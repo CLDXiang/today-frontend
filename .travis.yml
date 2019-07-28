@@ -9,3 +9,8 @@ deploy:
   keep_history: true
   on:
     branch: gp-pages
+
+branches:
+  except:
+  - gp-pages
+    

@@ -2,15 +2,21 @@ language: node_js
 node_js:
  - "11.15.0"
 
+script:
+  - mkdir dist
+  - npm run build
+  - npm run test
+
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   keep_history: true
+  local_dir: dist # push this directory to github pages
   on:
     branch: master
 
 branches:
   except:
   - gp-pages
-    
+

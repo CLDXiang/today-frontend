@@ -1,5 +1,7 @@
 # fudan.today
 
+update
+
 ## Project setup
 ```
 npm install

@@ -1,6 +1,8 @@
 # fudan.today
 
-update
+update:
+
+1. Add master branch protection
 
 ## Project setup
 ```

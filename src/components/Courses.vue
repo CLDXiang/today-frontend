@@ -50,6 +50,11 @@
       @withdraw="withdraw"
     ></courses-table>
     <!-- <h1>{{ msg }}</h1> -->
+
+    <!-- <div id="tile" style="background: black; width: 100px; height: 100px">
+      233
+    </div> -->
+
   </div>
 </template>
 
@@ -57,6 +62,7 @@
 import CoursesTable from './CoursesTable';
 import { setTimeout } from 'timers';
 import { getJSON, spans2segments, getCellByPosition, getId, spans2slots } from './utils';
+import { constants } from 'crypto';
 
 var sections = [
   '第1节',
@@ -191,17 +197,18 @@ export default {
         var segments = spans2segments(d.spans);
         console.log(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
-          var l = s.end - s.start + 1;
-          var c = getCellByPosition(s.day, s.start);
+          var l = s.e - s.s + 1;
+          var c = getCellByPosition(s.d, s.s);
+          console.log(c);
           // place a tile? or
 
-          // c.setAttribute('rowspan', l);
-          // console.log(s);
-          // for (var i = s.start + 1; i <= s.end; ++i) {
-          //   c = getCellByPosition(s.day, i);
-          //   console.log("c: ", c);
-          //   c.style.display = "None";
-          // }
+          c.setAttribute('rowspan', l);
+          console.log(s);
+          for (var i = s.s + 1; i <= s.e; ++i) {
+            c = getCellByPosition(s.d, i);
+            console.log("c: ", c);
+            c.style.display = "None";
+          }
         });
       }
     },

@@ -31,7 +31,7 @@ function spans2slots(spans) {
     res.push({ d: parseInt(t[0]), s: parseInt(t[1]) });
   });
   res.sort((a, b) => {
-    a.d < b.d ? -1 : a.d == b.d && a.s < b.s ? -1 : 1;
+    return a.d < b.d ? -1 : (a.d == b.d && a.s < b.s ? -1 : 1);
   });
   return res;
 }
@@ -45,13 +45,15 @@ function spans2segments(spans) {
     end;
   for (var i = 0; i < slots.length; ++i) {
     var s = slots[i];
-    if (s.d != day || start + 1 != s.s) {
+    if (s.d != day || end + 1 != s.s) {
       if (day != -1) {
         segs.push({ d: day, s: start, e: end });
       }
       day = s.d;
       start = s.s;
+      end = s.s - 1;
     }
+    ++end;
   }
   segs.push({ d: day, s: start, e: end });
   return segs;

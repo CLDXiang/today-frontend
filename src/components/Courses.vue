@@ -61,7 +61,7 @@
 <script>
 import CoursesTable from './CoursesTable';
 import { setTimeout } from 'timers';
-import { getJSON, spans2segments, getCellByPosition, getId, spans2slots } from './utils';
+import { spans2segments, getCellByPosition, getId, spans2slots } from './utils';
 import { constants } from 'crypto';
 const axios = require('axios');
 

@@ -63,6 +63,7 @@ import CoursesTable from './CoursesTable';
 import { setTimeout } from 'timers';
 import { getJSON, spans2segments, getCellByPosition, getId, spans2slots } from './utils';
 import { constants } from 'crypto';
+const axios = require('axios');
 
 var sections = [
   '第1节',
@@ -125,17 +126,17 @@ export default {
   methods: {
     parseTime(timeStr) {
       // returns a list of time range, [(day, section)]
-      var timeStrs = timeStr.split('<br>');
-      var spans = new Set();
-      var temp = /(星期.) (\d*)-(\d*)/g;
+      const timeStrs = timeStr.split('<br>');
+      const spans = new Set();
+      const temp = /(星期.) (\d*)-(\d*)/g;
       for (var i in timeStrs) {
         var t = temp.exec(timeStrs[i].trim());
         temp.lastIndex = 0;
         if (t) {
           // console.log(t);
-          var day = this.days.indexOf(t[1]);
-          var start = parseInt(t[2]) - 1;
-          var end = parseInt(t[3]) - 1;
+          let day = this.days.indexOf(t[1]);
+          let start = parseInt(t[2]) - 1;
+          let end = parseInt(t[3]) - 1;
           spans.add({ day: day, start: start, end: end });
         } else {
           console.log(timeStr, t, timeStrs[i]);
@@ -145,25 +146,23 @@ export default {
     },
     getId: getId,
     calcAvailableCourses() {
-      getJSON('courses.json', (err, data) => {
-        if (!err) {
-          this.data = data;
-          var courses = new Array();
-          for (var i in data) {
-            var d = data[i];
-            var timeStr = d.timing;
-            var spans = this.parseTime(timeStr);
-            d.spans = spans;
-            spans2slots(spans).forEach((s) => {
-              this.slots[s.s][s.d].available.push(data[i]);
-            });
-            courses.push(d);
-          }
-          this.courses = courses;
-        } else {
-          // console.log(err);
-          alert(err);
+      axios.get('courses.json').then((response) => {
+        const data = response.data;
+        const courses = new Array();
+        for (let i in data) {
+          const d = data[i];
+          const timeStr = d.timing;
+          const spans = this.parseTime(timeStr);
+          d.spans = spans;
+          spans2slots(spans).forEach((s) => {
+            this.slots[s.s][s.d].available.push(data[i]);
+          });
+          courses.push(d);
         }
+        this.courses = courses;
+        this.data = data;
+      }).catch((err) => {
+        alert(err);
       });
     },
     query(e, day, section) {
@@ -197,8 +196,8 @@ export default {
         var segments = spans2segments(d.spans);
         console.log(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
-          var l = s.e - s.s + 1;
-          var c = getCellByPosition(s.d, s.s);
+          const l = s.e - s.s + 1;
+          const c = getCellByPosition(s.d, s.s);
           console.log(c);
           // place a tile? or
 
@@ -228,7 +227,7 @@ export default {
   computed: {
     getNumAvailableCourses: function(d, s) {
       console.log(d, s);
-      var id = getId(d, s);
+      var id = this.getId(d, s);
       console.log(id, this.slots);
       return this.slots[s][d].available.length;
     },

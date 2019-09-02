@@ -1,40 +1,41 @@
 <template>
-  
   <v-card>
     <v-card-title>
       {{ title }}
       <div class="flex-grow-1"></div>
       <v-text-field
         v-model="search"
-        append-icon="search"
         label="输入关键字搜索：试试课程名、授课老师名、PEDU、ENGL、119、授课地点"
         single-line
         hide-details
       ></v-text-field>
     </v-card-title>
-    <v-data-table :headers="headers" :items="items" :items-per-page="20" dense :search="search"></v-data-table>
-    <!-- <v-data-table
-      :headers="headers"
-      :items="desserts"
-      :search="search"
-    ></v-data-table> -->
+    <v-data-table :headers="headers" :items="items" :items-per-page="20" dense :search="search">
+      <template v-slot:item.operation="{ item }">
+        <button color="green" dark v-if="showOperation == 'select'" @click="select(item.cid)">选中</button>
+        <button color="green" dark v-if="showOperation == 'withdraw'" @click="withdraw(item.cid)">退选</button>
+      </template>
+      <template v-slot:item.timing="{ item }">
+        <div v-for="t in item.timing.split('<br>')" :key="t">{{ t.trim() }}</div>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
 <script>
-import { constants } from "crypto";
 function getHeaders(cols) {
   const header = [
-    // { text: "课号", value: "name" },
+    { text: "课号", value: "num" },
     { text: "名称", value: "name" },
     { text: "时间", value: "timing" },
     { text: "地点", value: "place" },
     { text: "教师", value: "tutor" },
-    { text: "院系", value: "depart" }
-    // { text: "", value: "" },
-    // { text: "", value: "" },
-    // { text: "", value: "" },
-    // { text: "", value: "" },
+    { text: "院系", value: "depart" },
+    { text: "学分", value: "credit" },
+    { text: "容量", value: "limit" },
+    { text: "职称", value: "title" },
+    { text: "ID", value: "cid" },
+    { text: "操作", value: "operation" }
   ];
   var headers = [];
   for (var col of cols) {
@@ -44,38 +45,31 @@ function getHeaders(cols) {
       }
     }
   }
-  console.log("headers ", headers);
   return headers;
-}
-function applyFilter(data, col) {
-  // var res = new Array();
-  // for (var d of data) {
-  //     var o = new Object();
-  //     for (var t of col) {
-  //         o[t] = data[t];
-  //         console.log(t, col, data[t], o[t]);
-  //     }
-  //     res.push(o);
-  // }
-  // console.log(res);
-  // return res;
-  return data;
 }
 export default {
   props: {
     showColumns: Array[String],
-    showFilter: Boolean,
     tableData: Array[Object],
-    title: String,
+    showOperation: String, // select, withdraw
+    title: String
   },
   data: function() {
     return {
-      search: '',
+      search: "",
       data: this.tableData,
-      items: applyFilter(this.tableData, this.showColumns),
+      items: this.tableData,
       filter: this.showFilter,
       headers: getHeaders(this.showColumns)
     };
+  },
+  methods: {
+    select: function(cid) {
+      this.$emit("select", cid);
+    },
+    withdraw: function(cid) {
+      this.$emit("withdraw", cid);
+    }
   }
 };
 </script>

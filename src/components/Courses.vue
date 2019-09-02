@@ -1,5 +1,4 @@
 <template>
-  
   <div class="hello">
     <!-- The basic idea is we do mobile first design -->
 
@@ -25,59 +24,71 @@
     </table>
     <hr />
     <v-dialog v-model="showAvailableDialog">
-      <courses-table :show-columns='["name", "tutor", "timing", "place", "depart"]' :table-data="availableDialogData" :key="getId(queryDay, querySection)" title="选课面板"></courses-table>
+      <v-alert v-model="showHasSelected" type="info">
+        <p>您已选过该课程</p>
+      </v-alert>
+      <courses-table
+        :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+        :table-data="availableDialogData"
+        :key="getId(queryDay, querySection)"
+        title="选课面板"
+        show-operation="select"
+        @select="select"
+      ></courses-table>
     </v-dialog>
-    <courses-table :show-columns='["name", "tutor", "timing", "place", "depart"]' :table-data="selected" :key="selected.length" title="已选课程"></courses-table>
+
+    <v-alert v-model="showNotSelected">
+      <p>您尚未选中该课程</p>
+    </v-alert>
+
+    <courses-table
+      :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+      :table-data="selected"
+      :key="selected.length"
+      title="已选课程"
+      show-operation="withdraw"
+      @withdraw="withdraw"
+    ></courses-table>
     <!-- <h1>{{ msg }}</h1> -->
+
+    <!-- <div id="tile" style="background: black; width: 100px; height: 100px">
+      233
+    </div> -->
+
   </div>
 </template>
 
 <script>
-import CoursesTable from "./CoursesTable";
-var getJSON = function(url, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
-  xhr.responseType = "json";
-  xhr.onload = function() {
-    var status = xhr.status;
-    if (status === 200) {
-      callback(null, xhr.response);
-    } else {
-      callback(status, xhr.response);
-    }
-  };
-  xhr.send();
-};
-function getId(day, section) {
-  return `day${day}section${section}`;
-}
-function getCellByPosition(day, section) {
-  return document.querySelector(`#${getId(day, section)}`);
-}
+import CoursesTable from './CoursesTable';
+import { setTimeout } from 'timers';
+import { spans2segments, getCellByPosition, getId, spans2slots } from './utils';
+import { constants } from 'crypto';
+const axios = require('axios');
+
 var sections = [
-  "第1节",
-  "第2节",
-  "第3节",
-  "第4节",
-  "第5节",
-  "第6节",
-  "第7节",
-  "第8节",
-  "第9节",
-  "第10节",
-  "第11节",
-  "第12节",
-  "第13节",
-  "第14节"
+  '第1节',
+  '第2节',
+  '第3节',
+  '第4节',
+  '第5节',
+  '第6节',
+  '第7节',
+  '第8节',
+  '第9节',
+  '第10节',
+  '第11节',
+  '第12节',
+  '第13节',
+  '第14节',
 ];
 var days = [
-  "星期一",
-  "星期二",
-  "星期三",
-  "星期四",
-  "星期五",
-  "星期六",
-  "星期日"
+  '星期一',
+  '星期二',
+  '星期三',
+  '星期四',
+  '星期五',
+  '星期六',
+  '星期日',
 ];
 var slots = new Array();
 for (var s = 0; s < sections.length; s++) {
@@ -88,10 +99,12 @@ for (var s = 0; s < sections.length; s++) {
   slots.push(tmp);
 }
 export default {
-  name: "HelloWorld",
+  name: 'HelloWorld',
   data: () => {
     return {
       showAvailableDialog: false,
+      showHasSelected: false,
+      showNotSelected: false,
       days: days,
       sections: sections,
       availableDialogData: [],
@@ -100,77 +113,66 @@ export default {
       queryDay: 0,
       querySection: 0,
       courses: [],
+      data: null,
     };
   },
   components: {
     // HelloWorld,
-    CoursesTable
+    CoursesTable,
   },
   props: {
-    msg: String
+    msg: String,
   },
   methods: {
     parseTime(timeStr) {
       // returns a list of time range, [(day, section)]
-      var timeStrs = timeStr.split("<br>");
-      var res = new Set();
-      var temp = /(星期.) (\d*)-(\d*)/g;
+      const timeStrs = timeStr.split('<br>');
+      const spans = new Set();
+      const temp = /(星期.) (\d*)-(\d*)/g;
       for (var i in timeStrs) {
-        var t = temp.exec(timeStrs[i]);
+        var t = temp.exec(timeStrs[i].trim());
+        temp.lastIndex = 0;
         if (t) {
           // console.log(t);
-          var day = this.days.indexOf(t[1]);
-          for (var j = parseInt(t[2]) - 1; j <= parseInt(t[3]) - 1; j++) {
-            if (
-              0 <= day &&
-              day < this.days.length &&
-              0 <= j &&
-              j < this.sections.length
-            )
-              res.add({ day: day, section: j });
-            else {
-              console.log(timeStr, timeStrs[i], t, day, j);
-            }
-          }
+          let day = this.days.indexOf(t[1]);
+          let start = parseInt(t[2]) - 1;
+          let end = parseInt(t[3]) - 1;
+          spans.add({ day: day, start: start, end: end });
+        } else {
+          console.log(timeStr, t, timeStrs[i]);
         }
       }
-      return res;
+      return spans;
     },
     getId: getId,
     calcAvailableCourses() {
-      getJSON("courses.json", (err, data) => {
-        if (!err) {
-          var courses = new Array();
-          for (var i in data) {
-            var d = data[i];
-            var timeStr = d.timing;
-            var timeSections = this.parseTime(timeStr);
-            d.timeSections = timeSections;
-            d.timing = d.timing.replace('<br>', '\n');
-            timeSections.forEach(t => {
-              if (this.slots[t.section][t.day] != null) {
-                this.slots[t.section][t.day].available.push(data[i]);
-              } else {
-                console.log(t);
-              }
-            });
-            courses.push(d);
-          }
-          this.courses = courses;
-        } else {
-          // console.log(err);
-          alert(err);
+      axios.get('courses.json').then((response) => {
+        const data = response.data;
+        const courses = new Array();
+        for (let i in data) {
+          const d = data[i];
+          const timeStr = d.timing;
+          const spans = this.parseTime(timeStr);
+          d.spans = spans;
+          spans2slots(spans).forEach((s) => {
+            this.slots[s.s][s.d].available.push(data[i]);
+          });
+          courses.push(d);
         }
+        this.courses = courses;
+        this.data = data;
+      }).catch((err) => {
+        alert(err);
       });
     },
     query(e, day, section) {
       this.queryDay = day;
       this.querySection = section;
       var c = getCellByPosition(day, section);
-      if (c.classList.contains("select") != -1) {
-        c.classList.remove("select");
+      if (c.classList.contains('select') != -1) {
+        c.classList.remove('select');
       } else {
-        c.classList.add("select");
+        c.classList.add('select');
       }
       // var data = new Array();
 
@@ -181,7 +183,43 @@ export default {
       console.log(this.availableDialogData);
       // console.log(data, this.courses, this.slots[section][day].available);
       this.showAvailableDialog = true;
-    }
+    },
+    select(cid) {
+      var d = this.data[cid];
+      if (this.selected.includes(d)) {
+        this.showHasSelected = true;
+        setTimeout(() => {
+          this.showHasSelected = false;
+        }, 2000);
+      } else {
+        this.selected.push(d);
+        var segments = spans2segments(d.spans);
+        console.log(d.spans, spans2slots(d.spans), segments);
+        segments.forEach((s) => {
+          const l = s.e - s.s + 1;
+          const c = getCellByPosition(s.d, s.s);
+          console.log(c);
+          // place a tile? or
+
+          c.setAttribute('rowspan', l);
+          console.log(s);
+          for (var i = s.s + 1; i <= s.e; ++i) {
+            c = getCellByPosition(s.d, i);
+            console.log("c: ", c);
+            c.style.display = "None";
+          }
+        });
+      }
+    },
+    withdraw(cid) {
+      var d = this.data[cid];
+      var i = this.selected.indexOf(d);
+      if (i == -1) {
+        this.showNotSelected = true;
+      } else {
+        this.selected.splice(i, i + 1);
+      }
+    },
   },
   created() {
     this.calcAvailableCourses();
@@ -189,11 +227,11 @@ export default {
   computed: {
     getNumAvailableCourses: function(d, s) {
       console.log(d, s);
-      var id = getId(d, s);
+      var id = this.getId(d, s);
       console.log(id, this.slots);
       return this.slots[s][d].available.length;
-    }
-  }
+    },
+  },
 };
 </script>
 

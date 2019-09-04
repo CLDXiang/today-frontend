@@ -14,19 +14,17 @@
           :key="slot.id"
           @click="query($event, slot.d, slot.s)"
           :id="slot.id"
-          class="cell"
+          :class="{ cell: true, select: slot.selected.length == 1, conflict: slot.selected.length > 1 }"
         >
-          {{ slot.d }} - {{ slot.s }}
-          <br />
-          {{ slot.available.length }}
+          <div v-if="slot.selected.length == 0">{{ slot.available.length }}</div>
+          <div v-else>
+            <div v-for="course in slot.selected" :key="course.cid">{{ course.name }}</div>
+          </div>
         </td>
       </tr>
     </table>
     <hr />
     <v-dialog v-model="showAvailableDialog">
-      <v-alert v-model="showHasSelected" type="info">
-        <p>您已选过该课程</p>
-      </v-alert>
       <courses-table
         :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
         :table-data="availableDialogData"
@@ -36,25 +34,43 @@
         @select="select"
       ></courses-table>
     </v-dialog>
-
+    <v-alert v-model="showHasSelected" type="info">
+      <p>您已选过该课程</p>
+    </v-alert>
     <v-alert v-model="showNotSelected">
       <p>您尚未选中该课程</p>
     </v-alert>
 
-    <courses-table
-      :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
-      :table-data="selected"
-      :key="selected.length"
-      title="已选课程"
-      show-operation="withdraw"
-      @withdraw="withdraw"
-    ></courses-table>
+    <v-tabs>
+      <v-tab>所有课程</v-tab>
+      <v-tab>已选课程</v-tab>
+      <v-tab-item>
+        <courses-table
+          :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+          :table-data="courses"
+          :key="courses.length"
+          title="所有课程"
+          show-operation="select"
+          @select="select"
+        ></courses-table>
+      </v-tab-item>
+      <v-tab-item>
+        <courses-table
+          :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+          :table-data="selected"
+          :key="selected.length"
+          title="已选课程"
+          show-operation="withdraw"
+          @withdraw="withdraw"
+        ></courses-table>
+      </v-tab-item>
+    </v-tabs>
+
     <!-- <h1>{{ msg }}</h1> -->
 
     <!-- <div id="tile" style="background: black; width: 100px; height: 100px">
       233
-    </div> -->
-
+    </div>-->
   </div>
 </template>
 
@@ -94,7 +110,13 @@ var slots = new Array();
 for (var s = 0; s < sections.length; s++) {
   var tmp = new Array();
   for (var d = 0; d < days.length; d++) {
-    tmp.push({ id: getId(d, s), d: d, s: s, available: new Array() });
+    tmp.push({
+      id: getId(d, s),
+      d: d,
+      s: s,
+      available: new Array(),
+      selected: new Array(),
+    });
   }
   slots.push(tmp);
 }
@@ -146,47 +168,44 @@ export default {
     },
     getId: getId,
     calcAvailableCourses() {
-      axios.get('courses.json').then((response) => {
-        const data = response.data;
-        const courses = new Array();
-        for (let i in data) {
-          const d = data[i];
-          const timeStr = d.timing;
-          const spans = this.parseTime(timeStr);
-          d.spans = spans;
-          spans2slots(spans).forEach((s) => {
-            this.slots[s.s][s.d].available.push(data[i]);
-          });
-          courses.push(d);
-        }
-        this.courses = courses;
-        this.data = data;
-      }).catch((err) => {
-        alert(err);
-      });
+      axios
+        .get('courses.json')
+        .then((response) => {
+          const data = response.data;
+          const courses = new Array();
+          for (let i in data) {
+            const d = data[i];
+            const timeStr = d.timing;
+            const spans = this.parseTime(timeStr);
+            d.spans = spans;
+            spans2slots(spans).forEach((s) => {
+              this.slots[s.s][s.d].available.push(data[i]);
+            });
+            courses.push(d);
+          }
+          this.courses = courses;
+          this.data = data;
+        })
+        .catch((err) => {
+          alert(err);
+        });
     },
     query(e, day, section) {
       this.queryDay = day;
       this.querySection = section;
       var c = getCellByPosition(day, section);
-      if (c.classList.contains('select') != -1) {
-        c.classList.remove('select');
-      } else {
-        c.classList.add('select');
-      }
       // var data = new Array();
 
       // for (var cid in this.slots[section][day].available) {
       //   data.push(this.courses[cid]);
       // }
       this.availableDialogData = this.slots[section][day].available;
-      console.log(this.availableDialogData);
-      // console.log(data, this.courses, this.slots[section][day].available);
       this.showAvailableDialog = true;
     },
     select(cid) {
       var d = this.data[cid];
       if (this.selected.includes(d)) {
+        console.log('Has selected');
         this.showHasSelected = true;
         setTimeout(() => {
           this.showHasSelected = false;
@@ -196,18 +215,21 @@ export default {
         var segments = spans2segments(d.spans);
         console.log(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
-          const l = s.e - s.s + 1;
-          const c = getCellByPosition(s.d, s.s);
-          console.log(c);
+          for (let c = s.s; c <= s.e; c++) {
+            this.slots[c][s.d].selected.push(d);
+          }
+          // const l = s.e - s.s + 1;
+          // const c = getCellByPosition(s.d, s.s);
+          // console.log(c);
           // place a tile? or
 
-          c.setAttribute('rowspan', l);
-          console.log(s);
-          for (var i = s.s + 1; i <= s.e; ++i) {
-            c = getCellByPosition(s.d, i);
-            console.log("c: ", c);
-            c.style.display = "None";
-          }
+          // c.setAttribute('rowspan', l);
+          // console.log(s);
+          // for (var i = s.s + 1; i <= s.e; ++i) {
+          //   c = getCellByPosition(s.d, i);
+          //   console.log("c: ", c);
+          //   c.style.display = "None";
+          // }
         });
       }
     },
@@ -218,6 +240,14 @@ export default {
         this.showNotSelected = true;
       } else {
         this.selected.splice(i, i + 1);
+        var segments = spans2segments(d.spans);
+        console.log(d.spans, spans2slots(d.spans), segments);
+        segments.forEach((s) => {
+          for (let c = s.s; c <= s.e; c++) {
+            const i = this.slots[c][s.d].selected.indexOf(d);
+            this.slots[c][s.d].selected.splice(i, i + 1);
+          }
+        });
       }
     },
   },
@@ -240,28 +270,23 @@ export default {
 .select {
   background: #42b983;
 }
+.conflict {
+  background: salmon;
+}
 .head {
   border: 2px solid black;
 }
 .cell {
   border: 1px solid black;
+  text-align: center;
 }
+
 .block {
   width: 50px;
   height: 10%;
   border: 1px solid black;
 }
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+
 a {
   color: #42b983;
 }

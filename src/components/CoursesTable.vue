@@ -12,8 +12,8 @@
     </v-card-title>
     <v-data-table :headers="headers" :items="items" :items-per-page="20" dense :search="search">
       <template v-slot:item.operation="{ item }">
-        <button color="green" dark v-if="showOperation == 'select'" @click="select(item.cid)">选中</button>
-        <button color="green" dark v-if="showOperation == 'withdraw'" @click="withdraw(item.cid)">退选</button>
+        <v-btn color="green" dark v-if="showOperation == 'select'" @click="select(item.cid)">选中</v-btn>
+        <v-btn color="green" dark v-if="showOperation == 'withdraw'" @click="withdraw(item.cid)">退选</v-btn>
       </template>
       <template v-slot:item.timing="{ item }">
         <div v-for="t in item.timing.split('<br>')" :key="t">{{ t.trim() }}</div>

@@ -15,6 +15,7 @@ deploy:
   local_dir: dist # push this directory to github pages
   on:
     branch: master
+  fqdn: fudan.today
 
 branches:
   except:

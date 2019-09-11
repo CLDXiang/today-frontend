@@ -78,7 +78,6 @@
 import CoursesTable from './CoursesTable';
 import { setTimeout } from 'timers';
 import { spans2segments, getCellByPosition, getId, spans2slots } from './utils';
-import { constants } from 'crypto';
 const axios = require('axios');
 
 var sections = [

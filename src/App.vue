@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <!-- <v-app-bar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>
         <span class="font-weight-light">Course Finder</span>
@@ -13,11 +13,11 @@
       >
         <span class="mr-2">Latest Release</span>
       </v-btn>
-    </v-app-bar>
-
-    <v-content>
+    </v-app-bar> -->
+    <router-view></router-view>
+    <!-- <v-content>
       <Courses/>
-    </v-content>
+    </v-content> -->
   </v-app>
 </template>
 

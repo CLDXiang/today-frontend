@@ -1,20 +1,20 @@
 <template>
-  <v-app>
-    <TopToolbar></TopToolbar>
-    <!-- <v-layout>
+  <div>
+    <v-container>
+      <TopToolbar></TopToolbar>
+      <!-- <v-layout>
         <div v-if="loggedIn">Hi {{ userName }}</div>
         <div v-else>Please login first!</div>
-    </v-layout>-->
-    <v-content>
+      </v-layout> -->
       <router-view></router-view>
-    </v-content>
-    <BottomNav></BottomNav>
-  </v-app>
+      <BottomNav></BottomNav>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import TopToolbar from './components/TopToolbar';
-import BottomNav from './components/BottomNav';
+import TopToolbar from './TopToolbar';
+import BottomNav from './BottomNav';
 
 export default {
   components: {

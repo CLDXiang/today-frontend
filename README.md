@@ -1,5 +1,16 @@
 # fudan.today
 
+# Dev Stack
+
+* [vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate) can be used to make vuex state persistant, as a proxy to `localStorage`
+
+# For Developers
+
+We would like to refer to the following boilerplate projects
+
+* [beauty-vuejs-boilerplate](https://github.com/zmts/beauty-vuejs-boilerplate)
+* [vue-spa-boilerplate](https://github.com/jishcem/vue-spa-boilerplate)
+
 update:
 
 1. Add master branch protection

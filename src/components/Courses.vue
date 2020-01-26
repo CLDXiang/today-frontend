@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <!-- The basic idea is we do mobile first design -->
-
     <table style="height: 100%; width: 100%; overflow: true;">
       <tr>
         <th class="head"></th>
@@ -77,8 +76,8 @@
 <script>
 import CoursesTable from './CoursesTable';
 import { setTimeout } from 'timers';
-import { spans2segments, getCellByPosition, getId, spans2slots } from './utils';
-import { constants } from 'crypto';
+import { spans2segments, getId, spans2slots } from './utils';
+import log from '../utils/log.js';
 const axios = require('axios');
 
 var sections = [
@@ -121,7 +120,7 @@ for (var s = 0; s < sections.length; s++) {
   slots.push(tmp);
 }
 export default {
-  name: 'HelloWorld',
+  name: 'Courses',
   data: () => {
     return {
       showAvailableDialog: false,
@@ -139,7 +138,6 @@ export default {
     };
   },
   components: {
-    // HelloWorld,
     CoursesTable,
   },
   props: {
@@ -155,13 +153,13 @@ export default {
         var t = temp.exec(timeStrs[i].trim());
         temp.lastIndex = 0;
         if (t) {
-          // console.log(t);
+          // log.info(t);
           let day = this.days.indexOf(t[1]);
           let start = parseInt(t[2]) - 1;
           let end = parseInt(t[3]) - 1;
           spans.add({ day: day, start: start, end: end });
         } else {
-          console.log(timeStr, t, timeStrs[i]);
+          log.info(timeStr, t, timeStrs[i]);
         }
       }
       return spans;
@@ -193,7 +191,7 @@ export default {
     query(e, day, section) {
       this.queryDay = day;
       this.querySection = section;
-      var c = getCellByPosition(day, section);
+      // var c = getCellByPosition(day, section);
       // var data = new Array();
 
       // for (var cid in this.slots[section][day].available) {
@@ -205,7 +203,7 @@ export default {
     select(cid) {
       var d = this.data[cid];
       if (this.selected.includes(d)) {
-        console.log('Has selected');
+        log.info('Has selected');
         this.showHasSelected = true;
         setTimeout(() => {
           this.showHasSelected = false;
@@ -213,21 +211,21 @@ export default {
       } else {
         this.selected.push(d);
         var segments = spans2segments(d.spans);
-        console.log(d.spans, spans2slots(d.spans), segments);
+        log.info(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
           for (let c = s.s; c <= s.e; c++) {
             this.slots[c][s.d].selected.push(d);
           }
           // const l = s.e - s.s + 1;
           // const c = getCellByPosition(s.d, s.s);
-          // console.log(c);
+          // log.info(c);
           // place a tile? or
 
           // c.setAttribute('rowspan', l);
-          // console.log(s);
+          // log.info(s);
           // for (var i = s.s + 1; i <= s.e; ++i) {
           //   c = getCellByPosition(s.d, i);
-          //   console.log("c: ", c);
+          //   log.info("c: ", c);
           //   c.style.display = "None";
           // }
         });
@@ -241,7 +239,7 @@ export default {
       } else {
         this.selected.splice(i, i + 1);
         var segments = spans2segments(d.spans);
-        console.log(d.spans, spans2slots(d.spans), segments);
+        log.info(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
           for (let c = s.s; c <= s.e; c++) {
             const i = this.slots[c][s.d].selected.indexOf(d);
@@ -256,9 +254,9 @@ export default {
   },
   computed: {
     getNumAvailableCourses: function(d, s) {
-      console.log(d, s);
+      log.info(d, s);
       var id = this.getId(d, s);
-      console.log(id, this.slots);
+      log.info(id, this.slots);
       return this.slots[s][d].available.length;
     },
   },

@@ -26,6 +26,7 @@
   </v-form>
 </template>
 <script>
+import log from '../utils/log.js';
 import { makeLogin } from '../services/auth.service';
 import usersService from '../services/users.service';
 export default {
@@ -46,7 +47,7 @@ export default {
     login() {
       makeLogin(this.name, this.password).then(() => {
         usersService.getCurrent().then((res) => {
-          console.log(res);
+          log.info(res);
         });
       });
     }

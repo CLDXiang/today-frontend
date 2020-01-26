@@ -23,13 +23,13 @@
 
 <script>
 // import HelloWorld from './components/HelloWorld';
-import Courses from './components/Courses';
+// import Courses from './components/Courses';
 
 export default {
   name: 'App',
   components: {
     // HelloWorld,
-    Courses,
+    // Courses,
   },
   data: () => ({
     //

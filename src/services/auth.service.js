@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Http from './http.init';
 import { ResponseWrapper, ErrorWrapper } from './util';
+import log from '../utils/log.js';
 import $store from '../store';
 import $router from '../router';
 
@@ -18,11 +19,11 @@ export function makeLogin(email, password) {
       email,
       password,
     };
-    console.log("Payload: ", data);
+    log.info("Payload: ", data);
     axios
       .post(`${API_URL}/auth/signin`, data)
       .then((response) => {
-        console.log(response);
+        log.info(response);
         _setAuthData(response);
         return resolve(new ResponseWrapper(response, response.data));
       })
@@ -55,13 +56,13 @@ export function refreshTokens() {
       })
       .catch((error) => {
         if (error.response.data.badRefreshToken) {
-          console.log('http.init.js >> badRefreshToken: true');
+          log.info('http.init.js >> badRefreshToken: true');
           _resetAuthData();
           $router.push({ name: 'index' });
           return reject(new ErrorWrapper(error));
         }
         if (error.response.data.refreshTokenExpiredError) {
-          console.log('http.init.js >> refreshTokenExpiredError');
+          log.info('http.init.js >> refreshTokenExpiredError');
           _resetAuthData();
           $router.push({ name: 'index' });
           return reject(new ErrorWrapper(error));

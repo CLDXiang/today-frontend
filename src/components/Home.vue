@@ -2,20 +2,24 @@
   <div>
     <v-container>
       <TopToolbar></TopToolbar>
-      <v-layout>
+      <!-- <v-layout>
         <div v-if="loggedIn">Hi {{ userName }}</div>
         <div v-else>Please login first!</div>
-      </v-layout>
+      </v-layout> -->
+      <router-view></router-view>
+      <BottomNav></BottomNav>
     </v-container>
   </div>
 </template>
 
 <script>
 import TopToolbar from './TopToolbar';
+import BottomNav from './BottomNav';
 
 export default {
   components: {
     TopToolbar,
+    BottomNav,
   },
   computed: {
     loggedIn() {

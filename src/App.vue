@@ -1,38 +1,33 @@
 <template>
   <v-app>
-    <!-- <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">Course Finder</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-app-bar> -->
-    <router-view></router-view>
-    <!-- <v-content>
-      <Courses/>
-    </v-content> -->
+    <TopToolbar></TopToolbar>
+    <!-- <v-layout>
+        <div v-if="loggedIn">Hi {{ userName }}</div>
+        <div v-else>Please login first!</div>
+    </v-layout>-->
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+    <BottomNav></BottomNav>
   </v-app>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld';
-// import Courses from './components/Courses';
+import TopToolbar from './components/TopToolbar';
+import BottomNav from './components/BottomNav';
 
 export default {
-  name: 'App',
   components: {
-    // HelloWorld,
-    // Courses,
+    TopToolbar,
+    BottomNav,
   },
-  data: () => ({
-    //
-  }),
+  computed: {
+    loggedIn() {
+      return this.$store.user != null;
+    },
+    userName() {
+      return this.$this.store.user.name;
+    },
+  },
 };
 </script>

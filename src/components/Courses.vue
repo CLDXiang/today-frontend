@@ -138,7 +138,6 @@ export default {
     };
   },
   components: {
-    // HelloWorld,
     CoursesTable,
   },
   props: {

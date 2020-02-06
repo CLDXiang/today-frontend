@@ -31,6 +31,14 @@ repo 在 [api.fudan.today](https://github.com/ichn-hu/api.fudan.today)
 * nestjs
 * mysql
 
+## TODOs
+
+* [ ] User profile (name, email, password, avatar)
+* [ ] PWA support (could refer to nusmods)
+* [ ] Course table and course selection simulation
+* [ ] Course rate & comments
+* [ ] Anonymous post and comments (shudong)
+
 * [vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate) can be used to make vuex state persistant, as a proxy to `localStorage`
 
 ## For Developers
@@ -45,13 +53,6 @@ We would like to refer to the following boilerplate projects
 * nusmod
 * [PKU Helper](https://ckcz123.com/applications/pkuhelper/)
 
-## TODOs
-
-* [ ] User profile (name, email, password, avatar)
-* [ ] PWA support (could refer to nusmods)
-* [ ] Course table and course selection simulation
-* [ ] Course rate & comments
-* [ ] Anonymous post and comments (shudong)
 
 update:
 

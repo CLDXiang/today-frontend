@@ -1,19 +1,21 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import log from '../utils/log';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
     user: {
-      token: '',
+      jwt_token: '',
       name: '',
       email: '',
     },
   },
   mutations: {
-    SET_JWT(state, token) {
-      state.user.token = token;
+    SET_JWT_TOKEN(state, token) {
+      state.user.jwt_token = token;
+      log.info('set jwt_token', token);
     },
   },
 });

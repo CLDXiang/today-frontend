@@ -11,7 +11,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field v-model="password" :rules="passwordRules" label="密码" required></v-text-field>
+          <v-text-field v-model="password" type="password" :rules="passwordRules" label="密码" required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -27,17 +27,16 @@
 </template>
 <script>
 import log from '../utils/log.js';
-import { makeLogin } from '../services/auth.service';
-import usersService from '../services/users.service';
+import { login, tryHello } from '../services/auth.service';
 export default {
   data: () => ({
     valid: false,
-    name: '',
+    name: 'john',
     nameRules: [
       (v) => !!v || 'Name is required',
       (v) => v.length <= 10 || 'Name must be less than 10 characters',
     ],
-    password: '',
+    password: 'changeme',
     passwordRules: [
       (v) => !!v || 'password is required',
       //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
@@ -45,12 +44,11 @@ export default {
   }),
   methods: {
     login() {
-      makeLogin(this.name, this.password).then(() => {
-        usersService.getCurrent().then((res) => {
-          log.info(res);
-        });
+      login(this.name, this.password).then((resp) => {
+        log.info(resp);
+        tryHello();
       });
-    }
-  }
+    },
+  },
 };
 </script>

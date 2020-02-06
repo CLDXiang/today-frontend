@@ -1,18 +1,12 @@
 <template>
   <v-form v-model="valid">
     <v-container>
-        <v-row>
-            <h1>注册</h1>
-        </v-row>
+      <v-row>
+        <h1>注册</h1>
+      </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="name"
-            :rules="nameRules"
-            :counter="10"
-            label="昵称"
-            required
-          ></v-text-field>
+          <v-text-field v-model="name" :rules="nameRules" :counter="10" label="昵称" required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -21,18 +15,31 @@
         </v-col>
       </v-row>
       <v-row>
-          <v-col cols="12" md="4">
-          <v-text-field v-model="password" :rules="passwordRules" label="密码" required></v-text-field>
+        <v-col cols="12" md="4">
+          <v-text-field
+            type="password"
+            v-model="password"
+            :rules="passwordRules"
+            label="密码"
+            required
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
-          <v-btn @click="register">提交</v-btn>
+        <v-alert type="success" v-if="this.result === 'success'">注册成功，跳转登录页面……</v-alert>
+        <v-alert type="warning" :dismissible="true" v-if="this.result === 'already_exist'">
+          注册失败，该邮箱已经被使用，请直接
+          <a>登录</a>或者更改注册邮箱
+        </v-alert>
+      </v-row>
+      <v-row>
+        <v-btn @click="register">提交</v-btn>
       </v-row>
     </v-container>
   </v-form>
 </template>
 <script>
-import { register } from '../services/register.service';
+import { register } from '../services/auth.service';
 export default {
   data: () => ({
     valid: false,
@@ -51,13 +58,22 @@ export default {
       (v) => !!v || 'password is required',
       //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
+    result: '',
   }),
   methods: {
-      register() {
-        register(this.name, this.email, this.password).then((response, data) => {
-          alert(data);
-        });
-      }
-  }
+    register() {
+      register(this.name, this.email, this.password).then((resp) => {
+        if (resp.data.result === 'success') {
+          this.result = 'success';
+          setTimeout(() => {
+            this.$router.push('login');
+          }, 1000);
+        }
+        if (resp.data.result == 'already_exist') {
+          this.result = 'already_exist';
+        }
+      });
+    },
+  },
 };
 </script>

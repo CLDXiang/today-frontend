@@ -34,9 +34,8 @@
 
       <v-toolbar-title>Fudan Today</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-icon @click.stop="toggleMenu">mdi-plus</v-icon>
+      <v-icon @click.stop="login">mdi-face</v-icon>
       <!-- <v-app-bar-nav-icon @click.stop="toggleStatus"></v-app-bar-nav-icon> -->
-
     </v-app-bar>
   </div>
 </template>
@@ -53,9 +52,10 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
-    doNothing() {
-
-    }
+    doNothing() {},
+    login() {
+      this.$router.push('login');
+    },
   },
 };
 </script>

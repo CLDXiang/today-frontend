@@ -13,21 +13,60 @@ import { API_URL } from '../.env';
  ******************************
  */
 
-export function makeLogin(email, password) {
+export function login(email, password) {
   return new Promise((resolve, reject) => {
     const data = {
+      username: email,
+      password,
+    };
+    log.info('login payload: ', data);
+    axios
+      .post(`${API_URL}/auth/login`, data)
+      .then((response) => {
+        log.info('login response', response);
+        let jwt_token = response.data.access_token;
+        if (jwt_token) {
+          $store.commit('SET_JWT_TOKEN', jwt_token);
+          response.sucess = true;
+        } else {
+          response.sucess = false;
+        }
+        return resolve(response);
+      })
+      .catch((error) => reject(new ErrorWrapper(error)));
+  });
+}
+
+export function register(username, email, password) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      username,
       email,
       password,
     };
-    log.info("Payload: ", data);
+    log.info('register payload: ', payload);
     axios
-      .post(`${API_URL}/auth/signin`, data)
-      .then((response) => {
-        log.info(response);
-        _setAuthData(response);
-        return resolve(new ResponseWrapper(response, response.data));
+      .post(`${API_URL}/auth/register`, payload)
+      .then((resp) => {
+        log.info('register response', resp);
+        resolve(resp);
       })
-      .catch((error) => reject(new ErrorWrapper(error)));
+      .catch((err) => reject(err));
+  });
+}
+
+export function tryHello() {
+  return new Promise((resolve, reject) => {
+    let authHeader = { Authorization: `Bearer ${$store.state.user.jwt_token}` };
+    log.info({ authHeader });
+    axios
+      .get(`${API_URL}`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+      })
+      .catch((error) => reject(error));
   });
 }
 
@@ -106,5 +145,5 @@ function _setAuthData(response) {
   // localStorage.setItem('refreshToken', response.data.refreshToken);
   // localStorage.setItem('accessToken', response.data.accessToken);
   // $store.commit('auth/SET_ATOKEN_EXP_DATE', response.data.expires_in);
-  $store.commit('SET_JWT', response.data.accessToken);
+  $store.commit('SET_JWT', response.data.access_token);
 }

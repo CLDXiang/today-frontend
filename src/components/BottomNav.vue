@@ -1,35 +1,59 @@
 <template>
-  <v-bottom-navigation
-    app
-    fixed
-    grow
-    v-model="activeItem"
-    color="primary"
-  >
-    <v-btn value="top">
-      <span>Top Stories</span>
+  <v-bottom-navigation app fixed grow v-model="activePage" color="primary">
+    <v-btn value="course" @click="courseClick">
+      <span>选课</span>
       <v-icon>mdi-domain</v-icon>
     </v-btn>
 
-    <v-btn value="code">
-      <span>Code Examples</span>
+    <v-btn value="hole" @click="holeClick">
+      <span>树洞</span>
       <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
     </v-btn>
 
-    <v-btn value="favorites">
-      <span>Favorites</span>
+    <v-btn value="status" @click="statusClick">
+      <span>{{ status }}</span>
       <v-icon>mdi-call-split</v-icon>
     </v-btn>
   </v-bottom-navigation>
-
 </template>
 
 <script lang="js">
+import log from '../utils/log.js';
 export default {
     data: () => {
         return {
-            activeItem: 'top',
+            activePage: 'course',
         }
-    }
+    },
+    mounted() {
+    },
+    methods: {
+      courseClick() {
+        if (this.activePage != 'course') {
+          this.$router.push('/');
+        }
+      },
+      statusClick() {
+        if (this.$store.getters.userLoggedIn) {
+          log.info('jump to profile');
+          this.$router.push('profile');
+        } else {
+          this.$router.push('login');
+        }
+      },
+      holeClick() {
+        this.$router.push('hole').catch(e => {
+          log.info(e);
+        });
+      }
+    },
+    computed: {
+      status() {
+        return this.$store.getters.userLoggedIn ? "个人中心" : "未登录";
+      },
+      // activePage() {
+      //   return this.$router.url
+      // },
+    },
 }
 </script>

@@ -13,10 +13,10 @@ import { API_URL } from '../.env';
  ******************************
  */
 
-export function login(email, password) {
+export function login(username, password) {
   return new Promise((resolve, reject) => {
     const data = {
-      username: email,
+      username: username,
       password,
     };
     log.info('login payload: ', data);
@@ -25,22 +25,24 @@ export function login(email, password) {
       .then((response) => {
         log.info('login response', response);
         let jwt_token = response.data.access_token;
+        let email = response.data.email;
         if (jwt_token) {
           $store.commit('SET_JWT_TOKEN', jwt_token);
+          $store.commit('SET_USER', username, email);
           response.sucess = true;
         } else {
           response.sucess = false;
         }
         return resolve(response);
       })
-      .catch((error) => reject(new ErrorWrapper(error)));
+      .catch((error) => reject(error));
   });
 }
 
-export function register(username, email, password) {
+export function register(name, email, password) {
   return new Promise((resolve, reject) => {
     const payload = {
-      username,
+      name,
       email,
       password,
     };

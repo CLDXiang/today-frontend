@@ -17,6 +17,15 @@ const store = new Vuex.Store({
       state.user.jwt_token = token;
       log.info('set jwt_token', token);
     },
+    SET_USER(state, name, email) {
+      state.user.name = name;
+      state.user.email = email;
+    },
+  },
+  getters: {
+    userLoggedIn: state => {
+      return state.user.jwt_token !== '';
+    }
   },
 });
 

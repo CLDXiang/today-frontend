@@ -34,7 +34,7 @@
 
       <v-toolbar-title>Fudan Today</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-icon @click.stop="login">mdi-face</v-icon>
+      <v-icon @click.stop="back">mdi-face</v-icon>
       <!-- <v-app-bar-nav-icon @click.stop="toggleStatus"></v-app-bar-nav-icon> -->
     </v-app-bar>
   </div>
@@ -53,8 +53,9 @@ export default {
       this.showMenu = !this.showMenu;
     },
     doNothing() {},
-    login() {
-      this.$router.push('login');
+    back() {
+      // this.$router.push('login');
+      this.$router.back();
     },
   },
 };

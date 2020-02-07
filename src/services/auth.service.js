@@ -5,7 +5,7 @@ import log from '../utils/log.js';
 import $store from '../store';
 import $router from '../router';
 
-import { API_URL } from '../.env';
+import { API_URL } from '../utils/config';
 
 /**
  ******************************
@@ -16,7 +16,7 @@ import { API_URL } from '../.env';
 export function login(username, password) {
   return new Promise((resolve, reject) => {
     const data = {
-      username: username,
+      username,
       password,
     };
     log.info('login payload: ', data);

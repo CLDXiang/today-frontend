@@ -7,7 +7,7 @@
 import axios from 'axios'
 
 import * as authService from '../services/auth.service'
-import { API_URL } from '../.env'
+import { API_URL } from '../utils/config'
 
 export default class Http {
   constructor (status) {

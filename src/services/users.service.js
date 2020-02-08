@@ -1,5 +1,5 @@
 import BaseService from './base.service';
-import { API_URL } from '../.env';
+import { API_URL } from '../utils/config';
 
 class UsersService extends BaseService {
   get entity() {

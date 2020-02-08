@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../.env';
+import { API_URL } from '../utils/config.js';
 
 export function register(name, email, password) {
   return new Promise((resolve, reject) => {

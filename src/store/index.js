@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import log from '../utils/log';
+import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
 
@@ -23,10 +24,11 @@ const store = new Vuex.Store({
     },
   },
   getters: {
-    userLoggedIn: state => {
+    userLoggedIn: (state) => {
       return state.user.jwt_token !== '';
-    }
+    },
   },
+  plugins: [createPersistedState()],
 });
 
 export default store;

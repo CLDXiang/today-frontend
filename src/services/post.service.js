@@ -12,17 +12,17 @@ export async function getDiscussion() {
       })
       .then((resp) => {
         log.info(resp);
-        resolve(resp);
+        resolve(resp.data);
       })
       .catch((error) => reject(error));
   });
 }
 
-export async function createDiscussion(content) {
+export async function createDiscussion(title, content) {
   return new Promise((resolve, reject) => {
     let authHeader = { Authorization: `Bearer ${store.state.user.jwt_token}` };
     axios
-      .post(`${API_URL}/post/discussion`, { content }, { headers: authHeader })
+      .post(`${API_URL}/post/discussion`, { title, content }, { headers: authHeader })
       .then((resp) => {
         log.info(resp);
         resolve(resp);

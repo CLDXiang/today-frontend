@@ -22,15 +22,21 @@ import log from '../utils/log.js';
 export default {
     data: () => {
         return {
-            activePage: 'course',
         }
     },
     mounted() {
     },
+    computed: {
+      activePage() {
+        return 'course';
+      }
+    },
     methods: {
       courseClick() {
         if (this.activePage != 'course') {
-          this.$router.push('/');
+          this.$router.push('/').then(() => {
+            this.$store.state.app.barTitle = '课表';
+          });
         }
       },
       statusClick() {
@@ -42,7 +48,9 @@ export default {
         }
       },
       holeClick() {
-        this.$router.push('hole').catch(e => {
+        this.$router.push('hole').then(() => {
+          this.$store.state.app.barTitle = '树洞';
+        }).catch(e => {
           log.info(e);
         });
       }

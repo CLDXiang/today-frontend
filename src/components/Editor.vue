@@ -1,12 +1,21 @@
 <template>
-  <v-card class="d-flex flex-column">
-    <v-col v-if="mode === 'discussion'" cols="12" md="6">
+  <v-card cols="12" md="6" class="d-flex flex-column">
+    <v-card-title>
+      <slot></slot>
+    </v-card-title>
+    <v-col v-if="mode === 'discussion'">
       <v-text-field v-model="title" label="标题" clearable></v-text-field>
     </v-col>
-    <v-col cols="12" md="6">
-      <v-textarea name="input-7-1" label="内容" :clearable="true" v-model="content" hint="支持 markdown 语法"></v-textarea>
+    <v-col>
+      <v-textarea
+        name="input-7-1"
+        label="内容"
+        :clearable="true"
+        v-model="content"
+        :hint="mode === 'discussion' ? '支持 markdown 语法' : ''"
+      ></v-textarea>
     </v-col>
-    <v-col cols="12" md="6">
+    <v-col>
       <v-btn @click="cancel">取消</v-btn>
       <v-btn @click="create">添加</v-btn>
     </v-col>
@@ -17,7 +26,7 @@
 import log from '../utils/log';
 export default {
   props: {
-    mode: String, // 'secret' | 'dicussion' | 'rate',
+    mode: String, // 'secret' | 'dicussion' | 'rate' | 'reply',
   },
   data() {
     return {
@@ -30,11 +39,16 @@ export default {
       this.$emit('close');
     },
     create() {
-      const post = { content: this.content, title: this.title };
+      const input = {
+        content: this.content,
+        title: this.title,
+        created_at: '' + new Date(),
+        mode: this.mode,
+      };
       this.content = '';
       this.title = '';
-      log.info(post);
-      this.$emit('created', post);
+      log.info('Editor input:', input);
+      this.$emit('done', input);
       this.$emit('close');
     },
   },

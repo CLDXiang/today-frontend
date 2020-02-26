@@ -17,22 +17,8 @@
         <v-btn @click="enter(post.id)">回复</v-btn>
       </Post>
       <v-dialog v-model="editing">
-        <Editor mode="discussion" @close="editing = false" @created="created()"></Editor>
+        <Editor mode="discussion" @close="editing = false" @done="create">新建讨论</Editor>
       </v-dialog>
-
-      <!-- <v-dialog v-model="write">
-          <v-card>
-            <v-card-title class="headline grey lighten-2" primary-title>发布</v-card-title>
-
-            <v-textarea></v-textarea>
-            <v-divider></v-divider>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="write = false">I accept</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>-->
     </v-card>
     <!-- <v-speed-dial
       v-model="fab"
@@ -62,7 +48,7 @@
 </template>
 
 <script>
-import { getDiscussion, createDiscussion } from '../services/post.service.js';
+import { getPost, createPost } from '../services/post.service.js';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log.js';
@@ -80,15 +66,15 @@ export default {
     };
   },
   mounted() {
-    getDiscussion().then((posts) => {
+    getPost('secret').then((posts) => {
       this.posts = posts;
+      log.info(posts);
     });
   },
   methods: {
-    create() {
-      this.write = true;
-      log.info('输入内容', this.inputContent);
-      createDiscussion(this.inputTitle, this.inputContent)
+    create(input) {
+      log.info('输入内容', input);
+      createPost('secret', input.title, input.content)
         .then((p) => {
           this.posts.unshift(p);
         })
@@ -105,7 +91,7 @@ export default {
       this.editing = false;
     },
     created(post) {
-      log.info(post);
+      log.info('created', post);
     },
   },
   computed: {

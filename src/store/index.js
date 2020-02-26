@@ -16,8 +16,11 @@ const store = new Vuex.Store({
       draft: {
         content: '',
         title: '',
-      }
-    }
+      },
+    },
+    app: {
+      barTitle: 'Fudan Today',
+    },
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -27,6 +30,12 @@ const store = new Vuex.Store({
     SET_USER(state, name, email) {
       state.user.name = name;
       state.user.email = email;
+    },
+    LOGOUT(state) {
+      log.info('LOGOUT');
+      state.user.jwt_token = '';
+      state.user.name = '未登录';
+      state.user.email = '';
     },
   },
   getters: {

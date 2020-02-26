@@ -33,7 +33,7 @@ export default {
       const post = { content: this.content, title: this.title };
       this.content = '';
       this.title = '';
-      log.info(post, this);
+      log.info(post);
       this.$emit('created', post);
       this.$emit('close');
     },

@@ -17,8 +17,22 @@
         <v-btn @click="enter(post.id)">回复</v-btn>
       </Post>
       <v-dialog v-model="editing">
-        <Editor mode="discussion" @close="editing = false" @created="create()"></Editor>
+        <Editor mode="discussion" @close="editing = false" @created="created()"></Editor>
       </v-dialog>
+
+      <!-- <v-dialog v-model="write">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>发布</v-card-title>
+
+            <v-textarea></v-textarea>
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="write = false">I accept</v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-dialog>-->
     </v-card>
     <!-- <v-speed-dial
       v-model="fab"
@@ -71,16 +85,17 @@ export default {
     });
   },
   methods: {
-    create(input) {
-      log.info('输入内容', input);
-      createDiscussion(input.title, input.content)
+    create() {
+      this.write = true;
+      log.info('输入内容', this.inputContent);
+      createDiscussion(this.inputTitle, this.inputContent)
         .then((p) => {
           this.posts.unshift(p);
         })
         .catch((e) => {
           log.info(e);
         });
-      // this.cancel();
+      this.cancel();
     },
     enter() {
       log.info(this.id);
@@ -88,6 +103,9 @@ export default {
     },
     cancel() {
       this.editing = false;
+    },
+    created(post) {
+      log.info(post);
     },
   },
   computed: {

@@ -1,4 +1,3 @@
-
 // see https://blog.morizyun.com/javascript/library-typescript-dotenv-environment-variable.html
 import * as dotenv from 'dotenv';
 
@@ -29,3 +28,24 @@ console.log(path);
 
 export const API_URL = process.env.API_URL || api_url;
 export const BASE_URL = process.env.BASE_URL || base_url;
+export const ANONY_NAMES = [
+  '光华楼',
+  '一教',
+  '二教',
+  '三教',
+  '四教',
+  '五教',
+  '六教',
+  '西辅楼',
+  '旦苑',
+  '南食',
+  '北食',
+  '南小食',
+  '光草',
+  '校医院',
+  '相辉堂',
+  '校史馆',
+  '正大',
+  '菜地',
+  '雪莱',
+];

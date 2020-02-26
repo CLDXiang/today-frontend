@@ -12,6 +12,12 @@ const store = new Vuex.Store({
       name: '',
       email: '',
     },
+    editor: {
+      draft: {
+        content: '',
+        title: '',
+      }
+    }
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {

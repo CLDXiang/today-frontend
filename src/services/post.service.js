@@ -25,7 +25,7 @@ export async function createDiscussion(title, content) {
       .post(`${API_URL}/post/discussion`, { title, content }, { headers: authHeader })
       .then((resp) => {
         log.info(resp);
-        resolve(resp);
+        resolve(resp.data);
       })
       .catch((error) => reject(error));
   });

@@ -5,6 +5,7 @@ import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
 import Profile from '../components/Profile.vue';
 import Hole from '../components/Hole.vue';
+import PostView from '../components/PostView.vue';
 
 import store from '../store';
 
@@ -17,6 +18,7 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/profile', component: Profile },
   { path: '/hole', component: Hole, meta: { requiresAuth: true } },
+  { path: '/post/*', component: PostView },
   { path: '*', component: Courses },
 ];
 

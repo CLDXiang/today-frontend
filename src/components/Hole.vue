@@ -17,33 +17,9 @@
         <v-btn @click="enter(post.id)">回复</v-btn>
       </Post>
       <v-dialog v-model="editing">
-        <Editor mode="discussion" @close="editing = false" @done="create">新建讨论</Editor>
+        <Editor mode="secret" @close="editing = false" @done="create">匿名分享</Editor>
       </v-dialog>
     </v-card>
-    <!-- <v-speed-dial
-      v-model="fab"
-      bottom="true"
-      right="true"
-      direction="top"
-      open-on-hover="false"
-      transition="slide-y-reverse-transition"
-    >
-      <template v-slot:activator>
-        <v-btn v-model="fab" color="blue darken-2" dark fab>
-          <v-icon v-if="fab">mdi-close</v-icon>
-          <v-icon v-else>mdi-account-circle</v-icon>
-        </v-btn>
-      </template>
-      <v-btn fab dark small color="green">
-        <v-icon @click="this.editing = true">mdi-pencil</v-icon>
-      </v-btn>
-      <v-btn fab dark small color="indigo">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-      <v-btn fab dark small color="red">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </v-speed-dial>-->
   </v-container>
 </template>
 
@@ -83,9 +59,9 @@ export default {
         });
       this.cancel();
     },
-    enter() {
-      log.info(this.id);
-      this.$router.push(`/post/${this.id}`);
+    enter(id) {
+      log.info('enter', id);
+      this.$router.push(`/post/${id}`);
     },
     cancel() {
       this.editing = false;

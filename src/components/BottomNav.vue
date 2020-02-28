@@ -24,16 +24,9 @@ export default {
         return {
         }
     },
-    mounted() {
-    },
-    computed: {
-      activePage() {
-        return 'course';
-      }
-    },
     methods: {
       courseClick() {
-        if (this.activePage != 'course') {
+        if (this.activePage !== 'course') {
           this.$router.push('/').then(() => {
             this.$store.state.app.barTitle = '课表';
           });
@@ -56,6 +49,20 @@ export default {
       }
     },
     computed: {
+      activePage: {
+        get: function () {
+          let path = this.$route.path;
+          if (/\/hole\/?.*$/.test(path)) {
+            return 'hole';
+          }
+          if (/\/profile\/?.*$/.test(path)) {
+            return 'status';
+          }
+          return 'course';
+        },
+        set: function () {
+        }
+      },
       status() {
         return this.$store.getters.userLoggedIn ? "个人中心" : "未登录";
       },

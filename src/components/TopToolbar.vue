@@ -36,7 +36,8 @@
       <v-app-bar-nav-icon @click.stop="toggleMenu"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ barTitle }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-icon @click.stop="back">mdi-face</v-icon>
+      <!-- <v-icon @click.stop="back">mdi-face</v-icon> -->
+      <v-btn @click.stop="back">返回</v-btn>
       <!-- <v-app-bar-nav-icon @click.stop="toggleStatus"></v-app-bar-nav-icon> -->
     </v-app-bar>
   </div>
@@ -71,7 +72,7 @@ export default {
     },
     barTitle() {
       return this.$store.state.app.barTitle;
-    }
+    },
   },
 };
 </script>

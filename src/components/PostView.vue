@@ -4,10 +4,10 @@
       <v-btn @click="editing = true">回复</v-btn>
     </Post>
     <v-card>
-      <v-card v-for="reply in replies" :key="reply.created_at" class="my-1 my-1" flat>
+      <v-card v-for="reply in replies" :key="reply.id" class="my-1 my-1" flat>
         <v-list-item two-line>
           <v-list-item-content>
-            <v-list-item-subtitle>{{ getName(reply.user_id) }} 于 {{ reply.created_at }}：</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ getName(reply.anony_id) }} 于 {{ reply.created_at }}：</v-list-item-subtitle>
             <div>{{ reply.content }}</div>
           </v-list-item-content>
         </v-list-item>
@@ -25,15 +25,21 @@ import { ANONY_NAMES } from '../utils/config';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log.js';
+import {
+  getPostById,
+  getPostReply,
+  createReply,
+} from '../services/post.service';
 export default {
   components: { Post, Editor },
+  props: { id: String },
   data() {
     return {
       editing: false,
       post: {
         id: 23,
-        title: '这是一个帖子，有的时候没有标题',
-        content: '但是内容是不可缺少的\n特别是我们还支持 **markdown**',
+        title: '加载中',
+        content: '加载中',
         created_at: '2020-02-26T07:44:31.365Z',
         my_id: 1,
         user_id: 1,
@@ -43,6 +49,10 @@ export default {
       },
       replies: [],
     };
+  },
+  async mounted() {
+    this.post = await getPostById(parseInt(this.id));
+    this.replies = await getPostReply(parseInt(this.id));
   },
   methods: {
     render(content) {
@@ -57,14 +67,19 @@ export default {
       } else {
         name = '' + id;
       }
-      if (id == this.post.my_id) {
+      if (id == this.post.anony_id) {
         name += '（我）';
       }
       return name;
     },
-    createReply(reply) {
+    async createReply(reply) {
       log.info('reply!', reply);
-      this.replies.push({ ...reply, user_id: 0 });
+      const { anony_id, id } = await createReply(
+        parseInt(this.id),
+        reply.content,
+      );
+      log.info();
+      this.replies.push({ ...reply, anony_id, id });
       this.editing = false;
     },
   },

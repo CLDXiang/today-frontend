@@ -8,7 +8,6 @@
     </v-col>
     <v-col>
       <v-textarea
-        name="input-7-1"
         label="内容"
         :clearable="true"
         v-model="content"

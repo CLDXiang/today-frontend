@@ -6,14 +6,14 @@
         <div class="timetable__time__cell" v-for="(section, index) in sections" :key="index">{{ section }}</div>
       </div>
       <div class="timetable__day-box">
-        <time-table-day v-for="(title, index) in titles" :title="title" :key="index"></time-table-day>
+        <timetable-day v-for="(title, index) in titles" :title="title" :key="index"></timetable-day>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TimeTableDay from './TimetableDay.vue'
+import TimetableDay from './TimetableDay.vue'
 
 export default {
   props: {
@@ -25,7 +25,7 @@ export default {
     };
   },
   components: {
-    TimeTableDay
+    TimetableDay
   },
   methods: {
   }

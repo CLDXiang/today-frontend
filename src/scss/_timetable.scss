@@ -1,0 +1,16 @@
+// flex 布局，水平垂直居中
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+$cell-height: 64px;
+$cell-width: 64px;
+
+.background-one {
+  background-color: transparent;
+}
+
+.background-two {
+  background-color: #f0f0f0;
+}

@@ -5,8 +5,11 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "lint": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\"",
+    "test:unit": "vue-cli-service test:unit",
+    "format": "prettier --write \"src/**/*.js\" \"src/**/*.vue\" \"test/**/*\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"src/**/*.vue\" \"test/**/*\"",
+    "check": "npm run format:check && npm run lint && npm run build && echo 'check passed!'"
   },
   "dependencies": {
     "@vue/cli": "^3.11.0",
@@ -30,7 +33,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^6.2.2",
     "jest": "^24.9.0",
     "sass": "^1.17.4",
     "sass-loader": "^7.1.0",

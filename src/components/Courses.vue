@@ -4,7 +4,9 @@
     <table style="height: 100%; width: 100%; overflow: true;">
       <tr>
         <th class="head"></th>
-        <th v-for="d in days.length" :key="d" class="head">{{ days[d - 1] }}</th>
+        <th v-for="d in days.length" :key="d" class="head">
+          {{ days[d - 1] }}
+        </th>
       </tr>
       <tr v-for="s in sections.length" :key="s">
         <th class="head">{{ sections[s - 1] }}</th>
@@ -13,19 +15,36 @@
           :key="slot.id"
           @click="query($event, slot.d, slot.s)"
           :id="slot.id"
-          :class="{ cell: true, select: slot.selected.length == 1, conflict: slot.selected.length > 1 }"
+          :class="{
+            cell: true,
+            select: slot.selected.length == 1,
+            conflict: slot.selected.length > 1,
+          }"
         >
-          <div v-if="slot.selected.length == 0">{{ slot.available.length }}</div>
+          <div v-if="slot.selected.length == 0">
+            {{ slot.available.length }}
+          </div>
           <div v-else>
-            <div v-for="course in slot.selected" :key="course.cid">{{ course.name }}</div>
+            <div v-for="course in slot.selected" :key="course.cid">
+              {{ course.name }}
+            </div>
           </div>
         </td>
       </tr>
     </table>
+
     <hr />
     <v-dialog v-model="showAvailableDialog">
       <courses-table
-        :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+        :show-columns="[
+          'num',
+          'name',
+          'tutor',
+          'timing',
+          'place',
+          'depart',
+          'operation',
+        ]"
         :table-data="availableDialogData"
         :key="getId(queryDay, querySection)"
         title="选课面板"
@@ -45,7 +64,15 @@
       <v-tab>已选课程</v-tab>
       <v-tab-item>
         <courses-table
-          :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+          :show-columns="[
+            'num',
+            'name',
+            'tutor',
+            'timing',
+            'place',
+            'depart',
+            'operation',
+          ]"
           :table-data="courses"
           :key="courses.length"
           title="所有课程"
@@ -55,7 +82,15 @@
       </v-tab-item>
       <v-tab-item>
         <courses-table
-          :show-columns="['num', 'name', 'tutor', 'timing', 'place', 'depart', 'operation', ]"
+          :show-columns="[
+            'num',
+            'name',
+            'tutor',
+            'timing',
+            'place',
+            'depart',
+            'operation',
+          ]"
           :table-data="selected"
           :key="selected.length"
           title="已选课程"

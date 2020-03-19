@@ -7,14 +7,19 @@
       <v-card v-for="reply in replies" :key="reply.id" class="my-1 my-1" flat>
         <v-list-item two-line>
           <v-list-item-content>
-            <v-list-item-subtitle>{{ getName(reply.anony_id) }} 于 {{ reply.created_at }}：</v-list-item-subtitle>
+            <v-list-item-subtitle
+              >{{ getName(reply.anony_id) }} 于
+              {{ reply.created_at }}：</v-list-item-subtitle
+            >
             <div>{{ reply.content }}</div>
           </v-list-item-content>
         </v-list-item>
       </v-card>
     </v-card>
     <v-dialog v-model="editing">
-      <Editor mode="reply" @close="editing = false" @done="createReply">写回复</Editor>
+      <Editor mode="reply" @close="editing = false" @done="createReply"
+        >写回复</Editor
+      >
     </v-dialog>
   </v-container>
 </template>
@@ -86,5 +91,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

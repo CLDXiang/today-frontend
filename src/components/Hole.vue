@@ -17,7 +17,9 @@
         <v-btn @click="enter(post.id)">回复</v-btn>
       </Post>
       <v-dialog v-model="editing">
-        <Editor mode="secret" @close="editing = false" @done="create">匿名分享</Editor>
+        <Editor mode="secret" @close="editing = false" @done="create"
+          >匿名分享</Editor
+        >
       </v-dialog>
     </v-card>
   </v-container>

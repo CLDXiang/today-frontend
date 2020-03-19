@@ -10,13 +10,33 @@
         hide-details
       ></v-text-field>
     </v-card-title>
-    <v-data-table :headers="headers" :items="items" :items-per-page="20" dense :search="search">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :items-per-page="20"
+      dense
+      :search="search"
+    >
       <template v-slot:item.operation="{ item }">
-        <v-btn color="green" dark v-if="showOperation == 'select'" @click="select(item.cid)">选中</v-btn>
-        <v-btn color="green" dark v-if="showOperation == 'withdraw'" @click="withdraw(item.cid)">退选</v-btn>
+        <v-btn
+          color="green"
+          dark
+          v-if="showOperation == 'select'"
+          @click="select(item.cid)"
+          >选中</v-btn
+        >
+        <v-btn
+          color="green"
+          dark
+          v-if="showOperation == 'withdraw'"
+          @click="withdraw(item.cid)"
+          >退选</v-btn
+        >
       </template>
       <template v-slot:item.timing="{ item }">
-        <div v-for="t in item.timing.split('<br>')" :key="t">{{ t.trim() }}</div>
+        <div v-for="t in item.timing.split('<br>')" :key="t">
+          {{ t.trim() }}
+        </div>
       </template>
     </v-data-table>
   </v-card>
@@ -25,17 +45,17 @@
 <script>
 function getHeaders(cols) {
   const header = [
-    { text: "课号", value: "num" },
-    { text: "名称", value: "name" },
-    { text: "时间", value: "timing" },
-    { text: "地点", value: "place" },
-    { text: "教师", value: "tutor" },
-    { text: "院系", value: "depart" },
-    { text: "学分", value: "credit" },
-    { text: "容量", value: "limit" },
-    { text: "职称", value: "title" },
-    { text: "ID", value: "cid" },
-    { text: "操作", value: "operation" }
+    { text: '课号', value: 'num' },
+    { text: '名称', value: 'name' },
+    { text: '时间', value: 'timing' },
+    { text: '地点', value: 'place' },
+    { text: '教师', value: 'tutor' },
+    { text: '院系', value: 'depart' },
+    { text: '学分', value: 'credit' },
+    { text: '容量', value: 'limit' },
+    { text: '职称', value: 'title' },
+    { text: 'ID', value: 'cid' },
+    { text: '操作', value: 'operation' },
   ];
   var headers = [];
   for (var col of cols) {
@@ -52,27 +72,26 @@ export default {
     showColumns: Array[String],
     tableData: Array[Object],
     showOperation: String, // select, withdraw
-    title: String
+    title: String,
   },
   data: function() {
     return {
-      search: "",
+      search: '',
       data: this.tableData,
       items: this.tableData,
       filter: this.showFilter,
-      headers: getHeaders(this.showColumns)
+      headers: getHeaders(this.showColumns),
     };
   },
   methods: {
     select: function(cid) {
-      this.$emit("select", cid);
+      this.$emit('select', cid);
     },
     withdraw: function(cid) {
-      this.$emit("withdraw", cid);
-    }
-  }
+      this.$emit('withdraw', cid);
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

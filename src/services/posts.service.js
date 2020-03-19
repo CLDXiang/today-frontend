@@ -1,9 +1,9 @@
-import BaseService from './base.service'
+import BaseService from './base.service';
 
 class PostsService extends BaseService {
-  get entity () {
-    return 'posts'
+  get entity() {
+    return 'posts';
   }
 }
 
-export default new PostsService()
+export default new PostsService();

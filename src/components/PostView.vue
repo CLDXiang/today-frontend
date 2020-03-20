@@ -35,6 +35,7 @@ import {
   getPostReply,
   createReply,
 } from '../services/post.service';
+
 export default {
   components: { Post, Editor },
   props: { id: String },
@@ -70,7 +71,7 @@ export default {
       if (id < ANONY_NAMES.length) {
         name = ANONY_NAMES[id];
       } else {
-        name = '' + id;
+        name = `${id}`;
       }
       if (id == this.post.anony_id) {
         name += '（我）';

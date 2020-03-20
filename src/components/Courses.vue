@@ -109,13 +109,14 @@
 </template>
 
 <script>
-import CoursesTable from './CoursesTable';
 import { setTimeout } from 'timers';
+import CoursesTable from './CoursesTable';
 import { spans2segments, getId, spans2slots } from './utils';
 import log from '../utils/log.js';
+
 const axios = require('axios');
 
-var sections = [
+const sections = [
   '第1节',
   '第2节',
   '第3节',
@@ -131,7 +132,7 @@ var sections = [
   '第13节',
   '第14节',
 ];
-var days = [
+const days = [
   '星期一',
   '星期二',
   '星期三',
@@ -140,14 +141,14 @@ var days = [
   '星期六',
   '星期日',
 ];
-var slots = new Array();
-for (var s = 0; s < sections.length; s++) {
-  var tmp = new Array();
-  for (var d = 0; d < days.length; d++) {
+const slots = new Array();
+for (let s = 0; s < sections.length; s++) {
+  const tmp = new Array();
+  for (let d = 0; d < days.length; d++) {
     tmp.push({
       id: getId(d, s),
-      d: d,
-      s: s,
+      d,
+      s,
       available: new Array(),
       selected: new Array(),
     });
@@ -156,22 +157,20 @@ for (var s = 0; s < sections.length; s++) {
 }
 export default {
   name: 'Courses',
-  data: () => {
-    return {
-      showAvailableDialog: false,
-      showHasSelected: false,
-      showNotSelected: false,
-      days: days,
-      sections: sections,
-      availableDialogData: [],
-      selected: [],
-      slots: slots,
-      queryDay: 0,
-      querySection: 0,
-      courses: [],
-      data: null,
-    };
-  },
+  data: () => ({
+    showAvailableDialog: false,
+    showHasSelected: false,
+    showNotSelected: false,
+    days,
+    sections,
+    availableDialogData: [],
+    selected: [],
+    slots,
+    queryDay: 0,
+    querySection: 0,
+    courses: [],
+    data: null,
+  }),
   components: {
     CoursesTable,
   },
@@ -184,29 +183,29 @@ export default {
       const timeStrs = timeStr.split('<br>');
       const spans = new Set();
       const temp = /(星期.) (\d*)-(\d*)/g;
-      for (var i in timeStrs) {
-        var t = temp.exec(timeStrs[i].trim());
+      for (const i in timeStrs) {
+        const t = temp.exec(timeStrs[i].trim());
         temp.lastIndex = 0;
         if (t) {
           // log.info(t);
-          let day = this.days.indexOf(t[1]);
-          let start = parseInt(t[2]) - 1;
-          let end = parseInt(t[3]) - 1;
-          spans.add({ day: day, start: start, end: end });
+          const day = this.days.indexOf(t[1]);
+          const start = parseInt(t[2]) - 1;
+          const end = parseInt(t[3]) - 1;
+          spans.add({ day, start, end });
         } else {
           log.info(timeStr, t, timeStrs[i]);
         }
       }
       return spans;
     },
-    getId: getId,
+    getId,
     calcAvailableCourses() {
       axios
         .get('courses.json')
         .then((response) => {
-          const data = response.data;
+          const { data } = response;
           const courses = new Array();
-          for (let i in data) {
+          for (const i in data) {
             const d = data[i];
             const timeStr = d.timing;
             const spans = this.parseTime(timeStr);
@@ -236,7 +235,7 @@ export default {
       this.showAvailableDialog = true;
     },
     select(cid) {
-      var d = this.data[cid];
+      const d = this.data[cid];
       if (this.selected.includes(d)) {
         log.info('Has selected');
         this.showHasSelected = true;
@@ -245,7 +244,7 @@ export default {
         }, 2000);
       } else {
         this.selected.push(d);
-        var segments = spans2segments(d.spans);
+        const segments = spans2segments(d.spans);
         log.info(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
           for (let c = s.s; c <= s.e; c++) {
@@ -267,13 +266,13 @@ export default {
       }
     },
     withdraw(cid) {
-      var d = this.data[cid];
-      var i = this.selected.indexOf(d);
+      const d = this.data[cid];
+      const i = this.selected.indexOf(d);
       if (i == -1) {
         this.showNotSelected = true;
       } else {
         this.selected.splice(i, i + 1);
-        var segments = spans2segments(d.spans);
+        const segments = spans2segments(d.spans);
         log.info(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
           for (let c = s.s; c <= s.e; c++) {
@@ -288,9 +287,9 @@ export default {
     this.calcAvailableCourses();
   },
   computed: {
-    getNumAvailableCourses: function(d, s) {
+    getNumAvailableCourses(d, s) {
       log.info(d, s);
-      var id = this.getId(d, s);
+      const id = this.getId(d, s);
       log.info(id, this.slots);
       return this.slots[s][d].available.length;
     },

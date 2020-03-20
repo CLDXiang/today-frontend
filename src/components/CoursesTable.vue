@@ -57,9 +57,9 @@ function getHeaders(cols) {
     { text: 'ID', value: 'cid' },
     { text: '操作', value: 'operation' },
   ];
-  var headers = [];
-  for (var col of cols) {
-    for (var t of header) {
+  const headers = [];
+  for (const col of cols) {
+    for (const t of header) {
       if (t.value == col) {
         headers.push(t);
       }
@@ -74,7 +74,7 @@ export default {
     showOperation: String, // select, withdraw
     title: String,
   },
-  data: function() {
+  data() {
     return {
       search: '',
       data: this.tableData,
@@ -84,10 +84,10 @@ export default {
     };
   },
   methods: {
-    select: function(cid) {
+    select(cid) {
       this.$emit('select', cid);
     },
-    withdraw: function(cid) {
+    withdraw(cid) {
       this.$emit('withdraw', cid);
     },
   },

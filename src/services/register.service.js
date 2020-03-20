@@ -9,9 +9,7 @@ export function register(name, email, password) {
         password,
         email,
       })
-      .then((response) => {
-        return resolve(response, response.data);
-      })
+      .then((response) => resolve(response, response.data))
       .catch((err) => reject(err));
   });
 }

@@ -45,6 +45,7 @@
 <script>
 import log from '../utils/log.js';
 import { login, tryHello } from '../services/auth.service';
+
 export default {
   data: () => ({
     name: '',
@@ -80,7 +81,7 @@ export default {
           log.info(resp);
           tryHello();
           this.showAlert('success', '登录成功');
-          let redirect = this.$router.currentRoute.query.redirect;
+          const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);
           if (redirect) {
             log.info('redirected!');

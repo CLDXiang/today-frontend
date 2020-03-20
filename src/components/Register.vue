@@ -49,6 +49,7 @@
 </template>
 <script>
 import { register } from '../services/auth.service';
+
 export default {
   data: () => ({
     name: '',

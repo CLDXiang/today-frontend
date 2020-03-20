@@ -24,8 +24,8 @@ export function login(username, password) {
       .post(`${API_URL}/auth/login`, data)
       .then((response) => {
         log.info('login response', response);
-        let jwt_token = response.data.access_token;
-        let email = response.data.email;
+        const jwt_token = response.data.access_token;
+        const { email } = response.data;
         if (jwt_token) {
           $store.commit('SET_JWT_TOKEN', jwt_token);
           $store.commit('SET_USER', username, email);
@@ -59,7 +59,9 @@ export function register(name, email, password) {
 
 export function tryHello() {
   return new Promise((resolve, reject) => {
-    let authHeader = { Authorization: `Bearer ${$store.state.user.jwt_token}` };
+    const authHeader = {
+      Authorization: `Bearer ${$store.state.user.jwt_token}`,
+    };
     log.info({ authHeader });
     axios
       .get(`${API_URL}`, {
@@ -75,7 +77,7 @@ export function tryHello() {
 export function makeLogout() {
   return new Promise((resolve, reject) => {
     new Http({ auth: true })
-      .post(`auth/signout`)
+      .post('auth/signout')
       .then((response) => {
         _resetAuthData();
         $router.push({ name: 'index' });

@@ -36,39 +36,39 @@ export default class BaseService {
     const params = {
       ...parameters,
     };
-    return new Promise((resolve, reject) => {
-      return this.request()
+    return new Promise((resolve, reject) =>
+      this.request()
         .get(`${this.entity}`, { params })
         .then((response) => {
-          let data = {
+          const data = {
             content: response.data.data.results,
             total: response.data.data.total,
           };
           resolve(this.responseWrapper(response, data));
         })
         .catch((error) => {
-          let message = error.response.data
+          const message = error.response.data
             ? error.response.data.error
             : error.response.statusText;
           reject(this.errorWrapper(error, message));
-        });
-    });
+        }),
+    );
   }
 
   getByIdPublic(id = window.required()) {
-    return new Promise((resolve, reject) => {
-      return this.request()
+    return new Promise((resolve, reject) =>
+      this.request()
         .get(`${this.entity}/${id}`)
         .then((response) =>
           resolve(this.responseWrapper(response, response.data.data)),
         )
         .catch((error) => {
-          let message = error.response.data
+          const message = error.response.data
             ? error.response.data.error
             : error.response.statusText;
           reject(this.errorWrapper(error, message));
-        });
-    });
+        }),
+    );
   }
 
   /**
@@ -78,51 +78,51 @@ export default class BaseService {
    */
 
   getById(id = window.required()) {
-    return new Promise((resolve, reject) => {
-      return this.request({ auth: true })
+    return new Promise((resolve, reject) =>
+      this.request({ auth: true })
         .get(`${this.entity}/${id}`)
         .then((response) =>
           resolve(this.responseWrapper(response, response.data.data)),
         )
         .catch((error) => {
-          let message = error.response.data
+          const message = error.response.data
             ? error.response.data.error
             : error.response.statusText;
           reject(this.errorWrapper(error, message));
-        });
-    });
+        }),
+    );
   }
 
   create(data = window.required()) {
-    return new Promise((resolve, reject) => {
-      return this.request({ auth: true })
+    return new Promise((resolve, reject) =>
+      this.request({ auth: true })
         .post(`${this.entity}`, data)
         .then((response) =>
           resolve(this.responseWrapper(response, response.data.data)),
         )
-        .catch((error) => reject(this.errorWrapper(error)));
-    });
+        .catch((error) => reject(this.errorWrapper(error))),
+    );
   }
 
   update(id = window.required(), data = window.required()) {
-    return new Promise((resolve, reject) => {
-      return this.request({ auth: true })
+    return new Promise((resolve, reject) =>
+      this.request({ auth: true })
         .patch(`${this.entity}/${id}`, data)
         .then((response) =>
           resolve(this.responseWrapper(response, response.data.data)),
         )
-        .catch((error) => reject(this.errorWrapper(error)));
-    });
+        .catch((error) => reject(this.errorWrapper(error))),
+    );
   }
 
   remove(id = window.required()) {
-    return new Promise((resolve, reject) => {
-      return this.request({ auth: true })
+    return new Promise((resolve, reject) =>
+      this.request({ auth: true })
         .delete(`${this.entity}/${id}`)
         .then((response) =>
           resolve(this.responseWrapper(response, response.data.data)),
         )
-        .catch((error) => reject(this.errorWrapper(error)));
-    });
+        .catch((error) => reject(this.errorWrapper(error))),
+    );
   }
 }

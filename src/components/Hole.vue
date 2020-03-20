@@ -30,6 +30,7 @@ import { getPost, createPost } from '../services/post.service.js';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log.js';
+
 export default {
   components: { Post, Editor },
   data() {

@@ -6,7 +6,7 @@
 
 import axios from 'axios';
 
-import * as authService from '../services/auth.service';
+import * as authService from './auth.service';
 import { API_URL } from '../utils/config';
 
 export default class Http {
@@ -23,8 +23,7 @@ export default class Http {
     if (this.isAuth) {
       this.instance.interceptors.request.use(
         (request) => {
-          request.headers['Authorization'] =
-            'Bearer ' + authService.getAccessToken();
+          request.headers.Authorization = `Bearer ${authService.getAccessToken()}`;
           // if access token expired and refreshToken is exist >> go to API and get new access token
           // if (authService.isAccessTokenExpired() && authService.getRefreshToken()) {
           //   return authService.refreshTokens()
@@ -37,9 +36,7 @@ export default class Http {
           // }
           return request;
         },
-        (error) => {
-          return Promise.reject(error);
-        },
+        (error) => Promise.reject(error),
       );
 
       return this.instance;

@@ -45,13 +45,12 @@
 
 <script>
 import log from '../utils/log';
+
 export default {
   name: 'TopToolbar',
-  data: () => {
-    return {
-      showMenu: false,
-    };
-  },
+  data: () => ({
+    showMenu: false,
+  }),
   methods: {
     toggleMenu() {
       this.showMenu = !this.showMenu;

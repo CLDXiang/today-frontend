@@ -19,56 +19,55 @@
 
 <script lang="js">
 import log from '../utils/log.js';
+
 export default {
-    data: () => {
-        return {
-        }
-    },
-    methods: {
-      courseClick() {
-        if (this.activePage !== 'course') {
-          this.$router.push('/').then(() => {
-            this.$store.state.app.barTitle = '课表';
-          });
-        }
-      },
-      statusClick() {
-        if (this.$store.getters.userLoggedIn) {
-          log.info('jump to profile');
-          this.$router.push('profile');
-        } else {
-          this.$router.push('login');
-        }
-      },
-      holeClick() {
-        this.$router.push('hole').then(() => {
-          this.$store.state.app.barTitle = '树洞';
-        }).catch(e => {
-          log.info(e);
+  data: () => ({
+  }),
+  methods: {
+    courseClick() {
+      if (this.activePage !== 'course') {
+        this.$router.push('/').then(() => {
+          this.$store.state.app.barTitle = '课表';
         });
       }
     },
-    computed: {
-      activePage: {
-        get: function () {
-          let path = this.$route.path;
-          if (/\/hole\/?.*$/.test(path)) {
-            return 'hole';
-          }
-          if (/\/profile\/?.*$/.test(path)) {
-            return 'status';
-          }
-          return 'course';
-        },
-        set: function () {
-        }
-      },
-      status() {
-        return this.$store.getters.userLoggedIn ? "个人中心" : "未登录";
-      },
-      // activePage() {
-      //   return this.$router.url
-      // },
+    statusClick() {
+      if (this.$store.getters.userLoggedIn) {
+        log.info('jump to profile');
+        this.$router.push('profile');
+      } else {
+        this.$router.push('login');
+      }
     },
-}
+    holeClick() {
+      this.$router.push('hole').then(() => {
+        this.$store.state.app.barTitle = '树洞';
+      }).catch((e) => {
+        log.info(e);
+      });
+    },
+  },
+  computed: {
+    activePage: {
+      get() {
+        const { path } = this.$route;
+        if (/\/hole\/?.*$/.test(path)) {
+          return 'hole';
+        }
+        if (/\/profile\/?.*$/.test(path)) {
+          return 'status';
+        }
+        return 'course';
+      },
+      set() {
+      },
+    },
+    status() {
+      return this.$store.getters.userLoggedIn ? '个人中心' : '未登录';
+    },
+    // activePage() {
+    //   return this.$router.url
+    // },
+  },
+};
 </script>

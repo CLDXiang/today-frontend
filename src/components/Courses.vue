@@ -17,11 +17,11 @@
           :id="slot.id"
           :class="{
             cell: true,
-            select: slot.selected.length == 1,
+            select: slot.selected.length === 1,
             conflict: slot.selected.length > 1,
           }"
         >
-          <div v-if="slot.selected.length == 0">
+          <div v-if="slot.selected.length === 0">
             {{ slot.available.length }}
           </div>
           <div v-else>

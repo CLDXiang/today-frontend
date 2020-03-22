@@ -28,16 +28,16 @@
 
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-alert :type="alertType" v-if="alertShown" :dismissible="true">{{
-          alertContent
-        }}</v-alert>
+        <v-alert :type="alertType" v-if="alertShown" :dismissible="true">
+          {{ alertContent }}
+        </v-alert>
       </v-col>
     </v-row>
 
     <v-row justify="center">
-      <v-btn @click="$router.push('/register')" color="primary" class="ma-2"
-        >注册</v-btn
-      >
+      <v-btn @click="$router.push('/register')" color="primary" class="ma-2">
+        注册
+      </v-btn>
       <v-btn @click="login" color="primary" class="ma-2">登录</v-btn>
     </v-row>
   </v-container>

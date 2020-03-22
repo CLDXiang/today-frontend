@@ -21,14 +21,14 @@
         <v-btn
           color="green"
           dark
-          v-if="showOperation == 'select'"
+          v-if="showOperation === 'select'"
           @click="select(item.cid)"
           >选中</v-btn
         >
         <v-btn
           color="green"
           dark
-          v-if="showOperation == 'withdraw'"
+          v-if="showOperation === 'withdraw'"
           @click="withdraw(item.cid)"
           >退选</v-btn
         >

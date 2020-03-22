@@ -41,18 +41,17 @@ export function login(username, password) {
     log.info('login payload: ', data);
     axios
       .post(`${API_URL}/auth/login`, data)
-      .then((response) => {
-        log.info('login response', response);
-        const jwtToken = response.data.access_token;
-        const { email } = response.data;
+      .then((resp) => {
+        log.info('login resp', resp);
+        const jwtToken = resp.data.access_token;
+        const { email } = resp.data;
         if (jwtToken) {
           $store.commit('SET_JWT_TOKEN', jwtToken);
           $store.commit('SET_USER', username, email);
-          response.sucess = true;
         } else {
-          response.sucess = false;
+          reject(new Error('jwtToken no contained in response'));
         }
-        return resolve(response);
+        return resolve(resp);
       })
       .catch((error) => reject(error));
   });
@@ -69,7 +68,7 @@ export function register(name, email, password) {
     axios
       .post(`${API_URL}/auth/register`, payload)
       .then((resp) => {
-        log.info('register response', resp);
+        log.info('register resp', resp);
         resolve(resp);
       })
       .catch((err) => reject(err));

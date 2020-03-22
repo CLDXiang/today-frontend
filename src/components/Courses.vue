@@ -219,7 +219,7 @@ export default {
           this.data = data;
         })
         .catch((err) => {
-          alert(err);
+          log.info(err);
         });
     },
     query(e, day, section) {

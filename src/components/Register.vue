@@ -88,7 +88,7 @@ export default {
             this.$router.push('login');
           }, 1000);
         }
-        if (resp.data.result == 'failed') {
+        if (resp.data.result === 'failed') {
           this.result = 'already_exist';
           this.showAlert(
             'warning',

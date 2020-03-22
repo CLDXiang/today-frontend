@@ -58,13 +58,20 @@ function getHeaders(cols) {
     { text: '操作', value: 'operation' },
   ];
   const headers = [];
-  for (const col of cols) {
-    for (const t of header) {
-      if (t.value == col) {
+  cols.array.forEach((col) => {
+    header.forEach((t) => {
+      if (t.value === col) {
         headers.push(t);
       }
-    }
-  }
+    });
+  });
+  // for (const col of cols) {
+  //   for (const t of header) {
+  //     if (t.value === col) {
+  //       headers.push(t);
+  //     }
+  //   }
+  // }
   return headers;
 }
 export default {

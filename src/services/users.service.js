@@ -2,7 +2,7 @@ import BaseService from './base.service';
 import { API_URL } from '../utils/config';
 
 class UsersService extends BaseService {
-  get entity() {
+  static get entity() {
     return 'users';
   }
 
@@ -22,10 +22,10 @@ class UsersService extends BaseService {
     );
   }
 
-  getPostsByUserId(user_id = window.required()) {
+  getPostsByUserId(userId = window.required()) {
     return new Promise((resolve, reject) =>
       this.request({ auth: true })
-        .get(`${this.entity}/${user_id}/posts`)
+        .get(`${this.entity}/${userId}/posts`)
         .then((response) => {
           const data = {
             content: response.data.data,

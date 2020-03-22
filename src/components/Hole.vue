@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import { getPost, createPost } from '../services/post.service.js';
+import { getPost, createPost } from '../services/post.service';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
-import log from '../utils/log.js';
+import log from '../utils/log';
 
 export default {
   components: { Post, Editor },

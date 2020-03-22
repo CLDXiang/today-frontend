@@ -1,5 +1,5 @@
 class Logger {
-  info(...args) {
+  static info(...args) {
     // eslint-disable-next-line no-console
     console.log(...args);
   }

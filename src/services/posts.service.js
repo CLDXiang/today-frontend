@@ -1,7 +1,7 @@
 import BaseService from './base.service';
 
 class PostsService extends BaseService {
-  get entity() {
+  static get entity() {
     return 'posts';
   }
 }

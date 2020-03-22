@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
-import { API_URL } from '../utils/config.js';
-import log from '../utils/log.js';
+import { API_URL } from '../utils/config';
+import log from '../utils/log';
 
 export async function getPost(category) {
   return new Promise((resolve, reject) => {

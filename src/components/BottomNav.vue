@@ -18,7 +18,7 @@
 </template>
 
 <script lang="js">
-import log from '../utils/log.js';
+import log from '../utils/log';
 
 export default {
   data: () => ({

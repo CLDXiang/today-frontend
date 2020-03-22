@@ -1,11 +1,49 @@
 import axios from 'axios';
 import Http from './http.init';
 import { ResponseWrapper, ErrorWrapper } from './util';
-import log from '../utils/log.js';
+import log from '../utils/log';
 import $store from '../store';
 import $router from '../router';
 
 import { API_URL } from '../utils/config';
+
+/**
+ ******************************
+ * @methods
+ ******************************
+ */
+
+export function isAccessTokenExpired() {
+  const accessTokenExpDate = $store.state.auth.accessTokenExpDate - 1;
+  const nowTime = Math.floor(new Date().getTime() / 1000);
+
+  return accessTokenExpDate <= nowTime;
+}
+
+export function getRefreshToken() {
+  return localStorage.getItem('refreshToken');
+}
+
+export function getAccessToken() {
+  return $store.state.user.token;
+  // return localStorage.getItem('accessToken');
+}
+
+function resetAuthData() {
+  // reset userData in store
+  $store.commit('user/SET_CURRENT_USER', {});
+  $store.commit('auth/SET_ATOKEN_EXP_DATE', null);
+  // reset tokens in localStorage
+  localStorage.setItem('refreshToken', '');
+  localStorage.setItem('accessToken', '');
+}
+
+function setAuthData(response) {
+  // localStorage.setItem('refreshToken', response.data.refreshToken);
+  // localStorage.setItem('accessToken', response.data.accessToken);
+  // $store.commit('auth/SET_ATOKEN_EXP_DATE', response.data.expires_in);
+  $store.commit('SET_JWT', response.data.access_token);
+}
 
 /**
  ******************************
@@ -24,10 +62,10 @@ export function login(username, password) {
       .post(`${API_URL}/auth/login`, data)
       .then((response) => {
         log.info('login response', response);
-        const jwt_token = response.data.access_token;
+        const jwtToken = response.data.access_token;
         const { email } = response.data;
-        if (jwt_token) {
-          $store.commit('SET_JWT_TOKEN', jwt_token);
+        if (jwtToken) {
+          $store.commit('SET_JWT_TOKEN', jwtToken);
           $store.commit('SET_USER', username, email);
           response.sucess = true;
         } else {
@@ -79,7 +117,7 @@ export function makeLogout() {
     new Http({ auth: true })
       .post('auth/signout')
       .then((response) => {
-        _resetAuthData();
+        resetAuthData();
         $router.push({ name: 'index' });
         return resolve(new ResponseWrapper(response, response.data));
       })
@@ -94,60 +132,23 @@ export function refreshTokens() {
         refreshToken: getRefreshToken(),
       })
       .then((response) => {
-        _setAuthData(response);
+        setAuthData(response);
         return resolve(new ResponseWrapper(response, response.data));
       })
       .catch((error) => {
         if (error.response.data.badRefreshToken) {
           log.info('http.init.js >> badRefreshToken: true');
-          _resetAuthData();
+          resetAuthData();
           $router.push({ name: 'index' });
           return reject(new ErrorWrapper(error));
         }
         if (error.response.data.refreshTokenExpiredError) {
           log.info('http.init.js >> refreshTokenExpiredError');
-          _resetAuthData();
+          resetAuthData();
           $router.push({ name: 'index' });
           return reject(new ErrorWrapper(error));
         }
+        return reject(new ErrorWrapper(error));
       });
   });
-}
-
-/**
- ******************************
- * @methods
- ******************************
- */
-
-export function isAccessTokenExpired() {
-  const accessTokenExpDate = $store.state.auth.accessTokenExpDate - 1;
-  const nowTime = Math.floor(new Date().getTime() / 1000);
-
-  return accessTokenExpDate <= nowTime;
-}
-
-export function getRefreshToken() {
-  return localStorage.getItem('refreshToken');
-}
-
-export function getAccessToken() {
-  return $store.state.user.token;
-  // return localStorage.getItem('accessToken');
-}
-
-function _resetAuthData() {
-  // reset userData in store
-  $store.commit('user/SET_CURRENT_USER', {});
-  $store.commit('auth/SET_ATOKEN_EXP_DATE', null);
-  // reset tokens in localStorage
-  localStorage.setItem('refreshToken', '');
-  localStorage.setItem('accessToken', '');
-}
-
-function _setAuthData(response) {
-  // localStorage.setItem('refreshToken', response.data.refreshToken);
-  // localStorage.setItem('accessToken', response.data.accessToken);
-  // $store.commit('auth/SET_ATOKEN_EXP_DATE', response.data.expires_in);
-  $store.commit('SET_JWT', response.data.access_token);
 }

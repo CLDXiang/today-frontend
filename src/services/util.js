@@ -6,7 +6,7 @@ import isArray from 'lodash/isArray';
  * @param {number} status - HTTP status code
  * @returns {string} Message of network operation
  */
-function _getStatusMessage(status) {
+function getStatusMessage(status) {
   let message = '';
   switch (status) {
     case 200:
@@ -34,7 +34,7 @@ function _getStatusMessage(status) {
   return message;
 }
 
-function _getResponseErrorMessage(error) {
+function getResponseErrorMessage(error) {
   if (error.response && error.response.data)
     return error.response.data.description;
   if (error.response && error.response.statusText)
@@ -54,7 +54,7 @@ export class ResponseWrapper {
     this.data = data;
     this.success = response.data.success;
     this.status = response.status;
-    this.statusMessage = _getStatusMessage(this.status);
+    this.statusMessage = getStatusMessage(this.status);
     this.message = message || null;
   }
 }
@@ -71,8 +71,8 @@ export class ErrorWrapper extends Error {
     this.stack = new Error().stack;
     this.success = error.response ? error.response.data.success : false;
     this.status = error.response ? error.response.status : false;
-    this.statusMessage = _getStatusMessage(this.status);
-    this.message = message || _getResponseErrorMessage(error);
+    this.statusMessage = getStatusMessage(this.status);
+    this.message = message || getResponseErrorMessage(error);
   }
 }
 

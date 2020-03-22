@@ -43,7 +43,7 @@
   </v-container>
 </template>
 <script>
-import log from '../utils/log.js';
+import log from '../utils/log';
 import { login, tryHello } from '../services/auth.service';
 
 export default {

@@ -14,15 +14,15 @@ export default class BaseService {
    * ------------------------------
    */
 
-  request(status = { auth: false }) {
+  static request(status = { auth: false }) {
     return new Http(status);
   }
 
-  responseWrapper(...rest) {
+  static responseWrapper(...rest) {
     return new ResponseWrapper(...rest);
   }
 
-  errorWrapper(...rest) {
+  static errorWrapper(...rest) {
     return new ErrorWrapper(...rest);
   }
 

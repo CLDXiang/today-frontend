@@ -9,7 +9,8 @@
     "test:unit": "vue-cli-service test:unit",
     "format": "prettier --write \"src/**/*.js\" \"src/**/*.vue\" \"test/**/*\"",
     "format:check": "prettier --check \"src/**/*.js\" \"src/**/*.vue\" \"test/**/*\"",
-    "check": "npm run format:check && npm run lint && npm run build && echo 'check passed!'"
+    "check": "npm run format:check && npm run lint && npm run build && echo 'check passed!'",
+    "checkRun": "npm run build"
   },
   "dependencies": {
     "@vue/cli": "^3.11.0",

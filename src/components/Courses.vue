@@ -110,9 +110,9 @@
 
 <script>
 import { setTimeout } from 'timers';
-import CoursesTable from './CoursesTable';
-import { spans2segments, getId, spans2slots } from './utils';
-import log from '../utils/log.js';
+import CoursesTable from './CoursesTable.vue';
+import { spans2segments, getId, spans2slots } from './utils.jsx';
+import log from '../utils/log';
 
 const axios = require('axios');
 
@@ -141,16 +141,16 @@ const days = [
   '星期六',
   '星期日',
 ];
-const slots = new Array();
-for (let s = 0; s < sections.length; s++) {
-  const tmp = new Array();
-  for (let d = 0; d < days.length; d++) {
+const slots = [];
+for (let s = 0; s < sections.length; s += 1) {
+  const tmp = [];
+  for (let d = 0; d < days.length; d += 1) {
     tmp.push({
       id: getId(d, s),
       d,
       s,
-      available: new Array(),
-      selected: new Array(),
+      available: [],
+      selected: [],
     });
   }
   slots.push(tmp);
@@ -183,7 +183,7 @@ export default {
       const timeStrs = timeStr.split('<br>');
       const spans = new Set();
       const temp = /(星期.) (\d*)-(\d*)/g;
-      for (const i in timeStrs) {
+      timeStrs.forEach((i) => {
         const t = temp.exec(timeStrs[i].trim());
         temp.lastIndex = 0;
         if (t) {
@@ -195,7 +195,7 @@ export default {
         } else {
           log.info(timeStr, t, timeStrs[i]);
         }
-      }
+      });
       return spans;
     },
     getId,
@@ -204,8 +204,8 @@ export default {
         .get('courses.json')
         .then((response) => {
           const { data } = response;
-          const courses = new Array();
-          for (const i in data) {
+          const courses = [];
+          data.forEach((i) => {
             const d = data[i];
             const timeStr = d.timing;
             const spans = this.parseTime(timeStr);
@@ -214,7 +214,7 @@ export default {
               this.slots[s.s][s.d].available.push(data[i]);
             });
             courses.push(d);
-          }
+          });
           this.courses = courses;
           this.data = data;
         })
@@ -247,7 +247,7 @@ export default {
         const segments = spans2segments(d.spans);
         log.info(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
-          for (let c = s.s; c <= s.e; c++) {
+          for (let c = s.s; c <= s.e; c += 1) {
             this.slots[c][s.d].selected.push(d);
           }
           // const l = s.e - s.s + 1;
@@ -268,16 +268,16 @@ export default {
     withdraw(cid) {
       const d = this.data[cid];
       const i = this.selected.indexOf(d);
-      if (i == -1) {
+      if (i === -1) {
         this.showNotSelected = true;
       } else {
         this.selected.splice(i, i + 1);
         const segments = spans2segments(d.spans);
         log.info(d.spans, spans2slots(d.spans), segments);
         segments.forEach((s) => {
-          for (let c = s.s; c <= s.e; c++) {
-            const i = this.slots[c][s.d].selected.indexOf(d);
-            this.slots[c][s.d].selected.splice(i, i + 1);
+          for (let c = s.s; c <= s.e; c += 1) {
+            const j = this.slots[c][s.d].selected.indexOf(d);
+            this.slots[c][s.d].selected.splice(j, j + 1);
           }
         });
       }

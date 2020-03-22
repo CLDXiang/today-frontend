@@ -29,7 +29,7 @@ import marked from 'marked';
 import { ANONY_NAMES } from '../utils/config';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
-import log from '../utils/log.js';
+import log from '../utils/log';
 import {
   getPostById,
   getPostReply,
@@ -73,13 +73,14 @@ export default {
       } else {
         name = `${id}`;
       }
-      if (id == this.post.anony_id) {
+      if (id === this.post.anony_id) {
         name += '（我）';
       }
       return name;
     },
     async createReply(reply) {
       log.info('reply!', reply);
+      // eslint-disable-next-line camelcase
       const { anony_id, id } = await createReply(
         parseInt(this.id),
         reply.content,

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { API_URL } from '../utils/config.js';
+import { API_URL } from '../utils/config';
 
-export function register(name, email, password) {
+export default function register(name, email, password) {
   return new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/register`, {

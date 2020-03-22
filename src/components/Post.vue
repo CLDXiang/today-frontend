@@ -25,7 +25,7 @@
 
 <script>
 import marked from 'marked';
-// import log from '../utils/log.js';
+
 export default {
   props: {
     title: String,

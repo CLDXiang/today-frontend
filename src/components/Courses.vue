@@ -111,7 +111,7 @@
 <script>
 import { setTimeout } from 'timers';
 import CoursesTable from './CoursesTable.vue';
-import { spans2segments, getId, spans2slots } from './utils.jsx';
+import { spans2segments, getId, spans2slots } from './utils';
 import log from '../utils/log';
 
 const axios = require('axios');

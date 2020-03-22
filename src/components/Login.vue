@@ -44,7 +44,7 @@
 </template>
 <script>
 import log from '../utils/log';
-import { login, tryHello } from '../services/auth.service';
+import { login } from '../services/auth.service';
 
 export default {
   data: () => ({
@@ -79,7 +79,6 @@ export default {
       login(this.name, this.password)
         .then((resp) => {
           log.info(resp);
-          tryHello();
           this.showAlert('success', '登录成功');
           const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);

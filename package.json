@@ -56,7 +56,17 @@
       "airbnb-base",
       "plugin:prettier/recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-param-reassign": [
+        "error",
+        {
+          "props": true,
+          "ignorePropertyModificationsFor": [
+            "state"
+          ]
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     },

@@ -1,9 +1,6 @@
 import axios from 'axios';
-import Http from './http.init';
-import { ResponseWrapper, ErrorWrapper } from './util';
 import log from '../utils/log';
 import $store from '../store';
-import $router from '../router';
 
 import { API_URL } from '../utils/config';
 
@@ -27,22 +24,6 @@ export function getRefreshToken() {
 export function getAccessToken() {
   return $store.state.user.token;
   // return localStorage.getItem('accessToken');
-}
-
-function resetAuthData() {
-  // reset userData in store
-  $store.commit('user/SET_CURRENT_USER', {});
-  $store.commit('auth/SET_ATOKEN_EXP_DATE', null);
-  // reset tokens in localStorage
-  localStorage.setItem('refreshToken', '');
-  localStorage.setItem('accessToken', '');
-}
-
-function setAuthData(response) {
-  // localStorage.setItem('refreshToken', response.data.refreshToken);
-  // localStorage.setItem('accessToken', response.data.accessToken);
-  // $store.commit('auth/SET_ATOKEN_EXP_DATE', response.data.expires_in);
-  $store.commit('SET_JWT', response.data.access_token);
 }
 
 /**
@@ -92,63 +73,5 @@ export function register(name, email, password) {
         resolve(resp);
       })
       .catch((err) => reject(err));
-  });
-}
-
-export function tryHello() {
-  return new Promise((resolve, reject) => {
-    const authHeader = {
-      Authorization: `Bearer ${$store.state.user.jwt_token}`,
-    };
-    log.info({ authHeader });
-    axios
-      .get(`${API_URL}`, {
-        headers: authHeader,
-      })
-      .then((resp) => {
-        log.info(resp);
-      })
-      .catch((error) => reject(error));
-  });
-}
-
-export function makeLogout() {
-  return new Promise((resolve, reject) => {
-    new Http({ auth: true })
-      .post('auth/signout')
-      .then((response) => {
-        resetAuthData();
-        $router.push({ name: 'index' });
-        return resolve(new ResponseWrapper(response, response.data));
-      })
-      .catch((error) => reject(new ErrorWrapper(error)));
-  });
-}
-
-export function refreshTokens() {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/refresh-tokens`, {
-        refreshToken: getRefreshToken(),
-      })
-      .then((response) => {
-        setAuthData(response);
-        return resolve(new ResponseWrapper(response, response.data));
-      })
-      .catch((error) => {
-        if (error.response.data.badRefreshToken) {
-          log.info('http.init.js >> badRefreshToken: true');
-          resetAuthData();
-          $router.push({ name: 'index' });
-          return reject(new ErrorWrapper(error));
-        }
-        if (error.response.data.refreshTokenExpiredError) {
-          log.info('http.init.js >> refreshTokenExpiredError');
-          resetAuthData();
-          $router.push({ name: 'index' });
-          return reject(new ErrorWrapper(error));
-        }
-        return reject(new ErrorWrapper(error));
-      });
   });
 }

@@ -57,8 +57,8 @@ export default {
     };
   },
   async mounted() {
-    this.post = await getPostById(parseInt(this.id));
-    this.replies = await getPostReply(parseInt(this.id));
+    this.post = await getPostById(parseInt(this.id, 10));
+    this.replies = await getPostReply(parseInt(this.id, 10));
   },
   methods: {
     render(content) {
@@ -82,7 +82,7 @@ export default {
       log.info('reply!', reply);
       // eslint-disable-next-line camelcase
       const { anony_id, id } = await createReply(
-        parseInt(this.id),
+        parseInt(this.id, 10),
         reply.content,
       );
       log.info();

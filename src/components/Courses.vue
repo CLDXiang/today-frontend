@@ -189,8 +189,8 @@ export default {
         if (t) {
           // log.info(t);
           const day = this.days.indexOf(t[1]);
-          const start = parseInt(t[2]) - 1;
-          const end = parseInt(t[3]) - 1;
+          const start = parseInt(t[2], 10) - 1;
+          const end = parseInt(t[3], 10) - 1;
           spans.add({ day, start, end });
         } else {
           log.info(timeStr, t, timeStrs[i]);

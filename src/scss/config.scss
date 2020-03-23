@@ -1,0 +1,306 @@
+
+//Responsive
+$break-width: 50rem;
+$main-width: 65rem;
+
+$spacing-unit: 3rem;
+$dp: 1px;
+
+/* Color */
+
+$red: #f44336;
+$pink: #e91e63;
+$purple: #9c27b0;
+$deep-purple: #673ab7;
+$indigo: #3f51b5;
+$blue: #2196f3;
+$light-blue: #03a9f4;
+$cyan: #00bcd4;
+$teal: #009688;
+$green: #4caf50;
+$light-green: #8bc34a;
+$lime: #cddc39;
+$yellow: #ffeb3b;
+$amber: #ffc107;
+$orange: #ff9800;
+$deep-orange: #ff5722;
+$brown: #795548;
+$grey: #9e9e9e;
+$blue-grey: #607d8b;
+
+
+//$primary-color: white;
+//$primary-color: #1976D2;
+$primary-color: #3f51b5;
+//$primary-color: #6200ee;
+
+$dark-primary-color: #1976D2;
+$light-primary-color: #BBDEFB;
+
+$secondary-color: #FF4081; //aka. accent color 
+$dark-secondary-color: #c60055;
+$light-secondary-color: #ff79b0;
+
+$background-color: white;
+$surface-color: white;
+$error-color: #B00020;
+
+/* on colors should be automatically generated */
+/* default white or black */
+$on-primary-color: white;
+$on-secondary-color: white;
+$on-background-color: black;
+$on-surface-color: black;
+$on-error-color: white;
+
+/*
+$primary-text-color: ;
+$secondary-text-color: ;
+$divider-color: ;
+*/
+
+/* Text and icon color */
+$error-opacity: 1;/* Error helper */
+$high-emphasis-opacity: .8;
+$active-opacity: .8; /* Active icon */
+$medium-emphasis-opacity: .6;/* Default helper */
+$inactive-opacity: .6; /* Inactive icon */
+$disabled-opacity: .38;
+$divider-opacity: .12;
+
+
+/* span spacing .4em */
+
+
+/* 3. Typography */
+//TODO
+
+
+/* Layout */
+$small-spacing: 0.6em;//inner component should be em
+$medium-spacing: 1rem;//inter component
+$large-spacing: 4rem;//inter view
+
+
+/* Motion */
+
+/* 4.1 Duration: small(in-place), medium(half-screen), large(full-screen) */
+$small-in: .1s;
+$small-out: .1s;
+$medium-in: .25s;
+$medium-out: .2s;
+$large-in: .3s;
+$large-out: .25s;
+    
+/* 4.2 Easing */
+$standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
+$accelerate-easing: cubic-bezier(0.4, 0.0, 1, 1);
+$decelerate-easing: cubic-bezier(0.0, 0.0, 0.2, 1);
+
+// Math functions
+$pi: 3.14159265359;
+$_precision: 10;
+
+@function pow($base, $exp) {
+  $value: $base;
+  @if $exp > 1 {
+    @for $i from 2 through $exp {
+      $value: $value * $base;
+    }
+  }
+  @if $exp < 1{
+    @for $i from 0 through -$exp {
+      $value: $value / $base;
+    }
+  }
+  @return $value;
+}
+
+@function fact($num) {
+  $fact: 1;
+  @if $num > 0{
+    @for $i from 1 through $num {
+      $fact: $fact * $i;
+    }
+  }
+  @return $fact;
+}
+
+@function _to_unitless_rad($angle) {
+  @if unit($angle) == "deg" {
+    $angle: $angle / 180deg * $pi;
+  }
+  @if unit($angle) == "rad" {
+    $angle: $angle / 1rad;
+  }
+  @return $angle;
+}
+
+@function sin($angle){
+  $a: _to_unitless_rad($angle);
+  $sin: $a;
+  @for $n from 1 through $_precision {
+    $sin: $sin + (pow(-1, $n) / fact(2 * $n + 1) ) * pow($a, (2 * $n + 1));
+  }
+  @return $sin;
+}
+
+@function cos($angle){
+  $a: _to_unitless_rad($angle);
+  $cos: 1;
+  @for $n from 1 through $_precision {
+    $cos: $cos + ( pow(-1,$n) / fact(2*$n) ) * pow($a,2*$n);
+  }
+  @return $cos;
+}
+
+@function tan($angle){
+  @return sin($angle) / cos($angle);
+}
+
+/* Usage: 
+ * background: url(#{svg-inline("<svg>...</svg>")})
+ */
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+  
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  
+  @return $string;
+}
+@function svg-inline($string){
+  $result: str-replace($string, "<svg", "<svg xmlns='http://www.w3.org/2000/svg'");
+  $result: str-replace($result, '#', '%23');
+  $result: str-replace($result, '%', '%25');
+  $result: str-replace($result, '"', '%22');
+  $result: str-replace($result, "'", '%27');
+  $result: str-replace($result, ' ', '%20');
+  $result: str-replace($result, '<', '%3C');
+  $result: str-replace($result, '>', '%3E');
+  @return "data:image/svg+xml;utf8," + $result;
+}
+
+@mixin no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@mixin no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    &::-webkit-scrollbar { /* WebKit */
+        width: 0;
+        height: 0;
+    }
+}
+
+@mixin frosted-glass($color: #ffffff) {
+    @supports ((-webkit-backdrop-filter: saturate(180%) blur(20px)) or (backdrop-filter: saturate(180%) blur(20px))) {
+        //user can customize background color like this
+        background-color: rgba($color, .8) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: saturate(180%) blur(10px);
+    }
+    background-color: rgba($color, 1);
+}
+.frosted-glass {
+    @include frosted-glass;
+}
+
+// Apple's collapse effect
+%cascade--collapse {
+    
+    // user should specify transition-property of outer
+    // and transform of inner as below
+
+    //transition-property: height;
+    //& > * { transform: translate3d(0, -$item-size*6, 0); }
+
+    //outer collapse
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.28, 0.11, 0.32, 1);
+    transition-delay: 0.4s;
+
+    & > * {
+        opacity: 0;
+        //inner collapse
+        transition: transform 0s cubic-bezier(0.23, 1, 0.32, 1) 0.9s, 
+                    opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.2s;
+    }
+}
+%cascade--expand {
+    //outer expand
+    transition-delay: 0.2s;
+
+    & > * {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+        //inner expand
+        transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0.2s, 
+                    opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.4s;
+    }
+} 
+
+@mixin button2span {
+
+    border: none;
+    outline: none;
+    background-color: transparent;
+    &::-moz-focus-inner { border: 0; }
+    padding: 0;
+    margin: 0;
+}
+
+//desktop
+.landscape-only { @media (max-width: $break-width) { display: none !important; }}
+
+//mobile
+.portrait-only { @media (min-width: $break-width) { display: none !important;} }
+.portrait-sticky { @media (max-width: $break-width) { position: sticky; } }
+.portrait-fixed { @media (max-width: $break-width) { position: fixed; } }
+
+// Responsive align
+.responsive-max-width { 
+    max-width: var(--max-width--landscape);
+    @media (max-width: $break-width) { max-width: var(--max-width--portrait); } 
+}
+.responsive-padding { 
+    padding: var(--padding--landscape);
+    @media (max-width: $break-width) { padding: var(--padding--portrait); } 
+}
+.responsive-margin { 
+    margin: var(--margin--landscape);
+    @media (max-width: $break-width) { margin: var(--margin--portrait); }
+}
+.responsive-width { 
+    width: var(--width--landscape);
+    @media (max-width: $break-width) { width: var(--width--portrait); }
+}
+.responsive-background { 
+    background: var(--background--landscape);
+    @media (max-width: $break-width) { background: var(--background--portrait); } 
+}
+.responsive-border { 
+    border: var(--border--landscape);
+    @media (max-width: $break-width) { border: var(--border--portrait); }
+}
+// Usually we only need this
+.responsive-border-width { 
+    border-width: var(--border-width--landscape);
+    @media (max-width: $break-width) { border-width: var(--border-width--portrait); }
+}
+.responsive-border-radius { 
+    border-radius: var(--border-radius--landscape);
+    @media (max-width: $break-width) { border-radius: var(--border-radius--portrait); }
+}
+
+.no-scrollbar {
+    @include no-scrollbar;
+}
+

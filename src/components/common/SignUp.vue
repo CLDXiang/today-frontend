@@ -6,21 +6,17 @@
         <h3>Welcome.</h3>
 
         <div class="inputbar" style="max-width: 20em; border-radius: .3em;">
-          <input id="signinname" type="text" spellcheck="false" />
+          <input id="signupname" type="text" spellcheck="false" />
           <span style="--width: 5em;"><span>Name</span></span>
         </div>
 
         <div class="inputbar" style="max-width: 20em; border-radius: .3em;">
-          <input id="signinpwd" type="text" spellcheck="false" />
+          <input id="signuppwd" type="text" spellcheck="false" />
           <span style="--width: 7em;"><span>Password</span></span>
         </div>
 
         <div>
-          <button
-            id="signinbtn"
-            class="light"
-            style="color: rgba(0, 0, 0, .8);"
-          >
+          <button class="light" style="color: rgba(0, 0, 0, .8);">
             Sign Up
           </button>
         </div>
@@ -47,9 +43,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/mark.scss';
-@import '../../scss/dialog.scss';
-@imoprt "../../scss/button.scss";
+// @import '../../scss/mark.scss';
+// @import '../../scss/dialog.scss';
+// @imoprt '../../scss/button.scss';
+@import '../../scss/config.scss';
 
 // Input bar style
 div.inputbar {

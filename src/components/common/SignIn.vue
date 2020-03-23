@@ -50,9 +50,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/mark.scss';
-@import '../../scss/dialog.scss';
-@import '../../scss/button.scss';
+// @import '../../scss/mark.scss';
+// @import '../../scss/dialog.scss';
+// @import '../../scss/button.scss';
+@import '../../scss/config.scss';
 
 // Input bar style
 div.inputbar {

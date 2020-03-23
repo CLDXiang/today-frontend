@@ -105,65 +105,6 @@
 
 }
 
-//TODO
-//height: 1em + 2*small-spacing
-@mixin list-button($color: $on-surface-color, $align: left) {
-
-    @include button-base;
-    @include no-select;
-
-    color: inherit;
-    //customize color
-    //color: rgba(160, 0, 0, .8);
-
-    @if $align==right { justify-content: flex-end; }
-
-    &::before, &::after { border-bottom: none;}
-    &:last-child::after { border-bottom: 1px solid currentColor; }
-
-    //alternative color
-    &:nth-child(even)::before { background-color: transparent; }
-    &:nth-child(even):hover::before { background-color: currentColor; opacity: .01;}
-    &:nth-child(even):active::before { opacity: .04;}
-    //&:nth-child(odd) { }
-
-    padding: .7em 1em;
-    & > * { margin-right: .7em; }
-    & > *:last-child { margin-right: 0; }
-
-    display: flex;
-
-    //NOTE
-    width: 100%;
-
-
-    //Force single line
-    white-space: nowrap;
-
-    //color: $color;
-    opacity: $medium-emphasis-opacity;
-    &:hover, &:focus { opacity: $high-emphasis-opacity; }
-
-    //background
-    &::before {
-        box-sizing: border-box;
-        height: 100%;
-        width: 100%;
-    }
-    //border
-    &::after {
-        box-sizing: border-box;
-        height: 100%;
-        width: 100%;
-    }
-    margin: -1px 0 0 0;
-    border-radius: 0;
-    text-transform: none;
-    letter-spacing: 0;
-}
-
-
-
 button.light {
 
     @include button-base;
@@ -268,6 +209,4 @@ a.icon {
         opacity: $inactive-opacity;
     }
 }
-
-div.list .list-button { @include list-button; }
 

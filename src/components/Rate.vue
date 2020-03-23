@@ -86,8 +86,8 @@
       </symbol>
     </svg>
 
-    <SignIn />
-    <SignUp />
+    <sign-in />
+    <sign-up />
 
     <!-- Discussion dialog -->
     <div
@@ -245,7 +245,7 @@
       </div>
     </div>
 
-    <HMF>
+    <base-layout>
       <main>
         <div
           class="mark reveal"
@@ -390,15 +390,60 @@
           </div>
         </nav>
       </main>
-    </HMF>
+    </base-layout>
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import '../scss/mark.scss';
-@import '../scss/button.scss';
-@import '../scss/dialog.scss';
+<script>
+import BaseLayout from './common/BaseLayout.vue';
+import SignIn from './common/SignIn.vue';
+import SignUp from './common/SignUp.vue';
 
+export default {
+  components: {
+    BaseLayout,
+    SignIn,
+    SignUp,
+  },
+  data() {
+    return {
+      info: {
+        name: 'Introduction to Algorithm',
+        fav: 13,
+        score: 9.9,
+        intro:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      },
+      rates: [
+        {
+          id: 1,
+          author: 'Airey',
+          time: '',
+          content:
+            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        },
+        {
+          id: 2,
+          author: 'Airey',
+          time: '',
+          content:
+            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        },
+        {
+          id: 3,
+          author: 'Airey',
+          time: '',
+          content:
+            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import '../scss/config.scss';
 // Side input for reply dialog
 .side-input-container {
   position: relative;
@@ -826,51 +871,3 @@ $edit-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
   }
 }
 </style>
-
-<script>
-import HMF from './common/HMF.vue';
-import SignIn from './common/SignIn.vue';
-import SignUp from './common/SignUp.vue';
-
-export default {
-  components: {
-    HMF,
-    SignIn,
-    SignUp,
-  },
-  data() {
-    return {
-      info: {
-        name: 'Introduction to Algorithm',
-        fav: 13,
-        score: 9.9,
-        intro:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      },
-      rates: [
-        {
-          id: 1,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-        {
-          id: 2,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-        {
-          id: 3,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-      ],
-    };
-  },
-};
-</script>

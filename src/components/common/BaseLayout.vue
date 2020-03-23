@@ -122,10 +122,6 @@
   </div>
 </template>
 
-<style>
-@import url('https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css');
-</style>
-
 <script>
 // Hide topbar automatically
 let pos = window.pageYOffset;
@@ -155,6 +151,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../scss/config.scss';
+//@import '../../scss/responsive.scss';
 
 @mixin nav-menu($line-height: 1.4em + $small-spacing) {
   & input {

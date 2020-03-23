@@ -4,7 +4,10 @@ import { spans2segments } from '../../src/components/utils';
 test('sort', () => {
   expect(
     [{ d: 1, s: 0 }, { d: 0, s: 1 }].sort((a, b) => {
-      return a.d < b.d ? -1 : a.d == b.d && a.s < b.s ? -1 : 1;
+      const tem1 = a.d < b.d ? -1 : a.d;
+      const tem2 = b.d && a.s < b.s ? -1 : 1;
+      return tem1 === tem2;
+      // return a.d < b.d ? -1 : a.d === b.d && a.s < b.s ? -1 : 1;
     }),
   ).toEqual([{ d: 0, s: 1 }, { d: 1, s: 0 }]);
 });
@@ -45,7 +48,7 @@ test('spans2slots returns sorted slots', () => {
 });
 
 test('spans2segments', () => {
-  var spans = [
+  const spans = [
     { day: 2, start: 0, end: 0 },
     { day: 2, start: 1, end: 1 },
     { day: 2, start: 2, end: 2 },
@@ -59,14 +62,14 @@ test('spans2segments', () => {
     { day: 2, start: 2, end: 11 },
     { day: 1, start: 0, end: 2 },
     { day: 1, start: 3, end: 4 },
-    { day: 3, start: 0, end: 1},
-    { day: 3, start: 3, end: 4},
-    { day: 3, start: 5, end: 6},
+    { day: 3, start: 0, end: 1 },
+    { day: 3, start: 3, end: 4 },
+    { day: 3, start: 5, end: 6 },
   ];
   expect(spans2segments(spans)).toEqual([
     { d: 1, s: 0, e: 4 },
     { d: 2, s: 0, e: 11 },
-    { d: 3, s: 0, e: 1},
-    { d: 3, s: 3, e: 6},
+    { d: 3, s: 0, e: 1 },
+    { d: 3, s: 3, e: 6 },
   ]);
 });

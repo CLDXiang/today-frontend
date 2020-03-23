@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import TopToolbar from './components/TopToolbar';
-import BottomNav from './components/BottomNav';
+import TopToolbar from './components/TopToolbar.vue';
+import BottomNav from './components/BottomNav.vue';
 
 export default {
   components: {

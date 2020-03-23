@@ -1,11 +1,13 @@
 import axios from 'axios';
 import store from '../store';
-import { API_URL } from '../utils/config.js';
-import log from '../utils/log.js';
+import { API_URL } from '../utils/config';
+import log from '../utils/log';
 
 export async function getPost(category) {
   return new Promise((resolve, reject) => {
-    let authHeader = { Authorization: `Bearer ${store.state.user.jwt_token}` };
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
     axios
       .get(`${API_URL}/post/${category}`, {
         headers: authHeader,
@@ -21,7 +23,9 @@ export async function getPost(category) {
 export async function getPostById(id) {
   log.info('getPostById', id);
   return new Promise((res, rej) => {
-    let authHeader = { Authorization: `Bearer ${store.state.user.jwt_token}` };
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
     axios
       .get(`${API_URL}/post/${id}`, {
         headers: authHeader,
@@ -37,7 +41,9 @@ export async function getPostById(id) {
 export async function getPostReply(id) {
   log.info('getPostReply', id);
   return new Promise((res, rej) => {
-    let authHeader = { Authorization: `Bearer ${store.state.user.jwt_token}` };
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
     axios
       .get(`${API_URL}/post/${id}/reply`, {
         headers: authHeader,
@@ -52,7 +58,9 @@ export async function getPostReply(id) {
 
 export async function createPost(category, title, content) {
   return new Promise((resolve, reject) => {
-    let authHeader = { Authorization: `Bearer ${store.state.user.jwt_token}` };
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
     axios
       .post(
         `${API_URL}/post/${category}`,
@@ -69,7 +77,9 @@ export async function createPost(category, title, content) {
 
 export async function createReply(postId, content) {
   return new Promise((resolve, reject) => {
-    let authHeader = { Authorization: `Bearer ${store.state.user.jwt_token}` };
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
     axios
       .post(
         `${API_URL}/post/${postId}/reply`,

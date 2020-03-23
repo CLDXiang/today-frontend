@@ -23,6 +23,7 @@
 
 <script>
 import log from '../utils/log';
+
 export default {
   props: {
     mode: String, // 'secret' | 'dicussion' | 'rate' | 'reply',
@@ -41,7 +42,7 @@ export default {
       const input = {
         content: this.content,
         title: this.title,
-        created_at: '' + new Date(),
+        created_at: `${new Date()}`,
         mode: this.mode,
       };
       this.content = '';
@@ -54,5 +55,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

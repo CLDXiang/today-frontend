@@ -5,41 +5,44 @@ function getCellByPosition(day, section) {
   return document.querySelector(`#${getId(day, section)}`);
 }
 function spans2slots(spans) {
-  var slots = new Set();
+  const slots = new Set();
   spans.forEach((s) => {
-    for (var i = s.start; i <= s.end; ++i) {
-      slots.add(s.day + ' ' + i);
+    for (let i = s.start; i <= s.end; i += 1) {
+      slots.add(`${s.day} ${i}`);
     }
   });
-  var res = new Array();
+  const res = [];
   slots.forEach((s) => {
-    var t = s.split(' ');
-    res.push({ d: parseInt(t[0]), s: parseInt(t[1]) });
+    const t = s.split(' ');
+    res.push({ d: parseInt(t[0], 10), s: parseInt(t[1], 10) });
   });
   res.sort((a, b) => {
-    return a.d < b.d ? -1 : (a.d == b.d && a.s < b.s ? -1 : 1);
+    if (a.d < b.d || (a.d === b.d && a.s < b.s)) {
+      return -1;
+    }
+    return 1;
   });
   return res;
 }
 
 function spans2segments(spans) {
   // add some tests please ...
-  var slots = spans2slots(spans);
-  var segs = new Array();
-  var day = -1,
-    start,
-    end;
-  for (var i = 0; i < slots.length; ++i) {
-    var s = slots[i];
-    if (s.d != day || end + 1 != s.s) {
-      if (day != -1) {
+  const slots = spans2slots(spans);
+  const segs = [];
+  let day = -1;
+  let start;
+  let end;
+  for (let i = 0; i < slots.length; i += 1) {
+    const s = slots[i];
+    if (s.d !== day || end + 1 !== s.s) {
+      if (day !== -1) {
         segs.push({ d: day, s: start, e: end });
       }
       day = s.d;
       start = s.s;
       end = s.s - 1;
     }
-    ++end;
+    end += 1;
   }
   segs.push({ d: day, s: start, e: end });
   return segs;

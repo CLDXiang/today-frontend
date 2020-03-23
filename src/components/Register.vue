@@ -5,22 +5,41 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-text-field v-model="name" :rules="nameRules" :counter="10" label="昵称" required></v-text-field>
+        <v-text-field
+          v-model="name"
+          :rules="nameRules"
+          :counter="10"
+          label="昵称"
+          required
+        ></v-text-field>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+        <v-text-field
+          v-model="email"
+          :rules="emailRules"
+          label="E-mail"
+          required
+        ></v-text-field>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-text-field type="password" v-model="password" :rules="passwordRules" label="密码" required></v-text-field>
+        <v-text-field
+          type="password"
+          v-model="password"
+          :rules="passwordRules"
+          label="密码"
+          required
+        ></v-text-field>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-alert :type="alertType" v-if="alertShown" :dismissible="true">{{ alertContent }}</v-alert>
+        <v-alert :type="alertType" v-if="alertShown" :dismissible="true">
+          {{ alertContent }}
+        </v-alert>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -30,6 +49,7 @@
 </template>
 <script>
 import { register } from '../services/auth.service';
+
 export default {
   data: () => ({
     name: '',
@@ -68,7 +88,7 @@ export default {
             this.$router.push('login');
           }, 1000);
         }
-        if (resp.data.result == 'failed') {
+        if (resp.data.result === 'failed') {
           this.result = 'already_exist';
           this.showAlert(
             'warning',

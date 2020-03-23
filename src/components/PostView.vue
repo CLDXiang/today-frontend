@@ -7,14 +7,18 @@
       <v-card v-for="reply in replies" :key="reply.id" class="my-1 my-1" flat>
         <v-list-item two-line>
           <v-list-item-content>
-            <v-list-item-subtitle>{{ getName(reply.anony_id) }} 于 {{ reply.created_at }}：</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ getName(reply.anony_id) }} 于 {{ reply.created_at }}：
+            </v-list-item-subtitle>
             <div>{{ reply.content }}</div>
           </v-list-item-content>
         </v-list-item>
       </v-card>
     </v-card>
     <v-dialog v-model="editing">
-      <Editor mode="reply" @close="editing = false" @done="createReply">写回复</Editor>
+      <Editor mode="reply" @close="editing = false" @done="createReply">
+        写回复
+      </Editor>
     </v-dialog>
   </v-container>
 </template>
@@ -24,12 +28,13 @@ import marked from 'marked';
 import { ANONY_NAMES } from '../utils/config';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
-import log from '../utils/log.js';
+import log from '../utils/log';
 import {
   getPostById,
   getPostReply,
   createReply,
 } from '../services/post.service';
+
 export default {
   components: { Post, Editor },
   props: { id: String },
@@ -51,8 +56,8 @@ export default {
     };
   },
   async mounted() {
-    this.post = await getPostById(parseInt(this.id));
-    this.replies = await getPostReply(parseInt(this.id));
+    this.post = await getPostById(parseInt(this.id, 10));
+    this.replies = await getPostReply(parseInt(this.id, 10));
   },
   methods: {
     render(content) {
@@ -65,17 +70,18 @@ export default {
       if (id < ANONY_NAMES.length) {
         name = ANONY_NAMES[id];
       } else {
-        name = '' + id;
+        name = `${id}`;
       }
-      if (id == this.post.anony_id) {
+      if (id === this.post.anony_id) {
         name += '（我）';
       }
       return name;
     },
     async createReply(reply) {
       log.info('reply!', reply);
+      // eslint-disable-next-line camelcase
       const { anony_id, id } = await createReply(
-        parseInt(this.id),
+        parseInt(this.id, 10),
         reply.content,
       );
       log.info();
@@ -86,5 +92,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -3,8 +3,12 @@
     <v-list-item three-line>
       <v-list-item-content>
         <!-- <div class="overline mb-4">{{ post.user_id }}</div> -->
-        <v-list-item-subtitle>#{{ id }} 于 {{ created_at }}</v-list-item-subtitle>
-        <v-list-item-title class="headline mb-1" v-if="title !== ''">{{ title }}</v-list-item-title>
+        <v-list-item-subtitle>
+          #{{ id }} 于 {{ created_at }}
+        </v-list-item-subtitle>
+        <v-list-item-title class="headline mb-1" v-if="title !== ''">
+          {{ title }}
+        </v-list-item-title>
         <div v-html="render(content)"></div>
       </v-list-item-content>
 
@@ -21,7 +25,7 @@
 
 <script>
 import marked from 'marked';
-import log from '../utils/log.js';
+
 export default {
   props: {
     title: String,
@@ -39,5 +43,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

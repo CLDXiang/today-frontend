@@ -17,14 +17,12 @@ export default {
     title: String,
   },
   data() {
-    return {
-    };
+    return {};
   },
   components: {
     TimetableDayColumn,
   },
-  methods: {
-  }
+  methods: {},
 };
 </script>
 
@@ -49,7 +47,7 @@ export default {
 .timetable__day__title {
   flex: 1 0 $cell-height/2;
   @include flex-center;
-  
+
   color: #69707a;
   font-weight: 600;
 }

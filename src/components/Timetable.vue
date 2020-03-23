@@ -3,32 +3,55 @@
     <div class="timetable__body">
       <div class="timetable__time">
         <div class="timetable__time__title"></div>
-        <div class="timetable__time__cell" v-for="(section, index) in sections" :key="index">{{ section }}</div>
+        <div
+          class="timetable__time__cell"
+          v-for="(section, index) in sections"
+          :key="index"
+        >
+          {{ section }}
+        </div>
       </div>
       <div class="timetable__day-box">
-        <timetable-day v-for="(title, index) in titles" :title="title" :key="index"></timetable-day>
+        <timetable-day
+          v-for="(title, index) in titles"
+          :title="title"
+          :key="index"
+        ></timetable-day>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TimetableDay from './TimetableDay.vue'
+import TimetableDay from './TimetableDay.vue';
 
 export default {
-  props: {
-  },
+  props: {},
   data() {
     return {
       titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      sections: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四']
+      sections: [
+        '一',
+        '二',
+        '三',
+        '四',
+        '五',
+        '六',
+        '七',
+        '八',
+        '九',
+        '十',
+        '十一',
+        '十二',
+        '十三',
+        '十四',
+      ],
     };
   },
   components: {
-    TimetableDay
+    TimetableDay,
   },
-  methods: {
-  }
+  methods: {},
 };
 </script>
 
@@ -68,7 +91,6 @@ export default {
   @include flex-center;
 
   padding: 0 4px;
-
 }
 
 .timetable__time__cell {

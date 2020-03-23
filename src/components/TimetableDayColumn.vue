@@ -1,20 +1,22 @@
 <template>
   <div class="timetable__day__column">
-    <div class="timetable__day__cell" v-for="(_, index) in cellNumbers" :key="index"></div>
+    <div
+      class="timetable__day__cell"
+      v-for="(_, index) in cellNumbers"
+      :key="index"
+    ></div>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-  },
+  props: {},
   data() {
     return {
       cellNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
     };
   },
-  methods: {
-  }
+  methods: {},
 };
 </script>
 
@@ -40,7 +42,7 @@ export default {
   &:nth-of-type(2n) {
     @extend .background-one;
   }
-  &:nth-of-type(2n+1) {
+  &:nth-of-type(2n + 1) {
     @extend .background-two;
   }
 }

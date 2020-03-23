@@ -6,6 +6,7 @@ import Register from '../components/Register.vue';
 import Profile from '../components/Profile.vue';
 import Hole from '../components/Hole.vue';
 import PostView from '../components/PostView.vue';
+import Timetable from '../components/Timetable.vue';
 
 import store from '../store';
 
@@ -17,6 +18,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Profile },
+  { path: '/timetabel', component: Timetable },
   { path: '/hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
   { path: '*', component: Courses },

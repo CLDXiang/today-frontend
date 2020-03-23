@@ -1,7 +1,7 @@
 <template>
   <div class="timetable__day">
-    <div class="timetable__day__title background-one">{{ title }}</div>
-    <div class="timetable__day__column-box">
+    <div class="day__title background-one">{{ title }}</div>
+    <div class="day__column-box">
       <!-- TODO: 此处应根据 props 传下来的当日的课程计算该显示几列，并将每列该显示的课程信息作为 props 传给 column-->
       <timetable-day-column></timetable-day-column>
       <timetable-day-column></timetable-day-column>
@@ -44,7 +44,7 @@ export default {
   }
 }
 
-.timetable__day__title {
+.day__title {
   flex: 1 0 $cell-height/2;
   @include flex-center;
 
@@ -52,7 +52,7 @@ export default {
   font-weight: 600;
 }
 
-.timetable__day__column-box {
+.day__column-box {
   display: flex;
 }
 </style>

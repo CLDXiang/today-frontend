@@ -1,10 +1,6 @@
 <template>
-  <div class="timetable__day__column">
-    <div
-      class="timetable__day__cell"
-      v-for="(_, index) in cellNumbers"
-      :key="index"
-    ></div>
+  <div class="day__column">
+    <div class="day__cell" v-for="(_, index) in cellNumbers" :key="index"></div>
   </div>
 </template>
 
@@ -23,7 +19,7 @@ export default {
 <style lang="scss" scoped>
 @import '../scss/_timetable';
 
-.timetable__day__column {
+.day__column {
   height: 100%;
 
   flex: 1;
@@ -32,7 +28,7 @@ export default {
   flex-direction: column;
 }
 
-.timetable__day__cell {
+.day__cell {
   flex: 1 0 $cell-height;
   @include flex-center;
 

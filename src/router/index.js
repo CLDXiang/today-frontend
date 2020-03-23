@@ -18,7 +18,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Profile },
-  { path: '/timetabel', component: Timetable },
+  { path: '/timetable', component: Timetable },
   { path: '/hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
   { path: '*', component: Courses },

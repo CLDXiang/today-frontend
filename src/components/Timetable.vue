@@ -2,9 +2,9 @@
   <div class="timetable">
     <div class="timetable__body">
       <div class="timetable__time">
-        <div class="timetable__time__title"></div>
+        <div class="time__title"></div>
         <div
-          class="timetable__time__cell"
+          class="time__cell"
           v-for="(section, index) in sections"
           :key="index"
         >
@@ -86,14 +86,14 @@ export default {
   flex-direction: column;
 }
 
-.timetable__time__title {
+.time__title {
   flex: 1 0 $cell-height/2;
   @include flex-center;
 
   padding: 0 4px;
 }
 
-.timetable__time__cell {
+.time__cell {
   flex: 1 0 $cell-height;
   @include flex-center;
 

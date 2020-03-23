@@ -39,14 +39,6 @@
     h5 { font-size: 1.3em;}
     h6 { font-size: 1em;}
     
-    div.note {
-        //spacing unit: 1em
-        * { margin: 0 0 .2em 0;}
-        background-color: rgba($on-surface-color, .04);
-        padding: .8em 1em .6em 1em;
-        border: 1px solid rgba($on-surface-color, $divider-opacity);
-    }
-
     > p > a {
         color: #0070c9;
         text-decoration: none;
@@ -65,26 +57,6 @@
         }
     }
 
-    pre {
-
-        $line-height: 1.2em;
-        padding: calc(#{$medium-spacing} - #{($line-height - 1em)/2}) $medium-spacing;
-        background-color: rgba(black, .04);
-
-        overflow-x: auto;
-    }
-    code {
-
-        font-family: monospace;
-
-        color: rgba(black, $high-emphasis-opacity);
-        .tag, .comment { color: rgba(30, 30, 30, .3); }
-        .title { color: rgba(30, 110, 30, $high-emphasis-opacity); }
-        .attr {color: rgba(100, 30, 100, $high-emphasis-opacity);}
-        .value { color: rgba(0, 50, 100, $high-emphasis-opacity);}
-    
-    }
-
     // Wrap when landscape
     // TODO add into doc
     > .responsive-list {
@@ -93,26 +65,6 @@
         flex-wrap: wrap;
         max-height: var(--max-height--landscape);
     }
-
-    > .blocklist {
-        > div { border-top: 1px solid rgba(0, 0, 0, $divider-opacity); }
-        > div:last-child { border-bottom: 1px solid rgba(0, 0, 0, $divider-opacity); }
-    }
-    > .blocklist > div {
-        padding: calc(#{$medium-spacing} - #{($line-height - 1em)/2}) 0;
-        @media (max-width: $break-width) {
-            padding: calc(#{$medium-spacing} - #{($line-height - 1em)/2}) $medium-spacing;
-        }
-    }
-
-    > .blocklist--striped {
-        > div:nth-child(odd) { background-color: var(--primary-color, rgba(black, .04)); }
-        > div:nth-child(even) { background-color: var(--secondary-color, transparent); }
-    }
-    > .blocklist--striped > div {
-        padding: calc(#{$medium-spacing} - #{($line-height - 1em)/2}) $medium-spacing;
-    }
-    //blockquote {}
 }
 
 //Portrait
@@ -124,10 +76,6 @@
     .mark > *:first-child {margin-top: calc(#{$spacing} - #{($line-height - 1em)/2});}
     .mark > *:last-child { margin-bottom: $large-spacing/2;}
 
-    .mark > pre, .mark > .blocklist, .mark > .blocklist--striped {
-        margin-left: 0;
-        margin-right: 0;
-    }
     .mark > .responsive-list {
         flex-wrap: nowrap;
     }

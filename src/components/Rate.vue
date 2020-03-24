@@ -114,10 +114,12 @@
               class="icon"
               style="margin-right: .4em;"
               onclick="window.history.back();"
-              ><i class="material-icons" style="font-size: inherit;"
-                >navigate_before</i
-              ></a
-            >View Post
+            >
+              <i class="material-icons" style="font-size: inherit;">
+                navigate_before
+              </i>
+            </a>
+            View Post
           </h3>
 
           <div

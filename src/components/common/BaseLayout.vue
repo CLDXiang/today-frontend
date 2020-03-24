@@ -30,16 +30,11 @@
     </header>
 
     <!-- Portrait Top Bar -->
-    <input type="checkbox" id="menu-trigger" class="hmf--fullscreen-trigger" />
+    <input type="checkbox" v-model="openDropdown" class="hmf--fullscreen-trigger" />
     <header
       id="portrait-header"
-      class="portrait-fixed portrait-only"
-      style="top: 0; z-index: 11; width: 100%;"
-      ontransitionend="
-      if(event.target == this && event.propertyName == 'height') {
-        this.hideable = !this.previousElementSibling.checked;
-        console.log(this.hideable);
-      }"
+      class="portrait-fixed portrait-only topbar"
+      :class="{ 'topbar--hidden': !showTopbar && !openDropdown }"
     >
       <!-- header row 1 -->
       <div style="height: 3em; align-items: center;">
@@ -47,12 +42,8 @@
         <label
           id="menu-trigger--arrow"
           class="switch--arrow right-start"
-          onclick="
-        document.getElementById('menu-trigger').checked = this.children[0].checked;
-        this.parentElement.parentElement.hideable = false;
-      "
         >
-          <input type="checkbox" /><span></span>
+          <input type="checkbox" v-model="openDropdown"/><span></span>
         </label>
       </div>
 
@@ -123,28 +114,34 @@
 </template>
 
 <script>
-// Hide topbar automatically
-let pos = window.pageYOffset;
-window.addEventListener(
-  'scroll',
-  () => {
-    const thispos = window.pageYOffset;
-    const topbar = document.getElementById('portrait-header');
-    if (
-      (topbar.hideable === undefined || topbar.hideable) &&
-      pos < thispos &&
-      thispos > 3 * 17
-    )
-      topbar.style.transform = 'translateY(-3rem)';
-    else topbar.style.transform = 'translateY(0)';
-    pos = thispos;
-  },
-  { passive: true },
-);
 
 export default {
+  mounted () {
+    window.addEventListener('scroll', this.onScroll)
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.onScroll)
+  },
+  methods: {
+    // Hide topbar automatically
+    onScroll() {
+      const thispos = window.pageYOffset;
+      const topbar = document.getElementById('portrait-header');
+      if (
+        this.lastScrollPosition < thispos &&
+        thispos > 3 * 17
+      )
+        this.showTopbar = false;
+      else this.showTopbar = true;
+      this.lastScrollPosition = thispos;
+    },
+  },
   data() {
-    return {};
+    return {
+      openDropdown: false,
+      lastScrollPosition: 0,
+      showTopbar: false,
+    };
   },
 };
 </script>
@@ -152,6 +149,15 @@ export default {
 <style lang="scss" scoped>
 @import '../../scss/config.scss';
 //@import '../../scss/responsive.scss';
+.topbar--hidden {
+  transform: translateY(-3rem) !important;
+}
+.topbar {
+  top: 0;
+  z-index: 11;
+  width: 100%;
+  transform: translateY(0);
+}
 
 @mixin nav-menu($line-height: 1.4em + $small-spacing) {
   & input {

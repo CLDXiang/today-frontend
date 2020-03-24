@@ -1,14 +1,6 @@
 <template>
   <div>
     <!-- SVGs -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
-      <symbol id="star" viewBox="-2 -2 30 30">
-        <path
-          d="M26 10.109c0 .281-.203.547-.406.75l-5.672 5.531 1.344 7.812c.016.109.016.203.016.313 0 .406-.187.781-.641.781a1.27 1.27 0 0 1-.625-.187L13 21.422l-7.016 3.687c-.203.109-.406.187-.625.187-.453 0-.656-.375-.656-.781 0-.109.016-.203.031-.313l1.344-7.812L.39 10.859c-.187-.203-.391-.469-.391-.75 0-.469.484-.656.875-.719l7.844-1.141 3.516-7.109c.141-.297.406-.641.766-.641s.625.344.766.641l3.516 7.109 7.844 1.141c.375.063.875.25.875.719z"
-        />
-      </symbol>
-    </svg>
-
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="pencil--flat" viewBox="0 0 23 23">
         <g
@@ -88,163 +80,7 @@
 
     <sign-in />
     <sign-up />
-
-    <!-- Discussion dialog -->
-    <div
-      class="dialog"
-      style="z-index: 12; background-color: white;"
-      id="discuss"
-    >
-      <a class="dialog-back" href="#"></a>
-      <div
-        class="dialog-content responsive-max-width"
-        style="
-        height: 100%;
-        --max-width--landscape: 35rem;
-        --max-width--portrait: 100%;
-      "
-      >
-        <div
-          class="mark no-scrollbar"
-          style="height: 100%; --mark-padding: 2.1rem 0; overflow: auto;"
-        >
-          <!-- Action buttons -->
-          <h3 style="display: flex; align-items: center;">
-            <a
-              class="icon"
-              style="margin-right: .4em;"
-              onclick="window.history.back();"
-              ><i class="material-icons" style="font-size: inherit;"
-                >navigate_before</i
-              ></a
-            >View Post
-          </h3>
-
-          <div
-            style="
-              margin: 0;
-              --opacity: .38; --opacity--hover: .6;
-              --margin--landscape: 1.5rem;
-              --padding--landscape: 1.2rem 1.4rem 1.5rem 1.4rem;
-              --border-radius--landscape: .6em;
-
-              --margin--portrait: 0;
-              --padding--portrait: 1rem 1rem 1rem 1rem;
-              --border-radius--portrait: 0;
-          "
-          >
-            <div
-              class="responsive-margin responsive-padding responsive-border-radius"
-              style="
-              --margin--landscape: 0 1rem;
-              --padding--landscape: 0 1rem;
-              --padding--portrait: 0rem 1rem 1rem 1rem;
-            "
-            >
-              <p style="margin: 0;">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur.
-              </p>
-
-              <div
-                style="display: flex; align-items: center; margin: .8rem 0; font-size: .8rem;"
-              >
-                <span style="margin-right: 1rem;">Airey</span>
-                <span style="opacity: var(--opacity);">1 hour ago</span>
-
-                <label
-                  class="switch--heart"
-                  style="margin-left: auto; margin-right: .7rem;"
-                >
-                  <input type="checkbox" /><span></span>
-                  <svg
-                    style="--fill-color: #ed7a9b; --border-color: transparent; --shadow-color: transparent"
-                  >
-                    <use xlink:href="#heart--flat"></use>
-                  </svg>
-                </label>
-                <span>13</span>
-              </div>
-
-              <div
-                class="side-input-container portrait-only"
-                style="--height: 2.6em;"
-              >
-                <textarea
-                  spellcheck="false"
-                  placeholder="Type here to reply to Airey..."
-                  style="
-                  --width: calc(100% - 5em); 
-                  --background: #f7f7f7;
-                  --background--focus: #f0f0f0;
-                  padding: .7em; 
-                  border-radius: .3em;
-                  color: rgba(0, 0, 0, .8);
-                  "
-                ></textarea>
-                <button
-                  class="text"
-                  style="position: absolute; top: 0; right: 0; "
-                >
-                  Send
-                </button>
-              </div>
-            </div>
-
-            <div
-              class="responsive-margin responsive-padding responsive-border-radius"
-              style="background: rgba(0, 0, 0, .03);"
-            >
-              <p style="margin: 0;">
-                Lo rem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <div
-                style="display: flex; align-items: center; margin-top: .8rem; font-size: .8rem;"
-              >
-                <span style="margin-right: 1rem;">Airey</span>
-                <span style="opacity: var(--opacity);">1 hour ago</span>
-              </div>
-            </div>
-            <div
-              class="responsive-margin responsive-padding responsive-border-radius"
-              style="background: rgba(0, 0, 0, .03);"
-            >
-              <p style="margin: 0;">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div
-                style="display: flex; align-items: center; margin-top: .8rem; font-size: .8rem;"
-              >
-                <span style="margin-right: 1rem;">Airey</span>
-                <span style="opacity: var(--opacity);">1 hour ago</span>
-              </div>
-            </div>
-            <div
-              class="responsive-margin responsive-padding responsive-border-radius"
-              style="background: rgba(0, 0, 0, .03);"
-            >
-              <p style="margin: 0;">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur.
-              </p>
-              <div
-                style="display: flex; align-items: center; margin-top: .8rem; font-size: .8rem;"
-              >
-                <span style="margin-right: 1rem;">Airey</span>
-                <span style="opacity: var(--opacity);">1 hour ago</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <Reply id="discuss" />
     <base-layout>
       <main>
         <div
@@ -254,26 +90,7 @@
         >
           <h3>{{ info.name }}</h3>
 
-          <div>
-            <span class="rating">
-              <input type="radio" name="str1" id="s11" /><label for="s11"
-                ><svg><use xlink:href="#star"></use></svg
-              ></label>
-              <input type="radio" name="str1" id="s12" /><label for="s12"
-                ><svg><use xlink:href="#star"></use></svg
-              ></label>
-              <input type="radio" name="str1" id="s13" /><label for="s13"
-                ><svg><use xlink:href="#star"></use></svg
-              ></label>
-              <input type="radio" name="str1" id="s14" /><label for="s14"
-                ><svg><use xlink:href="#star"></use></svg
-              ></label>
-              <input type="radio" name="str1" id="s15" /><label for="s15"
-                ><svg><use xlink:href="#star"></use></svg
-              ></label>
-            </span>
-            <span>9.9</span>
-          </div>
+          <RatePicker />
 
           <div
             class="tag-container--round"
@@ -361,6 +178,7 @@
                 <a class="link" style="margin-left: auto; margin-right: 1rem;"
                   >Like</a
                 >
+                <!-- <a class="link" @click="$router.push('reply#discuss')">Reply</a> -->
                 <a class="link" href="#discuss">Reply</a>
               </div>
             </div>
@@ -398,12 +216,16 @@
 import BaseLayout from './common/BaseLayout.vue';
 import SignIn from './common/SignIn.vue';
 import SignUp from './common/SignUp.vue';
+import RatePicker from './common/RatePicker.vue';
+import Reply from './Reply.vue';
 
 export default {
   components: {
     BaseLayout,
     SignIn,
     SignUp,
+    RatePicker,
+    Reply,
   },
   data() {
     return {
@@ -444,94 +266,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '../scss/config.scss';
-// Side input for reply dialog
-.side-input-container {
-  position: relative;
-  width: 100%;
-  > textarea {
-    z-index: 1;
-    outline: none;
-    border: none;
-    position: relative;
-    width: 100%;
-    height: var(--height);
-    background: var(--background);
-    transition: width 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.2s,
-      background 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.2s;
-
-    + * {
-      height: var(--height);
-      opacity: 0;
-      transition: opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
-    }
-  }
-  > textarea:focus {
-    width: var(--width);
-    background: var(--background--focus);
-    + * {
-      opacity: 1;
-      transition-delay: 0s;
-    }
-  }
-}
-
-// Star -- Animation
-@keyframes wobble {
-  0% {
-    transform: scale(0.8);
-  }
-  20% {
-    transform: scale(1.1);
-  }
-  40% {
-    transform: scale(0.9);
-  }
-  60% {
-    transform: scale(1.05);
-  }
-  80% {
-    transform: scale(0.96);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.rating {
-  color: rgb(255, 204, 0);
-
-  $unit: 1.4em;
-  display: inline-block;
-  > input {
-    display: none;
-  }
-  > label {
-    display: inline-block;
-    width: $unit;
-    height: $unit;
-    margin-right: $small-spacing/2;
-    cursor: pointer;
-    > svg {
-      width: $unit;
-      height: $unit;
-    }
-  }
-
-  > input:checked ~ label > svg {
-    fill: var(--fill-color--inactive, none);
-    stroke: var(--border-color--inactive, rgba(black, $high-emphasis-opacity));
-    stroke-width: var(--border-width--inactive, var(--border-width, 0.06em));
-  }
-  > label > svg,
-  > input:checked + label > svg {
-    fill: var(--fill-color, currentColor);
-    stroke: var(--border-color, rgba(black, $high-emphasis-opacity));
-    stroke-width: var(--border-width, 0.06em);
-  }
-  > input:checked + label > svg {
-    animation: wobble 0.8s ease-out;
-  }
-}
 
 // SVG Animation
 $border-color--inactive: #777;

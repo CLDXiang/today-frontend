@@ -80,61 +80,31 @@
 
     <sign-in />
     <sign-up />
-    <Reply id="discuss" />
+    <reply id="discuss" />
     <base-layout>
       <main>
-        <div
-          class="mark reveal"
-          id="doc-container"
-          style="--padding--portrait: 3rem 0 0 0; --padding--landscape: 0 3rem 0 3rem;"
-        >
+        <div class="mark main-container responsive-padding responsive-width">
           <h3>{{ info.name }}</h3>
 
           <RatePicker />
 
-          <div
-            class="tag-container--round"
-            style="display: flex; font-size: .8em;"
-          >
-            <button class="light" style="margin-right: 1em;">5 Credits</button>
-            <button
-              class="light"
-              style="margin-right: 1em; color: rgba(0, 167, 90, .8);"
-            >
-              Naive
-            </button>
-            <button
-              class="outlined"
-              style="margin-right: 1em; color: rgba(0, 0, 0, .6);"
-            >
-              Medium Workload
+          <div class="tag-container">
+            <!-- TODO: customize button style -->
+            <button v-for="tag in info.tags" v-bind:key="tag.id" class="light">
+              {{ tag.name }}
             </button>
           </div>
 
-          <p style="margin-bottom: 0;">{{ info.intro }}</p>
-          <div
-            class="responsive-padding responsive-border"
-            style="display: flex; align-items: center; font-size: .8rem;
-          margin: 0;
-          --padding--landscape: 2rem 0 0 0;
-          --padding--portrait: 1.4rem 1rem 1.6rem 1rem;
-          --border--portrait: 1px solid rgba(0, 0, 0, .12);
-          border-top: none;
-          border-left: none;
-          border-right: none;
-        "
-          >
-            <label
-              class="switch--edit"
-              style="margin-left: auto; margin-right: 1rem;"
-            >
+          <p class="intro-paragraph">{{ info.intro }}</p>
+          <div class="action-bar responsive-padding responsive-border">
+            <label class="action-switch--edit switch--edit">
               <input type="checkbox" /><span></span>
               <svg style="font-size: 1em;">
                 <use xlink:href="#pencil--flat"></use>
               </svg>
             </label>
 
-            <label class="switch--heart" style="margin-right: .7rem;">
+            <label class="action-switch--fav switch--heart">
               <input type="checkbox" /><span></span>
               <svg
                 style="--fill-color: #ed7a9b; --border-color: transparent; --shadow-color: transparent"
@@ -145,65 +115,46 @@
             <span style="color: rgba(0, 0, 0, .6);">{{ info.fav }}</span>
           </div>
 
-          <h4 style="margin-bottom: 0;">
-            Comments<span style="font-size: .6em; margin-left: 1rem;">99+</span>
+          <h4 class="comment-title">
+            Comments<span class="comment-count">{{ info.rateCount }}</span>
           </h4>
-          <div
-            style="
-            margin: 0;
-            --opacity: .38; --opacity--hover: .6;
-            --margin--landscape: 1.5rem 0;
-            --padding--landscape: 1.2rem 1.4rem 1.5rem 1.4rem;
-            --border-radius--landscape: .6em;
-            --background--landscape: rgba(0, 0, 0, .03);
-  
-            --margin--portrait: 0;
-            --padding--portrait: 1rem 1rem 1rem 1rem;
-            --border-radius--portrait: 0;
-            --background--portrait: transparent;
-  
-        "
-          >
+
+          <div class="rate-list">
             <div
               v-for="rate in rates"
               v-bind:key="rate.id"
               class="responsive-margin responsive-padding responsive-border-radius responsive-background"
             >
-              <p style="margin: 0;">{{ rate.content }}</p>
-              <div
-                style="display: flex; align-items: center; margin-top: .8rem; font-size: .8rem;"
-              >
-                <span style="margin-right: 1rem;">{{ rate.author }}</span>
-                <span style="opacity: var(--opacity);">{{ rate.time }}</span>
-                <a class="link" style="margin-left: auto; margin-right: 1rem;"
-                  >Like</a
-                >
-                <!-- <a class="link" @click="$router.push('reply#discuss')">Reply</a> -->
+              <p class="rate-content">{{ rate.content }}</p>
+              <div class="rate-action-bar">
+                <span class="rate-action__author">{{ rate.author }}</span>
+                <span class="rate-action__time">{{ rate.time }}</span>
+                <a class="rate-action__fav link">Like</a>
                 <a class="link" href="#discuss">Reply</a>
+                <!-- <a class="link" @click="$router.push('reply#discuss')">Reply</a> -->
               </div>
             </div>
           </div>
         </div>
 
-        <nav style="padding-left: 0; padding-right: 0;">
-          <div class="mark" style="--padding--landscape: 0 3rem 0 0;">
-            <h4 style="margin-bottom: .13em;">More Professors</h4>
-            <p style="opacity: .6;">Professors that related to this cource</p>
+        <nav class="nav-container">
+          <div class="mark nav-container-inner">
+            <h4 class="nav-section__title">More Professors</h4>
+            <p class="nav-section__subtitle">
+              Professors that related to this cource
+            </p>
             <div class="list">
-              <div><a class="link">Sam Bridges</a></div>
-              <div><a class="link">Amelie Strand</a></div>
-              <div><a class="link">Clifford Unger</a></div>
-              <div><a class="link">Higgs Monaghan</a></div>
-              <div><a class="link">Die-Hardman</a></div>
+              <div v-for="p in relatedProfessors" v-bind:key="p.id">
+                <a class="link">{{ p.name }}</a>
+              </div>
             </div>
 
-            <h4 style="margin-bottom: .13em;">More Courses</h4>
-            <p style="opacity: .6;">Other courses of the professor</p>
+            <h4 class="nav-section__title">More Courses</h4>
+            <p class="nav-section__subtitle">Other courses of the professor</p>
             <div class="list">
-              <div><a class="link">Calculus</a></div>
-              <div><a class="link">Mathematical Analysis</a></div>
-              <div><a class="link">Differential Equations</a></div>
-              <div><a class="link">Linear Algebra</a></div>
+              <div v-for="c in relatedCourses" v-bind:key="c.id">
+                <a class="link">{{ c.name }}</a>
+              </div>
             </div>
           </div>
         </nav>
@@ -233,9 +184,17 @@ export default {
         name: 'Introduction to Algorithm',
         fav: 13,
         score: 9.9,
+        rateCount: '99+',
+        tags: [{ id: 1, name: 'Naive' }, { id: 2, name: 'Medium Workload' }],
         intro:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       },
+      relatedProfessors: [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
+      relatedCourses: [
+        { id: 1, name: 'Math' },
+        { id: 2, name: 'Chinese' },
+        { id: 3, name: 'English' },
+      ],
       rates: [
         {
           id: 1,
@@ -266,6 +225,98 @@ export default {
 
 <style lang="scss" scoped>
 @import '../scss/config.scss';
+
+.main-container {
+  --padding--landscape: 0 3rem 0 3rem;
+  --padding--portrait: 0 0 0 0;
+}
+
+.nav-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.nav-container__inner {
+  --padding--landscape: 0 3rem 0 0;
+}
+.nav-section__title {
+  margin-bottom: 0.13em;
+}
+.nav-section__subtitle {
+  opacity: 0.6;
+}
+
+.course-name {
+  font-size: 1.9em;
+}
+.tag-container {
+  display: flex;
+  font-size: 0.8em;
+  > button {
+    margin-right: 1em;
+  }
+}
+.intro-paragraph {
+  margin-bottom: 0;
+}
+.action-bar {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  margin: 0;
+  --padding--landscape: 2rem 0 0 0;
+  --padding--portrait: 1.4rem 1rem 1.6rem 1rem;
+  --border--portrait: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.action-switch--edit {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+.action-switch--fav {
+  margin-right: 0.7rem;
+}
+
+.comment-title {
+  margin-bottom: 0;
+}
+.comment-count {
+  font-size: 0.6em;
+  margin-left: 1rem;
+}
+.rate-list {
+  margin: 0;
+  --opacity: 0.38;
+  --opacity--hover: 0.6;
+  --margin--landscape: 1.5rem 0;
+  --padding--landscape: 1.2rem 1.4rem 1.5rem 1.4rem;
+  --border-radius--landscape: 0.6em;
+  --background--landscape: rgba(0, 0, 0, 0.03);
+  --margin--portrait: 0;
+  --padding--portrait: 1rem 1rem 1rem 1rem;
+  --border-radius--portrait: 0;
+  --background--portrait: transparent;
+}
+.rate-content {
+  margin: 0;
+}
+.rate-action-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 0.8rem;
+  font-size: 0.8rem;
+}
+.rate-action__author {
+  margin-right: 1rem;
+}
+.rate-action__time {
+  opacity: var(--opacity);
+}
+.rate-action__fav {
+  margin-left: auto;
+  margin-right: 1rem;
+}
 
 // SVG Animation
 $border-color--inactive: #777;

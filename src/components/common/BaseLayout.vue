@@ -30,7 +30,12 @@
     </header>
 
     <!-- Portrait Top Bar -->
-    <input type="checkbox" v-model="openDropdown" class="hmf--fullscreen-trigger" />
+    <input
+      type="checkbox"
+      v-model="openDropdown"
+      class="hmf--fullscreen-trigger"
+    />
+
     <header
       id="portrait-header"
       class="portrait-fixed portrait-only topbar"
@@ -39,11 +44,8 @@
       <!-- header row 1 -->
       <div style="height: 3em; align-items: center;">
         <span>TODAY</span>
-        <label
-          id="menu-trigger--arrow"
-          class="switch--arrow right-start"
-        >
-          <input type="checkbox" v-model="openDropdown"/><span></span>
+        <label class="switch--arrow right-start">
+          <input type="checkbox" v-model="openDropdown" /><span></span>
         </label>
       </div>
 
@@ -114,23 +116,18 @@
 </template>
 
 <script>
-
 export default {
-  mounted () {
-    window.addEventListener('scroll', this.onScroll)
+  mounted() {
+    window.addEventListener('scroll', this.onScroll);
   },
-  beforeDestroy () {
-    window.removeEventListener('scroll', this.onScroll)
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
     // Hide topbar automatically
     onScroll() {
       const thispos = window.pageYOffset;
-      const topbar = document.getElementById('portrait-header');
-      if (
-        this.lastScrollPosition < thispos &&
-        thispos > 3 * 17
-      )
+      if (this.lastScrollPosition < thispos && thispos > 3 * 17)
         this.showTopbar = false;
       else this.showTopbar = true;
       this.lastScrollPosition = thispos;

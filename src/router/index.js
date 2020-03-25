@@ -4,6 +4,8 @@ import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
 import Profile from '../components/Profile.vue';
 import Hole from '../components/Hole.vue';
+import Rate from '../components/Rate.vue';
+import Reply from '../components/Reply.vue';
 import PostView from '../components/PostView.vue';
 import Timetable from '../components/Timetable.vue';
 
@@ -17,6 +19,8 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Profile },
+  { path: '/rate', component: Rate },
+  { path: '/reply', component: Reply },
   { path: '/hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
   { path: '*', component: Timetable },

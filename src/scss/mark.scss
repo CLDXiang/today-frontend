@@ -1,0 +1,93 @@
+@import "./config.scss";
+
+.mark {
+    $spacing: $large-spacing/2;
+    $line-height: 1.4em;
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding--landscape, 0);
+    @media (max-width: $break-width) { padding: var(--padding--portrait, 0); }
+
+    h1, h2, h3, h4, h5, h6, li, ul, p {
+        color: rgba($on-surface-color, $high-emphasis-opacity);
+        line-height: $line-height;
+    }
+
+    //Spacing
+    > h1, > h2, > h3, > h4, > h5, > h6, > p { margin: 0 $medium-spacing calc(#{$spacing} - #{($line-height - 1em)/2}) $medium-spacing; }
+    & > div, & > pre { margin: 0 $medium-spacing $spacing $medium-spacing; }
+
+    //Section spacing
+    > h1, > h2, > h3, > h4, > h5, > h6 { margin-top: $spacing;}
+    > h1, > h2, > h3, > h4, > h5, > h6 {
+      & + h1, & + h2, & + h3, & + h4, & + h5, & + h6 {
+        margin-top: 0;
+      }
+    }
+    & > *:first-child {margin-top: 0;}
+    & > *:last-child { margin-bottom: 0;}
+
+
+    //TODO Font-size
+    p { font-size: 1em; }
+
+    h1 { font-size: 2.7em;}
+    h2 { font-size: 2.3em;}
+    h3 { font-size: 1.9em;}
+    h4 { font-size: 1.5em;}
+    h5 { font-size: 1.3em;}
+    h6 { font-size: 1em;}
+    
+    > p > a {
+        color: #0070c9;
+        text-decoration: none;
+        &:hover {
+            cursor: pointer;
+            text-decoration: var(--text-decoration--hover, underline);
+        }
+    
+    }
+    // Support customized link
+    & .link {
+        opacity: var(--opacity, $high-emphasis-opacity);
+        &:hover {
+            cursor: pointer;
+            opacity: var(--opacity--hover, $inactive-opacity);
+        }
+    }
+
+    // Wrap when landscape
+    // TODO add into doc
+    > .responsive-list {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        max-height: var(--max-height--landscape);
+    }
+}
+
+//Portrait
+@media (max-width: $break-width) {
+
+    $spacing: $large-spacing/2;
+    $line-height: 1.4em;
+
+    .mark > *:first-child {margin-top: calc(#{$spacing} - #{($line-height - 1em)/2});}
+    .mark > *:last-child { margin-bottom: $large-spacing/2;}
+
+    .mark > .responsive-list {
+        flex-wrap: nowrap;
+    }
+    .mark > .mark--fullwidth {
+        margin-left: 0;
+        margin-right: 0;
+        overflow: auto;
+        // Fix table
+        > table {
+            border-left: none;
+            border-right: none;
+        }
+    }
+}
+

@@ -1,0 +1,50 @@
+@import "./config.scss";
+
+//desktop
+.landscape-only { @media (max-width: $break-width) { display: none !important; }}
+
+//mobile
+.portrait-only { @media (min-width: $break-width) { display: none !important;} }
+.portrait-sticky { @media (max-width: $break-width) { position: sticky; } }
+.portrait-fixed { @media (max-width: $break-width) { position: fixed; } }
+
+// Responsive align
+.responsive-max-width { 
+    max-width: var(--max-width--landscape);
+    @media (max-width: $break-width) { max-width: var(--max-width--portrait); } 
+}
+.responsive-padding { 
+    padding: var(--padding--landscape);
+    @media (max-width: $break-width) { padding: var(--padding--portrait); } 
+}
+.responsive-margin { 
+    margin: var(--margin--landscape);
+    @media (max-width: $break-width) { margin: var(--margin--portrait); }
+}
+.responsive-width { 
+    width: var(--width--landscape);
+    @media (max-width: $break-width) { width: var(--width--portrait); }
+}
+.responsive-background { 
+    background: var(--background--landscape);
+    @media (max-width: $break-width) { background: var(--background--portrait); } 
+}
+.responsive-border { 
+    border: var(--border--landscape);
+    @media (max-width: $break-width) { border: var(--border--portrait); }
+}
+// Usually we only need this
+.responsive-border-width { 
+    border-width: var(--border-width--landscape);
+    @media (max-width: $break-width) { border-width: var(--border-width--portrait); }
+}
+.responsive-border-radius { 
+    border-radius: var(--border-radius--landscape);
+    @media (max-width: $break-width) { border-radius: var(--border-radius--portrait); }
+}
+
+.no-scrollbar {
+    @include no-scrollbar;
+}
+
+

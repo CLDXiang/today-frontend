@@ -126,17 +126,25 @@ export default {
   methods: {
     // Hide topbar automatically
     onScroll() {
-      const thispos = window.pageYOffset;
-      if (this.lastScrollPosition < thispos && thispos > 3 * 17)
-        this.showTopbar = false;
-      else this.showTopbar = true;
-      this.lastScrollPosition = thispos;
+      if (!this.timerOnScroll) {
+        this.timerOnScroll = setTimeout(() => {
+          this.timerOnScroll = null;
+        }, this.delay);
+        const thispos = window.pageYOffset;
+        if (this.lastScrollPosition < thispos && thispos > 3 * 17)
+          this.showTopbar = false;
+        else this.showTopbar = true;
+        this.lastScrollPosition = thispos;
+      }
     },
   },
   data() {
     return {
       openDropdown: false,
       lastScrollPosition: 0,
+      timerOnScroll: null,
+      // 节流延迟，数值越小反应越灵敏，性能需求越高
+      delay: 233,
       showTopbar: false,
     };
   },

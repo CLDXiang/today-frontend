@@ -14,3 +14,35 @@ $cell-width: 64px;
 .background-two {
   background-color: #f0f0f0;
 }
+
+$colors: (
+  #f2777a,
+  #f99157,
+  #fc6,
+  #9c9,
+  #6cc,
+  #69c,
+  #c9c,
+  #d27b53
+);
+
+@mixin color($color) {
+  border-color: darken($color, 20%);
+  color: darken($color, 40%);
+  background-color: $color;
+
+  &:hover,
+  &.hover {
+    background-color: darken($color, 10%);
+  }
+}
+
+$index: 0;
+
+@each $color in $colors {
+  .color-#{$index} {
+    @include color($color);
+  }
+
+  $index: $index + 1; /* stylelint-disable-line order/order */
+}

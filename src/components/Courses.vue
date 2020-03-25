@@ -110,11 +110,10 @@
 
 <script>
 import { setTimeout } from 'timers';
+import axios from 'axios';
 import CoursesTable from './CoursesTable.vue';
 import { spans2segments, getId, spans2slots } from './utils';
 import log from '../utils/log';
-
-const axios = require('axios');
 
 const sections = [
   '第1节',

@@ -2,9 +2,11 @@
   <div class="timetable__day">
     <div class="day__title background-one">{{ title }}</div>
     <div class="day__column-box">
-      <!-- TODO: 此处应根据 props 传下来的当日的课程计算该显示几列，并将每列该显示的课程信息作为 props 传给 column-->
-      <timetable-day-column></timetable-day-column>
-      <timetable-day-column></timetable-day-column>
+      <timetable-day-column
+        v-for="(column, index) in coursesByColumns"
+        :column="column"
+        :key="index"
+      ></timetable-day-column>
     </div>
   </div>
 </template>
@@ -15,14 +17,76 @@ import TimetableDayColumn from './TimetableDayColumn.vue';
 export default {
   props: {
     title: String,
+    courses: Array,
   },
   data() {
     return {};
   },
+  computed: {
+    // 计算列数，并将课程放到各个列中
+    coursesByColumns() {
+      // 占位：未被占用的位置记 0，某门课程从这里开始就将它整个放到这个位置，并将其他占的位置置 1
+      const columns = [new Array(13).fill(0)];
+
+      this.courses.forEach((course) => {
+        const sectionsArray = this.parseSections(course.currentSlot.section);
+
+        // 插入完成
+        let insertOK = false;
+
+        // 当前在检查第几列
+        let currentColumnIndex = 0;
+
+        while (!insertOK) {
+          // 当前检查列数大于总列数，则加一列
+          if (currentColumnIndex > columns.length - 1) {
+            columns.push(new Array(13).fill(0));
+          }
+
+          // 可以插入在当前列
+          let canBeInsertedHere = true;
+          // eslint-disable-next-line no-loop-func
+          sectionsArray.forEach((section) => {
+            if (columns[currentColumnIndex][section] !== 0) {
+              canBeInsertedHere = false;
+            }
+          });
+          if (canBeInsertedHere) {
+            // 若可以插入，则将课程信息插入第一格，并将剩余格置 1
+            const courseInserted = { ...course, sectionsArray };
+            columns[currentColumnIndex][sectionsArray[0]] = courseInserted;
+            // eslint-disable-next-line no-loop-func
+            sectionsArray.slice(1).forEach((section) => {
+              columns[currentColumnIndex][section] = 1;
+            });
+            insertOK = true;
+          } else {
+            // 若不可以插入，则尝试插入下一行
+            currentColumnIndex += 1;
+          }
+        }
+      });
+      return columns;
+    },
+  },
   components: {
     TimetableDayColumn,
   },
-  methods: {},
+  methods: {
+    /** 将 "3-5" 格式的字符串节数转为 [3, 4, 5] 整型数组
+     * TODO: 需要确认是否所有都符合 "X-Y" 格式
+     */
+    parseSections(sectionString) {
+      const [sectionStart, sectionEnd] = sectionString
+        .split('-')
+        .map((i) => parseInt(i, 10));
+      const sectionsArray = [];
+      for (let i = sectionStart; i <= sectionEnd; i += 1) {
+        sectionsArray.push(i);
+      }
+      return sectionsArray;
+    },
+  },
 };
 </script>
 

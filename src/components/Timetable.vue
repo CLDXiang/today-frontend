@@ -140,6 +140,7 @@ export default {
 .timetable__time {
   position: sticky;
   left: 0;
+  z-index: 2;
 
   padding-right: 4px;
 

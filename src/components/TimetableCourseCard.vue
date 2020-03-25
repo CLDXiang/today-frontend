@@ -45,6 +45,7 @@ export default {
 .course-card {
   display: flex;
   flex-direction: column;
+  z-index: 1;
 
   box-sizing: border-box;
   position: absolute;

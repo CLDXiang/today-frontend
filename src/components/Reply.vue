@@ -67,17 +67,11 @@
               <span style="margin-right: 1rem;">Airey</span>
               <span style="opacity: var(--opacity);">1 hour ago</span>
 
-              <label
-                class="switch--heart"
-                style="margin-left: auto; margin-right: .7rem;"
-              >
-                <input type="checkbox" /><span></span>
-                <svg
-                  style="--fill-color: #ed7a9b; --border-color: transparent; --shadow-color: transparent"
-                >
-                  <use xlink:href="#heart--flat"></use>
-                </svg>
-              </label>
+              <svg-set
+                variant="heart"
+                style="margin-left: auto; margin-right: .7em;"
+              />
+
               <span>13</span>
             </div>
 
@@ -158,11 +152,18 @@
 </template>
 
 <script>
-export default {};
+import SvgSet from './SvgSet.vue';
+
+export default {
+  components: {
+    SvgSet,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import '../scss/config.scss';
+
 // Side input for reply dialog
 .side-input-container {
   position: relative;

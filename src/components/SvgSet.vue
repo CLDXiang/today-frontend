@@ -1,233 +1,98 @@
 <template>
   <div>
-    <sign-in />
-    <sign-up />
-    <reply id="discuss" />
-    <base-layout>
-      <main>
-        <div class="mark main-container responsive-padding responsive-width">
-          <h3>{{ info.name }}</h3>
+    <label v-if="variant === 'heart'" class="switch--heart">
+      <input type="checkbox" /><span></span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 25 23"
+        style="--fill-color: #ed7a9b; --border-color: transparent; --shadow-color: transparent"
+      >
+        <g fill-rule="evenodd" fill="none" stroke-width="1" stroke="none">
+          <g transform="translate(-300.000000, -101.000000)">
+            <g transform="translate(300.000000, 101.000000)">
+              <path
+                d="M24.5,7 C24.5,3.41 21.59,0.5 18,0.5 C15.681,0.5 13.65,1.719 12.5,3.547 C11.35,1.719 9.319,0.5 7,0.5 C3.41,0.5 0.5,3.41 0.5,7 C0.5,7.169 0.513,7.334 0.525,7.5 L0.5,7.5 C0.5,16.5 11.5,22.5 12.5,22.5 C13.5,22.5 24.5,16.5 24.5,7.5 L24.475,7.5 C24.487,7.334 24.5,7.169 24.5,7"
+                fill="var(--fill, #FF2C55)"
+              />
+              <path
+                d="M-0.0002,7.0002 C-0.0002,6.7695512 0.0118609344,6.53610512 0.0351901669,6.29836913 C0.0948520269,5.69038637 0.98454279,5.6997967 1.03133137,6.3089054 C1.30920064,9.92629665 3.42292338,13.3148708 6.73061013,16.2471793 C8.97779027,18.2393346 11.9525171,20.0002 12.4998,20.0002 C13.0470829,20.0002 16.0218097,18.2393346 18.2689899,16.2471793 C21.5766766,13.3148708 23.6903994,9.92629665 23.9682686,6.3089054 C24.0150678,5.69965848 24.9050314,5.69044645 24.9644319,6.2985941 C24.9877475,6.53730178 24.9998,6.77058476 24.9998,7.0002 C24.9998,7.12130537 24.9954041,7.22990126 24.985131,7.37948746 C24.9947145,7.41814554 24.9998,7.45857888 24.9998,7.5002 C24.9998,11.6373125 22.8124471,15.4570184 19.2119347,18.7444427 C16.7287351,21.0117119 13.4145883,23.0002 12.4998,23.0002 C11.5850117,23.0002 8.27086491,21.0117119 5.78766532,18.7444427 C2.18715294,15.4570184 -0.0002,11.6373125 -0.0002,7.5002 C-0.0002,7.4577332 0.00509425482,7.41650294 0.0150587451,7.37713324 C0.00473433441,7.23044282 -0.0002,7.11771542 -0.0002,7.0002 Z"
+                fill="var(--shadow, rgba(0, 0, 0, 0.24))"
+                fill-rule="nonzero"
+              />
+              <path
+                d="M24.5,7 C24.5,3.41 21.59,0.5 18,0.5 C15.681,0.5 13.65,1.719 12.5,3.547 C11.35,1.719 9.319,0.5 7,0.5 C3.41,0.5 0.5,3.41 0.5,7 C0.5,7.169 0.513,7.334 0.525,7.5 L0.5,7.5 C0.5,16.5 11.5,22.5 12.5,22.5 C13.5,22.5 24.5,16.5 24.5,7.5 L24.475,7.5 C24.487,7.334 24.5,7.169 24.5,7 Z"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          </g>
+        </g>
+      </svg>
+    </label>
 
-          <RatePicker />
+    <label v-if="variant === 'edit'" class="action-switch--edit switch--edit">
+      <input type="checkbox" /><span></span>
 
-          <div class="tag-container">
-            <!-- TODO: customize button style -->
-            <button v-for="tag in info.tags" v-bind:key="tag.id" class="light">
-              {{ tag.name }}
-            </button>
-          </div>
-
-          <p class="intro-paragraph">{{ info.intro }}</p>
-          <div class="action-bar responsive-padding responsive-border">
-            <svg-set variant="edit" class="action-switch--edit" />
-            <svg-set variant="heart" class="action-switch--fav" />
-          </div>
-
-          <h4 class="comment-title">
-            Comments<span class="comment-count">{{ info.rateCount }}</span>
-          </h4>
-
-          <div class="rate-list">
-            <div
-              v-for="rate in rates"
-              v-bind:key="rate.id"
-              class="responsive-margin responsive-padding responsive-border-radius responsive-background"
-            >
-              <p class="rate-content">{{ rate.content }}</p>
-              <div class="rate-action-bar">
-                <span class="rate-action__author">{{ rate.author }}</span>
-                <span class="rate-action__time">{{ rate.time }}</span>
-                <a class="rate-action__fav link">Like</a>
-                <a class="link" href="#discuss">Reply</a>
-                <!-- <a class="link" @click="$router.push('reply#discuss')">Reply</a> -->
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <nav class="nav-container">
-          <div class="mark nav-container-inner">
-            <h4 class="nav-section__title">More Professors</h4>
-            <p class="nav-section__subtitle">
-              Professors that related to this cource
-            </p>
-            <div class="list">
-              <div v-for="p in relatedProfessors" v-bind:key="p.id">
-                <a class="link">{{ p.name }}</a>
-              </div>
-            </div>
-
-            <h4 class="nav-section__title">More Courses</h4>
-            <p class="nav-section__subtitle">Other courses of the professor</p>
-            <div class="list">
-              <div v-for="c in relatedCourses" v-bind:key="c.id">
-                <a class="link">{{ c.name }}</a>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </main>
-    </base-layout>
+      <!-- SVGs -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g transform="translate(-451.000000, -151.000000)">
+            <g transform="translate(450.000000, 151.000000)">
+              <path
+                fill="var(--primary, #FFCC00)"
+                d="M1.5,22.5 L3.493,15.525 L18.226,0.792 C18.615,0.403 19.246,0.403 19.635,0.792 L23.208,4.365 C23.597,4.754 23.597,5.385 23.208,5.774 L8.475,20.507 L1.5,22.5 Z"
+              />
+              <polygon
+                fill="var(--secondary, #FFFFFF)"
+                points="8.4902 20.4902 8.4802 20.5102 1.5002 22.5002 3.4902 15.5202 3.5102 15.5102"
+              />
+              <path
+                fill="var(--eraser, #FF2C55)"
+                d="M23.21,5.77 L21.99,6.99 L17.01,2.01 L18.23,0.79 C18.62,0.4 19.25,0.4 19.64,0.79 L23.21,4.36 C23.6,4.75 23.6,5.38 23.21,5.77"
+              />
+              <path
+                d="M22.5590466,3.71574661 C22.7543088,3.52048446 23.0708912,3.52048446 23.2661534,3.71574661 L23.5611534,4.01074661 C24.1464155,4.59600876 24.1464155,5.54259124 23.5611414,6.12786539 L8.82814139,20.8598654 C8.76807719,20.9199255 8.69370239,20.9636938 8.61203339,20.9870412 L1.63703339,22.9810412 C1.25986726,23.0888647 0.911100702,22.7401933 1.01882137,22.3629977 L1.64082137,20.1849977 C1.68826643,20.0188638 1.81812023,19.8889969 1.98424943,19.8415352 L8.21266542,18.0621278 L22.5590466,3.71574661 Z"
+                fill="var(--shadow, rgba(0, 0, 0, 0.24))"
+              />
+              <path
+                d="M1.5,22.5 L3.493,15.525 L18.226,0.792 C18.615,0.403 19.246,0.403 19.635,0.792 L23.208,4.365 C23.597,4.754 23.597,5.385 23.208,5.774 L8.475,20.507 L1.5,22.5 Z"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M21.9902,6.9902 L17.0102,2.0102"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8.4902,20.4902 L3.5102,15.5102"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          </g>
+        </g>
+      </svg>
+    </label>
   </div>
 </template>
 
 <script>
-import BaseLayout from './common/BaseLayout.vue';
-import SignIn from './common/SignIn.vue';
-import SignUp from './common/SignUp.vue';
-import RatePicker from './common/RatePicker.vue';
-import Reply from './Reply.vue';
-import SvgSet from './SvgSet.vue';
-
 export default {
-  components: {
-    BaseLayout,
-    SignIn,
-    SignUp,
-    RatePicker,
-    Reply,
-    SvgSet,
-  },
-  data() {
-    return {
-      info: {
-        name: 'Introduction to Algorithm',
-        fav: 13,
-        score: 9.9,
-        rateCount: '99+',
-        tags: [{ id: 1, name: 'Naive' }, { id: 2, name: 'Medium Workload' }],
-        intro:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      },
-      relatedProfessors: [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
-      relatedCourses: [
-        { id: 1, name: 'Math' },
-        { id: 2, name: 'Chinese' },
-        { id: 3, name: 'English' },
-      ],
-      rates: [
-        {
-          id: 1,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-        {
-          id: 2,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-        {
-          id: 3,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-      ],
-    };
+  props: {
+    variant: {
+      default: 'heart',
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '../scss/config.scss';
-
-.main-container {
-  --padding--landscape: 0 3rem 0 3rem;
-  --padding--portrait: 0 0 0 0;
-}
-
-.nav-container {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-.nav-container__inner {
-  --padding--landscape: 0 3rem 0 0;
-}
-.nav-section__title {
-  margin-bottom: 0.13em;
-}
-.nav-section__subtitle {
-  opacity: 0.6;
-}
-
-.course-name {
-  font-size: 1.9em;
-}
-.tag-container {
-  display: flex;
-  font-size: 0.8em;
-  > button {
-    margin-right: 1em;
-  }
-}
-.intro-paragraph {
-  margin-bottom: 0;
-}
-.action-bar {
-  display: flex;
-  align-items: center;
-  font-size: 0.8rem;
-  margin: 0;
-  --padding--landscape: 2rem 0 0 0;
-  --padding--portrait: 1.4rem 1rem 1.6rem 1rem;
-  --border--portrait: 1px solid rgba(0, 0, 0, 0.12);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
-.action-switch--edit {
-  margin-left: auto;
-  margin-right: 1rem;
-}
-.action-switch--fav {
-  margin-right: 0.7rem;
-}
-
-.comment-title {
-  margin-bottom: 0;
-}
-.comment-count {
-  font-size: 0.6em;
-  margin-left: 1rem;
-}
-.rate-list {
-  margin: 0;
-  --opacity: 0.38;
-  --opacity--hover: 0.6;
-  --margin--landscape: 1.5rem 0;
-  --padding--landscape: 1.2rem 1.4rem 1.5rem 1.4rem;
-  --border-radius--landscape: 0.6em;
-  --background--landscape: rgba(0, 0, 0, 0.03);
-  --margin--portrait: 0;
-  --padding--portrait: 1rem 1rem 1rem 1rem;
-  --border-radius--portrait: 0;
-  --background--portrait: transparent;
-}
-.rate-content {
-  margin: 0;
-}
-.rate-action-bar {
-  display: flex;
-  align-items: center;
-  margin-top: 0.8rem;
-  font-size: 0.8rem;
-}
-.rate-action__author {
-  margin-right: 1rem;
-}
-.rate-action__time {
-  opacity: var(--opacity);
-}
-.rate-action__fav {
-  margin-left: auto;
-  margin-right: 1rem;
-}
-
 // SVG Animation
 $border-color--inactive: #777;
 

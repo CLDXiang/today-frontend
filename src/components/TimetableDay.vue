@@ -26,7 +26,7 @@ export default {
     // 计算列数，并将课程放到各个列中
     coursesByColumns() {
       // 占位：未被占用的位置记 0，某门课程从这里开始就将它整个放到这个位置，并将其他占的位置置 1
-      const columns = [new Array(13).fill(0)];
+      const columns = [new Array(14).fill(0)];
 
       this.courses.forEach((course) => {
         const sectionsArray = this.parseSections(course.currentSlot.section);
@@ -39,7 +39,7 @@ export default {
 
         while (!insertOK) {
           // 当前检查列数大于总列数，则加一列
-          if (currentColumnIndex > columns.length - 1) {
+          if (currentColumnIndex >= columns.length) {
             columns.push(new Array(14).fill(0));
           }
 

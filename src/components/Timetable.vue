@@ -78,11 +78,6 @@ export default {
     TimetableDay,
   },
   methods: {
-    mapDay2Title(day) {
-      return ['周一', '周二', '周三', '周四', '周五', '周六', '周日'][
-        parseInt(day, 10) - 1
-      ];
-    },
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
       axios
         .get(filePath)

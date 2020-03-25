@@ -55,7 +55,15 @@ export default {
        * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * */
-      selectedCoursesIDs: [660088, 657728, 660122, 661363],
+      selectedCoursesIDs: [
+        660088,
+        657728,
+        660122,
+        661363,
+        657734,
+        657769,
+        661408,
+      ],
       /** 关于 selectedCoursesByDay 的设计
        * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，

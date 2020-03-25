@@ -23,14 +23,15 @@ export default {
     classCourseCard() {
       return [
         `color-${(this.course.code &&
-          parseInt(this.course.code[this.course.code.length - 1], 10) % 8) ||
+          parseInt(this.course.code.slice(this.course.code.length - 3), 10) %
+            96) ||
           0}`,
       ];
     },
     styleCourseCard() {
       const { sectionsArray } = this.course;
       return {
-        top: `${this.cellHeight * (sectionsArray[0] - 1)}px`,
+        top: `${this.cellHeight * sectionsArray[0]}px`,
         height: `${this.cellHeight * sectionsArray.length}px`,
       };
     },

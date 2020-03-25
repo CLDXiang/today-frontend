@@ -40,7 +40,7 @@ export default {
         while (!insertOK) {
           // 当前检查列数大于总列数，则加一列
           if (currentColumnIndex > columns.length - 1) {
-            columns.push(new Array(13).fill(0));
+            columns.push(new Array(14).fill(0));
           }
 
           // 可以插入在当前列
@@ -73,7 +73,7 @@ export default {
     TimetableDayColumn,
   },
   methods: {
-    /** 将 "3-5" 格式的字符串节数转为 [3, 4, 5] 整型数组
+    /** 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始）
      * TODO: 需要确认是否所有都符合 "X-Y" 格式
      */
     parseSections(sectionString) {
@@ -82,7 +82,7 @@ export default {
         .map((i) => parseInt(i, 10));
       const sectionsArray = [];
       for (let i = sectionStart; i <= sectionEnd; i += 1) {
-        sectionsArray.push(i);
+        sectionsArray.push(i - 1);
       }
       return sectionsArray;
     },

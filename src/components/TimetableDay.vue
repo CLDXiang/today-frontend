@@ -17,7 +17,7 @@ import TimetableDayColumn from './TimetableDayColumn.vue';
 export default {
   props: {
     title: String,
-    courses: Array,
+    courses: Object,
   },
   data() {
     return {};
@@ -28,7 +28,8 @@ export default {
       // 占位：未被占用的位置记 0，某门课程从这里开始就将它整个放到这个位置，并将其他占的位置置 1
       const columns = [new Array(14).fill(0)];
 
-      this.courses.forEach((course) => {
+      // this.courses.forEach((course) => {
+      Object.values(this.courses).forEach((course) => {
         const sectionsArray = this.parseSections(course.currentSlot.section);
 
         // 插入完成
@@ -73,9 +74,7 @@ export default {
     TimetableDayColumn,
   },
   methods: {
-    /** 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始）
-     * TODO: 需要确认是否所有都符合 "X-Y" 格式
-     */
+    // 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始）
     parseSections(sectionString) {
       const [sectionStart, sectionEnd] = sectionString
         .split('-')

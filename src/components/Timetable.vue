@@ -1,5 +1,5 @@
 <template>
-  <div class="timetable">
+  <div class="timetable" @click="testClick">
     <div class="timetable__body">
       <div class="timetable__time">
         <div class="time__title"></div>
@@ -55,7 +55,7 @@ export default {
        * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * */
-      selectedCoursesIDs: [
+      selectedCoursesIDs: new Set([
         660088,
         657728,
         660122,
@@ -63,7 +63,7 @@ export default {
         657734,
         657769,
         661408,
-      ],
+      ]),
       /** 关于 selectedCoursesByDay 的设计
        * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，
@@ -71,13 +71,17 @@ export default {
        * 此后每次增删仅仅针对增删的那一门课程来操作 selectedCoursesByDay
        * TODO: 按需过滤字段
        * */
-      selectedCoursesByDay: [[], [], [], [], [], [], []],
+      selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
     };
   },
   components: {
     TimetableDay,
   },
   methods: {
+    /** 测试用，点击增加一门课 */
+    testClick() {
+      this.addSelectedCourse(661900);
+    },
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
       axios
         .get(filePath)
@@ -98,17 +102,39 @@ export default {
         });
     },
     initSelectedCoursesByDay() {
-      const selectedCoursesByDay = [[], [], [], [], [], [], []];
+      const selectedCoursesByDay = [...this.selectedCoursesByDay];
       this.selectedCoursesIDs.forEach((courseID) => {
         const course = this.allCourses[courseID];
 
         // 对每个时间段，将该课程信息加入对应天
         course.time_slot.forEach((ts) => {
-          selectedCoursesByDay[ts.day - 1].push({
+          const courses = { ...selectedCoursesByDay[ts.day - 1] };
+          courses[courseID] = {
             ...course,
             currentSlot: ts,
-          });
+          };
+          selectedCoursesByDay[ts.day - 1] = courses;
         });
+      });
+      this.selectedCoursesByDay = selectedCoursesByDay;
+    },
+    addSelectedCourse(courseID) {
+      if (this.selectedCoursesIDs.has(courseID)) {
+        return;
+      }
+      this.selectedCoursesIDs.add(courseID);
+
+      const selectedCoursesByDay = [...this.selectedCoursesByDay];
+      const course = this.allCourses[courseID];
+
+      // 对每个时间段，将该课程信息加入对应天
+      course.time_slot.forEach((ts) => {
+        const courses = { ...selectedCoursesByDay[ts.day - 1] };
+        courses[courseID] = {
+          ...course,
+          currentSlot: ts,
+        };
+        selectedCoursesByDay[ts.day - 1] = courses;
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
     },

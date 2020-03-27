@@ -8,7 +8,8 @@
           v-for="(section, index) in sections"
           :key="index"
         >
-          {{ section }}
+          <span class="time__clock">{{ section.clock }}</span>
+          {{ section.name }}
         </div>
       </div>
       <div class="timetable__day-box">
@@ -34,20 +35,20 @@ export default {
       allCourses: {},
       titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       sections: [
-        '一',
-        '二',
-        '三',
-        '四',
-        '五',
-        '六',
-        '七',
-        '八',
-        '九',
-        '十',
-        '十一',
-        '十二',
-        '十三',
-        '十四',
+        { name: '1', clock: '08:00' },
+        { name: '2', clock: '08:55' },
+        { name: '3', clock: '09:55' },
+        { name: '4', clock: '10:50' },
+        { name: '5', clock: '11:45' },
+        { name: '6', clock: '13:30' },
+        { name: '7', clock: '14:25' },
+        { name: '8', clock: '15:25' },
+        { name: '9', clock: '16:20' },
+        { name: '10', clock: '17:15' },
+        { name: '11', clock: '18:30' },
+        { name: '12', clock: '19:25' },
+        { name: '13', clock: '20:20' },
+        { name: '14', clock: '21:15' },
       ],
       /** 关于 selectedCoursesIDs 的设计
        * 一开始我的想法是将不同课程的所有信息按不同 Day 来存储，但是考虑到多课时的课程的互动可能需要一次操作多个课时，
@@ -81,6 +82,8 @@ export default {
     /** 测试用，点击增加一门课 */
     testClick() {
       this.addSelectedCourse(661900);
+      this.addSelectedCourse(661901);
+      this.addSelectedCourse(661799);
     },
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
       axios
@@ -157,7 +160,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .timetable__body {
@@ -187,14 +190,25 @@ export default {
 }
 
 .time__cell {
+  position: relative;
   flex: 1 0 $cell-height;
   @include flex-center;
+  width: $cell-width / 2;
 
   padding: 0 4px;
   background: rgba(255, 255, 255, 0.5);
 
   color: #69707a;
   font-weight: 600;
+}
+
+.time__clock {
+  position: absolute;
+  top: 0;
+
+  color: #aaa;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 .timetable__day-box {

@@ -21,6 +21,8 @@ const store = new Vuex.Store({
     app: {
       barTitle: 'Fudan Today',
     },
+    detailPageCourse: {},
+    detailPageVisible: false,
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -36,6 +38,13 @@ const store = new Vuex.Store({
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
+    },
+    showDetailPage(state, course) {
+      state.detailPageCourse = course;
+      state.detailPageVisible = true;
+    },
+    hideDetailPage(state) {
+      state.detailPageVisible = false;
     },
   },
   getters: {

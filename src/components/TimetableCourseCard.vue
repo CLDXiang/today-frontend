@@ -1,5 +1,10 @@
 <template>
-  <div class="course-card" :class="classCourseCard" :style="styleCourseCard">
+  <div
+    class="course-card hoverable"
+    :class="classCourseCard"
+    :style="styleCourseCard"
+    @click="handleClickCourseCard"
+  >
     <span class="course-name">{{ course.name }}</span>
     <span class="course-code">{{ `(${course.code_id})` }}</span>
     <span class="course-teacher">{{
@@ -36,7 +41,11 @@ export default {
       };
     },
   },
-  methods: {},
+  methods: {
+    handleClickCourseCard() {
+      this.$store.commit('showDetailPage', this.course);
+    },
+  },
 };
 </script>
 
@@ -57,8 +66,6 @@ export default {
   padding: 0.3rem;
   transition: background-color 0.195s cubic-bezier(0, 0, 0.2, 1);
 
-  word-wrap: break-word;
-
   &:hover,
   &.hover {
     cursor: pointer;
@@ -74,5 +81,6 @@ export default {
 .course-teacher,
 .course-place {
   font-size: 10px;
+  word-wrap: break-word;
 }
 </style>

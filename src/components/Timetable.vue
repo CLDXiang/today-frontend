@@ -1,5 +1,17 @@
 <template>
   <div class="timetable">
+    <div
+      class="timetable__detail-page-box"
+      v-show="detailPageVisible"
+      :class="classDetailPage"
+      @click="hideDetailPage"
+    >
+      <timetable-detail-page :course="detailPageCourse" />
+      <span class="timetable__search-bar-footer">
+        <button @click="removeSelectedCourse(detailPageCourse.id)">删除</button>
+        <button>返回</button>
+      </span>
+    </div>
     <div class="timetable__body">
       <div class="timetable__time">
         <div class="time__title" />
@@ -32,8 +44,10 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
+import TimetableDetailPage from './TimetableDetailPage.vue';
 
 export default {
   props: {},
@@ -90,6 +104,22 @@ export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
+    TimetableDetailPage,
+  },
+  computed: {
+    ...mapState(['detailPageCourse', 'detailPageVisible']),
+    classDetailPage() {
+      return [
+        `color-${(this.detailPageCourse.code &&
+          parseInt(
+            this.detailPageCourse.code.slice(
+              this.detailPageCourse.code.length - 3,
+            ),
+            10,
+          ) % 96) ||
+          0}`,
+      ];
+    },
   },
   methods: {
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
@@ -147,7 +177,7 @@ export default {
         // TODO: 索引方式需要优化
         searchIndex[
           `${course.code_id} ${course.name} ${[...teachers].join(', ')}`
-        ] = courseID;
+        ] = parseInt(courseID, 10);
       });
       this.searchIndex = searchIndex;
     },
@@ -170,6 +200,26 @@ export default {
         selectedCoursesByDay[ts.day - 1] = courses;
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
+    },
+    removeSelectedCourse(courseID) {
+      if (!this.selectedCoursesIDs.has(courseID)) {
+        return;
+      }
+      this.selectedCoursesIDs.delete(courseID);
+
+      const selectedCoursesByDay = [...this.selectedCoursesByDay];
+      const course = this.allCourses[courseID];
+
+      // 对每个时间段，将该对应天的课程信息删除
+      course.time_slot.forEach((ts) => {
+        const courses = { ...selectedCoursesByDay[ts.day - 1] };
+        delete courses[courseID];
+        selectedCoursesByDay[ts.day - 1] = courses;
+      });
+      this.selectedCoursesByDay = selectedCoursesByDay;
+    },
+    hideDetailPage() {
+      this.$store.commit('hideDetailPage');
     },
   },
   created() {
@@ -252,5 +302,42 @@ export default {
   height: 17rem;
   margin: 10px;
   display: flex;
+}
+
+.timetable__detail-page-box {
+  position: fixed;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-radius: 6px;
+  padding: 0.3rem;
+  border-bottom: 0.2rem solid;
+  // 减去 header 和 footer 高度
+  // height: calc((100vh - 112px));
+  // width: 100vw;
+
+  left: 50vw;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  height: $cell-height * 5;
+  width: $cell-width * 4;
+  z-index: 4;
+}
+
+.timetable__search-bar-footer {
+  display: flex;
+  justify-content: flex-end;
+
+  > button {
+    border-radius: 6px;
+    margin: 0 5px;
+    padding: 0 10px;
+    background-color: #fff;
+
+    color: #69707a;
+    font-size: 14px;
+  }
 }
 </style>

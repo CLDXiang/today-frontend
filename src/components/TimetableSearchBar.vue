@@ -5,10 +5,10 @@
       v-model="searchText"
       placeholder="输入课程名、教师名或课程号"
       autocomplete="off"
-      @focus="showSearchResults = searchText !== ''"
-      @blur="showSearchResults = false"
+      @focus="searchResultsVisible = searchText !== ''"
+      @blur="searchResultsVisible = false"
     />
-    <div v-show="showSearchResults" class="search-bar__results">
+    <div v-show="searchResultsVisible" class="search-bar__results">
       <div
         class="search-bar__result"
         v-for="(searchResult, index) in searchResults"
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       searchText: '',
-      showSearchResults: false,
+      searchResultsVisible: false,
       /** 搜索结果
        * TODO: 后续可能还需要在 value 中加入一些状态：是否已选等
        */
@@ -42,7 +42,7 @@ export default {
     searchText(newVal) {
       const query = newVal.trim();
       if (!query || query === '') {
-        this.showSearchResults = false;
+        this.searchResultsVisible = false;
         return;
       }
       // TODO: 加入防抖？
@@ -51,7 +51,7 @@ export default {
         // eslint-disable-next-line no-unused-vars
         ([index, _]) => reg.test(index),
       );
-      this.showSearchResults = true;
+      this.searchResultsVisible = true;
     },
   },
   methods: {

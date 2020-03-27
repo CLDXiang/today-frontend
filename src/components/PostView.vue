@@ -30,9 +30,9 @@ import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log';
 import {
-  getPostById,
-  getPostReply,
-  createReply,
+  getSecretById,
+  getSecretReply,
+  createSecretReply,
 } from '../services/post.service';
 
 export default {
@@ -56,8 +56,8 @@ export default {
     };
   },
   async mounted() {
-    this.post = await getPostById(parseInt(this.id, 10));
-    this.replies = await getPostReply(parseInt(this.id, 10));
+    this.post = await getSecretById(parseInt(this.id, 10));
+    this.replies = await getSecretReply(parseInt(this.id, 10));
   },
   methods: {
     render(content) {
@@ -80,7 +80,7 @@ export default {
     async createReply(reply) {
       log.info('reply!', reply);
       // eslint-disable-next-line camelcase
-      const { anony_id, id } = await createReply(
+      const { anony_id, id } = await createSecretReply(
         parseInt(this.id, 10),
         reply.content,
       );

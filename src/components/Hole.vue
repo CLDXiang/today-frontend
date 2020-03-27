@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { getPost, createPost } from '../services/post.service';
+import { getSecret, createSecret } from '../services/post.service';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log';
@@ -45,15 +45,19 @@ export default {
     };
   },
   mounted() {
-    getPost('secret').then((posts) => {
-      this.posts = posts;
-      log.info(posts);
-    });
+    getSecret()
+      .then((posts) => {
+        this.posts = posts;
+        log.info(posts);
+      })
+      .catch((err) => {
+        log.info(err);
+      });
   },
   methods: {
     create(input) {
       log.info('输入内容', input);
-      createPost('secret', input.title, input.content)
+      createSecret(input.title, input.content)
         .then((p) => {
           this.posts.unshift(p);
         })

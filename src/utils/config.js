@@ -1,33 +1,16 @@
-// see https://blog.morizyun.com/javascript/library-typescript-dotenv-environment-variable.html
-import * as dotenv from 'dotenv';
+/**
+ * 如何配置本地 API_URL?
+ *
+ * 在项目根目录添加 .env.local 文件, 并写入
+ *
+ * VUE_APP_API_URL=http://localhost:3000
+ *
+ * 其中 3000 是后端的默认端口
+ * 参见 https://cli.vuejs.org/guide/mode-and-env.html#modes
+ */
+export const { NODE_ENV, BASE_URL } = process.env;
+export const API_URL = process.env.VUE_APP_API_URL;
 
-dotenv.config();
-let path;
-let apiUrl;
-let baseUrl;
-switch (process.env.NODE_ENV) {
-  case 'test':
-    path = `${__dirname}/../../.env.test`;
-    break;
-  case 'production':
-    path = `${__dirname}/../../.env.production`;
-    apiUrl = 'https://dev.fudan.today/api';
-    baseUrl = 'https://dev.fudan.today/';
-    break;
-  default:
-    apiUrl = 'http://localhost:3000';
-    baseUrl = 'http://localhost:8080';
-    path = `${__dirname}/../../.env`;
-}
-// eslint-disable-next-line
-console.log(path, process.env);
-dotenv.config({ path });
-
-// eslint-disable-next-line
-console.log(path);
-
-export const API_URL = process.env.API_URL || apiUrl;
-export const BASE_URL = process.env.BASE_URL || baseUrl;
 export const ANONY_NAMES = [
   '光华楼',
   '一教',
@@ -49,3 +32,6 @@ export const ANONY_NAMES = [
   '菜地',
   '雪莱',
 ];
+
+// eslint-disable-next-line
+console.log(NODE_ENV, API_URL, BASE_URL);

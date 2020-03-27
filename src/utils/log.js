@@ -5,5 +5,4 @@ class Logger {
   }
 }
 
-const logger = new Logger();
-export default logger;
+export default Logger;

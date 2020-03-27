@@ -1,14 +1,15 @@
 <template>
-  <div class="timetable" @click="testClick">
+  <div class="timetable">
     <div class="timetable__body">
       <div class="timetable__time">
-        <div class="time__title"></div>
+        <div class="time__title" />
         <div
           class="time__cell"
           v-for="(section, index) in sections"
           :key="index"
         >
-          {{ section }}
+          <span class="time__clock">{{ section.clock }}</span>
+          {{ section.name }}
         </div>
       </div>
       <div class="timetable__day-box">
@@ -17,8 +18,14 @@
           :title="titles[index]"
           :courses="courses"
           :key="index"
-        ></timetable-day>
+        />
       </div>
+    </div>
+    <div class="timetable__search-bar-box">
+      <timetable-search-bar
+        :searchIndex="searchIndex"
+        @addcourse="addSelectedCourse"
+      />
     </div>
   </div>
 </template>
@@ -26,33 +33,39 @@
 <script>
 import axios from 'axios';
 import TimetableDay from './TimetableDay.vue';
+import TimetableSearchBar from './TimetableSearchBar.vue';
 
 export default {
   props: {},
   data() {
     return {
       allCourses: {},
+      /** 搜索索引
+       * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
+       * value 为 course.id
+       */
+      searchIndex: {},
       titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       sections: [
-        '一',
-        '二',
-        '三',
-        '四',
-        '五',
-        '六',
-        '七',
-        '八',
-        '九',
-        '十',
-        '十一',
-        '十二',
-        '十三',
-        '十四',
+        { name: '1', clock: '08:00' },
+        { name: '2', clock: '08:55' },
+        { name: '3', clock: '09:55' },
+        { name: '4', clock: '10:50' },
+        { name: '5', clock: '11:45' },
+        { name: '6', clock: '13:30' },
+        { name: '7', clock: '14:25' },
+        { name: '8', clock: '15:25' },
+        { name: '9', clock: '16:20' },
+        { name: '10', clock: '17:15' },
+        { name: '11', clock: '18:30' },
+        { name: '12', clock: '19:25' },
+        { name: '13', clock: '20:20' },
+        { name: '14', clock: '21:15' },
       ],
       /** 关于 selectedCoursesIDs 的设计
        * 一开始我的想法是将不同课程的所有信息按不同 Day 来存储，但是考虑到多课时的课程的互动可能需要一次操作多个课时，
        * 最终还是将所有已选课程数据放到同一个 data 项中
-       * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端
+       * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端，最好连带课程数据一起保存以加快首次渲染
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * */
       selectedCoursesIDs: new Set([
@@ -76,26 +89,28 @@ export default {
   },
   components: {
     TimetableDay,
+    TimetableSearchBar,
   },
   methods: {
-    /** 测试用，点击增加一门课 */
-    testClick() {
-      this.addSelectedCourse(661900);
-    },
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
       axios
         .get(filePath)
         .then((response) => {
-          // TODO: 最好提前把 JSON 文件处理好，不要在前端预处理
-          this.allCourses = {};
+          /** TODO: 最好提前把 JSON 文件处理好，不要在前端预处理
+           * 1. 将 teachers 从 time_slots 拉出来整合一下
+           * */
+
+          const allCourses = {};
           response.data.forEach((course) => {
             if (course && course.id) {
-              this.allCourses[course.id] = course;
+              allCourses[course.id] = course;
             }
           });
+          this.allCourses = allCourses;
 
           // 初始化
           this.initSelectedCoursesByDay();
+          this.initSearchIndex();
         })
         .catch((err) => {
           throw err;
@@ -117,6 +132,24 @@ export default {
         });
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
+    },
+    initSearchIndex() {
+      const searchIndex = {};
+      Object.entries(this.allCourses).forEach(([courseID, course]) => {
+        // TODO: 提前处理好 JSON
+        const teachers = new Set();
+        course.time_slot.forEach((ts) => {
+          ts.teacher.forEach((teacher) => {
+            teachers.add(teacher);
+          });
+        });
+
+        // TODO: 索引方式需要优化
+        searchIndex[
+          `${course.code_id} ${course.name} ${[...teachers].join(', ')}`
+        ] = courseID;
+      });
+      this.searchIndex = searchIndex;
     },
     addSelectedCourse(courseID) {
       if (this.selectedCoursesIDs.has(courseID)) {
@@ -157,7 +190,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .timetable__body {
@@ -187,8 +220,10 @@ export default {
 }
 
 .time__cell {
+  position: relative;
   flex: 1 0 $cell-height;
   @include flex-center;
+  width: $cell-width / 2;
 
   padding: 0 4px;
   background: rgba(255, 255, 255, 0.5);
@@ -197,10 +232,25 @@ export default {
   font-weight: 600;
 }
 
+.time__clock {
+  position: absolute;
+  top: 0;
+
+  color: #aaa;
+  font-weight: 400;
+  font-size: 12px;
+}
+
 .timetable__day-box {
   display: flex;
 
   border: 1px solid #ddd;
   border-radius: 6px;
+}
+
+.timetable__search-bar-box {
+  height: 17rem;
+  margin: 10px;
+  display: flex;
 }
 </style>

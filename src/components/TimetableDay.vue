@@ -76,9 +76,7 @@ export default {
   methods: {
     // 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始）
     parseSections(sectionString) {
-      const [sectionStart, sectionEnd] = sectionString
-        .split('-')
-        .map((i) => parseInt(i, 10));
+      const [sectionStart, sectionEnd] = sectionString.split('-').map((i) => parseInt(i, 10));
       const sectionsArray = [];
       for (let i = sectionStart; i <= sectionEnd; i += 1) {
         sectionsArray.push(i - 1);

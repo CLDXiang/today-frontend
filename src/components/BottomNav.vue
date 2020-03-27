@@ -21,8 +21,7 @@
 import log from '../utils/log';
 
 export default {
-  data: () => ({
-  }),
+  data: () => ({}),
   methods: {
     courseClick() {
       if (this.activePage !== 'course') {
@@ -40,11 +39,14 @@ export default {
       }
     },
     holeClick() {
-      this.$router.push('hole').then(() => {
-        this.$store.state.app.barTitle = '树洞';
-      }).catch((e) => {
-        log.info(e);
-      });
+      this.$router
+        .push('hole')
+        .then(() => {
+          this.$store.state.app.barTitle = '树洞';
+        })
+        .catch((e) => {
+          log.info(e);
+        });
     },
   },
   computed: {
@@ -59,8 +61,7 @@ export default {
         }
         return 'course';
       },
-      set() {
-      },
+      set() {},
     },
     status() {
       return this.$store.getters.userLoggedIn ? '个人中心' : '未登录';

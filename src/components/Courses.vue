@@ -131,15 +131,7 @@ const sections = [
   '第13节',
   '第14节',
 ];
-const days = [
-  '星期一',
-  '星期二',
-  '星期三',
-  '星期四',
-  '星期五',
-  '星期六',
-  '星期日',
-];
+const days = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
 const slots = [];
 for (let s = 0; s < sections.length; s += 1) {
   const tmp = [];

@@ -29,11 +29,7 @@ import { ANONY_NAMES } from '../utils/config';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log';
-import {
-  getSecretById,
-  getSecretReply,
-  createSecretReply,
-} from '../services/post.service';
+import { getSecretById, getSecretReply, createSecretReply } from '../services/post.service';
 
 export default {
   components: { Post, Editor },
@@ -80,10 +76,7 @@ export default {
     async createReply(reply) {
       log.info('reply!', reply);
       // eslint-disable-next-line camelcase
-      const { anony_id, id } = await createSecretReply(
-        parseInt(this.id, 10),
-        reply.content,
-      );
+      const { anony_id, id } = await createSecretReply(parseInt(this.id, 10), reply.content);
       log.info();
       this.replies.push({ ...reply, anony_id, id });
       this.editing = false;

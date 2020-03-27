@@ -131,8 +131,7 @@ export default {
           this.timerOnScroll = null;
         }, this.delay);
         const thispos = window.pageYOffset;
-        if (this.lastScrollPosition < thispos && thispos > 3 * 17)
-          this.showTopbar = false;
+        if (this.lastScrollPosition < thispos && thispos > 3 * 17) this.showTopbar = false;
         else this.showTopbar = true;
         this.lastScrollPosition = thispos;
       }
@@ -521,8 +520,7 @@ nav.nav-menu--light {
   display: none;
   & + * {
     height: 3rem;
-    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s,
-      transform 0.3s ease; // Support auto hide
+    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s, transform 0.3s ease; // Support auto hide
     //nav
     & > *:nth-child(2) > * {
       transform: translateY(-6 * 3rem);
@@ -638,15 +636,13 @@ nav.nav-menu--light {
     opacity: 0;
     transform: translateX(-100px);
     //transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) .4s;
-    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s,
-      opacity 0s ease 0s;
+    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s, opacity 0s ease 0s;
   }
   > input:focus,
   > input:focus + i {
     opacity: $high-emphasis-opacity;
     transform: translateX(0);
-    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s,
-      opacity 0s ease 0.4s;
+    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s, opacity 0s ease 0.4s;
   }
 
   // Background menu item
@@ -678,8 +674,7 @@ nav.nav-menu--light {
     pointer-events: none;
     opacity: 0;
     transform: scale(0.7);
-    transition: opacity 0.2s cubic-bezier(0.2727, 0.0986, 0.8333, 1) 0.2s,
-      transform 0.4s linear;
+    transition: opacity 0.2s cubic-bezier(0.2727, 0.0986, 0.8333, 1) 0.2s, transform 0.4s linear;
   }
 }
 
@@ -798,8 +793,8 @@ nav.nav-menu--light {
     height: 0;
     opacity: 0;
     transform-origin: top center;
-    transition: height 0s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s,
-      opacity 0.2s 0.2s, visibility 0s 0.7s;
+    transition: height 0s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s, opacity 0.2s 0.2s,
+      visibility 0s 0.7s;
     > div {
       transform: translateY(-6 * 3rem);
       opacity: 0;
@@ -813,8 +808,7 @@ nav.nav-menu--light {
     opacity: 1;
     height: var(--dropdown-height, calc(var(--nslots) * var(--slot-height)));
 
-    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1), opacity 0s,
-      visibility 0s;
+    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1), opacity 0s, visibility 0s;
     > div {
       transform: translateY(0);
       opacity: 1;

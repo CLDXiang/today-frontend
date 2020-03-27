@@ -68,15 +68,7 @@ export default {
        * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端，最好连带课程数据一起保存以加快首次渲染
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * */
-      selectedCoursesIDs: new Set([
-        660088,
-        657728,
-        660122,
-        661363,
-        657734,
-        657769,
-        661408,
-      ]),
+      selectedCoursesIDs: new Set([660088, 657728, 660122, 661363, 657734, 657769, 661408]),
       /** 关于 selectedCoursesByDay 的设计
        * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，
@@ -145,9 +137,7 @@ export default {
         });
 
         // TODO: 索引方式需要优化
-        searchIndex[
-          `${course.code_id} ${course.name} ${[...teachers].join(', ')}`
-        ] = courseID;
+        searchIndex[`${course.code_id} ${course.name} ${[...teachers].join(', ')}`] = courseID;
       });
       this.searchIndex = searchIndex;
     },

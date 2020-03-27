@@ -6,7 +6,7 @@
         v-for="(column, index) in coursesByColumns"
         :column="column"
         :key="index"
-      ></timetable-day-column>
+      />
     </div>
   </div>
 </template>

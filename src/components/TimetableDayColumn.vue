@@ -4,12 +4,12 @@
       class="day__cell"
       v-for="(_, index) in cellNumbers"
       :key="'cell-' + index"
-    ></div>
+    />
     <timetable-course-card
       v-for="(course, index) in courseList"
       :course="course"
       :key="index"
-    ></timetable-course-card>
+    />
   </div>
 </template>
 

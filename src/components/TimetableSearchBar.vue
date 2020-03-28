@@ -55,13 +55,13 @@ export default {
           // eslint-disable-next-line no-unused-vars
           ([index, _]) => reg.test(index),
         );
-        return;
+      } else {
+        this.searchResults = Object.entries(this.searchIndex).filter(
+          // eslint-disable-next-line no-unused-vars
+          ([index, _]) => reg.test(index),
+        );
       }
 
-      this.searchResults = Object.entries(this.searchIndex).filter(
-        // eslint-disable-next-line no-unused-vars
-        ([index, _]) => reg.test(index),
-      );
       this.searchResultsVisible = true;
     },
   },

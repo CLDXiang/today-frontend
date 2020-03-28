@@ -1,12 +1,12 @@
 <template>
-  <div class="timetable__search-bar">
+  <div class="timetable__search-bar" @mouseleave="searchResultsVisible = false">
     <input
       type="search"
       v-model="searchText"
       placeholder="输入课程名、教师名或课程号"
       autocomplete="off"
       @focus="searchResultsVisible = searchText !== ''"
-      @blur="searchResultsVisible = false"
+      @mouseenter="searchResultsVisible = searchText !== ''"
     />
     <div v-show="searchResultsVisible" class="search-bar__results">
       <div
@@ -14,8 +14,6 @@
         v-for="(searchResult, index) in searchResults"
         :key="index"
         @click="handleClickSearchResult(searchResult[1])"
-        @mousedown.prevent
-        @touchend.prevent
       >
         {{ searchResult[0] }}
       </div>

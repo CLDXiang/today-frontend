@@ -37,14 +37,27 @@ export default {
     };
   },
   watch: {
-    searchText(newVal) {
+    searchText(newVal, oldVal) {
       const query = newVal.trim();
       if (!query || query === '') {
         this.searchResultsVisible = false;
         return;
       }
+
       // TODO: 加入防抖？
-      const reg = new RegExp(query.trim(), 'i');
+      const reg = new RegExp(query, 'i');
+
+      // 如果本次输入字符串包含上一次输入字符串，则在已有搜索结果中再次过滤，不再遍历整个索引
+      const queryOld = oldVal.trim();
+      const regOld = new RegExp(oldVal.trim(), 'i');
+      if (queryOld && queryOld !== '' && regOld.test(query)) {
+        this.searchResults = this.searchResults.filter(
+          // eslint-disable-next-line no-unused-vars
+          ([index, _]) => reg.test(index),
+        );
+        return;
+      }
+
       this.searchResults = Object.entries(this.searchIndex).filter(
         // eslint-disable-next-line no-unused-vars
         ([index, _]) => reg.test(index),

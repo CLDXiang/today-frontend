@@ -106,17 +106,6 @@ module.exports = {
           },
         },
       ],
-      'vue/html-indent': [
-        'warn',
-        2,
-        {
-          attribute: 1,
-          baseIndent: 1,
-          closeBracket: 0,
-          alignAttributesVertically: true,
-          ignores: [],
-        },
-      ],
     },
   };
   

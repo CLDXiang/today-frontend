@@ -23,7 +23,7 @@
     </div>
     <div class="timetable__search-bar-box">
       <timetable-search-bar
-        :searchIndex="searchIndex"
+        :search-index="searchIndex"
         @addcourse="addSelectedCourse"
       />
     </div>

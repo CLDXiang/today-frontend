@@ -77,11 +77,7 @@ export async function createSecretReply(postId, content) {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .post(
-        `${API_URL}/secret/${postId}/reply`,
-        { content },
-        { headers: authHeader },
-      )
+      .post(`${API_URL}/secret/${postId}/reply`, { content }, { headers: authHeader })
       .then((resp) => {
         log.info(resp);
         resolve(resp.data);

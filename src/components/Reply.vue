@@ -1,10 +1,10 @@
 <template>
   <div
+    id="discuss"
     class="dialog"
     style="z-index: 12; background-color: white;"
-    id="discuss"
   >
-    <a class="dialog-back" @click="$router.back()"></a>
+    <a class="dialog-back" @click="$router.back()" />
     <div
       class="dialog-content responsive-max-width"
       style="
@@ -83,14 +83,14 @@
                 spellcheck="false"
                 placeholder="Type here to reply to Airey..."
                 style="
-                  --width: calc(100% - 5em); 
+                  --width: calc(100% - 5em);
                   --background: #f7f7f7;
                   --background--focus: #f0f0f0;
-                  padding: .7em; 
+                  padding: .7em;
                   border-radius: .3em;
                   color: rgba(0, 0, 0, .8);
                   "
-              ></textarea>
+              />
               <button
                 class="text"
                 style="position: absolute; top: 0; right: 0; "

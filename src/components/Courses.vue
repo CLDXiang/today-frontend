@@ -3,23 +3,25 @@
     <!-- The basic idea is we do mobile first design -->
     <table style="height: 100%; width: 100%; overflow: true;">
       <tr>
-        <th class="head"></th>
+        <th class="head" />
         <th v-for="d in days.length" :key="d" class="head">
           {{ days[d - 1] }}
         </th>
       </tr>
       <tr v-for="s in sections.length" :key="s">
-        <th class="head">{{ sections[s - 1] }}</th>
+        <th class="head">
+          {{ sections[s - 1] }}
+        </th>
         <td
           v-for="slot in slots[s - 1]"
-          :key="slot.id"
-          @click="query($event, slot.d, slot.s)"
           :id="slot.id"
+          :key="slot.id"
           :class="{
             cell: true,
             select: slot.selected.length === 1,
             conflict: slot.selected.length > 1,
           }"
+          @click="query($event, slot.d, slot.s)"
         >
           <div v-if="slot.selected.length === 0">
             {{ slot.available.length }}
@@ -33,9 +35,10 @@
       </tr>
     </table>
 
-    <hr />
+    <hr>
     <v-dialog v-model="showAvailableDialog">
       <courses-table
+        :key="getId(queryDay, querySection)"
         :show-columns="[
           'num',
           'name',
@@ -46,11 +49,10 @@
           'operation',
         ]"
         :table-data="availableDialogData"
-        :key="getId(queryDay, querySection)"
         title="选课面板"
         show-operation="select"
         @select="select"
-      ></courses-table>
+      />
     </v-dialog>
     <v-alert v-model="showHasSelected" type="info">
       <p>您已选过该课程</p>
@@ -64,6 +66,7 @@
       <v-tab>已选课程</v-tab>
       <v-tab-item>
         <courses-table
+          :key="courses.length"
           :show-columns="[
             'num',
             'name',
@@ -74,14 +77,14 @@
             'operation',
           ]"
           :table-data="courses"
-          :key="courses.length"
           title="所有课程"
           show-operation="select"
           @select="select"
-        ></courses-table>
+        />
       </v-tab-item>
       <v-tab-item>
         <courses-table
+          :key="selected.length"
           :show-columns="[
             'num',
             'name',
@@ -92,11 +95,10 @@
             'operation',
           ]"
           :table-data="selected"
-          :key="selected.length"
           title="已选课程"
           show-operation="withdraw"
           @withdraw="withdraw"
-        ></courses-table>
+        />
       </v-tab-item>
     </v-tabs>
 
@@ -131,15 +133,7 @@ const sections = [
   '第13节',
   '第14节',
 ];
-const days = [
-  '星期一',
-  '星期二',
-  '星期三',
-  '星期四',
-  '星期五',
-  '星期六',
-  '星期日',
-];
+const days = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
 const slots = [];
 for (let s = 0; s < sections.length; s += 1) {
   const tmp = [];
@@ -156,6 +150,12 @@ for (let s = 0; s < sections.length; s += 1) {
 }
 export default {
   name: 'Courses',
+  components: {
+    CoursesTable,
+  },
+  props: {
+    msg: String,
+  },
   data: () => ({
     showAvailableDialog: false,
     showHasSelected: false,
@@ -170,11 +170,16 @@ export default {
     courses: [],
     data: null,
   }),
-  components: {
-    CoursesTable,
+  computed: {
+    getNumAvailableCourses(d, s) {
+      log.info(d, s);
+      const id = this.getId(d, s);
+      log.info(id, this.slots);
+      return this.slots[s][d].available.length;
+    },
   },
-  props: {
-    msg: String,
+  created() {
+    this.calcAvailableCourses();
   },
   methods: {
     parseTime(timeStr) {
@@ -280,17 +285,6 @@ export default {
           }
         });
       }
-    },
-  },
-  created() {
-    this.calcAvailableCourses();
-  },
-  computed: {
-    getNumAvailableCourses(d, s) {
-      log.info(d, s);
-      const id = this.getId(d, s);
-      log.info(id, this.slots);
-      return this.slots[s][d].available.length;
     },
   },
 };

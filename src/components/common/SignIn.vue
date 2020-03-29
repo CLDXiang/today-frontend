@@ -1,18 +1,18 @@
 <template>
   <!-- signin dialog -->
-  <div class="dialog" style="z-index: 12; background-color: white;" id="signin">
-    <a class="dialog-back" href="#"></a>
+  <div id="signin" class="dialog" style="z-index: 12; background-color: white;">
+    <a class="dialog-back" href="#" />
     <div class="dialog-content" style="max-width: 35rem;">
       <div class="mark">
         <h3>Please sign in.</h3>
 
         <div class="inputbar" style="max-width: 20em; border-radius: .3em;">
-          <input id="signinname" type="text" spellcheck="false" />
+          <input id="signinname" type="text" spellcheck="false">
           <span style="--width: 5em;"><span>Name</span></span>
         </div>
 
         <div class="inputbar" style="max-width: 20em; border-radius: .3em;">
-          <input id="signinpwd" type="text" spellcheck="false" />
+          <input id="signinpwd" type="text" spellcheck="false">
           <span style="--width: 7em;"><span>Password</span></span>
         </div>
 
@@ -30,11 +30,12 @@
 
         <!-- Action buttons -->
         <div style="text-align: right;">
-          <label style="align-self: flex-end;"
-            ><a class="icon" href="#"
-              ><i class="material-icons">navigate_before</i></a
-            ></label
-          >
+          <label
+            style="align-self: flex-end;"
+          ><a
+            class="icon"
+            href="#"
+          ><i class="material-icons">navigate_before</i></a></label>
         </div>
       </div>
     </div>

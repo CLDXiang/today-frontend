@@ -5,12 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\"",
+    "lint": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\" --no-fix",
+    "lint:fix": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\"",
     "test:unit": "vue-cli-service test:unit",
-    "format": "prettier --write \"src/**/*.js\" \"src/**/*.vue\" \"test/**/*\"",
-    "format:check": "prettier --check \"src/**/*.js\" \"src/**/*.vue\" \"test/**/*\"",
-    "check": "npm run format:check && npm run lint && npm run build && echo 'check passed!'",
-    "checkRun": "npm run build"
+    "check": "npm run lint && npm run build && echo 'check passed!'"
   },
   "dependencies": {
     "@vue/cli": "^3.11.0",
@@ -37,58 +35,16 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-prettier-vue": "^2.0.2",
     "eslint-plugin-vue": "^6.2.2",
     "jest": "^24.9.0",
     "node-sass": "^4.13.1",
+    "prettier": "^2.0.2",
     "sass": "^1.17.4",
     "sass-loader": "^7.3.1",
     "vue-cli-plugin-vuetify": "^0.6.3",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "airbnb-base",
-      "plugin:prettier/recommended"
-    ],
-    "rules": {
-      "no-param-reassign": [
-        "error",
-        {
-          "props": true,
-          "ignorePropertyModificationsFor": [
-            "state"
-          ]
-        }
-      ]
-    },
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/__tests__/*.{j,t}s?(x)"
-        ],
-        "env": {
-          "jest": true
-        }
-      },
-      {
-        "files": [
-          "**/__tests__/*.{j,t}s?(x)"
-        ],
-        "env": {
-          "jest": true
-        }
-      }
-    ]
   },
   "postcss": {
     "plugins": {

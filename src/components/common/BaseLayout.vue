@@ -8,33 +8,34 @@
 
         <span class="right-start search-span">
           <input
-            type="text"
             id="spb"
+            type="text"
             spellcheck="false"
             placeholder="Search..."
             onfocus="
             // Hack
             setTimeout(() => {this.selectionStart = this.selectionEnd;}, 1);
         "
-          />
-          <i></i>
+          >
+          <i />
           <span><a style="font-size: .9em;">Timetable</a></span>
           <span><a style="font-size: .9em;">Course</a></span>
           <span><a style="font-size: .9em;">Forum</a></span>
           <span><a style="font-size: .9em;" href="#signin">Login</a></span>
-          <label class="search-span--trigger" for="spb"
-            ><i class="material-icons">search</i></label
-          >
+          <label
+            class="search-span--trigger"
+            for="spb"
+          ><i class="material-icons">search</i></label>
         </span>
       </div>
     </header>
 
     <!-- Portrait Top Bar -->
     <input
-      type="checkbox"
       v-model="openDropdown"
+      type="checkbox"
       class="hmf--fullscreen-trigger"
-    />
+    >
 
     <header
       id="portrait-header"
@@ -45,25 +46,32 @@
       <div style="height: 3em; align-items: center;">
         <span>TODAY</span>
         <label class="switch--arrow right-start">
-          <input type="checkbox" v-model="openDropdown" /><span></span>
+          <input v-model="openDropdown" type="checkbox"><span />
         </label>
       </div>
 
       <!-- header row 2(dropdown box) -->
       <div
-        style="height: calc(100vh - 3rem); display: flex; flex-direction: column; align-items: center;overflow-y: auto; padding-top: 0;"
+        style="
+          height: calc(100vh - 3rem);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          overflow-y: auto;
+          padding-top: 0;
+        "
       >
         <span
           class="search-span--portrait"
           spellcheck="false"
           style="
-        font-size: 1rem;
-        margin-right: 0;
-        --slot-height: 2.5rem;
-        --dropdown-height: calc(100vh - 5.5rem);
-        "
+            font-size: 1rem;
+            margin-right: 0;
+            --slot-height: 2.5rem;
+            --dropdown-height: calc(100vh - 5.5rem);
+          "
         >
-          <input type="text" placeholder="Search..." />
+          <input type="text" placeholder="Search...">
           <div>
             <div>
               <div>Data Structure</div>
@@ -98,7 +106,7 @@
     <footer style="background-color: rgba(0, 0, 0, .03);">
       <div class="footer-row" style="/*max-width: 60em;*/">
         <div class="intro">
-          Designed and Built by Mr. Foo<br />
+          Designed and Built by Mr. Foo<br>
           Powered by <a>Light Minimalism</a>
         </div>
         <div class="link">
@@ -109,7 +117,9 @@
       </div>
 
       <div class="footer-row">
-        <div class="intro">Copyright © 2020 Today. All rights reserved.</div>
+        <div class="intro">
+          Copyright © 2020 Today. All rights reserved.
+        </div>
       </div>
     </footer>
   </div>
@@ -117,6 +127,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      openDropdown: false,
+      lastScrollPosition: 0,
+      timerOnScroll: null,
+      // 节流延迟，数值越小反应越灵敏，性能需求越高
+      delay: 233,
+      showTopbar: false,
+    };
+  },
   mounted() {
     window.addEventListener('scroll', this.onScroll);
   },
@@ -131,22 +151,12 @@ export default {
           this.timerOnScroll = null;
         }, this.delay);
         const thispos = window.pageYOffset;
-        if (this.lastScrollPosition < thispos && thispos > 3 * 17)
+        if (this.lastScrollPosition < thispos && thispos > 3 * 17) {
           this.showTopbar = false;
-        else this.showTopbar = true;
+        } else this.showTopbar = true;
         this.lastScrollPosition = thispos;
       }
     },
-  },
-  data() {
-    return {
-      openDropdown: false,
-      lastScrollPosition: 0,
-      timerOnScroll: null,
-      // 节流延迟，数值越小反应越灵敏，性能需求越高
-      delay: 233,
-      showTopbar: false,
-    };
   },
 };
 </script>
@@ -521,8 +531,7 @@ nav.nav-menu--light {
   display: none;
   & + * {
     height: 3rem;
-    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s,
-      transform 0.3s ease; // Support auto hide
+    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s, transform 0.3s ease; // Support auto hide
     //nav
     & > *:nth-child(2) > * {
       transform: translateY(-6 * 3rem);
@@ -638,15 +647,13 @@ nav.nav-menu--light {
     opacity: 0;
     transform: translateX(-100px);
     //transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) .4s;
-    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s,
-      opacity 0s ease 0s;
+    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s, opacity 0s ease 0s;
   }
   > input:focus,
   > input:focus + i {
     opacity: $high-emphasis-opacity;
     transform: translateX(0);
-    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s,
-      opacity 0s ease 0.4s;
+    transition: transform 1s cubic-bezier(0.12, 0.87, 0.15, 1) 0.4s, opacity 0s ease 0.4s;
   }
 
   // Background menu item
@@ -678,8 +685,7 @@ nav.nav-menu--light {
     pointer-events: none;
     opacity: 0;
     transform: scale(0.7);
-    transition: opacity 0.2s cubic-bezier(0.2727, 0.0986, 0.8333, 1) 0.2s,
-      transform 0.4s linear;
+    transition: opacity 0.2s cubic-bezier(0.2727, 0.0986, 0.8333, 1) 0.2s, transform 0.4s linear;
   }
 }
 
@@ -798,8 +804,8 @@ nav.nav-menu--light {
     height: 0;
     opacity: 0;
     transform-origin: top center;
-    transition: height 0s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s,
-      opacity 0.2s 0.2s, visibility 0s 0.7s;
+    transition: height 0s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s, opacity 0.2s 0.2s,
+      visibility 0s 0.7s;
     > div {
       transform: translateY(-6 * 3rem);
       opacity: 0;
@@ -813,8 +819,7 @@ nav.nav-menu--light {
     opacity: 1;
     height: var(--dropdown-height, calc(var(--nslots) * var(--slot-height)));
 
-    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1), opacity 0s,
-      visibility 0s;
+    transition: height 0.5s cubic-bezier(0.28, 0.11, 0.32, 1), opacity 0s, visibility 0s;
     > div {
       transform: translateY(0);
       opacity: 1;

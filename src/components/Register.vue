@@ -11,7 +11,7 @@
           :counter="10"
           label="昵称"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -21,29 +21,31 @@
           :rules="emailRules"
           label="E-mail"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-text-field
-          type="password"
           v-model="password"
+          type="password"
           :rules="passwordRules"
           label="密码"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-alert :type="alertType" v-if="alertShown" :dismissible="true">
+        <v-alert v-if="alertShown" :type="alertType" :dismissible="true">
           {{ alertContent }}
         </v-alert>
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-btn @click="register" class="ma-2" color="primary">提交</v-btn>
+      <v-btn class="ma-2" color="primary" @click="register">
+        提交
+      </v-btn>
     </v-row>
   </v-container>
 </template>

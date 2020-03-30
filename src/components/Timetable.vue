@@ -1,8 +1,8 @@
 <template>
   <div class="timetable">
     <div
-      class="timetable__detail-page-box"
       v-show="detailPageVisible"
+      class="timetable__detail-page-box"
       :class="classDetailPage"
       @click="hideDetailPage"
     >
@@ -53,6 +53,7 @@ export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
+    TimetableDetailPage,
   },
   props: {},
   data() {
@@ -97,22 +98,13 @@ export default {
       selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
     };
   },
-  components: {
-    TimetableDay,
-    TimetableSearchBar,
-    TimetableDetailPage,
-  },
   computed: {
     ...mapState(['detailPageCourse', 'detailPageVisible']),
     classDetailPage() {
       return [
         `color-${(this.detailPageCourse.code &&
-          parseInt(
-            this.detailPageCourse.code.slice(
-              this.detailPageCourse.code.length - 3,
-            ),
-            10,
-          ) % 96) ||
+          parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
+            96) ||
           0}`,
       ];
     },
@@ -176,7 +168,10 @@ export default {
         });
 
         // TODO: 索引方式需要优化
-        searchIndex[`${course.code_id} ${course.name} ${[...teachers].join(', ')}`] = parseInt(courseID, 10);
+        searchIndex[`${course.code_id} ${course.name} ${[...teachers].join(', ')}`] = parseInt(
+          courseID,
+          10,
+        );
       });
       this.searchIndex = searchIndex;
     },

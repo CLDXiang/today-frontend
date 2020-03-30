@@ -7,20 +7,19 @@
     <span class="detail-page__text">
       教师：{{
         (course.currentSlot && course.currentSlot.teacher.join(',')) || ''
-      }}</span
-    >
-    <span class="detail-page__text"
-      >校区：{{ course.campus }}
-      {{ (course.currentSlot && course.currentSlot.place) || '' }}</span
-    >
+      }}</span>
+    <span
+      class="detail-page__text"
+    >校区：{{ course.campus }}
+      {{ (course.currentSlot && course.currentSlot.place) || '' }}</span>
     <span class="detail-page__text">开课院系：{{ course.department }}</span>
     <span class="detail-page__text">考试时间：{{ course.exam_time }}</span>
     <span class="detail-page__text">考试方式：{{ course.exam_type }}</span>
     <span class="detail-page__text">是否允许期中退课：{{ course.drop }}</span>
     <div
-      class="detail-page__time-slot"
       v-for="(timeSlot, index) in course.time_slot"
       :key="index"
+      class="detail-page__time-slot"
     >
       <span class="detail-page__text">上课时间 {{ index + 1 }}：</span>
       <span class="detail-page__text">
@@ -28,8 +27,7 @@
           `${timeSlot.week} 周，每周周${mapDay(timeSlot.day)}第 ${
             timeSlot.section
           } 节`
-        }}：</span
-      >
+        }}：</span>
       <span class="detail-page__text"> {{ timeSlot.place }}</span>
     </div>
   </div>

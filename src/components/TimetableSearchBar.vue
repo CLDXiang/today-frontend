@@ -7,7 +7,7 @@
       autocomplete="off"
       @focus="searchResultsVisible = searchText !== ''"
       @mouseenter="searchResultsVisible = searchText !== ''"
-    />
+    >
     <div v-show="searchResultsVisible" class="search-bar__results">
       <div
         v-for="(searchResult, index) in searchResults"

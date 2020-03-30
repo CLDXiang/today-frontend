@@ -3,13 +3,13 @@ import store from '../store';
 import { API_URL } from '../utils/config';
 import log from '../utils/log';
 
-export async function getPost(category) {
+export async function getSecret() {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .get(`${API_URL}/post/${category}`, {
+      .get(`${API_URL}/secret`, {
         headers: authHeader,
       })
       .then((resp) => {
@@ -20,14 +20,14 @@ export async function getPost(category) {
   });
 }
 
-export async function getPostById(id) {
-  log.info('getPostById', id);
+export async function getSecretById(id) {
+  log.info('getSecretById', id);
   return new Promise((res, rej) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .get(`${API_URL}/post/${id}`, {
+      .get(`${API_URL}/secret/${id}`, {
         headers: authHeader,
       })
       .then((resp) => {
@@ -38,14 +38,14 @@ export async function getPostById(id) {
   });
 }
 
-export async function getPostReply(id) {
-  log.info('getPostReply', id);
+export async function getSecretReply(id) {
+  log.info('getSecretReply', id);
   return new Promise((res, rej) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .get(`${API_URL}/post/${id}/reply`, {
+      .get(`${API_URL}/secret/${id}/reply`, {
         headers: authHeader,
       })
       .then((resp) => {
@@ -56,17 +56,13 @@ export async function getPostReply(id) {
   });
 }
 
-export async function createPost(category, title, content) {
+export async function createSecret(title, content) {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .post(
-        `${API_URL}/post/${category}`,
-        { title, content },
-        { headers: authHeader },
-      )
+      .post(`${API_URL}/secret`, { title, content }, { headers: authHeader })
       .then((resp) => {
         log.info(resp);
         resolve(resp.data);
@@ -75,17 +71,13 @@ export async function createPost(category, title, content) {
   });
 }
 
-export async function createReply(postId, content) {
+export async function createSecretReply(postId, content) {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .post(
-        `${API_URL}/post/${postId}/reply`,
-        { content },
-        { headers: authHeader },
-      )
+      .post(`${API_URL}/secret/${postId}/reply`, { content }, { headers: authHeader })
       .then((resp) => {
         log.info(resp);
         resolve(resp.data);

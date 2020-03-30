@@ -1,7 +1,7 @@
 <template>
   <div>
     <label v-if="variant === 'heart'" class="switch--heart">
-      <input type="checkbox" /><span></span>
+      <input type="checkbox"><span />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 23"
@@ -32,7 +32,7 @@
     </label>
 
     <label v-if="variant === 'edit'" class="action-switch--edit switch--edit">
-      <input type="checkbox" /><span></span>
+      <input type="checkbox"><span />
 
       <!-- SVGs -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23">
@@ -146,15 +146,11 @@ $particle-r: 0.5 * $particle-d;
     $yg: $group-distr-r * sin($group-curr-angle);
 
     @for $j from 0 to $n-particles {
-      $particle-curr-angle: $group-curr-angle +
-        $particle-off-angle +
-        $j *
-        $particle-base-angle;
+      $particle-curr-angle: $group-curr-angle + $particle-off-angle + $j * $particle-base-angle;
       $xs: $xg + $particle-d * cos($particle-curr-angle);
       $ys: $yg + $particle-d * sin($particle-curr-angle);
 
-      $shadow-list: $shadow-list,
-        $xs $ys 0 $spread-r hsl(($i + $j) * $group-base-angle, 100%, 75%);
+      $shadow-list: $shadow-list, $xs $ys 0 $spread-r hsl(($i + $j) * $group-base-angle, 100%, 75%);
     }
   }
   box-shadow: $shadow-list;
@@ -426,8 +422,7 @@ $edit-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
     will-change: transform;
     animation: edit-line-animation 0.7 * $duration 0.3 * $duration;
     width: 0;
-    transition: width 0.6 * $duration cubic-bezier(0.68, 0, 0.77, 0) 0.4 *
-      $duration;
+    transition: width 0.6 * $duration cubic-bezier(0.68, 0, 0.77, 0) 0.4 * $duration;
   }
 }
 </style>

@@ -11,7 +11,7 @@
           :counter="10"
           label="昵称"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -22,23 +22,25 @@
           :rules="passwordRules"
           label="密码"
           required
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-alert :type="alertType" v-if="alertShown" :dismissible="true">
+        <v-alert v-if="alertShown" :type="alertType" :dismissible="true">
           {{ alertContent }}
         </v-alert>
       </v-col>
     </v-row>
 
     <v-row justify="center">
-      <v-btn @click="$router.push('/register')" color="primary" class="ma-2">
+      <v-btn color="primary" class="ma-2" @click="$router.push('/register')">
         注册
       </v-btn>
-      <v-btn @click="login" color="primary" class="ma-2">登录</v-btn>
+      <v-btn color="primary" class="ma-2" @click="login">
+        登录
+      </v-btn>
     </v-row>
   </v-container>
 </template>

@@ -6,10 +6,10 @@
         <v-list-item-subtitle>
           #{{ id }} 于 {{ created_at }}
         </v-list-item-subtitle>
-        <v-list-item-title class="headline mb-1" v-if="title !== ''">
+        <v-list-item-title v-if="title !== ''" class="headline mb-1">
           {{ title }}
         </v-list-item-title>
-        <div v-html="render(content)"></div>
+        <div v-html="render(content)" />
       </v-list-item-content>
 
       <!-- <v-list-item-avatar tile size="80" color="grey"></v-list-item-avatar> -->
@@ -18,7 +18,7 @@
     <v-card-actions class="d-flex justify-end">
       <v-btn>点赞</v-btn>
       <v-btn>关注</v-btn>
-      <slot></slot>
+      <slot />
     </v-card-actions>
   </v-card>
 </template>

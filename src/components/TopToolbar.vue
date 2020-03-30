@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer app fixed v-model="showMenu">
+    <v-navigation-drawer v-model="showMenu" app fixed>
       <v-list dense>
         <v-list-item>
           <v-list-item-content>{{ user }}</v-list-item-content>
@@ -33,11 +33,13 @@
     </v-navigation-drawer>
 
     <v-app-bar app fixed dark color="primary">
-      <v-app-bar-nav-icon @click.stop="toggleMenu"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="toggleMenu" />
       <v-toolbar-title>{{ barTitle }}</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <!-- <v-icon @click.stop="back">mdi-face</v-icon> -->
-      <v-btn @click.stop="back">返回</v-btn>
+      <v-btn @click.stop="back">
+        返回
+      </v-btn>
       <!-- <v-app-bar-nav-icon @click.stop="toggleStatus"></v-app-bar-nav-icon> -->
     </v-app-bar>
   </div>
@@ -51,6 +53,14 @@ export default {
   data: () => ({
     showMenu: false,
   }),
+  computed: {
+    user() {
+      return this.$store.state.user.name;
+    },
+    barTitle() {
+      return this.$store.state.app.barTitle;
+    },
+  },
   methods: {
     toggleMenu() {
       this.showMenu = !this.showMenu;
@@ -63,14 +73,6 @@ export default {
     logout() {
       log.info('logout');
       this.$store.commit('LOGOUT');
-    },
-  },
-  computed: {
-    user() {
-      return this.$store.state.user.name;
-    },
-    barTitle() {
-      return this.$store.state.app.barTitle;
     },
   },
 };

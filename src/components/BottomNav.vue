@@ -1,5 +1,11 @@
 <template>
-  <v-bottom-navigation app fixed grow v-model="activePage" color="primary">
+  <v-bottom-navigation
+    v-model="activePage"
+    app
+    fixed
+    grow
+    color="primary"
+  >
     <v-btn value="course" @click="courseClick">
       <span>选课</span>
       <v-icon>mdi-domain</v-icon>
@@ -21,8 +27,28 @@
 import log from '../utils/log';
 
 export default {
-  data: () => ({
-  }),
+  data: () => ({}),
+  computed: {
+    activePage: {
+      get() {
+        const { path } = this.$route;
+        if (/\/hole\/?.*$/.test(path)) {
+          return 'hole';
+        }
+        if (/\/profile\/?.*$/.test(path)) {
+          return 'status';
+        }
+        return 'course';
+      },
+      set() {},
+    },
+    status() {
+      return this.$store.getters.userLoggedIn ? '个人中心' : '未登录';
+    },
+    // activePage() {
+    //   return this.$router.url
+    // },
+  },
   methods: {
     courseClick() {
       if (this.activePage !== 'course') {
@@ -40,34 +66,15 @@ export default {
       }
     },
     holeClick() {
-      this.$router.push('hole').then(() => {
-        this.$store.state.app.barTitle = '树洞';
-      }).catch((e) => {
-        log.info(e);
-      });
+      this.$router
+        .push('hole')
+        .then(() => {
+          this.$store.state.app.barTitle = '树洞';
+        })
+        .catch((e) => {
+          log.info(e);
+        });
     },
-  },
-  computed: {
-    activePage: {
-      get() {
-        const { path } = this.$route;
-        if (/\/hole\/?.*$/.test(path)) {
-          return 'hole';
-        }
-        if (/\/profile\/?.*$/.test(path)) {
-          return 'status';
-        }
-        return 'course';
-      },
-      set() {
-      },
-    },
-    status() {
-      return this.$store.getters.userLoggedIn ? '个人中心' : '未登录';
-    },
-    // activePage() {
-    //   return this.$router.url
-    // },
   },
 };
 </script>

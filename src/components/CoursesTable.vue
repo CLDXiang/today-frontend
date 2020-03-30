@@ -2,13 +2,13 @@
   <v-card>
     <v-card-title>
       {{ title }}
-      <div class="flex-grow-1"></div>
+      <div class="flex-grow-1" />
       <v-text-field
         v-model="search"
         label="输入关键字搜索：试试课程名、授课老师名、PEDU、ENGL、119、授课地点"
         single-line
         hide-details
-      ></v-text-field>
+      />
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -19,19 +19,21 @@
     >
       <template v-slot:item.operation="{ item }">
         <v-btn
-          color="green"
-          dark
           v-if="showOperation === 'select'"
-          @click="select(item.cid)"
-          >选中</v-btn
-        >
-        <v-btn
           color="green"
           dark
-          v-if="showOperation === 'withdraw'"
-          @click="withdraw(item.cid)"
-          >退选</v-btn
+          @click="select(item.cid)"
         >
+          选中
+        </v-btn>
+        <v-btn
+          v-if="showOperation === 'withdraw'"
+          color="green"
+          dark
+          @click="withdraw(item.cid)"
+        >
+          退选
+        </v-btn>
       </template>
       <template v-slot:item.timing="{ item }">
         <div v-for="t in item.timing.split('<br>')" :key="t">

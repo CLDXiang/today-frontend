@@ -1,7 +1,9 @@
 <template>
   <v-container>
-    <Post :content="post.content" :id="post.id" :created_at="post.created_at">
-      <v-btn @click="editing = true">回复</v-btn>
+    <Post :id="post.id" :content="post.content" :created_at="post.created_at">
+      <v-btn @click="editing = true">
+        回复
+      </v-btn>
     </Post>
     <v-card>
       <v-card v-for="reply in replies" :key="reply.id" class="my-1 my-1" flat>
@@ -29,11 +31,7 @@ import { ANONY_NAMES } from '../utils/config';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
 import log from '../utils/log';
-import {
-  getPostById,
-  getPostReply,
-  createReply,
-} from '../services/post.service';
+import { getSecretById, getSecretReply, createSecretReply } from '../services/post.service';
 
 export default {
   components: { Post, Editor },
@@ -56,8 +54,8 @@ export default {
     };
   },
   async mounted() {
-    this.post = await getPostById(parseInt(this.id, 10));
-    this.replies = await getPostReply(parseInt(this.id, 10));
+    this.post = await getSecretById(parseInt(this.id, 10));
+    this.replies = await getSecretReply(parseInt(this.id, 10));
   },
   methods: {
     render(content) {
@@ -80,10 +78,7 @@ export default {
     async createReply(reply) {
       log.info('reply!', reply);
       // eslint-disable-next-line camelcase
-      const { anony_id, id } = await createReply(
-        parseInt(this.id, 10),
-        reply.content,
-      );
+      const { anony_id, id } = await createSecretReply(parseInt(this.id, 10), reply.content);
       log.info();
       this.replies.push({ ...reply, anony_id, id });
       this.editing = false;

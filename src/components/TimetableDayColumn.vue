@@ -1,14 +1,14 @@
 <template>
   <div class="day__column">
     <div
-      class="day__cell"
       v-for="(_, index) in cellNumbers"
       :key="'cell-' + index"
+      class="day__cell"
     />
     <timetable-course-card
       v-for="(course, index) in courseList"
-      :course="course"
       :key="index"
+      :course="course"
     />
   </div>
 </template>
@@ -17,6 +17,9 @@
 import TimetableCourseCard from './TimetableCourseCard.vue';
 
 export default {
+  components: {
+    TimetableCourseCard,
+  },
   props: {
     column: Array,
   },
@@ -29,9 +32,6 @@ export default {
     courseList() {
       return this.column.filter((item) => typeof item === 'object');
     },
-  },
-  components: {
-    TimetableCourseCard,
   },
   methods: {},
 };

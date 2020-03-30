@@ -1,14 +1,14 @@
 <template>
   <v-app>
-    <TopToolbar></TopToolbar>
+    <TopToolbar />
     <!-- <v-layout>
         <div v-if="loggedIn">Hi {{ userName }}</div>
         <div v-else>Please login first!</div>
     </v-layout>-->
     <v-content>
-      <router-view></router-view>
+      <router-view />
     </v-content>
-    <BottomNav></BottomNav>
+    <BottomNav />
   </v-app>
 </template>
 

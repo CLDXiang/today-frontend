@@ -1,22 +1,26 @@
 <template>
   <v-card cols="12" md="6" class="d-flex flex-column">
     <v-card-title>
-      <slot></slot>
+      <slot />
     </v-card-title>
     <v-col v-if="mode === 'discussion'">
-      <v-text-field v-model="title" label="标题" clearable></v-text-field>
+      <v-text-field v-model="title" label="标题" clearable />
     </v-col>
     <v-col>
       <v-textarea
+        v-model="content"
         label="内容"
         :clearable="true"
-        v-model="content"
         :hint="mode === 'discussion' ? '支持 markdown 语法' : ''"
-      ></v-textarea>
+      />
     </v-col>
     <v-col>
-      <v-btn @click="cancel">取消</v-btn>
-      <v-btn @click="create">添加</v-btn>
+      <v-btn @click="cancel">
+        取消
+      </v-btn>
+      <v-btn @click="create">
+        添加
+      </v-btn>
     </v-col>
   </v-card>
 </template>

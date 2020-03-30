@@ -4,9 +4,9 @@
       <div class="timetable__time">
         <div class="time__title" />
         <div
-          class="time__cell"
           v-for="(section, index) in sections"
           :key="index"
+          class="time__cell"
         >
           <span class="time__clock">{{ section.clock }}</span>
           {{ section.name }}
@@ -15,15 +15,15 @@
       <div class="timetable__day-box">
         <timetable-day
           v-for="(courses, index) in selectedCoursesByDay"
+          :key="index"
           :title="titles[index]"
           :courses="courses"
-          :key="index"
         />
       </div>
     </div>
     <div class="timetable__search-bar-box">
       <timetable-search-bar
-        :searchIndex="searchIndex"
+        :search-index="searchIndex"
         @addcourse="addSelectedCourse"
       />
     </div>
@@ -36,6 +36,10 @@ import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 
 export default {
+  components: {
+    TimetableDay,
+    TimetableSearchBar,
+  },
   props: {},
   data() {
     return {
@@ -68,15 +72,7 @@ export default {
        * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端，最好连带课程数据一起保存以加快首次渲染
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * */
-      selectedCoursesIDs: new Set([
-        660088,
-        657728,
-        660122,
-        661363,
-        657734,
-        657769,
-        661408,
-      ]),
+      selectedCoursesIDs: new Set([660088, 657728, 660122, 661363, 657734, 657769, 661408]),
       /** 关于 selectedCoursesByDay 的设计
        * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，
@@ -87,9 +83,10 @@ export default {
       selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
     };
   },
-  components: {
-    TimetableDay,
-    TimetableSearchBar,
+  created() {
+    // 读取课程信息
+    this.getCoursesFromJSON();
+    // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
@@ -145,9 +142,7 @@ export default {
         });
 
         // TODO: 索引方式需要优化
-        searchIndex[
-          `${course.code_id} ${course.name} ${[...teachers].join(', ')}`
-        ] = courseID;
+        searchIndex[`${course.code_id} ${course.name} ${[...teachers].join(', ')}`] = courseID;
       });
       this.searchIndex = searchIndex;
     },
@@ -171,11 +166,6 @@ export default {
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
     },
-  },
-  created() {
-    // 读取课程信息
-    this.getCoursesFromJSON();
-    // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
 };
 </script>

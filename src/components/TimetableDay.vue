@@ -1,11 +1,13 @@
 <template>
   <div class="timetable__day">
-    <div class="day__title background-one">{{ title }}</div>
+    <div class="day__title background-one">
+      {{ title }}
+    </div>
     <div class="day__column-box">
       <timetable-day-column
         v-for="(column, index) in coursesByColumns"
-        :column="column"
         :key="index"
+        :column="column"
       />
     </div>
   </div>
@@ -15,6 +17,9 @@
 import TimetableDayColumn from './TimetableDayColumn.vue';
 
 export default {
+  components: {
+    TimetableDayColumn,
+  },
   props: {
     title: String,
     courses: Object,
@@ -70,15 +75,10 @@ export default {
       return columns;
     },
   },
-  components: {
-    TimetableDayColumn,
-  },
   methods: {
     // 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始）
     parseSections(sectionString) {
-      const [sectionStart, sectionEnd] = sectionString
-        .split('-')
-        .map((i) => parseInt(i, 10));
+      const [sectionStart, sectionEnd] = sectionString.split('-').map((i) => parseInt(i, 10));
       const sectionsArray = [];
       for (let i = sectionStart; i <= sectionEnd; i += 1) {
         sectionsArray.push(i - 1);

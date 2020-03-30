@@ -12,12 +12,14 @@
 
           <div class="tag-container">
             <!-- TODO: customize button style -->
-            <button v-for="tag in info.tags" v-bind:key="tag.id" class="light">
+            <button v-for="tag in info.tags" :key="tag.id" class="light">
               {{ tag.name }}
             </button>
           </div>
 
-          <p class="intro-paragraph">{{ info.intro }}</p>
+          <p class="intro-paragraph">
+            {{ info.intro }}
+          </p>
           <div class="action-bar responsive-padding responsive-border">
             <svg-set variant="edit" class="action-switch--edit" />
             <svg-set variant="heart" class="action-switch--fav" />
@@ -30,10 +32,12 @@
           <div class="rate-list">
             <div
               v-for="rate in rates"
-              v-bind:key="rate.id"
+              :key="rate.id"
               class="responsive-margin responsive-padding responsive-border-radius responsive-background"
             >
-              <p class="rate-content">{{ rate.content }}</p>
+              <p class="rate-content">
+                {{ rate.content }}
+              </p>
               <div class="rate-action-bar">
                 <span class="rate-action__author">{{ rate.author }}</span>
                 <span class="rate-action__time">{{ rate.time }}</span>
@@ -47,20 +51,26 @@
 
         <nav class="nav-container">
           <div class="mark nav-container-inner">
-            <h4 class="nav-section__title">More Professors</h4>
+            <h4 class="nav-section__title">
+              More Professors
+            </h4>
             <p class="nav-section__subtitle">
               Professors that related to this cource
             </p>
             <div class="list">
-              <div v-for="p in relatedProfessors" v-bind:key="p.id">
+              <div v-for="p in relatedProfessors" :key="p.id">
                 <a class="link">{{ p.name }}</a>
               </div>
             </div>
 
-            <h4 class="nav-section__title">More Courses</h4>
-            <p class="nav-section__subtitle">Other courses of the professor</p>
+            <h4 class="nav-section__title">
+              More Courses
+            </h4>
+            <p class="nav-section__subtitle">
+              Other courses of the professor
+            </p>
             <div class="list">
-              <div v-for="c in relatedCourses" v-bind:key="c.id">
+              <div v-for="c in relatedCourses" :key="c.id">
                 <a class="link">{{ c.name }}</a>
               </div>
             </div>
@@ -95,11 +105,17 @@ export default {
         fav: 13,
         score: 9.9,
         rateCount: '99+',
-        tags: [{ id: 1, name: 'Naive' }, { id: 2, name: 'Medium Workload' }],
+        tags: [
+          { id: 1, name: 'Naive' },
+          { id: 2, name: 'Medium Workload' },
+        ],
         intro:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       },
-      relatedProfessors: [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
+      relatedProfessors: [
+        { id: 1, name: 'Foo' },
+        { id: 2, name: 'Bar' },
+      ],
       relatedCourses: [
         { id: 1, name: 'Math' },
         { id: 2, name: 'Chinese' },

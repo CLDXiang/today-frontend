@@ -22,10 +22,11 @@
           <span><a style="font-size: .9em;">Course</a></span>
           <span><a style="font-size: .9em;">Forum</a></span>
           <span><a style="font-size: .9em;" href="#signin">Login</a></span>
-          <label
-            class="search-span--trigger"
-            for="spb"
-          ><i class="material-icons">search</i></label>
+          <label class="search-span--trigger" for="spb">
+            <i class="material-icons">
+              search
+            </i>
+          </label>
         </span>
       </div>
     </header>

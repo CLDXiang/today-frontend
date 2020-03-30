@@ -10,21 +10,35 @@
     <div>
       <span class="rating">
         <input id="s11" type="radio" name="str1">
-        <label
-          for="s11"
-        ><svg><use xlink:href="#star" /></svg></label>
-        <input id="s12" type="radio" name="str1"><label
-          for="s12"
-        ><svg><use xlink:href="#star" /></svg></label>
-        <input id="s13" type="radio" name="str1"><label
-          for="s13"
-        ><svg><use xlink:href="#star" /></svg></label>
-        <input id="s14" type="radio" name="str1"><label
-          for="s14"
-        ><svg><use xlink:href="#star" /></svg></label>
-        <input id="s15" type="radio" name="str1"><label
-          for="s15"
-        ><svg><use xlink:href="#star" /></svg></label>
+        <label for="s11">
+          <svg>
+            <use xlink:href="#star" />
+          </svg>
+        </label>
+        <input id="s12" type="radio" name="str1">
+        <label for="s12">
+          <svg>
+            <use xlink:href="#star" />
+          </svg>
+        </label>
+        <input id="s13" type="radio" name="str1">
+        <label for="s13">
+          <svg>
+            <use xlink:href="#star" />
+          </svg>
+        </label>
+        <input id="s14" type="radio" name="str1">
+        <label for="s14">
+          <svg>
+            <use xlink:href="#star" />
+          </svg>
+        </label>
+        <input id="s15" type="radio" name="str1">
+        <label for="s15">
+          <svg>
+            <use xlink:href="#star" />
+          </svg>
+        </label>
       </span>
       <span>9.9</span>
     </div>

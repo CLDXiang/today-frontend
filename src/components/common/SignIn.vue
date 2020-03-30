@@ -30,12 +30,13 @@
 
         <!-- Action buttons -->
         <div style="text-align: right;">
-          <label
-            style="align-self: flex-end;"
-          ><a
-            class="icon"
-            href="#"
-          ><i class="material-icons">navigate_before</i></a></label>
+          <label style="align-self: flex-end;">
+            <a class="icon" href="#">
+              <i class="material-icons">
+                navigate_before
+              </i>
+            </a>
+          </label>
         </div>
       </div>
     </div>

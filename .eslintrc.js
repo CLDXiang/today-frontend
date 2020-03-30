@@ -75,6 +75,9 @@ module.exports = {
     },
   
     rules: {
+      'vue/require-default-prop': [
+        'off',
+      ],
       'prettier-vue/prettier': [
         'error',
         {

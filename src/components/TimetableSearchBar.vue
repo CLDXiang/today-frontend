@@ -1,21 +1,19 @@
 <template>
-  <div class="timetable__search-bar">
+  <div class="timetable__search-bar" @mouseleave="searchResultsVisible = false">
     <input
       v-model="searchText"
       type="search"
       placeholder="输入课程名、教师名或课程号"
       autocomplete="off"
-      @focus="showSearchResults = searchText !== ''"
-      @blur="showSearchResults = false"
+      @focus="searchResultsVisible = searchText !== ''"
+      @mouseenter="searchResultsVisible = searchText !== ''"
     >
-    <div v-show="showSearchResults" class="search-bar__results">
+    <div v-show="searchResultsVisible" class="search-bar__results">
       <div
         v-for="(searchResult, index) in searchResults"
         :key="index"
         class="search-bar__result"
         @click="handleClickSearchResult(searchResult[1])"
-        @mousedown.prevent
-        @touchend.prevent
       >
         {{ searchResult[0] }}
       </div>
@@ -31,7 +29,7 @@ export default {
   data() {
     return {
       searchText: '',
-      showSearchResults: false,
+      searchResultsVisible: false,
       /** 搜索结果
        * TODO: 后续可能还需要在 value 中加入一些状态：是否已选等
        */
@@ -39,19 +37,32 @@ export default {
     };
   },
   watch: {
-    searchText(newVal) {
+    searchText(newVal, oldVal) {
       const query = newVal.trim();
       if (!query || query === '') {
-        this.showSearchResults = false;
+        this.searchResultsVisible = false;
         return;
       }
+
       // TODO: 加入防抖？
-      const reg = new RegExp(query.trim(), 'i');
-      this.searchResults = Object.entries(this.searchIndex).filter(
-        // eslint-disable-next-line no-unused-vars
-        ([index, _]) => reg.test(index),
-      );
-      this.showSearchResults = true;
+      const reg = new RegExp(query, 'i');
+
+      // 如果本次输入字符串包含上一次输入字符串，则在已有搜索结果中再次过滤，不再遍历整个索引
+      const queryOld = oldVal.trim();
+      const regOld = new RegExp(oldVal.trim(), 'i');
+      if (queryOld && queryOld !== '' && regOld.test(query)) {
+        this.searchResults = this.searchResults.filter(
+          // eslint-disable-next-line no-unused-vars
+          ([index, _]) => reg.test(index),
+        );
+      } else {
+        this.searchResults = Object.entries(this.searchIndex).filter(
+          // eslint-disable-next-line no-unused-vars
+          ([index, _]) => reg.test(index),
+        );
+      }
+
+      this.searchResultsVisible = true;
     },
   },
   methods: {

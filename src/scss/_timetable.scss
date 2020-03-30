@@ -120,8 +120,8 @@ $colors: (
   color: darken($color, 40%);
   background-color: $color;
 
-  &:hover,
-  &.hover {
+  &.hoverable:hover,
+  &.hoverable.hover {
     background-color: darken($color, 10%);
   }
 }

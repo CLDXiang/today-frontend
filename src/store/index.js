@@ -22,6 +22,7 @@ const store = new Vuex.Store({
       barTitle: 'Fudan Today',
     },
     detailPageCourse: {},
+    isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
   },
   mutations: {
@@ -42,11 +43,17 @@ const store = new Vuex.Store({
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
     },
+    hideDetailDialog(state) {
+      state.isDetailDialogVisible = false;
+    },
     changeDetailPageContent(state, course) {
       state.detailPageCourse = course;
     },
-    hideDetailDialog(state) {
-      state.isDetailDialogVisible = false;
+    onDeleteDetailPageCourse(state) {
+      state.isDetailPageCourseDeleted = true;
+    },
+    onRestoreDetailPageCourse(state) {
+      state.isDetailPageCourseDeleted = false;
     },
   },
   getters: {

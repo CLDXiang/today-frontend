@@ -75,6 +75,7 @@ export default {
     handleClickDeleteButton() {
       this.$store.commit('hideDetailDialog');
       this.$emit('deleteCourse');
+      this.$store.commit('onDeleteDetailPageCourse');
     },
     handleClickCloseButton() {
       this.$store.commit('hideDetailDialog');

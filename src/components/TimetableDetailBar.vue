@@ -50,7 +50,7 @@
     </v-card-text>
     <v-divider />
     <v-card-actions class="justify-center">
-      <v-btn v-if="isCourseDeleted" color="primary" @click="handleClickRestoreButton">
+      <v-btn v-if="isDetailPageCourseDeleted" color="primary" @click="handleClickRestoreButton">
         <v-icon>mdi-delete-restore</v-icon>撤销删除
       </v-btn>
       <v-btn v-else color="error" @click="handleClickDeleteButton">
@@ -66,14 +66,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     course: Object,
   },
   data() {
-    return {
-      isCourseDeleted: false,
-    };
+    return {};
+  },
+  computed: {
+    ...mapState(['isDetailPageCourseDeleted']),
   },
   methods: {
     mapDay(day) {
@@ -82,11 +85,12 @@ export default {
     handleClickDeleteButton() {
       this.$store.commit('hideDetailDialog');
       this.$emit('deleteCourse');
-      this.isCourseDeleted = true;
+      this.$store.commit('onDeleteDetailPageCourse');
     },
     handleClickRestoreButton() {
       this.$emit('restoreCourse');
       this.isCourseDeleted = false;
+      this.$store.commit('onRestoreDetailPageCourse');
     },
   },
 };

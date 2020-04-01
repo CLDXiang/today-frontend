@@ -1,17 +1,14 @@
 <template>
-  <div class="timetable">
-    <div
-      v-show="detailPageVisible"
-      class="timetable__detail-page-box"
-      :class="classDetailPage"
-      @click="hideDetailPage"
+  <div class="timetable fluid my-3 pa-0 px-md-3">
+    <v-dialog
+      fullscreen
+      hide-overlay
+      scrollable
+      transition="dialog-bottom-transition"
+      :value="isMobileMode && detailDialogVisible"
     >
-      <timetable-detail-page :course="detailPageCourse" />
-      <span class="timetable__search-bar-footer">
-        <button @click="removeSelectedCourse(detailPageCourse.id)">删除</button>
-        <button>返回</button>
-      </span>
-    </div>
+      <timetable-detail-dialog-content :course="detailPageCourse" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
+    </v-dialog>
     <div class="timetable__body">
       <div class="timetable__time">
         <div class="time__title" />
@@ -47,13 +44,13 @@ import axios from 'axios';
 import { mapState } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
-import TimetableDetailPage from './TimetableDetailPage.vue';
+import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
-    TimetableDetailPage,
+    TimetableDetailDialogContent,
   },
   props: {},
   data() {
@@ -99,14 +96,27 @@ export default {
     };
   },
   computed: {
-    ...mapState(['detailPageCourse', 'detailPageVisible']),
+    ...mapState(['detailPageCourse', 'detailDialogVisible']),
     classDetailPage() {
-      return [
+      const classList = [
         `color-${(this.detailPageCourse.code &&
           parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
             96) ||
           0}`,
       ];
+      return classList;
+    },
+    isMobileMode() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+        case 'sm':
+          return true;
+        case 'md':
+        case 'lg':
+        case 'xl':
+        default:
+          return false;
+      }
     },
   },
   created() {
@@ -223,13 +233,10 @@ export default {
 @import '../scss/_timetable';
 
 .timetable {
-  height: 100%;
   position: relative;
 
   display: flex;
   flex-direction: column;
-
-  margin: 10px 0;
 }
 
 .timetable__body {
@@ -291,28 +298,6 @@ export default {
   height: 17rem;
   margin: 10px;
   display: flex;
-}
-
-.timetable__detail-page-box {
-  position: fixed;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  border-radius: 6px;
-  padding: 0.3rem;
-  border-bottom: 0.2rem solid;
-  // 减去 header 和 footer 高度
-  // height: calc((100vh - 112px));
-  // width: 100vw;
-
-  left: 50vw;
-  top: 50vh;
-  transform: translate(-50%, -50%);
-  height: $cell-height * 5;
-  width: $cell-width * 4;
-  z-index: 4;
 }
 
 .timetable__search-bar-footer {

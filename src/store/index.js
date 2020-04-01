@@ -22,7 +22,7 @@ const store = new Vuex.Store({
       barTitle: 'Fudan Today',
     },
     detailPageCourse: {},
-    detailPageVisible: false,
+    detailDialogVisible: false,
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -39,18 +39,27 @@ const store = new Vuex.Store({
       state.user.name = '未登录';
       state.user.email = '';
     },
-    showDetailPage(state, course) {
+    showDetailDialog(state, course) {
       state.detailPageCourse = course;
-      state.detailPageVisible = true;
+      state.detailDialogVisible = true;
     },
     hideDetailPage(state) {
-      state.detailPageVisible = false;
+      state.detailDialogVisible = false;
     },
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
   },
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      reducer(state) {
+        return {
+          user: state.user,
+          editor: state.editor,
+        };
+      },
+    }),
+  ],
 });
 
 export default store;

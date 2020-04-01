@@ -5,7 +5,7 @@
       hide-overlay
       scrollable
       transition="dialog-bottom-transition"
-      :value="isMobileMode && detailDialogVisible"
+      :value="isMobileMode && isDetailDialogVisible"
     >
       <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
     </v-dialog>
@@ -105,7 +105,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['detailPageCourse', 'detailDialogVisible']),
+    ...mapState(['detailPageCourse', 'isDetailDialogVisible']),
     classDetailPage() {
       if (!this.detailPageCourse.id) return [];
       const classList = [

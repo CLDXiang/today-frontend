@@ -1,14 +1,14 @@
 <template>
-  <div class="timetable__search-bar" @mouseleave="searchResultsVisible = false">
+  <div class="timetable__search-bar" @mouseleave="isSearchResultsVisible = false">
     <input
       v-model="searchText"
       type="search"
       placeholder="输入课程名、教师名或课程号"
       autocomplete="off"
-      @focus="searchResultsVisible = searchText !== ''"
-      @mouseenter="searchResultsVisible = searchText !== ''"
+      @focus="isSearchResultsVisible = searchText !== ''"
+      @mouseenter="isSearchResultsVisible = searchText !== ''"
     >
-    <div v-show="searchResultsVisible" class="search-bar__results">
+    <div v-show="isSearchResultsVisible" class="search-bar__results">
       <div
         v-for="(searchResult, index) in searchResults"
         :key="index"
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       searchText: '',
-      searchResultsVisible: false,
+      isSearchResultsVisible: false,
       /** 搜索结果
        * TODO: 后续可能还需要在 value 中加入一些状态：是否已选等
        */
@@ -40,7 +40,7 @@ export default {
     searchText(newVal, oldVal) {
       const query = newVal.trim();
       if (!query || query === '') {
-        this.searchResultsVisible = false;
+        this.isSearchResultsVisible = false;
         return;
       }
 
@@ -62,7 +62,7 @@ export default {
         );
       }
 
-      this.searchResultsVisible = true;
+      this.isSearchResultsVisible = true;
     },
   },
   methods: {

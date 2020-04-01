@@ -22,7 +22,7 @@ const store = new Vuex.Store({
       barTitle: 'Fudan Today',
     },
     detailPageCourse: {},
-    detailDialogVisible: false,
+    isDetailDialogVisible: false,
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -40,13 +40,13 @@ const store = new Vuex.Store({
       state.user.email = '';
     },
     showDetailDialog(state) {
-      state.detailDialogVisible = true;
+      state.isDetailDialogVisible = true;
     },
     changeDetailPageContent(state, course) {
       state.detailPageCourse = course;
     },
     hideDetailDialog(state) {
-      state.detailDialogVisible = false;
+      state.isDetailDialogVisible = false;
     },
   },
   getters: {

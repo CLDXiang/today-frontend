@@ -50,7 +50,10 @@
     </v-card-text>
     <v-divider />
     <v-card-actions class="justify-center">
-      <v-btn color="error" @click="handleClickDeleteButton">
+      <v-btn v-if="isCourseDeleted" color="primary" @click="handleClickRestoreButton">
+        <v-icon>mdi-delete-restore</v-icon>撤销删除
+      </v-btn>
+      <v-btn v-else color="error" @click="handleClickDeleteButton">
         <v-icon>mdi-delete-forever-outline</v-icon>删除课程
       </v-btn>
     </v-card-actions>
@@ -68,7 +71,9 @@ export default {
     course: Object,
   },
   data() {
-    return {};
+    return {
+      isCourseDeleted: false,
+    };
   },
   methods: {
     mapDay(day) {
@@ -77,6 +82,11 @@ export default {
     handleClickDeleteButton() {
       this.$store.commit('hideDetailDialog');
       this.$emit('deleteCourse');
+      this.isCourseDeleted = true;
+    },
+    handleClickRestoreButton() {
+      this.$emit('restoreCourse');
+      this.isCourseDeleted = false;
     },
   },
 };

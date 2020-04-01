@@ -29,7 +29,13 @@
           :courses="courses"
         />
       </div>
-      <t-imetable-detail-bar v-show="!isMobileMode" :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
+      <t-imetable-detail-bar
+        v-show="!isMobileMode"
+        :course="detailPageCourse"
+        :class="classDetailPage"
+        @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
+        @restoreCourse="addSelectedCourse(detailPageCourse.id)"
+      />
     </div>
     <div class="timetable__search-bar-box">
       <timetable-search-bar

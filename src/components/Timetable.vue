@@ -7,21 +7,21 @@
       transition="dialog-bottom-transition"
       :value="isMobileMode && detailDialogVisible"
     >
-      <timetable-detail-dialog-content :course="detailPageCourse" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
+      <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
     </v-dialog>
     <div class="timetable__body">
-      <div class="timetable__time">
-        <div class="time__title" />
-        <div
-          v-for="(section, index) in sections"
-          :key="index"
-          class="time__cell"
-        >
-          <span class="time__clock">{{ section.clock }}</span>
-          {{ section.name }}
-        </div>
-      </div>
       <div class="timetable__day-box">
+        <div class="timetable__time">
+          <div class="time__title" />
+          <div
+            v-for="(section, index) in sections"
+            :key="index"
+            class="time__cell"
+          >
+            <span class="time__clock">{{ section.clock }}</span>
+            {{ section.name }}
+          </div>
+        </div>
         <timetable-day
           v-for="(courses, index) in selectedCoursesByDay"
           :key="index"
@@ -29,6 +29,7 @@
           :courses="courses"
         />
       </div>
+      <t-imetable-detail-bar v-show="!isMobileMode" :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
     </div>
     <div class="timetable__search-bar-box">
       <timetable-search-bar
@@ -45,12 +46,14 @@ import { mapState } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
+import TImetableDetailBar from './TimetableDetailBar.vue';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
     TimetableDetailDialogContent,
+    TImetableDetailBar,
   },
   props: {},
   data() {
@@ -98,6 +101,7 @@ export default {
   computed: {
     ...mapState(['detailPageCourse', 'detailDialogVisible']),
     classDetailPage() {
+      if (!this.detailPageCourse.id) return [];
       const classList = [
         `color-${(this.detailPageCourse.code &&
           parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
@@ -222,8 +226,8 @@ export default {
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
     },
-    hideDetailPage() {
-      this.$store.commit('hideDetailPage');
+    hideDetailDialog() {
+      this.$store.commit('hideDetailDialog');
     },
   },
 };
@@ -241,8 +245,7 @@ export default {
 
 .timetable__body {
   display: flex;
-
-  overflow-x: auto;
+  align-items: flex-start;
 }
 
 .timetable__time {
@@ -259,7 +262,7 @@ export default {
 }
 
 .time__title {
-  flex: 1 0 $cell-height/2;
+  flex: 0 0 $cell-height/2;
   @include flex-center;
 
   padding: 0 4px;
@@ -267,7 +270,7 @@ export default {
 
 .time__cell {
   position: relative;
-  flex: 1 0 $cell-height;
+  flex: 0 0 $cell-height;
   @include flex-center;
   width: $cell-width / 2;
 
@@ -288,6 +291,7 @@ export default {
 }
 
 .timetable__day-box {
+  overflow-x: auto;
   display: flex;
 
   border: 1px solid #ddd;

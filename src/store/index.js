@@ -39,11 +39,13 @@ const store = new Vuex.Store({
       state.user.name = '未登录';
       state.user.email = '';
     },
-    showDetailDialog(state, course) {
-      state.detailPageCourse = course;
+    showDetailDialog(state) {
       state.detailDialogVisible = true;
     },
-    hideDetailPage(state) {
+    changeDetailPageContent(state, course) {
+      state.detailPageCourse = course;
+    },
+    hideDetailDialog(state) {
       state.detailDialogVisible = false;
     },
   },

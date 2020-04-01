@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card v-if="course.id" class="mx-3 detail-bar" min-width="320px" height="928px">
     <v-card-title>{{ course.name }}</v-card-title>
     <v-divider />
     <v-card-text>
@@ -49,14 +49,16 @@
       </div>
     </v-card-text>
     <v-divider />
-    <v-card-actions class="justify-end">
+    <v-card-actions class="justify-center">
       <v-btn color="error" @click="handleClickDeleteButton">
         <v-icon>mdi-delete-forever-outline</v-icon>删除课程
       </v-btn>
-      <v-btn color="primary" @click="handleClickCloseButton">
-        <v-icon>mdi-arrow-collapse</v-icon>关闭
-      </v-btn>
     </v-card-actions>
+  </v-card>
+  <v-card v-else class="mx-3" min-width="320px" height="928px">
+    <v-card-text>
+      点击课程查看详细信息
+    </v-card-text>
   </v-card>
 </template>
 
@@ -76,11 +78,12 @@ export default {
       this.$store.commit('hideDetailDialog');
       this.$emit('deleteCourse');
     },
-    handleClickCloseButton() {
-      this.$store.commit('hideDetailDialog');
-    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.detail-bar {
+  overflow-y: auto;
+}
+</style>

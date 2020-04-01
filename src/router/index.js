@@ -9,6 +9,8 @@ import Reply from '../components/Reply.vue';
 import PostView from '../components/PostView.vue';
 import Timetable from '../components/Timetable.vue';
 
+import SearchView from '../components/SearchView.vue';
+
 import store from '../store';
 
 Vue.use(VueRouter);
@@ -23,6 +25,7 @@ const routes = [
   { path: '/reply', component: Reply },
   { path: '/hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
+  { path: '/search', component: SearchView },
   { path: '*', component: Timetable },
 ];
 

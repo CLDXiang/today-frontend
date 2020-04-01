@@ -48,6 +48,7 @@ const store = new Vuex.Store({
     },
     changeDetailPageContent(state, course) {
       state.detailPageCourse = course;
+      state.isDetailPageCourseDeleted = false;
     },
     onDeleteDetailPageCourse(state) {
       state.isDetailPageCourseDeleted = true;

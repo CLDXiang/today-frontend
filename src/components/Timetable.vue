@@ -29,7 +29,7 @@
           :courses="courses"
         />
       </div>
-      <t-imetable-detail-bar
+      <timetable-detail-bar
         v-show="!isMobileMode"
         :course="detailPageCourse"
         :class="classDetailPage"
@@ -52,14 +52,14 @@ import { mapState } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
-import TImetableDetailBar from './TimetableDetailBar.vue';
+import TimetableDetailBar from './TimetableDetailBar.vue';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
     TimetableDetailDialogContent,
-    TImetableDetailBar,
+    TimetableDetailBar,
   },
   props: {},
   data() {

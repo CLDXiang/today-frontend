@@ -107,14 +107,15 @@ export default {
   computed: {
     ...mapState(['detailPageCourse', 'isDetailDialogVisible']),
     classDetailPage() {
-      if (!this.detailPageCourse.id) return [];
-      const classList = [
-        `color-${(this.detailPageCourse.code &&
-          parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
-            96) ||
-          0}`,
-      ];
-      return classList;
+      // if (!this.detailPageCourse.id) return [];
+      // const classList = [
+      //   `color-${(this.detailPageCourse.code &&
+      //     parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
+      //       96) ||
+      //     0}`,
+      // ];
+      // return classList;
+      return [];
     },
     isMobileMode() {
       switch (this.$vuetify.breakpoint.name) {

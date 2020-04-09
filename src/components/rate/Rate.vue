@@ -82,10 +82,10 @@
 </template>
 
 <script>
-import BaseLayout from './common/BaseLayout.vue';
-import SignIn from './common/SignIn.vue';
-import SignUp from './common/SignUp.vue';
-import RatePicker from './common/RatePicker.vue';
+import BaseLayout from './BaseLayout.vue';
+import SignIn from './SignIn.vue';
+import SignUp from './SignUp.vue';
+import RatePicker from './RatePicker.vue';
 import Reply from './Reply.vue';
 import SvgSet from './SvgSet.vue';
 
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/config.scss';
+@import '../../scss/config.scss';
 
 .main-container {
   --padding--landscape: 0 3rem 0 3rem;

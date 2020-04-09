@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import { getSecret, createSecret } from '../services/post.service';
+import { getSecret, createSecret } from '../../services/post.service';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
-import log from '../utils/log';
+import log from '../../utils/log';
 
 export default {
   components: { Post, Editor },

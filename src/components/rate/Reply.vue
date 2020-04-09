@@ -158,7 +158,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/config.scss';
+@import '../../scss/config.scss';
 
 // Side input for reply dialog
 .side-input-container {

@@ -27,11 +27,11 @@
 
 <script>
 import marked from 'marked';
-import { ANONY_NAMES } from '../utils/config';
+import { ANONY_NAMES } from '../../utils/config';
 import Post from './Post.vue';
 import Editor from './Editor.vue';
-import log from '../utils/log';
-import { getSecretById, getSecretReply, createSecretReply } from '../services/post.service';
+import log from '../../utils/log';
+import { getSecretById, getSecretReply, createSecretReply } from '../../services/post.service';
 
 export default {
   components: { Post, Editor },

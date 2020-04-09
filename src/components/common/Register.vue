@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <h1>登录</h1>
+      <h1>注册</h1>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
@@ -17,6 +17,16 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-text-field
+          v-model="email"
+          :rules="emailRules"
+          label="E-mail"
+          required
+        />
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-text-field
           v-model="password"
           type="password"
           :rules="passwordRules"
@@ -25,7 +35,6 @@
         />
       </v-col>
     </v-row>
-
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-alert v-if="alertShown" :type="alertType" :dismissible="true">
@@ -33,20 +42,15 @@
         </v-alert>
       </v-col>
     </v-row>
-
     <v-row justify="center">
-      <v-btn color="primary" class="ma-2" @click="$router.push('/register')">
-        注册
-      </v-btn>
-      <v-btn color="primary" class="ma-2" @click="login">
-        登录
+      <v-btn class="ma-2" color="primary" @click="register">
+        提交
       </v-btn>
     </v-row>
   </v-container>
 </template>
 <script>
-import log from '../utils/log';
-import { login } from '../services/auth.service';
+import { register } from '../../services/auth.service';
 
 export default {
   data: () => ({
@@ -54,6 +58,11 @@ export default {
     nameRules: [
       (v) => !!v || 'Name is required',
       (v) => v.length <= 10 || 'Name must be less than 10 characters',
+    ],
+    email: '',
+    emailRules: [
+      (v) => !!v || 'E-mail is required',
+      (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
     password: '',
     passwordRules: [
@@ -64,9 +73,6 @@ export default {
     alertShown: false,
     alertContent: '',
   }),
-  created() {
-    log.info(this.$router.currentRoute);
-  },
   methods: {
     showAlert(type, content) {
       this.alertType = type;
@@ -76,23 +82,22 @@ export default {
         this.alertShown = false;
       }, 3000);
     },
-    login() {
-      log.info(this.$router.url);
-      login(this.name, this.password)
-        .then((resp) => {
-          log.info(resp);
-          this.showAlert('success', '登录成功');
-          const { redirect } = this.$router.currentRoute.query;
-          log.info('redirecting', redirect);
-          if (redirect) {
-            log.info('redirected!');
-            this.$router.push(redirect);
-          }
-        })
-        .catch((e) => {
-          log.info(e);
-          this.showAlert('warning', '登录失败');
-        });
+    register() {
+      register(this.name, this.email, this.password).then((resp) => {
+        if (resp.data.result === 'success') {
+          this.showAlert('success', '注册成功，跳转登录页面……');
+          setTimeout(() => {
+            this.$router.push('login');
+          }, 1000);
+        }
+        if (resp.data.result === 'failed') {
+          this.result = 'already_exist';
+          this.showAlert(
+            'warning',
+            '注册失败，注册失败，该邮箱已经被使用，请直接登录或者更改注册邮箱',
+          );
+        }
+      });
     },
   },
 };

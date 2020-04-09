@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '../components/Login.vue';
-import Register from '../components/Register.vue';
-import Profile from '../components/Profile.vue';
-import Hole from '../components/Hole.vue';
-import Rate from '../components/Rate.vue';
-import Reply from '../components/Reply.vue';
-import PostView from '../components/PostView.vue';
-import Timetable from '../components/Timetable.vue';
+import Login from '../components/common/Login.vue';
+import Register from '../components/common/Register.vue';
+import Profile from '../components/profile/Profile.vue';
+import Hole from '../components/secret/Hole.vue';
+import Rate from '../components/rate/Rate.vue';
+import Reply from '../components/rate/Reply.vue';
+import PostView from '../components/secret/PostView.vue';
+import Timetable from '../components/timetable/Timetable.vue';
 
-import SearchView from '../components/SearchView.vue';
+import SearchView from '../components/rate/SearchView.vue';
 
 import store from '../store';
 

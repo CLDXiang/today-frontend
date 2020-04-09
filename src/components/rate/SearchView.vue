@@ -49,7 +49,7 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import courses from '../assets/courses.json';
+import courses from '../../assets/courses.json';
 
 export default {
   components: {},
@@ -153,7 +153,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/config.scss';
+@import '../../scss/config.scss';
 
 $background-color: transparent;
 $spacing: 1.6em;

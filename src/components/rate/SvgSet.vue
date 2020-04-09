@@ -92,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/config.scss';
+@import '../../scss/config.scss';
 // SVG Animation
 $border-color--inactive: #777;
 

@@ -24,7 +24,7 @@
 </template>
 
 <script lang="js">
-import log from '../utils/log';
+import log from '../../utils/log';
 
 export default {
   data: () => ({}),

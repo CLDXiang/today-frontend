@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import log from '../utils/log';
+import log from '../../utils/log';
 
 export default {
   name: 'TopToolbar',

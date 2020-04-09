@@ -96,7 +96,7 @@ export default {
   height: 100%;
   border-right: 1px solid #ddd;
 
-  flex: 1;
+  flex: 0 0 auto;
 
   display: flex;
   flex-direction: column;
@@ -108,7 +108,7 @@ export default {
 }
 
 .day__title {
-  flex: 1 0 $cell-height/2;
+  flex: 0 0 $cell-height/2;
   @include flex-center;
 
   color: #69707a;

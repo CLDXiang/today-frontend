@@ -22,7 +22,8 @@ const store = new Vuex.Store({
       barTitle: 'Fudan Today',
     },
     detailPageCourse: {},
-    detailPageVisible: false,
+    isDetailPageCourseDeleted: false,
+    isDetailDialogVisible: false,
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -39,18 +40,36 @@ const store = new Vuex.Store({
       state.user.name = '未登录';
       state.user.email = '';
     },
-    showDetailPage(state, course) {
-      state.detailPageCourse = course;
-      state.detailPageVisible = true;
+    showDetailDialog(state) {
+      state.isDetailDialogVisible = true;
     },
-    hideDetailPage(state) {
-      state.detailPageVisible = false;
+    hideDetailDialog(state) {
+      state.isDetailDialogVisible = false;
+    },
+    changeDetailPageContent(state, course) {
+      state.detailPageCourse = course;
+      state.isDetailPageCourseDeleted = false;
+    },
+    onDeleteDetailPageCourse(state) {
+      state.isDetailPageCourseDeleted = true;
+    },
+    onRestoreDetailPageCourse(state) {
+      state.isDetailPageCourseDeleted = false;
     },
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
   },
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      reducer(state) {
+        return {
+          user: state.user,
+          editor: state.editor,
+        };
+      },
+    }),
+  ],
 });
 
 export default store;

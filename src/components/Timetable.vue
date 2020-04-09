@@ -1,30 +1,28 @@
 <template>
-  <div class="timetable">
-    <div
-      v-show="detailPageVisible"
-      class="timetable__detail-page-box"
-      :class="classDetailPage"
-      @click="hideDetailPage"
+  <div class="timetable fluid my-3 pa-0 px-md-3">
+    <v-dialog
+      :fullscreen="isMobileMode"
+      scrollable
+      :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
+      :value="isDetailDialogVisible"
+      :max-width="isMobileMode ? '' : '368px'"
+      @click:outside="hideDetailDialog"
     >
-      <timetable-detail-page :course="detailPageCourse" />
-      <span class="timetable__search-bar-footer">
-        <button @click="removeSelectedCourse(detailPageCourse.id)">删除</button>
-        <button>返回</button>
-      </span>
-    </div>
+      <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
+    </v-dialog>
     <div class="timetable__body">
-      <div class="timetable__time">
-        <div class="time__title" />
-        <div
-          v-for="(section, index) in sections"
-          :key="index"
-          class="time__cell"
-        >
-          <span class="time__clock">{{ section.clock }}</span>
-          {{ section.name }}
-        </div>
-      </div>
       <div class="timetable__day-box">
+        <div class="timetable__time">
+          <div class="time__title" />
+          <div
+            v-for="(section, index) in sections"
+            :key="index"
+            class="time__cell"
+          >
+            <span class="time__clock">{{ section.clock }}</span>
+            {{ section.name }}
+          </div>
+        </div>
         <timetable-day
           v-for="(courses, index) in selectedCoursesByDay"
           :key="index"
@@ -32,6 +30,13 @@
           :courses="courses"
         />
       </div>
+      <!-- <timetable-detail-bar
+        v-show="!isMobileMode"
+        :course="detailPageCourse"
+        :class="classDetailPage"
+        @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
+        @restoreCourse="addSelectedCourse(detailPageCourse.id)"
+      /> -->
     </div>
     <div class="timetable__search-bar-box">
       <timetable-search-bar
@@ -47,13 +52,15 @@ import axios from 'axios';
 import { mapState } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
-import TimetableDetailPage from './TimetableDetailPage.vue';
+import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
+// import TimetableDetailBar from './TimetableDetailBar.vue';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
-    TimetableDetailPage,
+    TimetableDetailDialogContent,
+    // TimetableDetailBar,
   },
   props: {},
   data() {
@@ -99,14 +106,29 @@ export default {
     };
   },
   computed: {
-    ...mapState(['detailPageCourse', 'detailPageVisible']),
+    ...mapState(['detailPageCourse', 'isDetailDialogVisible']),
     classDetailPage() {
-      return [
-        `color-${(this.detailPageCourse.code &&
-          parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
-            96) ||
-          0}`,
-      ];
+      // if (!this.detailPageCourse.id) return [];
+      // const classList = [
+      //   `color-${(this.detailPageCourse.code &&
+      //     parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
+      //       96) ||
+      //     0}`,
+      // ];
+      // return classList;
+      return [];
+    },
+    isMobileMode() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+        case 'sm':
+          return true;
+        case 'md':
+        case 'lg':
+        case 'xl':
+        default:
+          return false;
+      }
     },
   },
   created() {
@@ -212,8 +234,8 @@ export default {
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
     },
-    hideDetailPage() {
-      this.$store.commit('hideDetailPage');
+    hideDetailDialog() {
+      this.$store.commit('hideDetailDialog');
     },
   },
 };
@@ -223,19 +245,15 @@ export default {
 @import '../scss/_timetable';
 
 .timetable {
-  height: 100%;
   position: relative;
 
   display: flex;
   flex-direction: column;
-
-  margin: 10px 0;
 }
 
 .timetable__body {
   display: flex;
-
-  overflow-x: auto;
+  align-items: flex-start;
 }
 
 .timetable__time {
@@ -252,7 +270,7 @@ export default {
 }
 
 .time__title {
-  flex: 1 0 $cell-height/2;
+  flex: 0 0 $cell-height/2;
   @include flex-center;
 
   padding: 0 4px;
@@ -260,7 +278,7 @@ export default {
 
 .time__cell {
   position: relative;
-  flex: 1 0 $cell-height;
+  flex: 0 0 $cell-height;
   @include flex-center;
   width: $cell-width / 2;
 
@@ -281,6 +299,7 @@ export default {
 }
 
 .timetable__day-box {
+  overflow-x: auto;
   display: flex;
 
   border: 1px solid #ddd;
@@ -291,28 +310,6 @@ export default {
   height: 17rem;
   margin: 10px;
   display: flex;
-}
-
-.timetable__detail-page-box {
-  position: fixed;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  border-radius: 6px;
-  padding: 0.3rem;
-  border-bottom: 0.2rem solid;
-  // 减去 header 和 footer 高度
-  // height: calc((100vh - 112px));
-  // width: 100vw;
-
-  left: 50vw;
-  top: 50vh;
-  transform: translate(-50%, -50%);
-  height: $cell-height * 5;
-  width: $cell-width * 4;
-  z-index: 4;
 }
 
 .timetable__search-bar-footer {

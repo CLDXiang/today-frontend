@@ -1,11 +1,12 @@
 <template>
   <div class="timetable fluid my-3 pa-0 px-md-3">
     <v-dialog
-      fullscreen
-      hide-overlay
+      :fullscreen="isMobileMode"
       scrollable
-      transition="dialog-bottom-transition"
-      :value="isMobileMode && isDetailDialogVisible"
+      :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
+      :value="isDetailDialogVisible"
+      :max-width="isMobileMode ? '' : '368px'"
+      @click:outside="hideDetailDialog"
     >
       <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
     </v-dialog>
@@ -29,13 +30,13 @@
           :courses="courses"
         />
       </div>
-      <timetable-detail-bar
+      <!-- <timetable-detail-bar
         v-show="!isMobileMode"
         :course="detailPageCourse"
         :class="classDetailPage"
         @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
         @restoreCourse="addSelectedCourse(detailPageCourse.id)"
-      />
+      /> -->
     </div>
     <div class="timetable__search-bar-box">
       <timetable-search-bar
@@ -52,14 +53,14 @@ import { mapState } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
-import TimetableDetailBar from './TimetableDetailBar.vue';
+// import TimetableDetailBar from './TimetableDetailBar.vue';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
     TimetableDetailDialogContent,
-    TimetableDetailBar,
+    // TimetableDetailBar,
   },
   props: {},
   data() {

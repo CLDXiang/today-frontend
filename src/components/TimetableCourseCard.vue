@@ -44,9 +44,10 @@ export default {
     handleClickCourseCard() {
       // only work on mobile mode
       this.$store.commit('changeDetailPageContent', this.course);
-      if (this.$vuetify.breakpoint.name === 'xs' || this.$vuetify.breakpoint.name === 'sm') {
-        this.$store.commit('showDetailDialog');
-      }
+      this.$store.commit('showDetailDialog');
+      // if (this.$vuetify.breakpoint.name === 'xs' || this.$vuetify.breakpoint.name === 'sm') {
+      //   this.$store.commit('showDetailDialog');
+      // }
     },
   },
 };

@@ -43,7 +43,9 @@
       </p>
 
       <div>
-        <v-btn color="primary" @click="handleSubmit">提交评论</v-btn>
+        <v-btn color="primary" @click="handleSubmit">
+          提交评论
+        </v-btn>
       </div>
     </div>
   </div>
@@ -52,12 +54,6 @@
 
 <script>
 export default {
-  methods: {
-    handleSubmit: function() {
-      console.log('submit');
-      console.log(this.$route.params.code, this.$route.params.index);
-    }
-  },
   data() {
     return {
       teachers: ' TA ',
@@ -90,6 +86,12 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    handleSubmit() {
+      // console.log('submit');
+      // console.log(this.$route.params.code, this.$route.params.index);
+    },
   },
 };
 </script>
@@ -145,7 +147,7 @@ export default {
 }
 
 .mark {
-  max-width: 0.618*$main-width;
+  max-width: 0.618 * $main-width;
   @include mark;
   padding: 1rem 0;
   display: flex;

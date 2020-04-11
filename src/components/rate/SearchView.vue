@@ -51,7 +51,7 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import lectures from '../../assets/lectures.json';
+import lectures from '../../assets/courses.json';
 
 export default {
   components: {},
@@ -62,12 +62,12 @@ export default {
       searchInput: '',
       searchResult: {
         Mathematics: [
-          ['TA', 'code a'],
-          ['TB', 'code b'],
+          ['TA', 'code a', 'index a'],
+          ['TB', 'code b', 'index b'],
         ],
         'Computer Science': [
-          ['TA', 'code a'],
-          ['TB', 'code b'],
+          ['TA', 'code a', 'index a'],
+          ['TB', 'code b', 'index b'],
         ],
       },
       filterLookup: {},

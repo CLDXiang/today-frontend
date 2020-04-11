@@ -34,7 +34,9 @@
   
             <v-list-item
               v-for="t in teachers"
-              :key="t[1]"
+              :key="t[0]"
+              link
+              :to="`/rate/${t[1]}/${t[2]}`" 
             >
               <v-list-item-content>
                 <v-list-item-title v-text="t[0]" />
@@ -49,7 +51,7 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import courses from '../../assets/courses.json';
+import lectures from '../../assets/lectures.json';
 
 export default {
   components: {},
@@ -80,9 +82,9 @@ export default {
         return tuples
           .filter((data) => {
             return (
-              data.class.includes(searchInput) ||
+              data.name.includes(searchInput) ||
               data.code.includes(searchInput) ||
-              data.teacher.includes(searchInput)
+              data.taught_by.includes(searchInput)
             );
           })
           .slice(0, maxSearchResult);
@@ -138,22 +140,23 @@ export default {
 
   methods: {
     updateSearchResult(filterFunction) {
-      const result = filterFunction(courses);
+      const result = filterFunction(lectures);
 
       // group by class name
       const c2t = {};
       result.forEach((data) => {
-        if (!c2t[data.class]) c2t[data.class] = [];
-        c2t[data.class].push([data.teacher, data.code]);
+        if (!c2t[data.name]) c2t[data.name] = [];
+        c2t[data.name].push([data.taught_by, data.code, data.lecture_index]);
       });
       this.searchResult = c2t;
+      console.log(c2t);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/config.scss';
+@import '@/scss/config.scss';
 
 $background-color: transparent;
 $spacing: 1.6em;

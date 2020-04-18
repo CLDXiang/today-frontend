@@ -1,75 +1,80 @@
 <template>
   <v-container>
-  <v-row justify="center">
-    <v-col
-      md="10"
-      lg="8"
-    >
-    <v-card
-      class="mx-auto"
-      outlined
-    >
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="headline mb-1">用户资料</v-list-item-title>
-          <v-list-item-subtitle>欢迎 {{ user }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-      <v-row
-        dense
+    <v-row justify="center">
+      <v-col
+        md="10"
+        lg="8"
       >
-        <template
-          v-for="(item, index) in cols"
+        <v-card
+          class="mx-auto"
+          outlined
         >
-          <v-col
-            :key="index"
-          >
-            <v-list-item
-              two-line
-              :to="item.to"
-              class="px-1"
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="headline mb-1">
+                用户资料
+              </v-list-item-title>
+              <v-list-item-subtitle>欢迎 {{ user }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-row
+              dense
             >
-              <v-list-item-content>
-            <v-list-item-title
-              v-text="item.name"
-              align="center"
-            ></v-list-item-title>
-            <v-list-item-subtitle
-              v-text="item.count"
-              align="center"
-              class="mt-2"
-            ></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-col>
-          <v-divider
-            v-if="index < cols.length - 1"
-            vertical
-          ></v-divider>
-        </template>
-      </v-row>
-      </v-list-item>
-      <v-card-actions>
-        <v-row
-          justify="center"
-        >
-          <v-col
-            md="4"
-            lg="5"
-          >
-        <v-btn
-          color="primary"
-          large
-          block
-          @click="logout"
-        >退出登录</v-btn>
-          </v-col>
-        </v-row>
-      </v-card-actions>
-    </v-card>
-    </v-col>
-  </v-row>
+              <template
+                v-for="(item, index) in cols"
+              >
+                <v-col
+                  :key="index"
+                >
+                  <v-list-item
+                    two-line
+                    :to="item.to"
+                    class="px-1"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title
+                        align="center"
+                        v-text="item.name"
+                      />
+                      <v-list-item-subtitle
+                        align="center"
+                        class="mt-2"
+                        v-text="item.count"
+                      />
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+                <v-divider
+                  v-if="index < cols.length - 1"
+                  :key="index"
+                  vertical
+                />
+              </template>
+            </v-row>
+          </v-list-item>
+          <v-card-actions>
+            <v-row
+              justify="center"
+            >
+              <v-col
+                md="4"
+                lg="5"
+              >
+                <v-btn
+                  color="primary"
+                  large
+                  block
+                  @click="logout"
+                >
+                  退出登录
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

@@ -5,36 +5,34 @@
         md="10"
         lg="8"
       >
-    <v-card
-      class="mx-auto"
-      outlined
-    >
-      <v-list>
-        <v-subheader>已关注课程</v-subheader>
-        <template
-          v-for="(item, index) in starCourses"
+        <v-card
+          class="mx-auto"
+          outlined
         >
-          <v-divider
-            v-if="index == 0"
-            :key="'divider1-' + item.name"
-          >
-          </v-divider>
-          <v-list-item
-            :key="item.name"
-            :to="'/rate'"
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="item.name"></v-list-item-title>
-              <v-list-item-subtitle v-text="item.intro"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider
-            :key="'divider2-' + item.name"
-          >
-          </v-divider>
-        </template>
-      </v-list>
-    </v-card>
+          <v-list>
+            <v-subheader>已关注课程</v-subheader>
+            <template
+              v-for="(item, index) in starCourses"
+            >
+              <v-divider
+                v-if="index == 0"
+                :key="'divider1-' + item.name"
+              />
+              <v-list-item
+                :key="item.name"
+                :to="'/rate'"
+              >
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.name" />
+                  <v-list-item-subtitle v-text="item.intro" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider
+                :key="'divider2-' + item.name"
+              />
+            </template>
+          </v-list>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>

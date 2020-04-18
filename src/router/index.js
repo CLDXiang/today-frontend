@@ -4,7 +4,11 @@ import Login from '../components/common/Login.vue';
 import Register from '../components/common/Register.vue';
 import Profile from '../components/profile/Profile.vue';
 import Hole from '../components/secret/Hole.vue';
+
 import Rate from '../components/rate/Rate.vue';
+import RateView from '../components/rate/RateView.vue';
+import RateSubmitView from '../components/rate/RateSubmitView.vue';
+
 import Reply from '../components/rate/Reply.vue';
 import PostView from '../components/secret/PostView.vue';
 import Timetable from '../components/timetable/Timetable.vue';
@@ -21,7 +25,16 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Profile },
-  { path: '/rate', component: Rate },
+
+  {
+    path: '/rate/:code/:index',
+    component: Rate,
+    children: [
+      { path: '', component: RateView },
+      { path: 'submit', component: RateSubmitView },
+    ],
+  },
+
   { path: '/reply', component: Reply },
   { path: '/hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },

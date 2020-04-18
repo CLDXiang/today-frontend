@@ -60,14 +60,14 @@ export default {
     statusClick() {
       if (this.$store.getters.userLoggedIn) {
         log.info('jump to profile');
-        this.$router.push('profile');
+        this.$router.push({ name: 'UserProfile' });
       } else {
-        this.$router.push('login');
+        this.$router.push({ name: 'Login' });
       }
     },
     holeClick() {
       this.$router
-        .push('hole')
+        .push({ name: 'Hole' })
         .then(() => {
           this.$store.state.app.barTitle = '树洞';
         })

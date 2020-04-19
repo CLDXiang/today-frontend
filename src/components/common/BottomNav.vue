@@ -35,7 +35,7 @@ export default {
         if (/\/hole\/?.*$/.test(path)) {
           return 'hole';
         }
-        if ((/\/profile\/?.*$/.test(path)) || (/\/login\/?.*$/.test(path))) {
+        if (/\/profile\/?.*$/.test(path) || /\/login\/?.*$/.test(path)) {
           return 'status';
         }
         return 'course';

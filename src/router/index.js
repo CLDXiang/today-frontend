@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import Login from '../components/common/Login.vue';
 import Register from '../components/common/Register.vue';
 import Profile from '../components/profile/Profile.vue';
+import UserProfile from '../components/profile/UserProfile.vue';
+import Star from '../components/profile/Star.vue';
 import Hole from '../components/secret/Hole.vue';
 
 import Rate from '../components/rate/Rate.vue';
@@ -20,25 +22,40 @@ import store from '../store';
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: Timetable },
+  { path: '/', name: 'Timetable', component: Timetable },
   { path: '/select', component: Timetable },
-  { path: '/login', component: Login },
-  { path: '/register', component: Register },
-  { path: '/profile', component: Profile },
-
+  { path: '/login', name: 'Login', component: Login },
+  { path: '/register', name: 'Register', component: Register },
+  {
+    path: '/profile',
+    component: Profile,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'UserProfile',
+        component: UserProfile,
+      },
+      {
+        path: 'star',
+        name: 'StarCourse',
+        component: Star,
+      },
+    ],
+  },
   {
     path: '/rate/:code/:index',
+    name: 'Rate',
     component: Rate,
     children: [
       { path: '', component: RateView },
       { path: 'submit', component: RateSubmitView },
     ],
   },
-
-  { path: '/reply', component: Reply },
-  { path: '/hole', component: Hole, meta: { requiresAuth: true } },
+  { path: '/reply', name: 'Reply', component: Reply },
+  { path: '/hole', name: 'Hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
-  { path: '/search', component: SearchView },
+  { path: '/search', name: 'Search', component: SearchView },
   { path: '*', component: Timetable },
 ];
 
@@ -53,7 +70,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       // https://router.vuejs.org/guide/essentials/passing-props.html
-      next({ path: '/login', query: { redirect: to.fullPath } });
+      next({ name: 'Login', query: { redirect: to.fullPath } });
     }
   } else {
     next();

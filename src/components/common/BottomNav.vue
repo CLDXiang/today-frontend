@@ -35,7 +35,7 @@ export default {
         if (/\/hole\/?.*$/.test(path)) {
           return 'hole';
         }
-        if (/\/profile\/?.*$/.test(path)) {
+        if (/\/profile\/?.*$/.test(path) || /\/login\/?.*$/.test(path)) {
           return 'status';
         }
         return 'course';
@@ -43,7 +43,7 @@ export default {
       set() {},
     },
     status() {
-      return this.$store.getters.userLoggedIn ? '个人中心' : '未登录';
+      return this.$store.getters.userLoggedIn ? '个人中心' : '登录';
     },
     // activePage() {
     //   return this.$router.url
@@ -58,16 +58,15 @@ export default {
       }
     },
     statusClick() {
-      if (this.$store.getters.userLoggedIn) {
-        log.info('jump to profile');
-        this.$router.push('profile');
-      } else {
-        this.$router.push('login');
+      if (this.activePage !== 'status') {
+        this.$router.push({ name: 'UserProfile' }).catch((e) => {
+          log.info(e);
+        });
       }
     },
     holeClick() {
       this.$router
-        .push('hole')
+        .push({ name: 'Hole' })
         .then(() => {
           this.$store.state.app.barTitle = '树洞';
         })

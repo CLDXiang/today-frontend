@@ -73,6 +73,7 @@ export default {
     logout() {
       log.info('logout');
       this.$store.commit('LOGOUT');
+      this.$router.replace({ name: 'Timetable' });
     },
   },
 };

@@ -25,7 +25,7 @@
                 v-for="(item, index) in cols"
               >
                 <v-col
-                  :key="index"
+                  :key="'col-' + index"
                 >
                   <v-list-item
                     two-line
@@ -47,7 +47,7 @@
                 </v-col>
                 <v-divider
                   v-if="index < cols.length - 1"
-                  :key="index"
+                  :key="'divider-' + index"
                   vertical
                 />
               </template>
@@ -113,7 +113,8 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.commit('SET_JWT_TOKEN', '');
+      this.$store.commit('LOGOUT');
+      this.$router.replace({ name: 'Login', query: { redirect: '/profile' } });
     },
   },
 };

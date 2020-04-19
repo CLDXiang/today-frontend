@@ -22,13 +22,14 @@ import store from '../store';
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: Timetable },
+  { path: '/', name: 'Timetable', component: Timetable },
   { path: '/select', component: Timetable },
   { path: '/login', name: 'Login', component: Login },
-  { path: '/register', component: Register },
+  { path: '/register', name: 'Register', component: Register },
   {
     path: '/profile',
     component: Profile,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -51,10 +52,10 @@ const routes = [
       { path: 'submit', component: RateSubmitView },
     ],
   },
-  { path: '/reply', component: Reply },
+  { path: '/reply', name: 'Reply', component: Reply },
   { path: '/hole', name: 'Hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
-  { path: '/search', component: SearchView },
+  { path: '/search', name: 'Search', component: SearchView },
   { path: '*', component: Timetable },
 ];
 
@@ -69,7 +70,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       // https://router.vuejs.org/guide/essentials/passing-props.html
-      next({ path: '/login', query: { redirect: to.fullPath } });
+      next({ name: 'Login', query: { redirect: to.fullPath } });
     }
   } else {
     next();

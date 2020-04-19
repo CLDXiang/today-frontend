@@ -59,10 +59,9 @@ export default {
     },
     statusClick() {
       if (this.activePage !== 'status') {
-        this.$router.push({ name: 'UserProfile' })
-          .catch((e) => {
-            log.info(e);
-          });
+        this.$router.push({ name: 'UserProfile' }).catch((e) => {
+          log.info(e);
+        });
       }
     },
     holeClick() {

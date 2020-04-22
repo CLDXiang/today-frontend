@@ -1,17 +1,19 @@
 <template>
   <div class="timetable__search-bar" @mouseleave="isSearchResultsVisible = false">
     <v-text-field
+      ref="textfield"
       v-model="searchText"
       label="搜索课程"
       hint="可通过课程名、课程号、教师名、院系、时间地点搜索"
       outlined
       dense
       :disabled="isLoadingSearchResults"
-      :success-messages="searchBarStatus === 'success' ? `找到 ${this.searchResults.length} 门课程` : false"
-      :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : false"
+      :success-messages="searchBarStatus === 'success' ? `找到 ${this.searchResults.length} 门课程` : []"
+      :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
       class="search-bar__text-field"
       @focus="isSearchResultsVisible = searchResults.length !== 0"
       @mouseenter="isSearchResultsVisible = searchResults.length !== 0"
+      @keydown="handleKeyDown"
     >
       <template #append>
         <v-fab-transition>
@@ -38,7 +40,7 @@
         v-for="item in searchResults"
         :key="item.courseID"
         class="search-bar__result"
-        @click="handleClickSearchResult(item.courseID)"
+        @click.stop="handleClickSearchResult(item.courseID)"
       >
         <div class="result-line">
           {{ `${item.codeID} ${item.name}` }}
@@ -134,6 +136,8 @@ export default {
         if (this.searchResults.length > 0) {
           this.searchBarStatus = 'success';
           this.showMessage(`找到 ${this.searchResults.length} 门课程`, 'success');
+          // 主要针对移动端，使键盘收回
+          this.$refs.textfield.blur();
         } else {
           this.searchBarStatus = 'error';
           this.showMessage('没有找到符合条件的课程', 'error');
@@ -142,6 +146,13 @@ export default {
         this.isLoadingSearchResults = false;
         this.isSearchResultsVisible = true;
       }, 0);
+    },
+    handleKeyDown(e) {
+      // TODO: 如何在移动端监听键盘“完成”按钮？
+      // 监听回车键
+      if (e.which === 13) {
+        this.handleClickSearchButton();
+      }
     },
   },
 };

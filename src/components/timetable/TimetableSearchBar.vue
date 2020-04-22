@@ -128,7 +128,7 @@ export default {
         if (this.searchResults.length > 0) {
           this.showMessage(`找到 ${this.searchResults.length} 门课程`, 'success');
         } else {
-          this.showMessage('没有找到符合条件的课程');
+          this.showMessage('没有找到符合条件的课程', 'error');
         }
 
         this.isLoadingSearchResults = false;

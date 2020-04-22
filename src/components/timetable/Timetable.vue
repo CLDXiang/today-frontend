@@ -37,12 +37,18 @@
         @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
         @restoreCourse="addSelectedCourse(detailPageCourse.id)"
       /> -->
-      <div class="timetable__search-bar-box">
+      <div v-if="!isMobileMode" class="timetable__search-bar-box">
         <timetable-search-bar
           :search-index="searchIndex"
           @addcourse="addSelectedCourse"
         />
       </div>
+    </div>
+    <div v-if="isMobileMode" class="timetable__search-bar-box">
+      <timetable-search-bar
+        :search-index="searchIndex"
+        @addcourse="addSelectedCourse"
+      />
     </div>
   </div>
 </template>

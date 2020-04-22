@@ -10,12 +10,24 @@
     >
     <div v-show="isSearchResultsVisible" class="search-bar__results">
       <div
-        v-for="(searchResult, index) in searchResults"
-        :key="index"
+        v-for="item in searchIndex"
+        v-show="searchReg.test(item.index)"
+        :key="item.courseID"
         class="search-bar__result"
-        @click="handleClickSearchResult(searchResult[1])"
+        @click="handleClickSearchResult(item.courseID)"
       >
-        {{ searchResult[0] }}
+        <div class="result-line">
+          {{ `${item.codeID} ${item.name}` }}
+        </div>
+        <div class="result-line cut">
+          {{ item.teachers }}
+        </div>
+        <div v-for="(ts, tsIndex) in item.timeSlots.slice(0, 3)" :key="tsIndex" class="result-line">
+          {{ ts }}
+        </div>
+        <div v-if="item.timeSlots.length > 3" class="result-line">
+          ……
+        </div>
       </div>
     </div>
   </div>
@@ -24,7 +36,7 @@
 <script>
 export default {
   props: {
-    searchIndex: Object,
+    searchIndex: Array,
   },
   data() {
     return {
@@ -36,31 +48,37 @@ export default {
       searchResults: [],
     };
   },
+  computed: {
+    searchReg() {
+      return new RegExp(this.searchText.trim(), 'i');
+    },
+  },
   watch: {
-    searchText(newVal, oldVal) {
+    // searchText(newVal, oldVal) {
+    searchText(newVal) {
       const query = newVal.trim();
       if (!query || query === '') {
         this.isSearchResultsVisible = false;
         return;
       }
 
-      // TODO: 加入防抖？
-      const reg = new RegExp(query, 'i');
+      // // TODO: 加入防抖？
+      // const reg = new RegExp(query, 'i');
 
-      // 如果本次输入字符串包含上一次输入字符串，则在已有搜索结果中再次过滤，不再遍历整个索引
-      const queryOld = oldVal.trim();
-      const regOld = new RegExp(oldVal.trim(), 'i');
-      if (queryOld && queryOld !== '' && regOld.test(query)) {
-        this.searchResults = this.searchResults.filter(
-          // eslint-disable-next-line no-unused-vars
-          ([index, _]) => reg.test(index),
-        );
-      } else {
-        this.searchResults = Object.entries(this.searchIndex).filter(
-          // eslint-disable-next-line no-unused-vars
-          ([index, _]) => reg.test(index),
-        );
-      }
+      // // 如果本次输入字符串包含上一次输入字符串，则在已有搜索结果中再次过滤，不再遍历整个索引
+      // const queryOld = oldVal.trim();
+      // const regOld = new RegExp(oldVal.trim(), 'i');
+      // if (queryOld && queryOld !== '' && regOld.test(query)) {
+      //   this.searchResults = this.searchResults.filter(
+      //     // eslint-disable-next-line no-unused-vars
+      //     ({ index }) => reg.test(index),
+      //   );
+      // } else {
+      //   this.searchResults = this.searchIndex.filter(
+      //     // eslint-disable-next-line no-unused-vars
+      //     ({ index }) => reg.test(index),
+      //   );
+      // }
 
       this.isSearchResultsVisible = true;
     },
@@ -76,6 +94,8 @@ export default {
 <style lang="scss" scoped>
 .timetable__search-bar {
   position: relative;
+  min-width: 320px;
+  height: 928px;
 
   flex: 1;
   display: flex;
@@ -131,5 +151,11 @@ export default {
   &.hover {
     background-color: #f3f5f8;
   }
+}
+
+.result-line.cut {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

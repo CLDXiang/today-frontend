@@ -7,6 +7,8 @@
       outlined
       dense
       :disabled="isLoadingSearchResults"
+      :success-messages="searchBarStatus === 'success' ? `找到 ${this.searchResults.length} 门课程` : false"
+      :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : false"
       class="search-bar__text-field"
       @focus="isSearchResultsVisible = searchResults.length !== 0"
       @mouseenter="isSearchResultsVisible = searchResults.length !== 0"
@@ -78,6 +80,7 @@ export default {
        */
       searchResults: [],
       isLoadingSearchResults: false,
+      searchBarStatus: 'normal',
 
       isMessageVisible: false,
       messageColor: 'info',
@@ -93,6 +96,9 @@ export default {
   watch: {
     searchText(newVal) {
       const query = newVal.trim();
+      if (this.searchBarStatus !== '') {
+        this.searchBarStatus = '';
+      }
       if (this.searchResults.length > 0) {
         this.searchResults = [];
       }
@@ -126,8 +132,10 @@ export default {
 
         this.searchResults = this.searchIndex.filter(({ index }) => reg.test(index));
         if (this.searchResults.length > 0) {
+          this.searchBarStatus = 'success';
           this.showMessage(`找到 ${this.searchResults.length} 门课程`, 'success');
         } else {
+          this.searchBarStatus = 'error';
           this.showMessage('没有找到符合条件的课程', 'error');
         }
 

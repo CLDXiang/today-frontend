@@ -22,6 +22,9 @@ const store = new Vuex.Store({
       barTitle: 'Fudan Today',
     },
     detailPageCourse: {},
+    secret: {
+      posts: [],
+    },
     isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
   },
@@ -39,6 +42,9 @@ const store = new Vuex.Store({
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
+    },
+    updateSecretPosts(state, posts) {
+      state.secret.posts = posts;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
@@ -66,6 +72,7 @@ const store = new Vuex.Store({
         return {
           user: state.user,
           editor: state.editor,
+          secret: state.secret,
         };
       },
     }),

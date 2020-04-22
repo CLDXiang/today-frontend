@@ -3,6 +3,43 @@ import store from '../store';
 import { API_URL } from '../utils/config';
 import log from '../utils/log';
 
+async function authorizedGet(endpoint) {
+  const authHeader = {
+    Authorization: `Bearer ${store.state.user.jwt_token}`,
+  };
+  return new Promise((res, rej) => {
+    axios
+      .get(`${API_URL}${endpoint}`, { headers: authHeader })
+      .then((resp) => {
+        res(resp.data);
+      })
+      .catch((err) => rej(err));
+  });
+}
+
+async function authorizedPost(endpoint, payload) {
+  const authHeader = {
+    Authorization: `Bearer ${store.state.user.jwt_token}`,
+  };
+  return new Promise((res, rej) => {
+    axios
+      .post(`${API_URL}${endpoint}`, payload, { headers: authHeader })
+      .then((resp) => {
+        res(resp.data);
+      })
+      .catch((err) => rej(err));
+  });
+}
+
+export async function getSecretEarlier(offsetId) {
+  return authorizedGet(`/secret/${offsetId}/earlier`);
+}
+
+export async function getSecretLater(offsetId) {
+  return authorizedGet(`/secret/${offsetId}/later`);
+}
+
+// getSecret gets the recent secret posts
 export async function getSecret() {
   return new Promise((resolve, reject) => {
     const authHeader = {

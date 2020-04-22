@@ -8,7 +8,7 @@
       outlined
       dense
       :disabled="isLoadingSearchResults"
-      :success-messages="searchBarStatus === 'success' ? `找到 ${this.searchResults.length} 门课程` : []"
+      :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
       :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
       class="search-bar__text-field"
       @focus="isSearchResultsVisible = searchResults.length !== 0"

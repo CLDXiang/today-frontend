@@ -90,6 +90,7 @@ module.exports = {
           trailingComma: 'all',
           arrowParens: 'always',
           tabWidth: 2,
+          endOfLine: 'lf', // （默认值）提示此项目 CRLF -> LF
         },
       ],
       'no-param-reassign': [

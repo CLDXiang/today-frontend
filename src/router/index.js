@@ -5,6 +5,7 @@ import Register from '../components/common/Register.vue';
 import Profile from '../components/profile/Profile.vue';
 import UserProfile from '../components/profile/UserProfile.vue';
 import Star from '../components/profile/Star.vue';
+import Rates from '../components/profile/Rates.vue';
 import Hole from '../components/secret/Hole.vue';
 
 import Rate from '../components/rate/Rate.vue';
@@ -40,6 +41,11 @@ const routes = [
         path: 'star',
         name: 'StarCourse',
         component: Star,
+      },
+      {
+        path: 'rates',
+        name: 'UserRates',
+        component: Rates,
       },
     ],
   },

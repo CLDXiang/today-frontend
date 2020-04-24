@@ -12,7 +12,7 @@
               </strong>
             </v-subheader>
             <template v-for="item in userRates">
-              <v-divider :key="'divider1-' + item.name" />
+              <v-divider :key="item.name" />
               <!-- TODO 暂时路由到这个界面 -->
               <v-list-item :key="item.name" :to="'/rate/ENGL110069/03#discuss'">
                 <v-list-item-content>

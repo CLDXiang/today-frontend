@@ -71,7 +71,6 @@ export default {
       .catch((err) => {
         log.info(err);
       });
-    this.$store.state.app.barTitle = '树洞'; // 防止刷新页面导致 barTitle 变为 Fudan Today
   },
   methods: {
     create(input) {

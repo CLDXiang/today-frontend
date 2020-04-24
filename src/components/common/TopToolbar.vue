@@ -26,7 +26,7 @@
             <v-icon>mdi-logout</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>登出</v-list-item-title>
+            <v-list-item-title>{{ status }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -60,6 +60,9 @@ export default {
     barTitle() {
       return this.$store.state.app.barTitle;
     },
+    status() {
+      return this.$store.getters.userLoggedIn ? '登出' : '登录';
+    },
   },
   methods: {
     toggleMenu() {
@@ -71,9 +74,13 @@ export default {
       this.$router.back();
     },
     logout() {
-      log.info('logout');
-      this.$store.commit('LOGOUT');
-      this.$router.replace({ name: 'Timetable' });
+      if (this.$store.getters.userLoggedIn) {
+        log.info('logout');
+        this.$store.commit('LOGOUT');
+        this.$router.replace({ name: 'Timetable' });
+      } else {
+        this.$router.replace({ name: 'Login', query: { redirect: '/profile' } });
+      }
     },
   },
 };

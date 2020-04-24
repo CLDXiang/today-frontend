@@ -37,8 +37,14 @@
         @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
         @restoreCourse="addSelectedCourse(detailPageCourse.id)"
       /> -->
+      <div v-if="!isMobileMode" class="timetable__search-bar-box">
+        <timetable-search-bar
+          :search-index="searchIndex"
+          @addcourse="addSelectedCourse"
+        />
+      </div>
     </div>
-    <div class="timetable__search-bar-box">
+    <div v-if="isMobileMode" class="timetable__search-bar-box">
       <timetable-search-bar
         :search-index="searchIndex"
         @addcourse="addSelectedCourse"
@@ -70,7 +76,7 @@ export default {
        * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
        * value 为 course.id
        */
-      searchIndex: {},
+      searchIndex: [],
       titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       sections: [
         { name: '1', clock: '08:00' },
@@ -179,21 +185,53 @@ export default {
       this.selectedCoursesByDay = selectedCoursesByDay;
     },
     initSearchIndex() {
-      const searchIndex = {};
+      const searchIndex = [];
+      // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
       Object.entries(this.allCourses).forEach(([courseID, course]) => {
-        // TODO: 提前处理好 JSON
-        const teachers = new Set();
+        let teachers = new Set();
+        let timeSlots = [];
         course.time_slot.forEach((ts) => {
           ts.teacher.forEach((teacher) => {
-            teachers.add(teacher);
+            if (teacher.trim() !== '') {
+              teachers.add(teacher);
+            }
+          });
+          const { week, day, section, place } = ts;
+          timeSlots.push({
+            week,
+            day: this.mapDay(day),
+            section,
+            place,
           });
         });
 
-        // TODO: 索引方式需要优化
-        searchIndex[`${course.code_id} ${course.name} ${[...teachers].join(', ')}`] = parseInt(
-          courseID,
-          10,
-        );
+        const { name, department } = course;
+
+        // 搜索索引字符串
+        const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
+          (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
+          '',
+        )}|${course.code_id}`;
+        // const index = `${timeSlots.reduce(
+        //   (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
+        //   '',
+        // )}`;
+
+        // 这里提前处理便于直接显示用，如果未来需要单独使用其中的字段可以注释掉，然后在其他地方处理
+        teachers = [...teachers].join(', ');
+        timeSlots = timeSlots.map((ts) => `周${ts.day} ${ts.section} ${ts.place}`);
+
+        searchIndex.push({
+          name,
+          // teachers: [...teachers],
+          teachers,
+          department,
+          timeSlots,
+          index,
+          codeID: course.code_id,
+          courseID: parseInt(courseID, 10),
+          // for test:
+        });
       });
       this.searchIndex = searchIndex;
     },
@@ -236,6 +274,9 @@ export default {
     },
     hideDetailDialog() {
       this.$store.commit('hideDetailDialog');
+    },
+    mapDay(day) {
+      return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
     },
   },
 };

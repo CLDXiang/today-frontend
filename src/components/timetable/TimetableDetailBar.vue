@@ -10,7 +10,7 @@
       </div>
       <div>
         教师：{{
-          (course.currentSlot && course.currentSlot.teacher.join(',')) || ''
+          (course.currentSlot && course.currentSlot.teacher.join(', ')) || ''
         }}
       </div>
       <div>

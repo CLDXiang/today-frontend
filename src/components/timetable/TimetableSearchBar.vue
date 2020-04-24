@@ -1,30 +1,77 @@
 <template>
   <div class="timetable__search-bar" @mouseleave="isSearchResultsVisible = false">
-    <input
+    <v-text-field
+      ref="textfield"
       v-model="searchText"
-      type="search"
-      placeholder="输入课程名、教师名或课程号"
-      autocomplete="off"
-      @focus="isSearchResultsVisible = searchText !== ''"
-      @mouseenter="isSearchResultsVisible = searchText !== ''"
+      label="搜索课程"
+      hint="可通过课程名、课程号、教师名、院系、时间地点搜索"
+      outlined
+      dense
+      :disabled="isLoadingSearchResults"
+      :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
+      :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
+      class="search-bar__text-field"
+      @focus="isSearchResultsVisible = searchResults.length !== 0"
+      @mouseenter="isSearchResultsVisible = searchResults.length !== 0"
+      @keydown="handleKeyDown"
     >
+      <template #append>
+        <v-fab-transition>
+          <v-btn
+            v-show="searchText !== ''"
+            color="blue"
+            fab
+            dark
+            x-small
+            absolute
+            right
+            :loading="isLoadingSearchResults"
+            class="search-bar__search-button"
+            @click="handleClickSearchButton"
+          >
+            <v-icon>search</v-icon>
+          </v-btn>
+        </v-fab-transition>
+      </template>
+    </v-text-field>
+    
     <div v-show="isSearchResultsVisible" class="search-bar__results">
       <div
-        v-for="(searchResult, index) in searchResults"
-        :key="index"
+        v-for="item in searchResults"
+        :key="item.courseID"
         class="search-bar__result"
-        @click="handleClickSearchResult(searchResult[1])"
+        @click.stop="handleClickSearchResult(item.courseID)"
       >
-        {{ searchResult[0] }}
+        <div class="result-line">
+          {{ `${item.codeID} ${item.name}` }}
+        </div>
+        <div class="result-line cut">
+          {{ item.teachers }}
+        </div>
+        <div v-for="(ts, tsIndex) in item.timeSlots.slice(0, 3)" :key="tsIndex" class="result-line">
+          {{ ts }}
+        </div>
+        <div v-if="item.timeSlots.length > 3" class="result-line">
+          ……
+        </div>
       </div>
     </div>
+
+    <v-snackbar
+      v-model="isMessageVisible"
+      :color="messageColor"
+      :timeout="messageTimeout"
+      top
+    >
+      {{ messageText }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    searchIndex: Object,
+    searchIndex: Array,
   },
   data() {
     return {
@@ -34,40 +81,78 @@ export default {
        * TODO: 后续可能还需要在 value 中加入一些状态：是否已选等
        */
       searchResults: [],
+      isLoadingSearchResults: false,
+      searchBarStatus: 'normal',
+
+      isMessageVisible: false,
+      messageColor: 'info',
+      messageText: '',
+      messageTimeout: 1500,
     };
   },
+  // computed: {
+  //   searchReg() {
+  //     return new RegExp(this.searchText.trim(), 'i');
+  //   },
+  // },
   watch: {
-    searchText(newVal, oldVal) {
+    searchText(newVal) {
       const query = newVal.trim();
+      if (this.searchBarStatus !== '') {
+        this.searchBarStatus = '';
+      }
+      if (this.searchResults.length > 0) {
+        this.searchResults = [];
+      }
       if (!query || query === '') {
         this.isSearchResultsVisible = false;
-        return;
       }
-
-      // TODO: 加入防抖？
-      const reg = new RegExp(query, 'i');
-
-      // 如果本次输入字符串包含上一次输入字符串，则在已有搜索结果中再次过滤，不再遍历整个索引
-      const queryOld = oldVal.trim();
-      const regOld = new RegExp(oldVal.trim(), 'i');
-      if (queryOld && queryOld !== '' && regOld.test(query)) {
-        this.searchResults = this.searchResults.filter(
-          // eslint-disable-next-line no-unused-vars
-          ([index, _]) => reg.test(index),
-        );
-      } else {
-        this.searchResults = Object.entries(this.searchIndex).filter(
-          // eslint-disable-next-line no-unused-vars
-          ([index, _]) => reg.test(index),
-        );
-      }
-
-      this.isSearchResultsVisible = true;
     },
   },
   methods: {
+    showMessage(text, color = 'info', timeout = 2500) {
+      this.messageText = text;
+      this.messageColor = color;
+      this.messageTimeout = timeout;
+      this.isMessageVisible = true;
+    },
     handleClickSearchResult(courseID) {
       this.$emit('addcourse', courseID);
+    },
+    handleClickSearchButton() {
+      this.isLoadingSearchResults = true;
+
+      // 防止还未渲染 loading 状态就卡住
+      setTimeout(() => {
+        const query = this.searchText.trim();
+        if (!query || query === '') {
+          this.isSearchResultsVisible = false;
+          return;
+        }
+
+        const reg = new RegExp(query, 'i');
+
+        this.searchResults = this.searchIndex.filter(({ index }) => reg.test(index));
+        if (this.searchResults.length > 0) {
+          this.searchBarStatus = 'success';
+          this.showMessage(`找到 ${this.searchResults.length} 门课程`, 'success');
+          // 主要针对移动端，使键盘收回
+          this.$refs.textfield.blur();
+        } else {
+          this.searchBarStatus = 'error';
+          this.showMessage('没有找到符合条件的课程', 'error');
+        }
+
+        this.isLoadingSearchResults = false;
+        this.isSearchResultsVisible = true;
+      }, 0);
+    },
+    handleKeyDown(e) {
+      // TODO: 如何在移动端监听键盘“完成”按钮？
+      // 监听回车键
+      if (e.which === 13) {
+        this.handleClickSearchButton();
+      }
     },
   },
 };
@@ -76,45 +161,32 @@ export default {
 <style lang="scss" scoped>
 .timetable__search-bar {
   position: relative;
+  min-width: 320px;
+  height: 928px;
 
   flex: 1;
   display: flex;
 
-  > input {
-    height: 2.75rem;
-    flex: 1;
-
-    border: 1px solid #d3d6db;
-    border-radius: 0.25rem;
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 0.375rem 0.75rem;
-
-    font-size: 1rem;
-    font-weight: 400;
-    color: #69707a;
-    line-height: 1.5;
-
-    text-align: left;
-    white-space: nowrap;
-
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    outline: none;
-
-    &:focus {
-      border-color: lightcoral;
-    }
+  > .search-bar__text-field {
+    position: relative;
   }
+}
+
+.search-bar__search-button {
+  margin-top: -4px;
 }
 
 .search-bar__results {
   position: absolute;
-  top: 2.75rem;
+  // top: 2.75rem;
+  top: 40px;
   width: 100%;
 
   max-height: 13.5rem;
   border: 1px solid #d3d6db;
   border-top: 0;
   border-radius: 0 0 0.25rem 0.25rem;
+  background-color: #fff;
 
   overflow: auto;
 }
@@ -131,5 +203,11 @@ export default {
   &.hover {
     background-color: #f3f5f8;
   }
+}
+
+.result-line.cut {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

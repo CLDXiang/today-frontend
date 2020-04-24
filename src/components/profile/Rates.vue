@@ -11,10 +11,10 @@
                 </font>
               </strong>
             </v-subheader>
-            <template v-for="item in userRates">
-              <v-divider :key="item.name" />
+            <div v-for="item in userRates" :key="item.rateId">
+              <v-divider />
               <!-- TODO 暂时路由到这个界面 -->
-              <v-list-item :key="item.name" :to="'/rate/ENGL110069/03#discuss'">
+              <v-list-item :to="'/rate/ENGL110069/03#discuss'">
                 <v-list-item-content>
                   <v-list-item-title v-text="item.className + ' · ' + item.instructorName" />
                   <v-list-item-subtitle v-text="'难度 ' + item.difficulty + ' · 工作量 ' + item.workload + ' · 给分 ' + item.grading" />
@@ -22,7 +22,7 @@
                   <v-list-item-subtitle v-text="item.upmote + '赞同 · ' + item.reply + '评论 · ' + item.createdAt" />
                 </v-list-item-content>
               </v-list-item>
-            </template>
+            </div>
           </v-list>
         </v-card>
       </v-col>
@@ -36,6 +36,7 @@ export default {
     return {
       userRates: [
         {
+          rateId: 1,
           className: 'Introduction to Algorithm',
           instructorName: 'Instructor1',
           createdAt: '2020-04-19 16:20:48',
@@ -48,6 +49,7 @@ export default {
           reply: 4,
         },
         {
+          rateId: 2,
           className: 'Introduction to Algorithm',
           instructorName: 'Instructor2',
           createdAt: '2020-04-11 08:56:17',

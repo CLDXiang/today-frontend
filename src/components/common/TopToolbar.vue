@@ -7,7 +7,7 @@
         </v-list-item>
         <v-list-item @click="doNothing">
           <v-list-item-action>
-            <v-icon>mdi-settings</v-icon>
+            <v-icon>mdi-cog</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>设置</v-list-item-title>

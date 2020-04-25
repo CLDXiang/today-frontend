@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import * as infiniteScroll from 'vue-infinite-scroll';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
@@ -15,6 +16,7 @@ import 'material-design-icons/iconfont/material-icons.css';
 // log.info(config);
 
 Vue.config.productionTip = false;
+Vue.use(infiniteScroll);
 
 new Vue({
   vuetify,

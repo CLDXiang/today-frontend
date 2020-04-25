@@ -1,27 +1,27 @@
 <template>
-  <v-card cols="12" md="6" class="d-flex flex-column">
+  <v-card cols="12" md="6" class="d-flex flex-column editor__container">
     <v-card-title>
       <slot />
     </v-card-title>
-    <v-col v-if="mode === 'discussion'">
+    <div v-if="mode === 'discussion'">
       <v-text-field v-model="title" label="标题" clearable />
-    </v-col>
-    <v-col>
+    </div>
+    <div class="editor__textarea mx-3">
       <v-textarea
         v-model="content"
         label="内容"
         :clearable="true"
         :hint="mode === 'discussion' ? '支持 markdown 语法' : ''"
       />
-    </v-col>
-    <v-col>
-      <v-btn @click="cancel">
+    </div>
+    <div class="editor__control">
+      <v-btn class="mx-3 my-4" @click="cancel">
         取消
       </v-btn>
-      <v-btn @click="create">
+      <v-btn class="mx-3 my-4" @click="create">
         添加
       </v-btn>
-    </v-col>
+    </div>
   </v-card>
 </template>
 
@@ -31,12 +31,18 @@ import log from '../../utils/log';
 export default {
   props: {
     mode: String, // 'secret' | 'dicussion' | 'rate' | 'reply',
+    defaultContent: String,
   },
   data() {
     return {
-      content: '',
       title: '',
+      content: '',
     };
+  },
+  mounted() {
+    if (this.defaultContent.length !== 0) {
+      this.content = this.defaultContent;
+    }
   },
   methods: {
     cancel() {
@@ -59,4 +65,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.editor_container {
+  height: 900px;
+}
+.editor_textarea {
+  flex-grow: 4;
+}
+.editor__control {
+  display: flex;
+  justify-content: center;
+}
+</style>

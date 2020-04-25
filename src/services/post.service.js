@@ -32,6 +32,15 @@ async function authorizedPost(endpoint, payload) {
 }
 
 export async function getSecretEarlier(offsetId) {
+  // const posts = [];
+  // for (let i = 0; i < 10; i += 1) {
+  //   const id = offsetId - 1 - i;
+  //   if (id < -1000) {
+  //     break;
+  //   }
+  //   posts.push({ id, content: `auto ${id}`, user_id: 1 });
+  // }
+  // return posts;
   return authorizedGet(`/secret/${offsetId}/earlier`);
 }
 

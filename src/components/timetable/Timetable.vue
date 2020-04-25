@@ -30,13 +30,6 @@
           :courses="courses"
         />
       </div>
-      <!-- <timetable-detail-bar
-        v-show="!isMobileMode"
-        :course="detailPageCourse"
-        :class="classDetailPage"
-        @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
-        @restoreCourse="addSelectedCourse(detailPageCourse.id)"
-      /> -->
       <div v-if="!isMobileMode" class="timetable__search-bar-box">
         <timetable-search-bar
           :search-index="searchIndex"
@@ -348,7 +341,8 @@ export default {
 }
 
 .timetable__search-bar-box {
-  height: 17rem;
+  // height: 17rem;
+  height: $search-bar-height;
   margin: 10px;
   display: flex;
 }

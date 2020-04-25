@@ -63,11 +63,17 @@ export default {
         // 若计时器存在，则取消
         clearTimeout(this.timer);
       }
-      this.timer = setTimeout(() => {
-        this.isMessageVisible = false;
+      if (this.globalMessageTimeout === 0) {
+        // 对于 loading 等只能手动触发关闭的
         this.timer = -1;
         this.$store.commit('clearGlobalMessageTimer');
-      }, this.globalMessageTimeout);
+      } else {
+        this.timer = setTimeout(() => {
+          this.isMessageVisible = false;
+          this.timer = -1;
+          this.$store.commit('clearGlobalMessageTimer');
+        }, this.globalMessageTimeout);
+      }
     },
   },
 };

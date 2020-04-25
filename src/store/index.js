@@ -67,6 +67,7 @@ const store = new Vuex.Store({
     sendGlobalMessage(state, action) {
       state.globalMessageText = action.text || '';
       state.globalMessageColor = action.color || 'info';
+      // 0 表示不自动关闭
       state.globalMessageTimeout = action.timeout || 2500;
       state.isGlobalMessageVisible = true;
       state.globalMessageTimer += 1;

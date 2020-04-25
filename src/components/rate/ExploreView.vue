@@ -677,37 +677,4 @@ $height: 1em + 2 * $spacing;
     min-height: calc(100vh - 10em);
   }
 }
-
-// $slot-height: 1.4em+ 2*$small-spacing;
-$slot-height: 2.8em;
-
-.list-item,
-.list-subitem {
-  height: $slot-height;
-  display: flex;
-  align-items: center;
-  opacity: $active-opacity;
-  cursor: pointer;
-
-  > * {
-    flex-grow: 1;
-    padding: $small-spacing;
-
-    // Force single line
-    white-space: nowrap;
-    overflow: hidden;
-    // Append ... when overflow
-    text-overflow: ellipsis;
-  }
-
-  &:hover > * {
-    background-color: rgba(0, 0, 0, 0.03);
-    border-radius: 0.3em;
-  }
-}
-
-// indent
-.list-subitem > * {
-  padding-left: 1.6rem;
-}
 </style>

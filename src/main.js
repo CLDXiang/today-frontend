@@ -3,6 +3,7 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import store from './store';
+import message from './utils/message';
 import './scss/mark.scss';
 import './scss/responsive.scss';
 import './scss/button.scss';
@@ -13,6 +14,7 @@ import 'material-design-icons/iconfont/material-icons.css';
 
 // log.info(config);
 
+Vue.prototype.$message = message;
 Vue.config.productionTip = false;
 
 new Vue({

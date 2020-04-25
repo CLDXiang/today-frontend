@@ -1,5 +1,5 @@
 <template>
-  <div class="timetable__search-bar" @mouseleave="isSearchResultsVisible = false">
+  <div class="timetable__search-bar">
     <v-text-field
       ref="textfield"
       v-model="searchText"
@@ -11,8 +11,6 @@
       :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
       :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
       class="search-bar__text-field"
-      @focus="isSearchResultsVisible = searchResults.length !== 0"
-      @mouseenter="isSearchResultsVisible = searchResults.length !== 0"
       @keydown="handleKeyDown"
     >
       <template #append>
@@ -34,28 +32,33 @@
         </v-fab-transition>
       </template>
     </v-text-field>
-    
-    <div v-show="isSearchResultsVisible" class="search-bar__results">
-      <div
-        v-for="item in searchResults"
-        :key="item.courseID"
-        class="search-bar__result"
-        @click.stop="handleClickSearchResult(item.courseID)"
-      >
-        <div class="result-line">
-          {{ `${item.codeID} ${item.name}` }}
-        </div>
-        <div class="result-line cut">
-          {{ item.teachers }}
-        </div>
-        <div v-for="(ts, tsIndex) in item.timeSlots.slice(0, 3)" :key="tsIndex" class="result-line">
-          {{ ts }}
-        </div>
-        <div v-if="item.timeSlots.length > 3" class="result-line">
-          ……
+    <v-btn v-show="searchResults.length !== 0" class="results-visible-button" @click="handleChangeResultsVisible">
+      <v-icon left style="color: #000">{{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}</v-icon>
+      {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
+    </v-btn>
+    <v-scroll-y-transition>
+      <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results">
+        <div
+          v-for="item in searchResults"
+          :key="item.courseID"
+          class="search-bar__result"
+          @click.stop="handleClickSearchResult(item.courseID)"
+        >
+          <div class="result-line">
+            {{ `${item.codeID} ${item.name}` }}
+          </div>
+          <div class="result-line cut">
+            {{ item.teachers }}
+          </div>
+          <div v-for="(ts, tsIndex) in item.timeSlots.slice(0, 3)" :key="tsIndex" class="result-line">
+            {{ ts }}
+          </div>
+          <div v-if="item.timeSlots.length > 3" class="result-line">
+            ……
+          </div>
         </div>
       </div>
-    </div>
+    </v-scroll-y-transition>
   </div>
 </template>
 
@@ -74,18 +77,8 @@ export default {
       searchResults: [],
       isLoadingSearchResults: false,
       searchBarStatus: 'normal',
-
-      isMessageVisible: false,
-      messageColor: 'info',
-      messageText: '',
-      messageTimeout: 1500,
     };
   },
-  // computed: {
-  //   searchReg() {
-  //     return new RegExp(this.searchText.trim(), 'i');
-  //   },
-  // },
   watch: {
     searchText(newVal) {
       const query = newVal.trim();
@@ -101,6 +94,9 @@ export default {
     },
   },
   methods: {
+    handleChangeResultsVisible() {
+      this.isSearchResultsVisible = !this.isSearchResultsVisible;
+    },
     handleClickSearchResult(courseID) {
       this.$emit('addcourse', courseID);
     },
@@ -144,16 +140,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../scss/_timetable';
+
 .timetable__search-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
   position: relative;
   min-width: 320px;
-  height: 928px;
+  height: $search-bar-height;
 
   flex: 1;
   display: flex;
 
   > .search-bar__text-field {
     position: relative;
+    flex: 0;
   }
 }
 
@@ -162,12 +165,14 @@ export default {
 }
 
 .search-bar__results {
+  $top-height: 66px + 36px;
+
   position: absolute;
-  // top: 2.75rem;
-  top: 40px;
+  top: $top-height;
   width: 100%;
 
-  max-height: 13.5rem;
+  // max-height: 13.5rem;
+  height: $search-bar-height - $top-height;
   border: 1px solid #d3d6db;
   border-top: 0;
   border-radius: 0 0 0.25rem 0.25rem;

@@ -544,6 +544,9 @@ export default {
 }
 
 .rate-content {
+  > p {
+    margin: 1em 0;
+  }
 }
 .rate-action {
   font-size: 0.8rem;

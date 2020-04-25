@@ -8,15 +8,12 @@ import Star from '../components/profile/Star.vue';
 import Rates from '../components/profile/Rates.vue';
 import Hole from '../components/secret/Hole.vue';
 
-import Rate from '../components/rate/Rate.vue';
+import ExploreView from '../components/rate/ExploreView.vue';
+import LectureView from '../components/rate/LectureView.vue';
 import RateView from '../components/rate/RateView.vue';
-import RateSubmitView from '../components/rate/RateSubmitView.vue';
 
-import Reply from '../components/rate/Reply.vue';
 import PostView from '../components/secret/PostView.vue';
 import Timetable from '../components/timetable/Timetable.vue';
-
-import SearchView from '../components/rate/SearchView.vue';
 
 import store from '../store';
 
@@ -49,19 +46,24 @@ const routes = [
       },
     ],
   },
+
+  // rate start
   {
-    path: '/rate/:code/:index',
-    name: 'Rate',
-    component: Rate,
-    children: [
-      { path: '', component: RateView },
-      { path: 'submit', component: RateSubmitView },
-    ],
+    path: '/explore',
+    component: ExploreView,
   },
-  { path: '/reply', name: 'Reply', component: Reply },
+  {
+    path: '/lecture/:code/:idx',
+    component: LectureView,
+  },
+  {
+    path: '/lecture/:code/:idx/rate',
+    component: RateView,
+  },
+  // rate end
+
   { path: '/hole', name: 'Hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
-  { path: '/search', name: 'Search', component: SearchView },
   { path: '*', component: Timetable },
 ];
 

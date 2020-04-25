@@ -1,7 +1,7 @@
 <template>
   <div>
     <label v-if="variant === 'heart'" class="switch--heart">
-      <input type="checkbox"><span />
+      <input type="checkbox" :checked="value" @change="handleChange"><span />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 23"
@@ -32,7 +32,7 @@
     </label>
 
     <label v-if="variant === 'edit'" class="action-switch--edit switch--edit">
-      <input type="checkbox"><span />
+      <input type="checkbox" :checked="value" @change="handleChange"><span />
 
       <!-- SVGs -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23">
@@ -83,16 +83,18 @@
 
 <script>
 export default {
-  props: {
-    variant: {
-      default: 'heart',
+  props: ['variant', 'value'],
+  methods: {
+    handleChange() {
+      this.$emit('input', !this.value);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/config.scss';
+@import '@/scss/utils.scss';
+
 // SVG Animation
 $border-color--inactive: #777;
 

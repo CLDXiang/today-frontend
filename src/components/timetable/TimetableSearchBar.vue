@@ -56,15 +56,6 @@
         </div>
       </div>
     </div>
-
-    <v-snackbar
-      v-model="isMessageVisible"
-      :color="messageColor"
-      :timeout="messageTimeout"
-      top
-    >
-      {{ messageText }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -110,12 +101,6 @@ export default {
     },
   },
   methods: {
-    showMessage(text, color = 'info', timeout = 2500) {
-      this.messageText = text;
-      this.messageColor = color;
-      this.messageTimeout = timeout;
-      this.isMessageVisible = true;
-    },
     handleClickSearchResult(courseID) {
       this.$emit('addcourse', courseID);
     },
@@ -135,12 +120,12 @@ export default {
         this.searchResults = this.searchIndex.filter(({ index }) => reg.test(index));
         if (this.searchResults.length > 0) {
           this.searchBarStatus = 'success';
-          this.showMessage(`找到 ${this.searchResults.length} 门课程`, 'success');
+          this.$message.success(`找到 ${this.searchResults.length} 门课程`);
           // 主要针对移动端，使键盘收回
           this.$refs.textfield.blur();
         } else {
           this.searchBarStatus = 'error';
-          this.showMessage('没有找到符合条件的课程', 'error');
+          this.$message.error('没有找到符合条件的课程');
         }
 
         this.isLoadingSearchResults = false;

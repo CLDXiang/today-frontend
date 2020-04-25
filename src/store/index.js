@@ -24,6 +24,13 @@ const store = new Vuex.Store({
     detailPageCourse: {},
     isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
+
+    isGlobalMessageVisible: false,
+    globalMessageColor: 'info',
+    globalMessageTimeout: 2500,
+    globalMessageText: '',
+    globalMessageTimer: -1,
+    // globalMessageIcon: '',
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -55,6 +62,20 @@ const store = new Vuex.Store({
     },
     onRestoreDetailPageCourse(state) {
       state.isDetailPageCourseDeleted = false;
+    },
+
+    sendGlobalMessage(state, action) {
+      state.globalMessageText = action.text || '';
+      state.globalMessageColor = action.color || 'info';
+      state.globalMessageTimeout = action.timeout || 2500;
+      state.isGlobalMessageVisible = true;
+      state.globalMessageTimer += 1;
+    },
+    hideGlobalMessage(state) {
+      state.isGlobalMessageVisible = false;
+    },
+    clearGlobalMessageTimer(state) {
+      state.globalMessageTimer = -1;
     },
   },
   getters: {

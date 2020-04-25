@@ -85,7 +85,7 @@ export default {
 
     rateClick() {
       this.$router
-        .push("/explore")
+        .push('/explore')
         .then(() => {
           this.$store.state.app.barTitle = '课程';
         })
@@ -93,7 +93,6 @@ export default {
           log.info(e);
         });
     },
- 
   },
 };
 </script>

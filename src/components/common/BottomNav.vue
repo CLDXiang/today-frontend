@@ -16,6 +16,11 @@
       <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
     </v-btn>
 
+    <v-btn value="rate" @click="rateClick">
+      <span>评课</span>
+      <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
+    </v-btn>
+
     <v-btn value="status" @click="statusClick">
       <span>{{ status }}</span>
       <v-icon>mdi-call-split</v-icon>
@@ -37,6 +42,9 @@ export default {
         }
         if (/\/profile\/?.*$/.test(path) || /\/login\/?.*$/.test(path)) {
           return 'status';
+        }
+        if (/\/explore\/?.*$/.test(path) || /\/lecture\/?.*$/.test(path)) {
+          return 'rate';
         }
         return 'course';
       },
@@ -74,6 +82,18 @@ export default {
           log.info(e);
         });
     },
+
+    rateClick() {
+      this.$router
+        .push("/explore")
+        .then(() => {
+          this.$store.state.app.barTitle = '课程';
+        })
+        .catch((e) => {
+          log.info(e);
+        });
+    },
+ 
   },
 };
 </script>

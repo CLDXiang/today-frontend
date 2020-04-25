@@ -162,7 +162,6 @@
     
           <!-- portrait list end -->
         </div>
-        <my-footer class="result-footer" />
       </div>
     </div>
   </div>
@@ -672,9 +671,7 @@ $height: 1em + 2 * $spacing;
 
 .result-body {
   background: #fafafa;
-  > .result-footer {
-    background: rgba(black, 0.03);
-  }
+
   > .result-box {
     padding: 1rem;
     min-height: calc(100vh - 10em);

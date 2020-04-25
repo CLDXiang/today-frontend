@@ -47,7 +47,7 @@
 
         <h4 class="comment-title">
           点评<span class="comment-count">{{ rateCount }}</span>
-          <v-btn flat style="margin-left: auto;" @click="routeToRate">
+          <v-btn color="primary" style="margin-left: auto;" @click="routeToRate">
             撰写点评
           </v-btn>
         </h4>
@@ -108,7 +108,7 @@
                 rows="5"
                 class="rate-input__input"
               />
-              <v-btn flat class="rate-input__btn" @click="postReply(rate.id, rate.input)">
+              <v-btn color="primary" class="rate-input__btn" @click="postReply(rate.id, rate.input)">
                 发表回复
               </v-btn>
             </div>

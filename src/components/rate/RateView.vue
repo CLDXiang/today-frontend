@@ -109,21 +109,21 @@ export default {
         .then((resp) => {
           log.info(resp);
           if (resp.status === 201) {
-            this.$toast.success('提交成功！');
+            log.info('提交成功！');
             this.$router.go(-1);
           } else {
-            this.$toast.success('提交失败！');
+            log.info('提交失败！');
           }
         })
         .catch((err) => {
           const code = err.response.status;
           if (code === 409) {
-            this.$toast.warn('您已经评价过此课程！');
+            log.info('您已经评价过此课程！');
             this.$router.push(`/lecture/${this.$route.params.code}/${this.$route.params.idx}`);
           } else if (code === 400) {
-            this.$toast.error('您似乎填写格式有误？');
+            log.info('您似乎填写格式有误？');
           } else if (code === 401) {
-            this.$toast.warn('请您先登录');
+            log.info('请您先登录');
             this.$router.push(`/login?redirect=${this.$route.path}`);
           }
         });

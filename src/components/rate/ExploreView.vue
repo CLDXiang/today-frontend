@@ -24,12 +24,6 @@
     <!-- Landscape View -->
     <div class="landscape-only scroll-snap-list">
       <div>
-        <div class="page-topbar-container">
-          <span>TODAY</span>
-          <router-link to="/login?redirect=/explore">
-            LOGIN
-          </router-link>
-        </div>
         <div class="page-container main-container">
           <div class="left-box">
             <h1 class="explore-title">
@@ -390,27 +384,6 @@ export default {
   cursor: pointer;
   &:hover {
     opacity: $inactive-opacity;
-  }
-}
-
-.page-topbar-container {
-  // border: 1px solid red;
-  width: 100%;
-  max-width: $main-width;
-  height: 3rem;
-  flex-shrink: 0;
-  display: flex;
-  > * {
-    opacity: $active-opacity;
-  }
-  > *:nth-child(2) {
-    margin-left: auto;
-  }
-  > a {
-    cursor: pointer;
-    &:hover {
-      opacity: $inactive-opacity;
-    }
   }
 }
 

@@ -41,7 +41,7 @@
       </p>
 
       <div>
-        <v-btn @click="submit">
+        <v-btn color="primary" @click="submit">
           提交评论
         </v-btn>
       </div>

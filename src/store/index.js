@@ -30,6 +30,9 @@ const store = new Vuex.Store({
     globalMessageTimeout: 2500,
     globalMessageText: '',
     globalMessageTimer: -1,
+
+    selectedCoursesIDs: [],
+    selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
     // globalMessageIcon: '',
   },
   mutations: {
@@ -78,6 +81,11 @@ const store = new Vuex.Store({
     clearGlobalMessageTimer(state) {
       state.globalMessageTimer = -1;
     },
+
+    setSelectedCourses(state, payload) {
+      state.selectedCoursesByDay = payload.selectedCoursesByDay;
+      state.selectedCoursesIDs = [...payload.selectedCoursesIDs];
+    },
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
@@ -88,6 +96,8 @@ const store = new Vuex.Store({
         return {
           user: state.user,
           editor: state.editor,
+          selectedCoursesIDs: state.selectedCoursesIDs,
+          selectedCoursesByDay: state.selectedCoursesByDay,
         };
       },
     }),

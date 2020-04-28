@@ -64,6 +64,7 @@ export default {
   props: {},
   data() {
     return {
+      semester: '2019-2020学年2学期',
       allCourses: {},
       /** 搜索索引
        * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
@@ -91,6 +92,7 @@ export default {
        * 一开始我的想法是将不同课程的所有信息按不同 Day 来存储，但是考虑到多课时的课程的互动可能需要一次操作多个课时，
        * 最终还是将所有已选课程数据放到同一个 data 项中
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
+       * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
        * */
       selectedCoursesIDs: new Set(),
       /** 关于 selectedCoursesByDay 的设计
@@ -131,7 +133,7 @@ export default {
   },
   created() {
     this.selectedCoursesByDay = this.$store.state.selectedCoursesByDay;
-    this.selectedCoursesIDs = new Set(this.$store.state.selectedCoursesIDs);
+    this.selectedCoursesIDs = new Set(this.$store.state.selectedCoursesIDs[this.semester]);
     // 读取课程信息
     this.getCoursesFromJSON();
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
@@ -178,6 +180,7 @@ export default {
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
       this.$store.commit('setSelectedCourses', {
+        semester: this.semester,
         selectedCoursesIDs: this.selectedCoursesIDs,
         selectedCoursesByDay,
       });
@@ -253,6 +256,7 @@ export default {
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
       this.$store.commit('setSelectedCourses', {
+        semester: this.semester,
         selectedCoursesIDs: this.selectedCoursesIDs,
         selectedCoursesByDay,
       });
@@ -274,6 +278,7 @@ export default {
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
       this.$store.commit('setSelectedCourses', {
+        semester: this.semester,
         selectedCoursesIDs: this.selectedCoursesIDs,
         selectedCoursesByDay,
       });

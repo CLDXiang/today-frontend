@@ -30,10 +30,11 @@ const store = new Vuex.Store({
     globalMessageTimeout: 2500,
     globalMessageText: '',
     globalMessageTimer: -1,
-
-    selectedCoursesIDs: [],
-    selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
     // globalMessageIcon: '',
+
+    selectedCoursesIDs: {},
+    // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
+    selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -84,7 +85,7 @@ const store = new Vuex.Store({
 
     setSelectedCourses(state, payload) {
       state.selectedCoursesByDay = payload.selectedCoursesByDay;
-      state.selectedCoursesIDs = [...payload.selectedCoursesIDs];
+      state.selectedCoursesIDs[payload.semester] = [...payload.selectedCoursesIDs];
     },
   },
   getters: {

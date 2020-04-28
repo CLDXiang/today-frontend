@@ -7,7 +7,7 @@
       hint="可通过课程名、课程号、教师名、院系、时间地点搜索"
       outlined
       dense
-      :disabled="isLoadingSearchResults"
+      :disabled="isLoadingSearchResults || isLoadingCourses"
       :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
       :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
       class="search-bar__text-field"
@@ -66,6 +66,7 @@
 export default {
   props: {
     searchIndex: Array,
+    isLoadingCourses: Boolean,
   },
   data() {
     return {

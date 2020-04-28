@@ -33,6 +33,7 @@
       <div v-if="!isMobileMode" class="timetable__search-bar-box">
         <timetable-search-bar
           :search-index="searchIndex"
+          :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
         />
       </div>
@@ -40,6 +41,7 @@
     <div v-if="isMobileMode" class="timetable__search-bar-box">
       <timetable-search-bar
         :search-index="searchIndex"
+        :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
       />
     </div>
@@ -65,6 +67,7 @@ export default {
   data() {
     return {
       semester: '2019-2020学年2学期',
+      isLoadingCourses: false,
       allCourses: {},
       /** 搜索索引
        * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
@@ -140,6 +143,7 @@ export default {
   },
   methods: {
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
+      this.isLoadingCourses = true;
       axios
         .get(filePath)
         .then((response) => {
@@ -158,8 +162,11 @@ export default {
           // 初始化
           this.initSelectedCoursesByDay();
           this.initSearchIndex();
+          this.isLoadingCourses = false;
         })
         .catch((err) => {
+          // TODO: 错误提示
+          this.isLoadingCourses = false;
           throw err;
         });
     },

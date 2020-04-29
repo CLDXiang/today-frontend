@@ -31,6 +31,10 @@ const store = new Vuex.Store({
     globalMessageText: '',
     globalMessageTimer: -1,
     // globalMessageIcon: '',
+
+    selectedCoursesIDs: {},
+    // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
+    selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -78,6 +82,11 @@ const store = new Vuex.Store({
     clearGlobalMessageTimer(state) {
       state.globalMessageTimer = -1;
     },
+
+    setSelectedCourses(state, payload) {
+      state.selectedCoursesByDay = payload.selectedCoursesByDay;
+      state.selectedCoursesIDs[payload.semester] = [...payload.selectedCoursesIDs];
+    },
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
@@ -88,6 +97,8 @@ const store = new Vuex.Store({
         return {
           user: state.user,
           editor: state.editor,
+          selectedCoursesIDs: state.selectedCoursesIDs,
+          selectedCoursesByDay: state.selectedCoursesByDay,
         };
       },
     }),

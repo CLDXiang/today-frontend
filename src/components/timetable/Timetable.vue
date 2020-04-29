@@ -33,6 +33,7 @@
       <div v-if="!isMobileMode" class="timetable__search-bar-box">
         <timetable-search-bar
           :search-index="searchIndex"
+          :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
         />
       </div>
@@ -40,6 +41,7 @@
     <div v-if="isMobileMode" class="timetable__search-bar-box">
       <timetable-search-bar
         :search-index="searchIndex"
+        :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
       />
     </div>
@@ -64,6 +66,8 @@ export default {
   props: {},
   data() {
     return {
+      semester: '2019-2020学年2学期',
+      isLoadingCourses: false,
       allCourses: {},
       /** 搜索索引
        * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
@@ -90,10 +94,10 @@ export default {
       /** 关于 selectedCoursesIDs 的设计
        * 一开始我的想法是将不同课程的所有信息按不同 Day 来存储，但是考虑到多课时的课程的互动可能需要一次操作多个课时，
        * 最终还是将所有已选课程数据放到同一个 data 项中
-       * TODO: 这个后续应该要放到 localStorage 中，甚至可能随用户保存到后端，最好连带课程数据一起保存以加快首次渲染
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
+       * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
        * */
-      selectedCoursesIDs: new Set([660088, 657728, 660122, 661363, 657734, 657769, 661408]),
+      selectedCoursesIDs: new Set(),
       /** 关于 selectedCoursesByDay 的设计
        * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，
@@ -131,12 +135,15 @@ export default {
     },
   },
   created() {
+    this.selectedCoursesByDay = this.$store.state.selectedCoursesByDay;
+    this.selectedCoursesIDs = new Set(this.$store.state.selectedCoursesIDs[this.semester]);
     // 读取课程信息
     this.getCoursesFromJSON();
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
+      this.isLoadingCourses = true;
       axios
         .get(filePath)
         .then((response) => {
@@ -155,8 +162,11 @@ export default {
           // 初始化
           this.initSelectedCoursesByDay();
           this.initSearchIndex();
+          this.isLoadingCourses = false;
         })
         .catch((err) => {
+          // TODO: 错误提示
+          this.isLoadingCourses = false;
           throw err;
         });
     },
@@ -176,6 +186,11 @@ export default {
         });
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
+      this.$store.commit('setSelectedCourses', {
+        semester: this.semester,
+        selectedCoursesIDs: this.selectedCoursesIDs,
+        selectedCoursesByDay,
+      });
     },
     initSearchIndex() {
       const searchIndex = [];
@@ -247,6 +262,11 @@ export default {
         selectedCoursesByDay[ts.day - 1] = courses;
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
+      this.$store.commit('setSelectedCourses', {
+        semester: this.semester,
+        selectedCoursesIDs: this.selectedCoursesIDs,
+        selectedCoursesByDay,
+      });
     },
     removeSelectedCourse(courseID) {
       if (!this.selectedCoursesIDs.has(courseID)) {
@@ -264,6 +284,11 @@ export default {
         selectedCoursesByDay[ts.day - 1] = courses;
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
+      this.$store.commit('setSelectedCourses', {
+        semester: this.semester,
+        selectedCoursesIDs: this.selectedCoursesIDs,
+        selectedCoursesByDay,
+      });
     },
     hideDetailDialog() {
       this.$store.commit('hideDetailDialog');

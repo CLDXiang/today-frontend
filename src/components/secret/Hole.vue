@@ -4,7 +4,9 @@
       <h1 class="title-row__header">
         树洞
       </h1>
-      <v-btn class="title-row__create my-2 mx-2" @click="editing = true">新建</v-btn>
+      <v-btn class="title-row__create my-2 mx-2" @click="editing = true">
+        新建
+      </v-btn>
     </div>
 
     <div

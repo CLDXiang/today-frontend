@@ -36,8 +36,10 @@
     </v-list-item>
 
     <v-card-actions class="d-flex justify-end">
-      <v-btn>点赞</v-btn>
-      <v-btn>关注</v-btn>
+      <!-- <v-btn>点赞</v-btn> -->
+      <v-btn :disabled="currentPost.starred_by_me === 1" @click="star">
+        {{ currentPost.num_starred }} 关注
+      </v-btn>
       <slot />
     </v-card-actions>
     <v-dialog
@@ -45,7 +47,12 @@
       max-width="800px"
       :fullscreen="$vuetify.breakpoint.xsOnly"
     >
-      <Editor mode="secret" :defaultContent="content" @close="editing = false" @done="doneReEditing">
+      <Editor
+        mode="secret"
+        :default-content="content"
+        @close="editing = false"
+        @done="doneReEditing"
+      >
         重新编辑
       </Editor>
     </v-dialog>
@@ -57,6 +64,7 @@ import marked from 'marked';
 import moment from 'moment';
 import log from '../../utils/log';
 import Editor from './Editor.vue';
+import { starSecretPost } from '../../services/post.service';
 
 export default {
   components: {
@@ -71,9 +79,35 @@ export default {
   data() {
     return {
       editing: false,
+      starred: false,
     };
   },
+  computed: {
+    currentPost() {
+      return this.$store.state.secret.postsMapping[this.id];
+    },
+  },
+  mounted() {
+    if (this.alreadyStarred) {
+      this.starred = true;
+    }
+  },
   methods: {
+    star() {
+      log.info(`star post ${this.id}`);
+      if (!this.currentPost.starred_by_me) {
+        starSecretPost(this.id)
+          .then(() => {
+            this.starred = true;
+          })
+          .catch((err) => {
+            log.info(`error: star post ${this.id}`, err, err.message);
+            if (err.response) {
+              log.info('error: ', err.response.data);
+            }
+          });
+      }
+    },
     render(content) {
       // see https://vuejs.org/v2/examples/ and https://marked.js.org/
       // we might want to try https://editorjs.io/ in the future
@@ -83,14 +117,13 @@ export default {
       const formatted = moment(time)
         .locale('zh-CN')
         .fromNow();
-      log.info(time, formatted);
       return formatted;
     },
     doneReEditing() {
       log.info('reEdit done');
     },
     deletePost() {
-      log.info('delete');
+      log.info('delete not implemented yet');
     },
   },
 };

@@ -31,6 +31,46 @@ async function authorizedPost(endpoint, payload) {
   });
 }
 
+async function authorizedDelete(endpoint) {
+  const authHeader = {
+    Authorization: `Bearer ${store.state.user.jwt_token}`,
+  };
+  return new Promise((res, rej) => {
+    axios
+      .delete(`${API_URL}${endpoint}`, { headers: authHeader })
+      .then((resp) => {
+        res(resp.data);
+      })
+      .catch((err) => rej(err));
+  });
+}
+
+async function authorizedUpdate(endpoint, payload) {
+  const authHeader = {
+    Authorization: `Bearer ${store.state.user.jwt_token}`,
+  };
+  return new Promise((res, rej) => {
+    axios
+      .put(`${API_URL}${endpoint}`, payload, { headers: authHeader })
+      .then((resp) => {
+        res(resp.data);
+      })
+      .catch((err) => rej(err));
+  });
+}
+
+export async function starSecretPost(postId) {
+  return authorizedPost(`/secret/${postId}/star`, {});
+}
+
+export async function deleteSecretPost(postId) {
+  return authorizedDelete(`/secret/${postId}`);
+}
+
+export async function updateSecretPost(postId, postToUpd) {
+  return authorizedUpdate(`/secret/${postId}`, postToUpd);
+}
+
 export async function getSecretEarlier(offsetId) {
   // const posts = [];
   // for (let i = 0; i < 10; i += 1) {

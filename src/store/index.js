@@ -24,7 +24,7 @@ const store = new Vuex.Store({
     detailPageCourse: {},
     secret: {
       posts: [],
-      postIdToIdx: {},
+      postsMapping: [],
     },
     isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
@@ -45,12 +45,12 @@ const store = new Vuex.Store({
       state.user.email = '';
     },
     updateSecretPosts(state, posts) {
-      const idToIdx = {};
+      const postsMapping = {};
       for (let i = 0; i < posts.length; i += 1) {
-        idToIdx[posts[i].id] = i;
+        postsMapping[posts[i].id] = posts[i];
       }
       state.secret.posts = posts;
-      state.secret.postIdToIdx = idToIdx;
+      state.secret.postsMapping = postsMapping;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;

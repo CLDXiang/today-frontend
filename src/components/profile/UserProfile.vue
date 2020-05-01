@@ -90,17 +90,17 @@ export default {
         {
           name: '我的评论',
           count: 0,
-          to: { name: 'UserRates' },
+          to: { name: 'UserRate' },
         },
         {
           name: '粉丝',
           count: 0,
-          to: { name: 'StarCourse' },
+          to: { name: 'Follower' },
         },
         {
           name: '关注用户',
           count: 0,
-          to: { name: 'StarCourse' },
+          to: { name: 'Following' },
         },
       ],
     };

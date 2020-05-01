@@ -171,3 +171,54 @@ export async function createSecretReply(postId, content) {
       .catch((error) => reject(error));
   });
 }
+
+export async function getUserRate() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/rate`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function getFollower() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/follower`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function getFollowing() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/following`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}

@@ -5,6 +5,14 @@
         <v-list-item>
           <v-list-item-content>{{ user }}</v-list-item-content>
         </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-circle-small</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>课评</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item @click="doNothing">
           <v-list-item-action>
             <v-icon>mdi-cog</v-icon>

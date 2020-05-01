@@ -6,20 +6,19 @@
           <v-list>
             <v-subheader>
               <strong>
-                <font size="5">
-                  历史评论
+                <font size="3">
+                  粉丝
                 </font>
               </strong>
             </v-subheader>
-            <div v-for="item in userRates" :key="item.rateId">
+            <div v-for="user in follower" :key="user.id">
               <v-divider />
               <!-- TODO 暂时路由到这个界面 -->
               <v-list-item :to="'/rate/ENGL110069/03#discuss'">
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.className + ' · ' + item.instructorName" />
-                  <v-list-item-subtitle v-text="'难度 ' + item.difficulty + ' · 工作量 ' + item.workload + ' · 给分 ' + item.grading" />
-                  <v-list-item-subtitle v-text="item.content" />
-                  <v-list-item-subtitle v-text="item.upmote + '赞同 · ' + item.reply + '评论 · ' + item.createdAt" />
+                  <v-list-item-title v-text="user.name" />
+                  <v-list-item-subtitle v-text="user.bio" />
+                  <v-list-item-subtitle v-show="user.icon" />
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -31,38 +30,40 @@
 </template>
 
 <script>
+import { getFollower } from '../../services/post.service';
+import log from '../../utils/log';
+
 export default {
+  props: { id: String },
   data() {
     return {
-      userRates: [
+      follower: [
         {
-          rateId: 1,
-          className: 'Introduction to Algorithm',
-          instructorName: 'Instructor1',
-          createdAt: '2020-04-19 16:20:48',
-          difficulty: 2,
-          workload: 2,
-          grading: 2,
-          content:
+          id: 1,
+          name: '张三',
+          bio:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          upmote: 13,
-          reply: 4,
+          icon: '../../assets/logo.png', // TODO
         },
         {
-          rateId: 2,
-          className: 'Introduction to Algorithm',
-          instructorName: 'Instructor2',
-          createdAt: '2020-04-11 08:56:17',
-          difficulty: 2,
-          workload: 2,
-          grading: 2,
-          content:
+          id: 2,
+          name: '小脑虎',
+          bio:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          upmote: 7,
-          reply: 5,
+          icon: '../../assets/logo.png',
         },
       ],
     };
+  },
+  mounted() {
+    getFollower()
+      .then((follower) => {
+        this.follower = follower;
+        log.info(follower);
+      })
+      .catch((err) => {
+        log.info(err);
+      });
   },
 };
 </script>

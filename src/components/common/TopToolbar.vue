@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { getUserRate } from '../../services/post.service';
 import log from '../../utils/log';
 
 export default {
@@ -109,6 +110,21 @@ export default {
     status() {
       return this.$store.getters.userLoggedIn ? '登出' : '登录';
     },
+  },
+  mounted() {
+    if (this.$store.getters.userLoggedIn) {
+      getUserRate()
+        .then((userRates) => {
+          this.countUserRate = userRates;
+          log.info(userRates);
+        })
+        .catch((err) => {
+          this.countUserRate = 0;
+          log.info(err);
+        });
+    } else {
+      this.countUserRate = 0;
+    }
   },
   methods: {
     toggleMenu() {

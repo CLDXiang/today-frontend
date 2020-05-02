@@ -11,7 +11,7 @@
                 </font>
               </strong>
             </v-subheader>
-            <div v-for="item in userRates" :key="item.rateId">
+            <div v-for="item in userRate" :key="item.rateId">
               <v-divider />
               <!-- TODO 暂时路由到这个界面 -->
               <v-list-item :to="'/rate/ENGL110069/03#discuss'">
@@ -38,41 +38,14 @@ export default {
   props: { id: String },
   data() {
     return {
-      userRates: [
-        {
-          rateId: 1,
-          className: 'Introduction to Algorithm',
-          instructorName: 'Instructor1',
-          createdAt: '2020-04-19 16:20:48',
-          difficulty: 2,
-          workload: 2,
-          grading: 2,
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          upmote: 13,
-          reply: 4,
-        },
-        {
-          rateId: 2,
-          className: 'Introduction to Algorithm',
-          instructorName: 'Instructor2',
-          createdAt: '2020-04-11 08:56:17',
-          difficulty: 2,
-          workload: 2,
-          grading: 2,
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          upmote: 7,
-          reply: 5,
-        },
-      ],
+      userRate: [],
     };
   },
   mounted() {
     getUserRate()
-      .then((userRates) => {
-        this.userRates = userRates;
-        log.info(userRates);
+      .then((userRate) => {
+        this.userRate = userRate;
+        log.info(userRate);
       })
       .catch((err) => {
         log.info(err);

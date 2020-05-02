@@ -172,6 +172,12 @@ export async function createSecretReply(postId, content) {
   });
 }
 
+function getUserId(jwt) {
+  const payload = decodeURIComponent(escape(window.atob(jwt.split('.')[1])));
+  const userId = JSON.parse(payload).sub;
+  return userId;
+}
+
 export async function getUserRate() {
   return new Promise((resolve, reject) => {
     const authHeader = {

@@ -50,11 +50,15 @@
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
-// import TimetableDetailBar from './TimetableDetailBar.vue';
+import {
+  getSelectedCourses as getSelectedCoursesService,
+  addSelectedCourse as addSelectedCourseService,
+  removeSelectedCourse as removeSelectedCourseService,
+} from '../../services/timetable.service';
 
 export default {
   components: {
@@ -98,6 +102,7 @@ export default {
        * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
        * */
       selectedCoursesIDs: new Set(),
+      selectedCoursesIDsFromDB: new Set(),
       /** 关于 selectedCoursesByDay 的设计
        * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，
@@ -106,10 +111,15 @@ export default {
        * TODO: 按需过滤字段
        * */
       selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
+      /**
+       * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
+       */
+      isOffline: false,
     };
   },
   computed: {
     ...mapState(['detailPageCourse', 'isDetailDialogVisible']),
+    ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     classDetailPage() {
       // if (!this.detailPageCourse.id) return [];
       // const classList = [
@@ -137,11 +147,39 @@ export default {
   created() {
     this.selectedCoursesByDay = this.$store.state.selectedCoursesByDay;
     this.selectedCoursesIDs = new Set(this.$store.state.selectedCoursesIDs[this.semester]);
+    // 若用户已登录，从后端同步所选课程 ID 列表
+    if (this.isUserLoggedIn && !this.isOffline) {
+      this.$message.loading('正在与服务器同步数据');
+      getSelectedCoursesService(this.semester)
+        .then((res) => {
+          this.$message.loaded();
+          if (!Array.isArray(res)) {
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+          }
+          this.selectedCoursesIDsFromDB = new Set(res);
+          if (this.areSetsSame(this.selectedCoursesIDsFromDB, this.selectedCoursesIDs)) {
+            this.$message.success('数据同步成功！');
+          } else {
+            // TODO: 冲突解决
+          }
+        })
+        .catch((err) => {
+          this.$message.error('数据同步失败！');
+          this.isOffline = true;
+          throw err;
+        });
+    }
     // 读取课程信息
     this.getCoursesFromJSON();
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
+    areSetsSame(set1, set2) {
+      if (set1.size !== set2.size) return false;
+      const intersect = [...set1].filter((item) => set2.has(item));
+      return intersect.length === set1.size;
+    },
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
       this.isLoadingCourses = true;
       axios
@@ -248,6 +286,18 @@ export default {
         return;
       }
       this.selectedCoursesIDs.add(courseID);
+      // 若用户已登录，向后端发送请求
+      if (this.isUserLoggedIn && !this.isOffline) {
+        addSelectedCourseService(courseID)
+          .then(() => {
+            // TODO: 后端应该返回有效响应
+          })
+          .catch((err) => {
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+            throw err;
+          });
+      }
 
       const selectedCoursesByDay = [...this.selectedCoursesByDay];
       const course = this.allCourses[courseID];
@@ -273,6 +323,18 @@ export default {
         return;
       }
       this.selectedCoursesIDs.delete(courseID);
+      // 若用户已登录，向后端发送请求
+      if (this.isUserLoggedIn && !this.isOffline) {
+        removeSelectedCourseService(courseID)
+          .then(() => {
+            // TODO: 后端应该返回有效响应
+          })
+          .catch((err) => {
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+            throw err;
+          });
+      }
 
       const selectedCoursesByDay = [...this.selectedCoursesByDay];
       const course = this.allCourses[courseID];

@@ -20,7 +20,7 @@ export const getSelectedCourses = async (semester) => {
   });
 };
 
-export const replaceSelectedCourses = async (semester, selectedCoursesIDs) => {
+export const replaceSelectedCourses = async (semester, selectedCoursesIds) => {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
@@ -30,7 +30,7 @@ export const replaceSelectedCourses = async (semester, selectedCoursesIDs) => {
         `${API_URL}/course/select`,
         {
           semester,
-          selectedCoursesIDs,
+          selectedCoursesIds,
         },
         {
           headers: authHeader,

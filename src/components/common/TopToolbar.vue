@@ -5,7 +5,7 @@
         <v-list-item>
           <v-list-item-content>{{ user }}</v-list-item-content>
         </v-list-item>
-        <v-list-item>
+        <v-list-item @click="toStar">
           <v-list-item-action>
             <v-icon>mdi-book</v-icon>
           </v-list-item-action>
@@ -13,10 +13,10 @@
             <v-list-item-title>关注课程</v-list-item-title>
           </v-list-item-content>
           <v-list-item-content>
-            <v-list-item-title>5</v-list-item-title>
+            <v-list-item-title>0</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item>
+        <v-list-item @click="toMyRate">
           <v-list-item-action>
             <v-icon>mdi-comment-processing</v-icon>
           </v-list-item-action>
@@ -27,7 +27,7 @@
             <v-list-item-title>{{ countUserRate }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item>
+        <v-list-item @click="toFollowing">
           <v-list-item-action>
             <v-icon>mdi-eye</v-icon>
           </v-list-item-action>
@@ -35,10 +35,10 @@
             <v-list-item-title>关注的人</v-list-item-title>
           </v-list-item-content>
           <v-list-item-content>
-            <v-list-item-title>5</v-list-item-title>
+            <v-list-item-title>{{ countFollowing }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item>
+        <v-list-item @click="toFollower">
           <v-list-item-action>
             <v-icon>mdi-human-greeting</v-icon>
           </v-list-item-action>
@@ -46,7 +46,7 @@
             <v-list-item-title>我的粉丝</v-list-item-title>
           </v-list-item-content>
           <v-list-item-content>
-            <v-list-item-title>5</v-list-item-title>
+            <v-list-item-title>{{ countFollower }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="doNothing">
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { getUserRate } from '../../services/post.service';
+import { getUserRate, getFollowing, getFollower } from '../../services/post.service';
 import log from '../../utils/log';
 
 export default {
@@ -112,16 +112,33 @@ export default {
   mounted() {
     if (this.$store.getters.userLoggedIn) {
       getUserRate()
-        .then((userRates) => {
-          this.countUserRate = userRates;
-          log.info(userRates);
+        .then((userRate) => {
+          this.countUserRate = Object.keys(userRate).length;
+          log.info(userRate);
         })
         .catch((err) => {
-          this.countUserRate = 0;
+          log.info(err);
+        });
+      getFollower()
+        .then((follower) => {
+          this.countFollower = Object.keys(follower).length;
+          log.info(follower);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getFollowing()
+        .then((following) => {
+          this.countFollowing = Object.keys(following).length;
+          log.info(following);
+        })
+        .catch((err) => {
           log.info(err);
         });
     } else {
       this.countUserRate = 0;
+      this.countFollower = 0;
+      this.countFollowing = 0;
     }
   },
   methods: {
@@ -140,6 +157,34 @@ export default {
         this.$router.replace({ name: 'Timetable' });
       } else {
         this.$router.replace({ name: 'Login', query: { redirect: '/profile' } });
+      }
+    },
+    toStar() {
+      if (window.location.pathname === '/profile/star') {
+        this.showMenu = false;
+      } else {
+        this.$router.replace({ name: 'StarCourse' });
+      }
+    },
+    toMyRate() {
+      if (window.location.pathname === '/profile/rate') {
+        this.showMenu = false;
+      } else {
+        this.$router.replace({ name: 'UserRate' });
+      }
+    },
+    toFollower() {
+      if (window.location.pathname === '/profile/follower') {
+        this.showMenu = false;
+      } else {
+        this.$router.replace({ name: 'Follower' });
+      }
+    },
+    toFollowing() {
+      if (window.location.pathname === '/profile/following') {
+        this.showMenu = false;
+      } else {
+        this.$router.replace({ name: 'Following' });
       }
     },
   },

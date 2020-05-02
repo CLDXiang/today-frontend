@@ -177,7 +177,6 @@ export default {
       return intersect.length === set1.size;
     },
     onConflictionResolved(selectedCoursesIds, changeLocal, changeRemote) {
-      console.log(changeLocal, changeRemote);
       // 得到用户选择保留的 Id 列表
       if (changeLocal) {
         this.replaceSelectedCourses(selectedCoursesIds);

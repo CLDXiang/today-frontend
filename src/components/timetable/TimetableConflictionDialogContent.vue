@@ -46,7 +46,6 @@ export default {
   },
   computed: {
     selectedCoursesOnlyInLocal() {
-      console.log(this.courses);
       return [...this.selectedCoursesIds]
         .filter((x) => !this.selectedCoursesIdsFromDatabase.has(x))
         .map((courseId) => ({
@@ -67,7 +66,7 @@ export default {
     handleChooseBoth() {
       const combinedSelectedCoursesIds = new Set([
         ...this.selectedCoursesIds,
-        ...this.selectedCoursesOnlyInDataBase,
+        ...this.selectedCoursesIdsFromDatabase,
       ]);
       this.$emit('conflictionResolved', combinedSelectedCoursesIds, true, true);
     },

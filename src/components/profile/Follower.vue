@@ -13,12 +13,10 @@
             </v-subheader>
             <div v-for="user in follower" :key="user.id">
               <v-divider />
-              <!-- TODO 暂时路由到这个界面 -->
-              <v-list-item :to="'/rate/ENGL110069/03#discuss'">
+              <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title v-text="user.name" />
-                  <v-list-item-subtitle v-text="user.bio" />
-                  <v-list-item-subtitle v-show="user.icon" />
+                  <v-list-item-subtitle v-text="'Bio: ' + user.bio" />
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -43,14 +41,14 @@ export default {
           name: '张三',
           bio:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          icon: '../../assets/logo.png', // TODO
+          icon: '', // TODO
         },
         {
           id: 2,
           name: '小脑虎',
           bio:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          icon: '../../assets/logo.png',
+          icon: '',
         },
       ],
     };

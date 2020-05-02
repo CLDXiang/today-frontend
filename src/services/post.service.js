@@ -108,7 +108,7 @@ export async function getSecret() {
 
 export async function getSecretById(id) {
   log.info('getSecretById', id);
-  return new Promise((res, rej) => {
+  return new Promise((resolve, rej) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -118,7 +118,7 @@ export async function getSecretById(id) {
       })
       .then((resp) => {
         log.info(resp);
-        res(resp.data);
+        resolve(resp.data);
       })
       .catch((error) => rej(error));
   });
@@ -126,7 +126,7 @@ export async function getSecretById(id) {
 
 export async function getSecretReply(id) {
   log.info('getSecretReply', id);
-  return new Promise((res, rej) => {
+  return new Promise((resolve, rej) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -136,7 +136,7 @@ export async function getSecretReply(id) {
       })
       .then((resp) => {
         log.info(resp);
-        res(resp.data);
+        resolve(resp.data);
       })
       .catch((error) => rej(error));
   });
@@ -172,13 +172,38 @@ export async function createSecretReply(postId, content) {
   });
 }
 
+function getUserId(jwt) {
+  const payload = decodeURIComponent(escape(window.atob(jwt.split('.')[1])));
+  const userId = JSON.parse(payload).sub;
+  return userId;
+}
+
 export async function getUserRate() {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
+    const userId = getUserId(store.state.user.jwt_token);
     axios
-      .get(`${API_URL}/rate`, {
+      .get(`${API_URL}/users/rates/${userId}`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function getUserRateById(id) {
+  log.info('getUserRateById', id);
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/users/rates/${id}`, {
         headers: authHeader,
       })
       .then((resp) => {
@@ -194,8 +219,9 @@ export async function getFollower() {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
+    const userId = getUserId(store.state.user.jwt_token);
     axios
-      .get(`${API_URL}/follower`, {
+      .get(`${API_URL}/users/${userId}/follower`, {
         headers: authHeader,
       })
       .then((resp) => {
@@ -211,8 +237,9 @@ export async function getFollowing() {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
+    const userId = getUserId(store.state.user.jwt_token);
     axios
-      .get(`${API_URL}/following`, {
+      .get(`${API_URL}/users/${userId}/following`, {
         headers: authHeader,
       })
       .then((resp) => {

@@ -7,10 +7,46 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-action>
-            <v-icon>mdi-circle-small</v-icon>
+            <v-icon>mdi-book</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>课评</v-list-item-title>
+            <v-list-item-title>关注课程</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title>5</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-comment-processing</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>我的课评</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title>{{ countUserRate }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-eye</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>关注的人</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title>5</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-human-greeting</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>我的粉丝</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title>5</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="doNothing">
@@ -54,6 +90,7 @@
 </template>
 
 <script>
+import { getUserRate } from '../../services/post.service';
 import log from '../../utils/log';
 
 export default {
@@ -71,6 +108,21 @@ export default {
     status() {
       return this.$store.getters.userLoggedIn ? '登出' : '登录';
     },
+  },
+  mounted() {
+    if (this.$store.getters.userLoggedIn) {
+      getUserRate()
+        .then((userRates) => {
+          this.countUserRate = userRates;
+          log.info(userRates);
+        })
+        .catch((err) => {
+          this.countUserRate = 0;
+          log.info(err);
+        });
+    } else {
+      this.countUserRate = 0;
+    }
   },
   methods: {
     toggleMenu() {

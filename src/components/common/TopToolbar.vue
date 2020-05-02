@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getUserRate } from '../../services/post.service';
+import { getUserRate, getFollowing, getFollower } from '../../services/post.service';
 import log from '../../utils/log';
 
 export default {
@@ -114,16 +114,33 @@ export default {
   mounted() {
     if (this.$store.getters.userLoggedIn) {
       getUserRate()
-        .then((userRates) => {
-          this.countUserRate = userRates;
-          log.info(userRates);
+        .then((userRate) => {
+          this.countUserRate = Object.keys(userRate).length;
+          log.info(userRate);
         })
         .catch((err) => {
-          this.countUserRate = 0;
+          log.info(err);
+        });
+      getFollower()
+        .then((follower) => {
+          this.countFollower = Object.keys(follower).length;
+          log.info(follower);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getFollowing()
+        .then((following) => {
+          this.countFollowing = Object.keys(following).length;
+          log.info(following);
+        })
+        .catch((err) => {
           log.info(err);
         });
     } else {
       this.countUserRate = 0;
+      this.countFollower = 0;
+      this.countFollowing = 0;
     }
   },
   methods: {

@@ -97,6 +97,9 @@ export default {
   name: 'TopToolbar',
   data: () => ({
     showMenu: false,
+    countUserRate: 0,
+    countFollower: 0,
+    countFollowing: 0,
   }),
   computed: {
     user() {

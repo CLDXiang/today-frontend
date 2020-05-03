@@ -13,6 +13,12 @@ const store = new Vuex.Store({
       name: '',
       email: '',
     },
+    profile: {
+      countStar: '',
+      countUserRate: '',
+      countFollower: '',
+      countFollowing: '',
+    },
     editor: {
       draft: {
         content: '',

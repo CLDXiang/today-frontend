@@ -47,6 +47,7 @@
 <script>
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
+import { getUserRate, getFollowing, getFollower } from '../../services/post.service';
 
 export default {
   data: () => ({
@@ -84,6 +85,30 @@ export default {
           this.showAlert('success', '登录成功');
           const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);
+          getUserRate()
+            .then((userRate) => {
+              this.$store.state.profile.countUserRate = Object.keys(userRate).length;
+              log.info(userRate);
+            })
+            .catch((err) => {
+              log.info(err);
+            });
+          getFollowing()
+            .then((following) => {
+              this.$store.state.profile.countFollowing = Object.keys(following).length;
+              log.info(following);
+            })
+            .catch((err) => {
+              log.info(err);
+            });
+          getFollower()
+            .then((follower) => {
+              this.$store.state.profile.countFollower = Object.keys(follower).length;
+              log.info(follower);
+            })
+            .catch((err) => {
+              log.info(err);
+            });
           if (redirect) {
             log.info('redirected!');
             this.$router.push(redirect);

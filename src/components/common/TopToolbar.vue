@@ -14,7 +14,7 @@
               <v-list-item-title>关注课程</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>0</v-list-item-title>
+              <v-list-item-title>{{ this.$store.state.profile.countStar }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="toMyRate">
@@ -25,7 +25,7 @@
               <v-list-item-title>我的课评</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ countUserRate }}</v-list-item-title>
+              <v-list-item-title>{{ this.$store.state.profile.countUserRate }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="toFollowing">
@@ -36,7 +36,7 @@
               <v-list-item-title>关注的人</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ countFollowing }}</v-list-item-title>
+              <v-list-item-title>{{ this.$store.state.profile.countFollowing }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="toFollower">
@@ -47,7 +47,7 @@
               <v-list-item-title>我的粉丝</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ countFollower }}</v-list-item-title>
+              <v-list-item-title>{{ this.$store.state.profile.countFollower }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -92,16 +92,12 @@
 </template>
 
 <script>
-import { getUserRate, getFollowing, getFollower } from '../../services/post.service';
 import log from '../../utils/log';
 
 export default {
   name: 'TopToolbar',
   data: () => ({
     showMenu: false,
-    countUserRate: 0,
-    countFollower: 0,
-    countFollowing: 0,
   }),
   computed: {
     user() {
@@ -113,38 +109,6 @@ export default {
     status() {
       return this.$store.getters.userLoggedIn ? '登出' : '登录';
     },
-  },
-  mounted() {
-    if (this.$store.getters.userLoggedIn) {
-      getUserRate()
-        .then((userRate) => {
-          this.countUserRate = Object.keys(userRate).length;
-          log.info(userRate);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollower()
-        .then((follower) => {
-          this.countFollower = Object.keys(follower).length;
-          log.info(follower);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollowing()
-        .then((following) => {
-          this.countFollowing = Object.keys(following).length;
-          log.info(following);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-    } else {
-      this.countUserRate = 0;
-      this.countFollower = 0;
-      this.countFollowing = 0;
-    }
   },
   methods: {
     toggleMenu() {

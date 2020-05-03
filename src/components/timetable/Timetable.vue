@@ -390,30 +390,10 @@ export default {
     },
     replaceSelectedCourses(courseIds) {
       this.selectedCoursesIds = new Set(courseIds);
+      this.selectedCoursesByDay = [{}, {}, {}, {}, {}, {}, {}];
 
-      const selectedCoursesByDay = [{}, {}, {}, {}, {}, {}, {}];
       // 重新加入每一门课
-      [...courseIds].forEach((courseId) => {
-        const course = this.allCourses[courseId];
-
-        // 对每个时间段，将该课程信息加入对应天
-        course.time_slot.forEach((ts) => {
-          const courses = { ...selectedCoursesByDay[ts.day - 1] };
-          courses[courseId] = {
-            ...course,
-            currentSlot: ts,
-          };
-          selectedCoursesByDay[ts.day - 1] = courses;
-        });
-      });
-
-      this.selectedCoursesByDay = selectedCoursesByDay;
-
-      this.$store.commit('setSelectedCourses', {
-        semester: this.semester,
-        selectedCoursesIds: this.selectedCoursesIds,
-        selectedCoursesByDay,
-      });
+      this.initSelectedCoursesByDay();
     },
     hideDetailDialog() {
       this.$store.commit('hideDetailDialog');

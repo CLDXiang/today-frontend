@@ -9,7 +9,8 @@ export const getSelectedCourses = async (semester) => {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .get(`${API_URL}/course/select?semester=${semester}`, {
+      .get(`${API_URL}/course/select`, {
+        params: { semester },
         headers: authHeader,
       })
       .then((resp) => {

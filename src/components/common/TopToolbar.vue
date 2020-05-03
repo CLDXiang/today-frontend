@@ -92,16 +92,12 @@
 </template>
 
 <script>
-import { getUserRate, getFollowing, getFollower } from '../../services/post.service';
 import log from '../../utils/log';
 
 export default {
   name: 'TopToolbar',
   data: () => ({
     showMenu: false,
-    countUserRate: 0,
-    countFollower: 0,
-    countFollowing: 0,
   }),
   computed: {
     user() {
@@ -113,38 +109,6 @@ export default {
     status() {
       return this.$store.getters.userLoggedIn ? '登出' : '登录';
     },
-  },
-  mounted() {
-    if (this.$store.getters.userLoggedIn) {
-      getUserRate()
-        .then((userRate) => {
-          this.countUserRate = Object.keys(userRate).length;
-          log.info(userRate);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollower()
-        .then((follower) => {
-          this.countFollower = Object.keys(follower).length;
-          log.info(follower);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollowing()
-        .then((following) => {
-          this.countFollowing = Object.keys(following).length;
-          log.info(following);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-    } else {
-      this.countUserRate = 0;
-      this.countFollower = 0;
-      this.countFollowing = 0;
-    }
   },
   methods: {
     toggleMenu() {

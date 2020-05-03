@@ -32,7 +32,7 @@ const store = new Vuex.Store({
     globalMessageTimer: -1,
     // globalMessageIcon: '',
 
-    selectedCoursesIDs: {},
+    selectedCoursesIds: {},
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
     selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
   },
@@ -85,7 +85,7 @@ const store = new Vuex.Store({
 
     setSelectedCourses(state, payload) {
       state.selectedCoursesByDay = payload.selectedCoursesByDay;
-      state.selectedCoursesIDs[payload.semester] = [...payload.selectedCoursesIDs];
+      state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
     },
   },
   getters: {
@@ -97,7 +97,7 @@ const store = new Vuex.Store({
         return {
           user: state.user,
           editor: state.editor,
-          selectedCoursesIDs: state.selectedCoursesIDs,
+          selectedCoursesIds: state.selectedCoursesIds,
           selectedCoursesByDay: state.selectedCoursesByDay,
         };
       },

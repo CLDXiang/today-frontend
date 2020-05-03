@@ -10,6 +10,22 @@
     >
       <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
     </v-dialog>
+    <v-dialog
+      :fullscreen="isMobileMode"
+      scrollable
+      :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
+      :value="isConflictionDialogVisible"
+      :max-width="isMobileMode ? '' : '368px'"
+    >
+      <timetable-confliction-dialog-content
+        persistent
+        :selected-courses-ids="selectedCoursesIds"
+        :selected-courses-ids-from-database="selectedCoursesIdsFromDatabase"
+        :courses="allCourses"
+        @conflictionResolved="onConflictionResolved"
+      />
+    </v-dialog>
+
     <div class="timetable__body">
       <div class="timetable__day-box">
         <div class="timetable__time">
@@ -50,18 +66,24 @@
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
-// import TimetableDetailBar from './TimetableDetailBar.vue';
+import TimetableConflictionDialogContent from './TimetableConflictionDialogContent.vue';
+import {
+  getSelectedCourses as getSelectedCoursesService,
+  addSelectedCourse as addSelectedCourseService,
+  removeSelectedCourse as removeSelectedCourseService,
+  replaceSelectedCourses as replaceSelectedCoursesService,
+} from '../../services/timetable.service';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
     TimetableDetailDialogContent,
-    // TimetableDetailBar,
+    TimetableConflictionDialogContent,
   },
   props: {},
   data() {
@@ -91,25 +113,32 @@ export default {
         { name: '13', clock: '20:20' },
         { name: '14', clock: '21:15' },
       ],
-      /** 关于 selectedCoursesIDs 的设计
+      /** 关于 selectedCoursesIds 的设计
        * 一开始我的想法是将不同课程的所有信息按不同 Day 来存储，但是考虑到多课时的课程的互动可能需要一次操作多个课时，
        * 最终还是将所有已选课程数据放到同一个 data 项中
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
        * */
-      selectedCoursesIDs: new Set(),
+      selectedCoursesIds: new Set(),
+      selectedCoursesIdsFromDatabase: new Set(),
       /** 关于 selectedCoursesByDay 的设计
-       * 为何不使用依赖 selectedCoursesIDs 的计算/侦听属性？主要是考虑到增删时的性能问题，
-       * 如果使用计算/侦听属性，每次修改 selectedCoursesIDs 时就需要重新处理所有已选择的课程，
-       * 所以我认为如此设计会更好：初始化时根据 selectedCoursesIDs 的初始值计算一次，
+       * 为何不使用依赖 selectedCoursesIds 的计算/侦听属性？主要是考虑到增删时的性能问题，
+       * 如果使用计算/侦听属性，每次修改 selectedCoursesIds 时就需要重新处理所有已选择的课程，
+       * 所以我认为如此设计会更好：初始化时根据 selectedCoursesIds 的初始值计算一次，
        * 此后每次增删仅仅针对增删的那一门课程来操作 selectedCoursesByDay
        * TODO: 按需过滤字段
        * */
       selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
+      /**
+       * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
+       */
+      isOffline: false,
+      isConflictionDialogVisible: false,
     };
   },
   computed: {
     ...mapState(['detailPageCourse', 'isDetailDialogVisible']),
+    ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     classDetailPage() {
       // if (!this.detailPageCourse.id) return [];
       // const classList = [
@@ -136,12 +165,38 @@ export default {
   },
   created() {
     this.selectedCoursesByDay = this.$store.state.selectedCoursesByDay;
-    this.selectedCoursesIDs = new Set(this.$store.state.selectedCoursesIDs[this.semester]);
+    this.selectedCoursesIds = new Set(this.$store.state.selectedCoursesIds[this.semester]);
     // 读取课程信息
     this.getCoursesFromJSON();
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
+    areSetsSame(set1, set2) {
+      if (set1.size !== set2.size) return false;
+      const intersect = [...set1].filter((item) => set2.has(item));
+      return intersect.length === set1.size;
+    },
+    onConflictionResolved(selectedCoursesIds, changeLocal, changeRemote) {
+      // 得到用户选择保留的 Id 列表
+      if (changeLocal) {
+        this.replaceSelectedCourses(selectedCoursesIds);
+      }
+      if (changeRemote) {
+        this.$message.loading('正在向服务器同步数据...');
+        replaceSelectedCoursesService(this.semester, [...selectedCoursesIds])
+          .then(() => {
+            // TODO: 根据后端响应进行处理
+            this.$message.loaded();
+            this.$message.success('数据同步成功!');
+          })
+          .catch(() => {
+            this.$message.loaded();
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+          });
+      }
+      this.hideConflictionDialog();
+    },
     getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
       this.isLoadingCourses = true;
       axios
@@ -163,6 +218,33 @@ export default {
           this.initSelectedCoursesByDay();
           this.initSearchIndex();
           this.isLoadingCourses = false;
+
+          // 若用户已登录，从后端同步所选课程 Id 列表
+          if (this.isUserLoggedIn && !this.isOffline) {
+            this.$message.loading('正在与服务器同步数据');
+            getSelectedCoursesService(this.semester)
+              .then((res) => {
+                this.$message.loaded();
+                if (!Array.isArray(res)) {
+                  this.$message.error('数据同步失败！');
+                  this.isOffline = true;
+                }
+                this.selectedCoursesIdsFromDatabase = new Set(res);
+                if (
+                  this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)
+                ) {
+                  this.$message.success('数据同步成功！');
+                } else {
+                  // 冲突解决
+                  this.isConflictionDialogVisible = true;
+                }
+              })
+              .catch((err) => {
+                this.$message.error('数据同步失败！');
+                this.isOffline = true;
+                throw err;
+              });
+          }
         })
         .catch((err) => {
           // TODO: 错误提示
@@ -172,13 +254,13 @@ export default {
     },
     initSelectedCoursesByDay() {
       const selectedCoursesByDay = [...this.selectedCoursesByDay];
-      this.selectedCoursesIDs.forEach((courseID) => {
-        const course = this.allCourses[courseID];
+      this.selectedCoursesIds.forEach((courseId) => {
+        const course = this.allCourses[courseId];
 
         // 对每个时间段，将该课程信息加入对应天
         course.time_slot.forEach((ts) => {
           const courses = { ...selectedCoursesByDay[ts.day - 1] };
-          courses[courseID] = {
+          courses[courseId] = {
             ...course,
             currentSlot: ts,
           };
@@ -188,14 +270,14 @@ export default {
       this.selectedCoursesByDay = selectedCoursesByDay;
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
-        selectedCoursesIDs: this.selectedCoursesIDs,
+        selectedCoursesIds: this.selectedCoursesIds,
         selectedCoursesByDay,
       });
     },
     initSearchIndex() {
       const searchIndex = [];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
-      Object.entries(this.allCourses).forEach(([courseID, course]) => {
+      Object.entries(this.allCourses).forEach(([courseId, course]) => {
         let teachers = new Set();
         let timeSlots = [];
         course.time_slot.forEach((ts) => {
@@ -236,26 +318,38 @@ export default {
           department,
           timeSlots,
           index,
-          codeID: course.code_id,
-          courseID: parseInt(courseID, 10),
+          codeId: course.code_id,
+          courseId: parseInt(courseId, 10),
           // for test:
         });
       });
       this.searchIndex = searchIndex;
     },
-    addSelectedCourse(courseID) {
-      if (this.selectedCoursesIDs.has(courseID)) {
+    addSelectedCourse(courseId) {
+      if (this.selectedCoursesIds.has(courseId)) {
         return;
       }
-      this.selectedCoursesIDs.add(courseID);
+      this.selectedCoursesIds.add(courseId);
+      // 若用户已登录，向后端发送请求
+      if (this.isUserLoggedIn && !this.isOffline) {
+        addSelectedCourseService(courseId)
+          .then(() => {
+            // TODO: 后端应该返回有效响应
+          })
+          .catch((err) => {
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+            throw err;
+          });
+      }
 
       const selectedCoursesByDay = [...this.selectedCoursesByDay];
-      const course = this.allCourses[courseID];
+      const course = this.allCourses[courseId];
 
       // 对每个时间段，将该课程信息加入对应天
       course.time_slot.forEach((ts) => {
         const courses = { ...selectedCoursesByDay[ts.day - 1] };
-        courses[courseID] = {
+        courses[courseId] = {
           ...course,
           currentSlot: ts,
         };
@@ -264,34 +358,56 @@ export default {
       this.selectedCoursesByDay = selectedCoursesByDay;
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
-        selectedCoursesIDs: this.selectedCoursesIDs,
+        selectedCoursesIds: this.selectedCoursesIds,
         selectedCoursesByDay,
       });
     },
-    removeSelectedCourse(courseID) {
-      if (!this.selectedCoursesIDs.has(courseID)) {
+    removeSelectedCourse(courseId) {
+      if (!this.selectedCoursesIds.has(courseId)) {
         return;
       }
-      this.selectedCoursesIDs.delete(courseID);
+      this.selectedCoursesIds.delete(courseId);
+      // 若用户已登录，向后端发送请求
+      if (this.isUserLoggedIn && !this.isOffline) {
+        removeSelectedCourseService(courseId)
+          .then(() => {
+            // TODO: 后端应该返回有效响应
+          })
+          .catch((err) => {
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+            throw err;
+          });
+      }
 
       const selectedCoursesByDay = [...this.selectedCoursesByDay];
-      const course = this.allCourses[courseID];
+      const course = this.allCourses[courseId];
 
       // 对每个时间段，将该对应天的课程信息删除
       course.time_slot.forEach((ts) => {
         const courses = { ...selectedCoursesByDay[ts.day - 1] };
-        delete courses[courseID];
+        delete courses[courseId];
         selectedCoursesByDay[ts.day - 1] = courses;
       });
       this.selectedCoursesByDay = selectedCoursesByDay;
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
-        selectedCoursesIDs: this.selectedCoursesIDs,
+        selectedCoursesIds: this.selectedCoursesIds,
         selectedCoursesByDay,
       });
     },
+    replaceSelectedCourses(courseIds) {
+      this.selectedCoursesIds = new Set(courseIds);
+      this.selectedCoursesByDay = [{}, {}, {}, {}, {}, {}, {}];
+
+      // 重新加入每一门课
+      this.initSelectedCoursesByDay();
+    },
     hideDetailDialog() {
       this.$store.commit('hideDetailDialog');
+    },
+    hideConflictionDialog() {
+      this.isConflictionDialogVisible = false;
     },
     mapDay(day) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];

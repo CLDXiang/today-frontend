@@ -40,12 +40,12 @@
       <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results">
         <div
           v-for="item in searchResults"
-          :key="item.courseID"
+          :key="item.courseId"
           class="search-bar__result"
-          @click.stop="handleClickSearchResult(item.courseID)"
+          @click.stop="handleClickSearchResult(item.courseId)"
         >
           <div class="result-line">
-            {{ `${item.codeID} ${item.name}` }}
+            {{ `${item.codeId} ${item.name}` }}
           </div>
           <div class="result-line cut">
             {{ item.teachers }}
@@ -98,8 +98,8 @@ export default {
     handleChangeResultsVisible() {
       this.isSearchResultsVisible = !this.isSearchResultsVisible;
     },
-    handleClickSearchResult(courseID) {
-      this.$emit('addcourse', courseID);
+    handleClickSearchResult(courseId) {
+      this.$emit('addcourse', courseId);
     },
     handleClickSearchButton() {
       this.isLoadingSearchResults = true;

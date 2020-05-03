@@ -5,50 +5,52 @@
         <v-list-item>
           <v-list-item-content>{{ user }}</v-list-item-content>
         </v-list-item>
-        <v-list-item @click="toStar">
-          <v-list-item-action>
-            <v-icon>mdi-book</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>关注课程</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content>
-            <v-list-item-title>0</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="toMyRate">
-          <v-list-item-action>
-            <v-icon>mdi-comment-processing</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>我的课评</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content>
-            <v-list-item-title>{{ countUserRate }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="toFollowing">
-          <v-list-item-action>
-            <v-icon>mdi-eye</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>关注的人</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content>
-            <v-list-item-title>{{ countFollowing }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="toFollower">
-          <v-list-item-action>
-            <v-icon>mdi-human-greeting</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>我的粉丝</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content>
-            <v-list-item-title>{{ countFollower }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <div v-show="this.$store.getters.userLoggedIn">
+          <v-list-item @click="toStar">
+            <v-list-item-action>
+              <v-icon>mdi-book</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>关注课程</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>0</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toMyRate">
+            <v-list-item-action>
+              <v-icon>mdi-comment-processing</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>我的课评</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>{{ countUserRate }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toFollowing">
+            <v-list-item-action>
+              <v-icon>mdi-eye</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>关注的人</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>{{ countFollowing }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toFollower">
+            <v-list-item-action>
+              <v-icon>mdi-human-greeting</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>我的粉丝</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>{{ countFollower }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
         <v-list-item @click="doNothing">
           <v-list-item-action>
             <v-icon>mdi-cog</v-icon>
@@ -166,28 +168,28 @@ export default {
       if (window.location.pathname === '/profile/star') {
         this.showMenu = false;
       } else {
-        this.$router.replace({ name: 'StarCourse' });
+        this.$router.push({ name: 'StarCourse' });
       }
     },
     toMyRate() {
       if (window.location.pathname === '/profile/rate') {
         this.showMenu = false;
       } else {
-        this.$router.replace({ name: 'UserRate' });
+        this.$router.push({ name: 'UserRate' });
       }
     },
     toFollower() {
       if (window.location.pathname === '/profile/follower') {
         this.showMenu = false;
       } else {
-        this.$router.replace({ name: 'Follower' });
+        this.$router.push({ name: 'Follower' });
       }
     },
     toFollowing() {
       if (window.location.pathname === '/profile/following') {
         this.showMenu = false;
       } else {
-        this.$router.replace({ name: 'Following' });
+        this.$router.push({ name: 'Following' });
       }
     },
   },

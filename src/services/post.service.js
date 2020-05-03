@@ -172,18 +172,12 @@ export async function createSecretReply(postId, content) {
   });
 }
 
-function getUserId(jwt) {
-  const payload = decodeURIComponent(escape(window.atob(jwt.split('.')[1])));
-  const userId = JSON.parse(payload).sub;
-  return userId;
-}
-
 export async function getUserRate() {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
-    const userId = getUserId(store.state.user.jwt_token);
+    const userId = store.state.user.id;
     axios
       .get(`${API_URL}/users/rates/${userId}`, {
         headers: authHeader,
@@ -219,7 +213,7 @@ export async function getFollower() {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
-    const userId = getUserId(store.state.user.jwt_token);
+    const userId = store.state.user.id;
     axios
       .get(`${API_URL}/users/${userId}/follower`, {
         headers: authHeader,
@@ -237,7 +231,7 @@ export async function getFollowing() {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
-    const userId = getUserId(store.state.user.jwt_token);
+    const userId = store.state.user.id;
     axios
       .get(`${API_URL}/users/${userId}/following`, {
         headers: authHeader,

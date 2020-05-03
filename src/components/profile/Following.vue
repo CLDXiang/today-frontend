@@ -17,7 +17,6 @@
                 <v-list-item-content>
                   <v-list-item-title v-text="user.name" />
                   <v-list-item-subtitle v-text="'Bio: ' + user.bio" />
-                  <v-list-item-subtitle v-show="user.icon" />
                 </v-list-item-content>
               </v-list-item>
             </div>

@@ -9,6 +9,7 @@ const store = new Vuex.Store({
   state: {
     user: {
       jwt_token: '',
+      id: '',
       name: '',
       email: '',
     },
@@ -43,6 +44,8 @@ const store = new Vuex.Store({
   mutations: {
     SET_JWT_TOKEN(state, token) {
       state.user.jwt_token = token;
+      const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
+      state.user.id = JSON.parse(payload).sub;
       log.info('set jwt_token', token);
     },
     SET_USER(state, name, email) {

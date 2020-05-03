@@ -182,10 +182,18 @@ export default {
         this.replaceSelectedCourses(selectedCoursesIds);
       }
       if (changeRemote) {
-        replaceSelectedCoursesService(this.semester, [...selectedCoursesIds]).catch(() => {
-          this.$message.error('数据同步失败！');
-          this.isOffline = true;
-        });
+        this.$message.loading('正在向服务器同步数据...');
+        replaceSelectedCoursesService(this.semester, [...selectedCoursesIds])
+          .then(() => {
+            // TODO: 根据后端响应进行处理
+            this.$message.loaded();
+            this.$message.success('数据同步成功!');
+          })
+          .catch(() => {
+            this.$message.loaded();
+            this.$message.error('数据同步失败！');
+            this.isOffline = true;
+          });
       }
       this.hideConflictionDialog();
     },

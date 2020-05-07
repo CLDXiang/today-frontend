@@ -14,7 +14,9 @@
               <v-list-item-title>关注课程</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ this.$store.state.profile.countStar }}</v-list-item-title>
+              <v-list-item-title>
+                {{ $store.getters.countUserStar }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="toMyRate">
@@ -25,7 +27,9 @@
               <v-list-item-title>我的课评</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ this.$store.state.profile.countUserRate }}</v-list-item-title>
+              <v-list-item-title>
+                {{ this.$store.getters.countUserRate }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="toFollowing">
@@ -36,7 +40,9 @@
               <v-list-item-title>关注的人</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ this.$store.state.profile.countFollowing }}</v-list-item-title>
+              <v-list-item-title>
+                {{ this.$store.getters.countFollowing }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click="toFollower">
@@ -47,7 +53,22 @@
               <v-list-item-title>我的粉丝</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
-              <v-list-item-title>{{ this.$store.state.profile.countFollower }}</v-list-item-title>
+              <v-list-item-title>
+                {{ this.$store.getters.countFollower }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toHistory">
+            <v-list-item-action>
+              <v-icon>mdi-history</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>浏览历史</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ this.$store.getters.countHistory }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -154,6 +175,13 @@ export default {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'Following' });
+      }
+    },
+    toHistory() {
+      if (window.location.pathname === '/profile/history') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'History' });
       }
     },
   },

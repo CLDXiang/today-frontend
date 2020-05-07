@@ -7,16 +7,18 @@
             <v-subheader>
               <strong>
                 <font size="3">
-                  粉丝
+                  最近浏览
                 </font>
               </strong>
             </v-subheader>
-            <div v-for="user in follower" :key="user.id">
+            <div v-for="item in history" :key="item.history_about_id">
               <v-divider />
-              <v-list-item>
+              <!-- TODO 暂时路由到这个界面 -->
+              <v-list-item :to="'/rate/ENGL110069/03#discuss'">
                 <v-list-item-content>
-                  <v-list-item-title v-text="user.name" />
-                  <v-list-item-subtitle v-text="'Bio: ' + user.bio" />
+                  <v-list-item-title v-text="'啊布吉标题'" />
+                  <v-list-item-subtitle v-text="'内容'" />
+                  <v-list-item-subtitle v-text="item.created_at" />
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -31,7 +33,7 @@
 export default {
   data() {
     return {
-      follower: this.$store.state.profile.follower,
+      history: this.$store.state.profile.history,
     };
   },
 };

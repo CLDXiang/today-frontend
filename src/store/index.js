@@ -14,10 +14,11 @@ const store = new Vuex.Store({
       email: '',
     },
     profile: {
-      countStar: '',
-      countUserRate: '',
-      countFollower: '',
-      countFollowing: '',
+      userStar: [],
+      userRate: [],
+      follower: [],
+      following: [],
+      history: [],
     },
     editor: {
       draft: {
@@ -72,6 +73,21 @@ const store = new Vuex.Store({
       state.secret.posts = posts;
       state.secret.postsMapping = postsMapping;
     },
+    SET_USER_STAR(state, userStar) {
+      state.profile.userStar = userStar;
+    },
+    SET_USER_RATE(state, userRate) {
+      state.profile.userRate = userRate;
+    },
+    SET_FOLLOWING(state, following) {
+      state.profile.following = following;
+    },
+    SET_FOLLOWER(state, follower) {
+      state.profile.follower = follower;
+    },
+    SET_HISTORY(state, history) {
+      state.profile.history = history;
+    },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
     },
@@ -111,6 +127,11 @@ const store = new Vuex.Store({
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
+    countUserStar: (state) => Object.keys(state.profile.userStar).length,
+    countUserRate: (state) => Object.keys(state.profile.userRate).length,
+    countFollower: (state) => Object.keys(state.profile.follower).length,
+    countFollowing: (state) => Object.keys(state.profile.following).length,
+    countHistory: (state) => Object.keys(state.profile.history).length,
   },
   plugins: [
     createPersistedState({

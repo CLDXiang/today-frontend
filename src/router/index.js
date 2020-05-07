@@ -8,6 +8,7 @@ import Star from '../components/profile/Star.vue';
 import UserRate from '../components/profile/UserRate.vue';
 import Follower from '../components/profile/Follower.vue';
 import Following from '../components/profile/Following.vue';
+import History from '../components/profile/History.vue';
 import Hole from '../components/secret/Hole.vue';
 
 import Rate from '../components/rate/Rate.vue';
@@ -58,6 +59,11 @@ const routes = [
         path: 'following',
         name: 'Following',
         component: Following,
+      },
+      {
+        path: 'history',
+        name: 'History',
+        component: History,
       },
     ],
   },

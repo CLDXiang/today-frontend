@@ -28,25 +28,11 @@
 </template>
 
 <script>
-import { getFollowing } from '../../services/post.service';
-import log from '../../utils/log';
-
 export default {
-  props: { id: String },
   data() {
     return {
-      following: [],
+      following: this.$store.state.profile.following,
     };
-  },
-  mounted() {
-    getFollowing()
-      .then((following) => {
-        this.following = following;
-        log.info(following);
-      })
-      .catch((err) => {
-        log.info(err);
-      });
   },
 };
 </script>

@@ -31,25 +31,11 @@
 </template>
 
 <script>
-import { getUserRate } from '../../services/post.service';
-import log from '../../utils/log';
-
 export default {
-  props: { id: String },
   data() {
     return {
-      userRate: [],
+      userRate: this.$store.state.profile.userRate,
     };
-  },
-  mounted() {
-    getUserRate()
-      .then((userRate) => {
-        this.userRate = userRate;
-        log.info(userRate);
-      })
-      .catch((err) => {
-        log.info(err);
-      });
   },
 };
 </script>

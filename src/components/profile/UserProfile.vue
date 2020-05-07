@@ -84,22 +84,22 @@ export default {
       cols: [
         {
           name: '关注课程',
-          count: this.$store.state.profile.countStar,
+          count: this.$store.getters.countUserStar,
           to: { name: 'StarCourse' },
         },
         {
           name: '我的评论',
-          count: this.$store.state.profile.countUserRate,
+          count: this.$store.getters.countUserRate,
           to: { name: 'UserRate' },
         },
         {
           name: '粉丝',
-          count: this.$store.state.profile.countFollower,
+          count: this.$store.getters.countFollower,
           to: { name: 'Follower' },
         },
         {
           name: '关注用户',
-          count: this.$store.state.profile.countFollowing,
+          count: this.$store.getters.countFollowing,
           to: { name: 'Following' },
         },
       ],

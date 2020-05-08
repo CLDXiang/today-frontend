@@ -5,16 +5,43 @@
       <p>您正在对<span class="inline-highlight">「{{ lecture.teacher }}」</span>的<span class="inline-highlight">「{{ lecture.name }}」</span>课程进行评价，首先，请选择您想评价的学期</p>
 
       <div style="display: flex;">
-        <v-select v-model="selects.semester.value" solo style="width: 5rem;" :items="selects.semester.choices" />
+        <v-select
+          v-model="selects.semester.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 5rem;"
+          :items="selects.semester.choices"
+        />
       </div>
 
       <p>您觉得本课程的工作量和难易程度如何？</p>
 
       <div style="display: flex; align-items: center;">
-        <span style="margin: 0 1rem;">工作量</span><v-select v-model="selects.workload.value" solo style="width: 6rem;" :items="selects.workload.choices" />
+        <span style="margin: 0 1rem;">作业总量</span><v-select
+          v-model="selects.workload.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 6rem;"
+          :items="selects.workload.choices"
+        />
       </div>
       <div style="display: flex; align-items: center;">
-        <span style="margin: 0 1rem;">难易度</span><v-select v-model="selects.difficulty.value" solo style="width: 6rem;" :items="selects.difficulty.choices" />
+        <span style="margin: 0 1rem;">难易程度</span><v-select
+          v-model="selects.difficulty.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 6rem;"
+          :items="selects.difficulty.choices"
+        />
+      </div>
+      <div style="display: flex; align-items: center;">
+        <span style="margin: 0 1rem;">给分情况</span><v-select
+          v-model="selects.grading.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 6rem;"
+          :items="selects.grading.choices"
+        />
       </div>
             
       <h3>您对此课程的体验如何？</h3>
@@ -26,12 +53,24 @@
       <h3>您在此课程上所得成绩如何？</h3>
       <p>此信息将会以完全匿名的方式参与统计，可以选择跳过此步骤</p>
       <div style="display: flex;">
-        <v-select v-model="selects.grading.value" solo style="width: 5rem;" :items="selects.grading.choices" />
+        <v-select
+          v-model="selects.score.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 5rem;"
+          :items="selects.score.choices"
+        />
       </div>
 
       <h3>{{ rangeRates[0].title }}</h3>
       <div style="display: flex;">
-        <v-select v-model="rangeRates[0].choiceValue" solo style="width: 7rem;" :items="rangeRates[0].choices" />
+        <v-select
+          v-model="rangeRates[0].choiceValue"
+          solo
+          dense
+          style="max-width: 10rem; width: 7rem;"
+          :items="rangeRates[0].choices"
+        />
       </div>
 
       <h3>感谢您的参与！</h3>
@@ -68,14 +107,18 @@ export default {
           choices: ['2019', '2020'],
         },
         workload: {
-          value: '摸鱼',
-          choices: ['随便浪', '摸鱼', '适度肝', '头皮发麻'],
+          value: '一般',
+          choices: ['随便浪', '摸鱼', '一般', '适度肝', '头皮发麻'],
         },
         difficulty: {
-          value: '普通',
-          choices: ['简单', '普通', '困难', '噩梦'],
+          value: '一般',
+          choices: ['简单', '普通', '一般', '困难', '噩梦'],
         },
         grading: {
+          value: '一般',
+          choices: ['慎选', '差', '一般', '还行', '良心'],
+        },
+        score: {
           value: '跳过',
           choices: ['跳过', 'A', 'A-', 'B+', 'B', 'B-'],
         },
@@ -99,9 +142,9 @@ export default {
     submit() {
       postRate(
         this.lecture.id,
-        this.selects.workload.choices.indexOf(this.selects.workload.value),
-        this.selects.difficulty.choices.indexOf(this.selects.difficulty.value),
-        this.selects.grading.choices.indexOf(this.selects.grading.value),
+        this.selects.workload.choices.indexOf(this.selects.workload.value) - 2,
+        this.selects.difficulty.choices.indexOf(this.selects.difficulty.value) - 2,
+        this.selects.grading.choices.indexOf(this.selects.grading.value) - 2,
         this.comment,
         this.selects.semester.value,
         this.rangeRates[0].value,
@@ -109,21 +152,21 @@ export default {
         .then((resp) => {
           log.info(resp);
           if (resp.status === 201) {
-            log.info('提交成功！');
+            this.$message.success('提交成功！');
             this.$router.go(-1);
           } else {
-            log.info('提交失败！');
+            this.$message.success('提交失败！');
           }
         })
         .catch((err) => {
           const code = err.response.status;
           if (code === 409) {
-            log.info('您已经评价过此课程！');
+            this.$message.warn('您已经评价过此课程！');
             this.$router.push(`/lecture/${this.$route.params.code}/${this.$route.params.idx}`);
           } else if (code === 400) {
-            log.info('您似乎填写格式有误？');
+            this.$message.error('您似乎填写格式有误？');
           } else if (code === 401) {
-            log.info('请您先登录');
+            this.$message.warn('请您先登录');
             this.$router.push(`/login?redirect=${this.$route.path}`);
           }
         });

@@ -153,3 +153,34 @@ $_precision: 10;
   } 
 }
 
+@mixin skeleton-loader($name: loading, $white: false) {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transform: translateX(-100%);
+    animation: $name 1.5s infinite;
+  }
+
+  @if $white {
+    background: white;
+    &::after {
+      background: linear-gradient(90deg,transparent,hsla(0, 100%, 0%, .03),transparent);
+    }
+  }
+  @else {
+    background: rgba(0, 0, 0, $divider-opacity);
+    &::after {
+      background: linear-gradient(90deg,transparent,hsla(0, 0%, 100%, .3),transparent);
+    }
+  }
+}
+
+
+

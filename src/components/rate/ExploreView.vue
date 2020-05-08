@@ -57,21 +57,39 @@
           <div class="right-box">
             <div class="explore-input-container">
               <input v-model="searchInput" class="explore-input" placeholder="Search by class, teacher and code">
-              <div class="explore-loader">
-                <transition name="fade">
-                  <v-progress-circular v-show="loading" indeterminate color="primary" size="24" />
-                </transition>
-              </div>
             </div>
             <div class="explore-showlist">
-              <div 
-                v-for="(teachers, lecture) in searchResult" 
-                :key="lecture" 
-                class="explore-listitem"
-                @click="openTeacherModal(teachers)"
-              >
-                {{ lecture }}
-              </div>
+              <transition name="fade">
+                <div v-show="loading" class="explore-showlist__result">
+                  <div class="explore-listitem">
+                    <div class="skeleton-loader-bar" style="max-width: 100%;" />
+                  </div>
+                  <div class="explore-listitem">
+                    <div class="skeleton-loader-bar" style="max-width: 100%;" />
+                  </div>
+                  <div class="explore-listitem">
+                    <div class="skeleton-loader-bar" style="max-width: 100%;" />
+                  </div>
+                  <div class="explore-listitem">
+                    <div class="skeleton-loader-bar" style="max-width: 100%;" />
+                  </div>
+                  <div class="explore-listitem">
+                    <div class="skeleton-loader-bar" style="max-width: 90%;" />
+                  </div>
+                </div>
+              </transition>
+              <transition name="fade">
+                <div v-show="!loading" class="explore-showlist__result">
+                  <div 
+                    v-for="(teachers, lecture) in searchResult" 
+                    :key="lecture" 
+                    class="explore-listitem"
+                    @click="openTeacherModal(teachers)"
+                  >
+                    {{ lecture }}
+                  </div>
+                </div>
+              </transition>
             </div>
           </div>
         </div>
@@ -144,9 +162,10 @@
                 <v-list-item
                   v-for="t in teachers"
                   :key="t[2]"
+                  :to="t[2]"
                 >
                   <v-list-item-content>
-                    <v-list-item-title :to="t[2]" v-text="t[0]" />
+                    <v-list-item-title v-text="t[0]" />
                   </v-list-item-content>
                 </v-list-item>
               </v-list-group>
@@ -174,7 +193,7 @@ export default {
       showModal: false,
       modalTeacherList: [],
       openSearch: false,
-      loading: false,
+      loading: true,
 
       tabIndex: '',
       searchInput: '',
@@ -250,6 +269,18 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+@keyframes loader {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+.skeleton-loader-bar {
+  @include skeleton-loader(loader);
+  height: 1em;
 }
 
 .landscape-only {
@@ -407,12 +438,21 @@ export default {
 }
 
 .explore-showlist {
+  position: relative;
+  background: #fafafa;
+  border: 1px solid transparent; // FIX Edge
+  padding: $small-spacing;
+  flex-grow: 1;
   overflow: auto;
   @include no-scrollbar;
-  flex-grow: 1;
-  background: #fafafa;
-  padding: $small-spacing;
-  border: 1px solid transparent; // FIX Edge
+  > .explore-showlist__result {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding: $small-spacing;
+  }
 }
 
 .explore-title {
@@ -478,7 +518,6 @@ export default {
 }
 
 .explore-input-container {
-  $loader-width: 3em;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -486,13 +525,7 @@ export default {
     outline: none;
     border: none;
     padding: 3 * $small-spacing 1.4 * $small-spacing;
-    width: calc(100% - #{$loader-width});
-  }
-  > .explore-loader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: $loader-width;
+    width: 100%;
   }
 }
 

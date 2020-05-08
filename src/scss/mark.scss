@@ -54,6 +54,23 @@
     }
   }
 
+  // Staggering animation
+  $max-delay: 10s;
+  $interval: .3s;
+
+  & > * {
+    animation-delay: $max-delay;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    // animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+    
+  @for $i from 1 to 10 {
+    & > *:nth-child(#{$i}) {
+      animation-delay: #{ $interval * $i};
+      // animation-delay: #{$max-delay/2 - $max-delay/(1+$i)};
+    }
+  }
 
 }
 

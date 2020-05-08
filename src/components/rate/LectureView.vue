@@ -1,180 +1,302 @@
 <template>
   <div>
-    <div class="container">
-      <main class="mark">
-        <h3>{{ lecture.name }}</h3>
+    <div class="skeleton-loader-container">
+      <transition name="fade" mode="out-in" @before-enter="scrollToTop">
+        <!-- main's skeleton loader -->
+        <div v-if="loadingLecture" key="1" class="container--skeleton">
+          <main class="mark">
+            <h3 class="skeleton-loader">
+              ac
+            </h3>
+            <div>
+              <div class="skeleton-loader" style="max-width: 40em; margin-bottom: 1em;">
+                wa
+              </div> 
+              <div class="skeleton-loader" style="max-width: 40em; margin-bottom: 1em;">
+                wa
+              </div> 
+              <div class="skeleton-loader" style="max-width: 40em; margin-bottom: 1em;">
+                wa
+              </div> 
+              <div class="skeleton-loader" style="max-width: 35em; margin-bottom: 1em;">
+                wa
+              </div> 
+            </div>
+          </main>
 
-        <div class="rating-bar">
-          <rate-picker :value="Math.round(score)" readonly />
-          <span class="rating-score">{{ score }}</span>
-          <div class="rating-fav">
-            <span class="rating-fav-cnt">{{ favorCount }}</span>
-            <svg-switch v-model="favored" variant="heart" />
-          </div>
+          <nav class="nav-container">
+            <div class="mark nav-container-inner">
+              <h4 class="skeleton-loader">
+                wa
+              </h4>
+              <div>
+                <div class="skeleton-loader" style="max-width: 5em; margin-bottom: 1em;">
+                  wa
+                </div> 
+                <div class="skeleton-loader" style="max-width: 5em; margin-bottom: 1em;">
+                  wa
+                </div> 
+                <div class="skeleton-loader" style="max-width: 5em; margin-bottom: 1em;">
+                  wa
+                </div> 
+              </div>
+            </div>
+          </nav>
         </div>
 
-        <p>本门课程是「{{ lecture.depart }}」的课程，授课老师为「{{ lecture.teacher }}」，学分数为「{{ lecture.credit }}」</p>
-
-        <div class="status-container">
-          <div class="status-item">
-            <div class="status-item__level">
-              {{ difficultyName }}
-            </div>
-            <div class="status-item__title">
-              难易程度
-            </div>
-          </div>
-
-          <div class="status-item">
-            <div class="status-item__level">
-              {{ gradingName }}
-            </div>
-            <div class="status-item__title">
-              给分好坏
-            </div>
-          </div>
-
-          <div class="status-item">
-            <div class="status-item__level">
-              {{ workloadName }}
-            </div>
-            <div class="status-item__title">
-              工作量大小
-            </div>
-          </div>
-        </div>
-
-
-        <h4 class="comment-title">
-          点评<span class="comment-count">{{ rateCount }}</span>
-          <v-btn color="primary" style="margin-left: auto;" @click="routeToRate">
-            撰写点评
-          </v-btn>
-        </h4>
-
-
-        <div
-          v-infinite-scroll="loadNextRateBatch"
-          infinite-scroll-disabled="loadingRates"
-          infinite-scroll-distance="10"
-        >
-          <div
-            v-for="rate in rates"
-            :key="rate.id"
-            class="rate-item"
-          >
-            <div class="rate-title">
-              <div class="rate-title-avatar">
-                <img class="rate-title-avatar__img" :src="rate.avatar">
-              </div>
-              <div class="rate-title-info">
-                <div class="rate-title-info__author">
-                  {{ rate.author }}
-                </div>
-                <div class="rate-title-info__time">
-                  {{ rate.time }}
-                </div>
-              </div>
-              <div class="rate-title-reply">
-                <div v-if="rate.replies" class="rate-title-reply__cnt">
-                  {{ rate.replies.length }}人回复
-                </div>
-                <svg-switch
-                  class="rate-title-reply__icon"
-                  variant="edit" 
-                  :value="rate.openReplies"
-                  @input="handleOpenReplies(rate, $event)"
-                />
+        <!-- main -->
+        <div v-else key="2" class="container">
+          <main id="lecture-main" class="mark">
+            <h3>{{ lecture.name }}</h3>
+            <div class="rating-bar">
+              <rate-picker :value="Math.round(score)" readonly />
+              <span class="rating-score">{{ score }}</span>
+              <div class="rating-fav">
+                <span class="rating-fav-cnt">{{ favorCount }}</span>
+                <svg-switch variant="heart" :value="favored" @input="syncFavor($event)" />
               </div>
             </div>
 
-            <div class="rate-content">
-              <p>{{ rate.content }}</p>
-            </div>
+            <p>
+              本门课程是「{{ lecture.depart }}」的课程，授课老师为「{{ lecture.teacher }}」，学分数为「{{ lecture.credit }}」
+            </p>
 
-            <my-picker
-              v-if="!rate.openReplies"
-              class="rate-action"
-              @activate="postReaction(`rate${rate.id}`, $event)"
-              @deactivate="deleteReaction(`rate${rate.id}`, $event)"
-            />
-
-            <div
-              v-if="rate.openReplies"
-              class="rate-input"
-            >
-              <v-textarea
-                v-model="rate.input"
-                rows="5"
-                class="rate-input__input"
-              />
-              <v-btn color="primary" class="rate-input__btn" @click="postReply(rate.id, rate.input)">
-                发表回复
+            <div class="post-button portrait-only">
+              <v-btn color="primary" @click="routeToRate">
+                撰写点评
               </v-btn>
             </div>
 
-            <div v-if="rate.openReplies && rate.replies" class="rate-reply">
-              <div v-for="reply in rate.replies" :key="reply.id" class="rate-reply__item">
+            <div class="status-container">
+              <div class="status-item">
+                <div class="status-item__level">
+                  {{ difficultyName }}
+                </div>
+                <div class="status-item__title">
+                  难易程度
+                </div>
+              </div>
+
+              <div class="status-item">
+                <div class="status-item__level">
+                  {{ gradingName }}
+                </div>
+                <div class="status-item__title">
+                  给分好坏
+                </div>
+              </div>
+
+              <div class="status-item">
+                <div class="status-item__level">
+                  {{ workloadName }}
+                </div>
+                <div class="status-item__title">
+                  工作量大小
+                </div>
+              </div>
+
+              <div class="landscape-only status-action">
+                <v-btn color="primary" @click="routeToRate">
+                  撰写点评
+                </v-btn>
+              </div>
+            </div>
+
+
+            <h4 class="comment-title">
+              点评<span class="comment-count">{{ rateCount }}</span>
+              <v-select
+                v-model="sort"
+                solo
+                dense
+                style="max-width: 10rem;"
+                class="comment-sort"
+                :items="sortChoices"
+              />
+            </h4>
+
+
+            <div
+              v-infinite-scroll="loadNextRateBatch"
+              infinite-scroll-disabled="loadingRates"
+              infinite-scroll-distance="10"
+              class="rate-list"
+            >
+              <div
+                v-for="rate in rates"
+                :key="rate.id"
+                class="rate-item"
+              >
                 <div class="rate-title">
-                  <div class="rate-title-avatar">
-                    <img class="rate-title-avatar__img" :src="reply.avatar">
+                  <div class="rate-title-span">
+                    <img
+                      class="rate-title-avatar"
+                      :src="rate.avatar"
+                      @click="$router.push('/user')"
+                      @mouseenter="getUserInfo(rate)"
+                    >
+
+                    <div class="rate-title-info">
+                      <div class="rate-title-info__author">
+                        {{ rate.userName }}
+                      </div>
+                      <div class="rate-title-info__time">
+                        {{ rate.time }}
+                      </div>
+                    </div>
+
+                    <div class="landscape-only rate-title-popup">
+                      <template v-if="rate.userInfo.valid">
+                        <p class="rate-title-user-intro">
+                          {{ rate.userInfo.intro }}
+                        </p>
+                        <div class="rate-title-user-info">
+                          <div>点评</div><div>回复</div><div>关注者</div>
+                        </div>
+                        <div class="rate-title-user-info">
+                          <div>{{ rate.userInfo.nrates }}</div>
+                          <div>{{ rate.userInfo.nreplies }}</div>
+                          <div>{{ rate.userInfo.nfollowers }}</div>
+                        </div>
+                        <svg-switch class="rate-title-user-btn" variant="heart" :value="rate.userInfo.followed" @input="toggleFollow(rate, $event)" />
+                      </template>
+
+                      <template v-else>
+                        <div class="rate-title-user-loader skeleton-loader-white" />
+                      </template>
+                    </div>
                   </div>
-                  <div class="rate-title-info">
-                    <div class="rate-title-info__author">
-                      {{ reply.author }}
+
+                  <div class="rate-title-reply">
+                    <div v-if="rate.replyCnt > 0" class="rate-title-reply__cnt">
+                      {{ rate.replyCnt }}人回复
                     </div>
-                    <div class="rate-title-info__time">
-                      {{ reply.time }}
-                    </div>
+                    <svg-switch
+                      class="rate-title-reply__icon"
+                      variant="edit" 
+                      :value="rate.openReplies"
+                      @input="handleOpenReplies(rate, $event)"
+                    />
                   </div>
                 </div>
 
                 <div class="rate-content">
-                  <p>{{ reply.content }}</p>
+                  <p>{{ rate.content }}</p>
                 </div>
 
                 <my-picker
+                  v-if="!rate.openReplies"
                   class="rate-action"
-                  @activate="postReaction(`reply${reply.id}`, $event)"
-                  @deactivate="deleteReaction(`reply${reply.id}`, $event)"
+                  :items="rate.reactions"
+                  @activate="postReact(`rates ${rate.id}`, $event)"
+                  @deactivate="deleteReact(`rates ${rate.id}`, $event)"
                 />
+
+                <div
+                  v-if="rate.openReplies"
+                  class="rate-input"
+                >
+                  <v-textarea
+                    v-model="rate.input"
+                    rows="5"
+                    class="rate-input__input"
+                  />
+                  <v-btn color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
+                    发表回复
+                  </v-btn>
+                </div>
+
+                <div v-if="rate.openReplies && rate.replies" class="rate-reply">
+                  <div v-for="reply in rate.replies" :key="reply.id" class="rate-reply__item">
+                    <div class="rate-title">
+                      <div class="rate-title-span">
+                        <img
+                          class="rate-title-avatar"
+                          :src="reply.avatar"
+                          @click="$router.push('/user')"
+                          @mouseenter="getUserInfo(reply)"
+                        >
+
+                        <div class="rate-title-info">
+                          <div class="rate-title-info__author">
+                            {{ reply.userName }}
+                          </div>
+                          <div class="rate-title-info__time">
+                            {{ reply.time }}
+                          </div>
+                        </div>
+
+                        <div class="landscape-only rate-title-popup">
+                          <template v-if="reply.userInfo.valid">
+                            <p class="rate-title-user-intro">
+                              {{ reply.userInfo.intro }}
+                            </p>
+                            <div class="rate-title-user-info">
+                              <div>点评</div><div>回复</div><div>关注者</div>
+                            </div>
+                            <div class="rate-title-user-info">
+                              <div>{{ reply.userInfo.nrates }}</div>
+                              <div>{{ reply.userInfo.nreplies }}</div>
+                              <div>{{ reply.userInfo.nfollowers }}</div>
+                            </div>
+                            <svg-switch class="rate-title-user-btn" variant="heart" :value="reply.userInfo.followed" @input="toggleFollow(reply, $event)" />
+                          </template>
+
+                          <template v-else>
+                            <div class="rate-title-user-loader skeleton-loader-white" />
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="rate-content">
+                      <p>{{ reply.content }}</p>
+                    </div>
+
+                    <my-picker
+                      class="rate-action"
+                      @activate="postReact(`reply ${reply.id}`, $event)"
+                      @deactivate="deleteReact(`reply ${reply.id}`, $event)"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </main>
+          </main>
 
-      <nav class="nav-container">
-        <div class="mark nav-container-inner">
-          <h4 class="nav-section__title">
-            其他老师
-          </h4>
-          <p class="nav-section__subtitle">
-            其他老师的「{{ lecture.name }}」
-          </p>
-          <div class="list">
-            <div v-for="p in relatedProfessors" :key="p.route">
-              <router-link class="link" :to="p.route">
-                {{ p.teacher }}
-              </router-link>
-            </div>
-          </div>
+          <nav class="nav-container">
+            <div class="mark nav-container-inner">
+              <h4 class="nav-section__title">
+                其他老师
+              </h4>
+              <p class="nav-section__subtitle">
+                其他老师的「{{ lecture.name }}」
+              </p>
+              <div class="list">
+                <div v-for="p in relatedProfessors" :key="p.route">
+                  <router-link class="link" :to="p.route">
+                    {{ p.teacher }}
+                  </router-link>
+                </div>
+              </div>
 
-          <h4 class="nav-section__title">
-            其他课程
-          </h4>
-          <p class="nav-section__subtitle">
-            「{{ lecture.teacher }}」老师的其他课程
-          </p>
-          <div class="list">
-            <div v-for="c in relatedLectures" :key="c.route">
-              <router-link class="link" :to="c.route">
-                {{ c.name }}
-              </router-link>
+              <h4 class="nav-section__title">
+                其他课程
+              </h4>
+              <p class="nav-section__subtitle">
+                「{{ lecture.teacher }}」老师的其他课程
+              </p>
+              <div class="list">
+                <div v-for="c in relatedLectures" :key="c.route">
+                  <router-link class="link" :to="c.route">
+                    {{ c.name }}
+                  </router-link>
+                </div>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
-      </nav>
+      </transition>
     </div>
   </div>
 </template>
@@ -190,10 +312,15 @@ import RatePicker from './RatePicker.vue';
 import {
   getLectureRateInfo,
   getReplies,
+  getRateIds,
   getRateBatch,
-  postReaction,
-  deleteReaction,
+  getUserInfo,
+  postFollow,
+  deleteFollow,
+  postReply,
 } from '../../services/rate';
+import { postReaction, deleteReaction } from '../../services/react';
+
 import { lectures, getLectureByCodeAndIdx } from '../../services/lecture';
 
 export default {
@@ -208,37 +335,49 @@ export default {
   data() {
     return {
       // For UI control
+      loadingLecture: true,
       loadingRates: false,
+      sort: '默认排序',
+      sortChoices: ['默认排序', '按时间排序'],
 
       lecture: {},
 
       favorCount: 3,
-      favored: true,
+      favored: '',
+
+      rateCount: '99+',
+      rateIds: [],
+      rateValidTil: -1,
+      rateBatchSize: 10, // scroll down and load rates in batch
+      rateOrder: 'default', // by time
 
       difficultyName: '噩梦',
       gradingName: '善良',
       workloadName: '巨多',
       score: 3.2,
-      rateCount: '99+',
-      tags: [
-        { name: '五学分' },
-        { name: '简单', color: 'rgba(0, 167, 90, .8)' },
-        { name: '中等工作量', color: 'rgba(0, 0, 0, .6)' },
-      ],
+
       intro:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       relatedProfessors: [{ teacher: 'foo', route: '/lecture/x/1' }],
       relatedLectures: [{ name: 'foo', route: '/lecture/x/2' }],
 
-      rateBatchSize: 10, // scroll down and load rates in batch
-      rateOrder: 'default', // by time
-
       rates: [
         {
           id: 1, // rate id
-          author: '小明',
+          userName: '小明',
+          userId: 1,
           avatar: 'https://img.icons8.com/offices/80/000000/user.png',
           time: '一天前',
+
+          userInfo: {
+            intro:
+              'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+            nrates: 1234,
+            nreplies: 12,
+            nfollowers: 12,
+            followed: false,
+          },
+
           content:
             'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
           replyCnt: 2,
@@ -247,7 +386,8 @@ export default {
           replies: [
             {
               id: 1,
-              author: 'Tom',
+              userId: 1,
+              userName: 'Tom',
               time: '一个月前',
               avatar: 'https://img.icons8.com/offices/80/000000/user.png',
               content:
@@ -255,7 +395,8 @@ export default {
             },
             {
               id: 2,
-              author: 'Tom',
+              userId: 1,
+              userName: 'Tom',
               time: '一个月前',
               avatar: 'https://img.icons8.com/offices/80/000000/user.png',
               content:
@@ -265,7 +406,9 @@ export default {
         },
         {
           id: 2, // rate id
-          author: '小明',
+          userId: 1,
+          userName: '小明',
+          userInfo: false,
           avatar: 'https://img.icons8.com/offices/80/000000/user.png',
           time: '一天前',
           content:
@@ -280,33 +423,37 @@ export default {
     $route() {
       // won't fetch data when routing out of this page
       if (this.$route.params.code !== undefined && !this.$route.path.endsWith('rate')) {
-        this.fetchData();
+        this.refresh();
       }
     },
-    favored(checked) {
-      if (checked) {
-        this.postReaction(`lecture${this.lecture.id}`, 'favor');
-        this.favorCount += 1;
-      } else {
-        this.deleteReaction(`lecture${this.lecture.id}`, 'favor');
-        this.favorCount -= 1;
-      }
+    sort(val) {
+      log.info(val);
     },
   },
+
   created() {
-    this.fetchData();
-    // log.info("created");
+    this.refresh();
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo({ top: 0 });
+    },
     routeToRate() {
       this.$router.push(`${this.$route.path}/rate`);
     },
-    fetchData() {
-      // log.info(this.$route.params.code, this.$route.params.idx);
-      log.info('fetchData');
+    requireLogin() {
+      this.$toast.warn('请您先登录');
+      this.$router.push(`/login?redirect=${this.$route.path}`);
+    },
+    requireNetwork() {
+      this.$toast.error('无法连接网络');
+    },
+
+    refresh() {
+      log.info('refresh');
+      this.loadingLecture = true;
 
       this.lecture = getLectureByCodeAndIdx(this.$route.params.code, this.$route.params.idx);
-      // log.info(this.lecture);
 
       this.relatedProfessors = lectures
         .filter((data) => {
@@ -315,68 +462,105 @@ export default {
         .map((data) => {
           return { teacher: data.teacher, route: `/lecture/${data.code}/${data.idx}` };
         });
+
       this.relatedLectures = lectures
         .filter((data) => {
-          return data.teacher.includes(this.lecture.teacher) && data.id !== this.lecture.id;
+          return (
+            data.teacher.split(', ').includes(this.lecture.teacher) && data.id !== this.lecture.id
+          );
         })
         .map((data) => {
           return { name: data.name, route: `/lecture/${data.code}/${data.idx}` };
         });
 
-      log.info(this.lecture);
-      getLectureRateInfo(this.lecture.id).then((resp) => {
-        log.info(resp);
-      });
+      getLectureRateInfo(this.lecture.id)
+        .then((resp) => {
+          this.favorCount = resp.favorCount;
+          this.favored = resp.favored;
+          this.rateCount = resp.rateCount;
+          this.difficultyName = resp.difficultyName;
+          this.gradingName = resp.gradingName;
+          this.workloadName = resp.workloadName;
+          this.score = resp.score;
 
-      // this.switchRateOrder();
+          this.loadingLecture = false;
+        })
+        .catch((e) => {
+          log.info(e);
+
+          // setTimeout(() => {
+          this.loadingLecture = false;
+          // }, 1000);
+        });
+
+      this.switchRateOrder();
     },
 
     // Rates
+    // FIXME: support order
     switchRateOrder() {
+      log.info('switch rate order');
       this.rates = [];
-      this.loadNextRateBatch();
+      getRateIds(this.lecture.id)
+        .then((resp) => {
+          this.rateIds = resp.rateIds;
+          this.rateValidTil = 0;
+          this.loadNextRateBatch();
+        })
+        .catch((e) => log.info(e));
+
+      // this.loadAllRates();
     },
     loadNextRateBatch() {
       // load rates in batch when scroll down
       this.loadingRates = true;
+      const nextIds = this.rateIds.slice(this.rateValidTil, this.rateValidTil + this.rateBatchSize);
+      if (nextIds.length === 0) return;
 
-      getRateBatch(this.lecture.id, this.rates.length, this.rateBatchSize, this.rateOrder)
+      getRateBatch(nextIds)
         .then((resp) => {
-          resp.forEach((data) => {
-            this.rate.push({
-              id: data.id,
-              author: data.author,
-              avatar: data.avatar,
-              time: data.time,
-              content: data.content,
-              replyCnt: data.reply_cnt,
-              input: '',
-              openReplies: false,
+          const getIds = resp.map((data) => data.id);
+
+          if (getIds.sort().join(',') === nextIds.sort().join(',')) {
+            const id2rate = new Map();
+            resp.forEach((data) => {
+              id2rate.set(data.id, data);
             });
-          });
+            nextIds.forEach((i) => {
+              const data = id2rate.get(i);
+              this.rates.push({
+                id: data.id,
+                userName: data.userName,
+                userId: data.userId,
+                avatar: data.avatar,
+                time: data.time,
+                content: data.content,
+                replyCnt: data.replyCnt,
+                replyIds: data.replyIds,
+                reactions: data.reactions,
+                input: '',
+                openReplies: false,
+                replies: [],
+                userInfo: { valid: false },
+              });
+            });
+          }
           if (resp.length < this.rateBatchSize) this.loadingRates = false;
         })
-        .catch((e) => {
-          log.info(e.name, e.message);
-        });
+        .catch((e) => log.info(e));
     },
 
-    // Reply
-    postReply(id, content) {
-      if (this.$store.state.user.jwt_token === '') {
-        this.$router.push('/login?go=-1');
-        this.$toast.warn('请您先登录');
-      }
-      log.info(id, content);
-    },
-    handleOpenReplies(rrate, open) {
-      const rate = rrate;
-      rate.openReplies = open;
-      if (open && rate.replies === undefined) {
-        log.info('open');
-        getReplies(rate.id)
+    getUserInfo(thread) {
+      const u = thread.userInfo;
+      if (!u.valid) {
+        getUserInfo(thread.userId)
           .then((resp) => {
-            rate.replies = resp;
+            log.info(resp);
+            u.valid = true;
+            u.intro = resp.intro;
+            u.nrates = resp.nrates;
+            u.nfollowers = resp.nfollowers;
+            u.nreplies = resp.nreplies;
           })
           .catch((e) => {
             log.info(e);
@@ -384,24 +568,125 @@ export default {
       }
     },
 
-    // Reaction and Favor
-    postReaction(target, reaction) {
-      postReaction(target, reaction)
+    // Follow
+    toggleFollow(rthread, follow) {
+      if (this.$store.state.user.jwt_token === '') {
+        this.requireLogin();
+        return;
+      }
+
+      const thread = rthread;
+      thread.userInfo.followed = follow;
+      if (follow) {
+        postFollow(thread.userId)
+          .then((resp) => log.info(resp))
+          .catch((e) => log.info(e));
+      } else {
+        deleteFollow(thread.userId)
+          .then((resp) => log.info(resp))
+          .catch((e) => log.info(e));
+      }
+    },
+
+    // Reply
+    postReply(type, ritem) {
+      const item = ritem;
+      const { id } = item;
+      const content = item.input;
+      if (this.$store.state.user.jwt_token === '') {
+        this.requireLogin();
+      } else if (content === '') {
+        this.$toast.warn('请您输入非空白字符哦');
+      } else {
+        item.input = '';
+        postReply(type, id, content)
+          .then((data) => {
+            log.info(data);
+            item.replies.push({
+              id: data.id,
+              userName: data.userName, // by jwt
+              userId: data.userId,
+              content: data.content,
+              time: data.time,
+              avatar: data.avatar,
+              reactions: [],
+              userInfo: { valid: false },
+            });
+          })
+          .catch((e) => {
+            log.info(e);
+            // this.requireNetwork();
+          });
+      }
+    },
+    handleOpenReplies(rrate, open) {
+      const rate = rrate;
+      rate.openReplies = open;
+      if (open && rate.replies.length === 0) {
+        log.info('open');
+        if (rate.replyCnt > 0) {
+          getReplies(rate.replyIds)
+            .then((d) => {
+              d.forEach((data) => {
+                rate.replies.push({
+                  id: data.id,
+                  userName: data.userName,
+                  userId: data.userId,
+                  avatar: data.avatar,
+                  time: data.time,
+                  content: data.content,
+                  reactions: data.reactions,
+                  userInfo: { valid: false },
+                  // replyCnt: data.replyCnt,
+                  // replyIds: data.replyIds,
+                  // input: "",
+                  // openReplies: false,
+                });
+              });
+            })
+            .catch((e) => log.info(e));
+        }
+      }
+    },
+
+    // Reaction
+    postReact(target, ritem) {
+      const item = ritem;
+      const { cnt } = item;
+      postReaction(target, item.id) // item.id is an emoji string
         .then((resp) => {
-          log.info(resp);
+          if (item.cnt !== cnt) deleteReaction(target, item.reactId);
+          // Roll back
+          else item.reactId = resp.id;
         })
         .catch((e) => {
           log.info(e);
         });
     },
-    deleteReaction(target, reaction) {
-      deleteReaction(target, reaction)
-        .then((resp) => {
-          log.info(resp);
-        })
-        .catch((e) => {
-          log.info(e);
+    deleteReact(target, item) {
+      if (item.reactId) {
+        deleteReaction(target, item.reactId);
+      }
+    },
+
+    // Favor
+    syncFavor(checked) {
+      this.favored = checked;
+      if (checked) {
+        this.favorCount += 1;
+        postReaction(`lecture ${this.lecture.id}`, 'favor').catch((e) => {
+          if (e.response.status === 401) this.requireLogin();
+          // this.favorCount -= 1;
+          // this.favored = false;
         });
+      } else {
+        this.favorCount -= 1;
+        deleteReaction(`lecture ${this.lecture.id}`, 'favor').catch((e) => {
+          if (e.response.status === 401) this.requireLogin();
+          // this.favorCount += 1;
+          // this.favored = true;
+        });
+      }
     },
   },
 };
@@ -420,7 +705,51 @@ export default {
   }
 }
 
-.container {
+.portrait-only {
+  @include landscape {
+    display: none !important;
+  }
+}
+.landscape-only {
+  @include portrait {
+    display: none !important;
+  }
+}
+
+// Animation
+.fade-leave-active {
+  transition: opacity 0.2s 0.2s;
+}
+.fade-enter-active {
+  transition: opacity 0.2s 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+@keyframes loader {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+.skeleton-loader {
+  @include skeleton-loader(loader);
+  @include no-select;
+  color: rgba(0, 0, 0, 0) !important;
+}
+.skeleton-loader-white {
+  @include skeleton-loader(loader, true);
+  @include no-select;
+}
+h3.skeleton-loader,
+h4.skeleton-loader {
+  max-width: 5em;
+}
+
+.container,
+.container--skeleton {
   display: flex;
   flex-direction: row;
   padding: 3rem 2rem;
@@ -441,33 +770,26 @@ export default {
     }
   }
 }
+.container--skeleton {
+  min-height: calc(100vh - 3rem);
+  @include portrait {
+    min-height: auto;
+  }
+}
 
 .nav-container {
+  flex-grow: 1;
   padding-left: 0 !important;
   padding-right: 0 !important;
   @include portrait {
     padding: 1rem;
   }
 }
-.nav-container__inner {
-  --padding--landscape: 0 3rem 0 0;
-}
 .nav-section__title {
   margin-bottom: 0.13em !important;
 }
 .nav-section__subtitle {
   opacity: 0.6;
-}
-
-.tag-container {
-  display: flex;
-  font-size: 0.8em;
-  > button {
-    margin-right: 1em;
-  }
-}
-.intro-paragraph {
-  margin-bottom: 0;
 }
 
 .rating-bar {
@@ -487,6 +809,13 @@ export default {
   }
 }
 
+.post-button {
+  display: flex;
+  > * {
+    margin-left: auto;
+  }
+}
+
 .comment-title {
   display: flex;
   > button {
@@ -497,8 +826,40 @@ export default {
   font-size: 0.6em;
   margin-left: 1rem;
 }
+.comment-sort {
+  margin-left: auto;
+  font-size: 0.9rem !important;
+  align-self: center;
+}
 
 // Rate List
+.rate-list {
+  > .rate-item > .rate-reply > .rate-reply__item {
+    margin-top: 2rem;
+  }
+
+  @include portrait {
+    margin: 0 0 2rem 0 !important;
+    > .rate-item {
+      > .rate-title,
+      > .rate-content,
+      > .rate-action,
+      > .rate-input {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+      > .rate-action {
+        width: auto;
+      }
+      > .rate-reply {
+        $shift: -1.3em;
+        margin-top: $shift;
+        background: rgba(0, 0, 0, 0.03);
+        padding: 0 1rem 2rem 1rem;
+      }
+    }
+  }
+}
 .rate-item {
   margin-bottom: 2rem;
 }
@@ -507,27 +868,97 @@ export default {
   $img-size: 3rem;
 
   display: flex;
-  > .rate-title-avatar {
+  > .rate-title-span {
     height: $img-size;
-    > .rate-title-avatar__img {
+    display: flex;
+    position: relative;
+
+    z-index: 0;
+    transition: z-index 0s 0.7s;
+
+    &:hover {
+      z-index: 1;
+      transition: z-index 0s 0.3s;
+    }
+
+    & > .rate-title-avatar:hover ~ .rate-title-popup,
+    & > .rate-title-popup:hover {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.5s,
+        transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s, visibility 0s 0s;
+    }
+
+    & > .rate-title-popup {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateX(1em);
+      transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.5s,
+        transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s, visibility 0s 1.3s;
+    }
+
+    > .rate-title-avatar {
+      cursor: pointer;
       width: $img-size;
       height: $img-size;
       border-radius: 50%;
       background: rgba(0, 0, 0, 0.08);
+      margin-right: $spacing;
     }
-    margin-right: $spacing;
+
+    > .rate-title-info {
+      > .rate-title-info__author,
+      > .rate-title-info__time {
+        height: $img-size/2;
+        display: flex;
+        align-items: flex-end;
+        opacity: $active-opacity;
+        font-size: 0.9em;
+      }
+    }
+
+    > .rate-title-popup {
+      position: absolute;
+      left: $img-size + $spacing;
+      width: 17em;
+      top: 0;
+      border: 1px solid rgba(0, 0, 0, $divider-opacity);
+      border-radius: 0 1em 1em 1em;
+      background: white;
+      display: flex;
+      flex-direction: column;
+
+      > .rate-title-user-loader {
+        height: 3em;
+        border-radius: inherit;
+      }
+
+      > .rate-title-user-intro {
+        opacity: $active-opacity;
+        margin: 0 0 $spacing 0;
+        padding: $spacing;
+        border-bottom: 1px solid rgba(0, 0, 0, $divider-opacity);
+      }
+      > .rate-title-user-info {
+        display: flex;
+        width: 100%;
+        opacity: $active-opacity;
+        > div {
+          flex-grow: 1;
+          flex-basis: 0;
+          flex-shrink: 0;
+          text-align: center;
+          padding: $spacing/4 0;
+        }
+      }
+      > .rate-title-user-btn {
+        margin: $spacing;
+        align-self: flex-end;
+      }
+    }
   }
 
-  > .rate-title-info {
-    > .rate-title-info__author,
-    > .rate-title-info__time {
-      height: $img-size/2;
-      display: flex;
-      align-items: flex-end;
-      opacity: $active-opacity;
-      font-size: 0.9em;
-    }
-  }
   > .rate-title-reply {
     margin-left: auto;
     display: flex;
@@ -567,10 +998,6 @@ export default {
   padding-left: 2rem;
   display: flex;
   flex-direction: column;
-
-  > .rate-reply__item {
-    margin-top: 2rem;
-  }
 }
 
 // input for reply dialog
@@ -583,6 +1010,7 @@ export default {
 .status-container {
   position: relative;
   display: flex;
+  align-items: center;
 
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -592,8 +1020,10 @@ export default {
 
   > .status-item {
     @include portrait {
-      flex-basis: 1;
+      flex-basis: 0;
       flex-grow: 1;
+      flex-shrink: 0;
+      padding: 1.4em 0;
     }
     display: flex;
     flex-direction: column;
@@ -609,6 +1039,10 @@ export default {
       font-size: 0.8em;
       margin-top: 1.4em;
     }
+  }
+  > .status-action {
+    margin-left: auto;
+    padding: 1rem;
   }
 }
 

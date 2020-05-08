@@ -1,5 +1,7 @@
 import rawLectures from '../assets/lectures.json';
 
+// const rawLectures = () => import("../assets/lectures.json");
+
 // Preprocess raw data exported from backend
 const lectures = rawLectures
   .map((d) => {

@@ -65,11 +65,12 @@ import marked from 'marked';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
 
 import log from '../../utils/log';
 import Editor from './Editor.vue';
 import { starSecretPost } from '../../services/post.service';
+
+dayjs.extend(relativeTime);
 
 export default {
   components: {

@@ -12,9 +12,8 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="headline mb-1">
-                用户资料
+                {{ user }}
               </v-list-item-title>
-              <v-list-item-subtitle>欢迎 {{ user }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
@@ -89,9 +88,9 @@ export default {
           to: { name: 'StarCourse' },
         },
         {
-          name: '评论课程',
+          name: '我的评论',
           count: 0,
-          to: { name: 'StarCourse' },
+          to: { name: 'UserRates' },
         },
         {
           name: '粉丝',

@@ -28,6 +28,17 @@ const store = new Vuex.Store({
     },
     isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
+
+    isGlobalMessageVisible: false,
+    globalMessageColor: 'info',
+    globalMessageTimeout: 2500,
+    globalMessageText: '',
+    globalMessageTimer: -1,
+    // globalMessageIcon: '',
+
+    selectedCoursesIds: {},
+    // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
+    selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -68,6 +79,26 @@ const store = new Vuex.Store({
     onRestoreDetailPageCourse(state) {
       state.isDetailPageCourseDeleted = false;
     },
+
+    sendGlobalMessage(state, action) {
+      state.globalMessageText = action.text || '';
+      state.globalMessageColor = action.color || 'info';
+      // 0 表示不自动关闭
+      state.globalMessageTimeout = action.timeout || 2500;
+      state.isGlobalMessageVisible = true;
+      state.globalMessageTimer += 1;
+    },
+    hideGlobalMessage(state) {
+      state.isGlobalMessageVisible = false;
+    },
+    clearGlobalMessageTimer(state) {
+      state.globalMessageTimer = -1;
+    },
+
+    setSelectedCourses(state, payload) {
+      state.selectedCoursesByDay = payload.selectedCoursesByDay;
+      state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
+    },
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
@@ -79,6 +110,8 @@ const store = new Vuex.Store({
           user: state.user,
           editor: state.editor,
           secret: state.secret,
+          selectedCoursesIds: state.selectedCoursesIds,
+          selectedCoursesByDay: state.selectedCoursesByDay,
         };
       },
     }),

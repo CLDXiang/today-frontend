@@ -9,17 +9,20 @@
       <router-view />
     </v-content>
     <BottomNav />
+    <Message />
   </v-app>
 </template>
 
 <script>
 import TopToolbar from './components/common/TopToolbar.vue';
 import BottomNav from './components/common/BottomNav.vue';
+import Message from './components/common/Message.vue';
 
 export default {
   components: {
     TopToolbar,
     BottomNav,
+    Message,
   },
   computed: {
     loggedIn() {

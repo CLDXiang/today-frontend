@@ -122,7 +122,6 @@ export default {
       const formatted = dayjs(time)
         .locale('zh-cn')
         .fromNow();
-      console.log("laksjdf", formatted);
       return formatted;
     },
     doneReEditing() {

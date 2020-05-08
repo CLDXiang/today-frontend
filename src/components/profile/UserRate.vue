@@ -45,7 +45,7 @@ export default {
   methods: {
     fetchData() {
       this.$store.state.profile.userRate.forEach((element) => {
-        this.userRate.push(Object.assign(getLectureById(element.lecture_id), element));
+        this.userRate.push(Object.assign(getLectureById(element.lectureId), element));
       });
     },
   },

@@ -53,7 +53,7 @@ import {
   getFollowing,
   getFollower,
   getHistory,
-} from '../../services/post.service';
+} from '../../services/profile.service';
 
 export default {
   data: () => ({
@@ -113,8 +113,9 @@ export default {
           log.info(err);
         });
       getHistory()
-        .then((follower) => {
-          log.info(follower);
+        .then((history) => {
+          console.log(history);
+          log.info(history);
         })
         .catch((err) => {
           log.info(err);
@@ -128,7 +129,7 @@ export default {
           this.showAlert('success', '登录成功');
           const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);
-          this.$options.methods.getProfile();
+          this.$options.methods.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
           if (redirect) {
             log.info('redirected!');
             this.$router.push(redirect);

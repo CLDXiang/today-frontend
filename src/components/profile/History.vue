@@ -13,11 +13,10 @@
             </v-subheader>
             <div v-for="item in history" :key="item.history_about_id">
               <v-divider />
-              <!-- TODO 暂时路由到这个界面 -->
-              <v-list-item :to="'/rate/ENGL110069/03#discuss'">
+              <v-list-item :to="`/rate/${item.code}/${item.idx}`">
                 <v-list-item-content>
-                  <v-list-item-title v-text="'啊布吉标题'" />
-                  <v-list-item-subtitle v-text="'内容'" />
+                  <v-list-item-title v-text="item.name" />
+                  <v-list-item-subtitle v-text="item.teacher" />
                   <v-list-item-subtitle v-text="item.created_at" />
                 </v-list-item-content>
               </v-list-item>
@@ -30,11 +29,23 @@
 </template>
 
 <script>
+import { getLectureById } from '../../services/profile.service';
+
 export default {
   data() {
     return {
-      history: this.$store.state.profile.history,
+      history: [],
     };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      this.$store.state.profile.history.forEach((element) => {
+        this.history.push(Object.assign(getLectureById(element.history_about_id), element));
+      });
+    },
   },
 };
 </script>

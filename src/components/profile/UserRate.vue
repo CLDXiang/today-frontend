@@ -11,12 +11,12 @@
                 </font>
               </strong>
             </v-subheader>
-            <div v-for="item in userRate" :key="item.rateId">
+            <div v-for="item in userRate" :key="item.id">
               <v-divider />
-              <!-- TODO 暂时路由到这个界面 -->
-              <v-list-item :to="'/rate/ENGL110069/03#discuss'">
+              <!-- TODO: 路由的目标不对 -->
+              <v-list-item :to="`/rate/${item.code}/${item.idx}`">
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.className + ' · ' + item.instructorName" />
+                  <v-list-item-title v-text="item.name + ' · ' + item.teacher" />
                   <v-list-item-subtitle v-text="'难度 ' + item.difficulty + ' · 工作量 ' + item.workload + ' · 给分 ' + item.grading" />
                   <v-list-item-subtitle v-text="item.content" />
                   <v-list-item-subtitle v-text="item.upmote + '赞同 · ' + item.reply + '评论 · ' + item.createdAt" />
@@ -31,11 +31,23 @@
 </template>
 
 <script>
+import { getLectureById } from '../../services/profile.service';
+
 export default {
   data() {
     return {
-      userRate: this.$store.state.profile.userRate,
+      userRate: [],
     };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      this.$store.state.profile.userRate.forEach((element) => {
+        this.userRate.push(Object.assign(getLectureById(element.lecture_id), element));
+      });
+    },
   },
 };
 </script>

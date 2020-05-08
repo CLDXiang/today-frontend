@@ -138,6 +138,7 @@ const store = new Vuex.Store({
       reducer(state) {
         return {
           user: state.user,
+          profile: state.profile,
           editor: state.editor,
           secret: state.secret,
           selectedCoursesIds: state.selectedCoursesIds,

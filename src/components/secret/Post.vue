@@ -61,10 +61,16 @@
 
 <script>
 import marked from 'marked';
-import moment from 'moment';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
 import log from '../../utils/log';
 import Editor from './Editor.vue';
 import { starSecretPost } from '../../services/post.service';
+
+dayjs.extend(relativeTime);
 
 export default {
   components: {
@@ -114,8 +120,8 @@ export default {
       return marked(content);
     },
     renderTime(time) {
-      const formatted = moment(time)
-        .locale('zh-CN')
+      const formatted = dayjs(time)
+        .locale('zh-cn')
         .fromNow();
       return formatted;
     },

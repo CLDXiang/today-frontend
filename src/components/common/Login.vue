@@ -114,7 +114,6 @@ export default {
         });
       getHistory()
         .then((history) => {
-          console.log(history);
           log.info(history);
         })
         .catch((err) => {

@@ -19,7 +19,7 @@
                   <v-list-item-title v-text="item.name + ' · ' + item.teacher" />
                   <v-list-item-subtitle v-text="'难度 ' + item.difficulty + ' · 工作量 ' + item.workload + ' · 给分 ' + item.grading" />
                   <v-list-item-subtitle v-text="item.content" />
-                  <v-list-item-subtitle v-text="item.upmote + '赞同 · ' + item.reply + '评论 · ' + item.createdAt" />
+                  <v-list-item-subtitle v-text="item.upmote + '赞同 · ' + item.reply + '评论 · ' + item.time" />
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { getLectureById } from '../../services/profile.service';
+import { getLectureById, renderTime } from '../../services/profile.service';
 
 export default {
   data() {
@@ -45,7 +45,8 @@ export default {
   methods: {
     fetchData() {
       this.$store.state.profile.userRate.forEach((element) => {
-        this.userRate.push(Object.assign(getLectureById(element.lectureId), element));
+        const time = { time: renderTime(element.createdAt) };
+        this.userRate.push(Object.assign(getLectureById(element.lectureId), element, time));
       });
     },
   },

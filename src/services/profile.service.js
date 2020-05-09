@@ -1,8 +1,20 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import store from '../store';
 import { API_URL } from '../utils/config';
 import log from '../utils/log';
 import rawLectures from '../assets/lectures.json';
+
+dayjs.extend(relativeTime);
+
+export function renderTime(time) {
+  const formatted = dayjs(time)
+    .locale('zh-cn')
+    .fromNow();
+  return formatted;
+}
 
 // Preprocess raw data exported from backend
 const lectures = rawLectures

@@ -17,7 +17,7 @@
                 <v-list-item-content>
                   <v-list-item-title v-text="item.name" />
                   <v-list-item-subtitle v-text="item.teacher" />
-                  <v-list-item-subtitle v-text="item.created_at" />
+                  <v-list-item-subtitle v-text="item.time" />
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getLectureById } from '../../services/profile.service';
+import { getLectureById, renderTime } from '../../services/profile.service';
 
 export default {
   data() {
@@ -43,7 +43,8 @@ export default {
   methods: {
     fetchData() {
       this.$store.state.profile.history.forEach((element) => {
-        this.history.push(Object.assign(getLectureById(element.history_about_id), element));
+        const time = { time: renderTime(element.created_at) };
+        this.history.push(Object.assign(getLectureById(element.history_about_id), time));
       });
     },
   },

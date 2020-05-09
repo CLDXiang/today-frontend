@@ -73,6 +73,9 @@ const store = new Vuex.Store({
       state.secret.posts = posts;
       state.secret.postsMapping = postsMapping;
     },
+    SET_BAR_TITLE(state, barTitle) {
+      state.app.barTitle = barTitle;
+    },
     SET_USER_STAR(state, userStar) {
       state.profile.userStar = userStar;
     },

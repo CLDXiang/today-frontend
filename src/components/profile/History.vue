@@ -1,35 +1,25 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col md="10" lg="8">
-        <v-card class="mx-auto" outlined>
-          <v-list>
-            <v-subheader>
-              <strong>
-                <font size="3">
-                  最近浏览
-                </font>
-              </strong>
-            </v-subheader>
-            <div v-for="item in history" :key="item.history_about_id">
-              <v-divider />
-              <v-list-item :to="`/rate/${item.code}/${item.idx}`">
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.name" />
-                  <v-list-item-subtitle v-text="item.teacher" />
-                  <v-list-item-subtitle v-text="item.time" />
-                </v-list-item-content>
-              </v-list-item>
-            </div>
-          </v-list>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-list two-line>
+    <template v-for="(item, index) in history">
+      <v-list-item :key="item.lectureId" :to="`/rate/${item.code}/${item.idx}`">
+        <v-list-item-content>
+          <v-list-item-title v-text="item.name" />
+          <v-list-item-subtitle v-text="item.teacher" />
+        </v-list-item-content>
+
+        <v-list-item-action>
+          <v-list-item-action-text v-text="item.time" />
+        </v-list-item-action>
+      </v-list-item>
+
+      <v-divider v-if="index + 1 < history.length" :key="index" />
+    </template>
+  </v-list>
 </template>
 
 <script>
 import { getLectureById, renderTime } from '../../services/profile.service';
+import store from '../../store';
 
 export default {
   data() {
@@ -38,6 +28,7 @@ export default {
     };
   },
   created() {
+    store.commit('SET_BAR_TITLE', '最近浏览');
     this.fetchData();
   },
   methods: {
@@ -50,5 +41,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

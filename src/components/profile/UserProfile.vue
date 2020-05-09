@@ -1,14 +1,8 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col
-        md="10"
-        lg="8"
-      >
-        <v-card
-          class="mx-auto"
-          outlined
-        >
+      <v-col md="10" lg="8">
+        <v-card class="mx-auto" outlined>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="headline mb-1">
@@ -17,25 +11,12 @@
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
-            <v-row
-              dense
-            >
-              <template
-                v-for="(item, index) in cols"
-              >
-                <v-col
-                  :key="'col-' + index"
-                >
-                  <v-list-item
-                    two-line
-                    :to="item.to"
-                    class="px-1"
-                  >
+            <v-row dense>
+              <template v-for="(item, index) in cols">
+                <v-col :key="'col-' + index">
+                  <v-list-item two-line :to="item.to" class="px-1">
                     <v-list-item-content>
-                      <v-list-item-title
-                        align="center"
-                        v-text="item.name"
-                      />
+                      <v-list-item-title align="center" v-text="item.name" />
                       <v-list-item-subtitle
                         align="center"
                         class="mt-2"
@@ -53,19 +34,9 @@
             </v-row>
           </v-list-item>
           <v-card-actions>
-            <v-row
-              justify="center"
-            >
-              <v-col
-                md="4"
-                lg="5"
-              >
-                <v-btn
-                  color="primary"
-                  large
-                  block
-                  @click="logout"
-                >
+            <v-row justify="center">
+              <v-col md="4" lg="5">
+                <v-btn color="primary" large block @click="logout">
                   退出登录
                 </v-btn>
               </v-col>
@@ -78,6 +49,8 @@
 </template>
 
 <script>
+import store from '../../store';
+
 export default {
   data() {
     return {
@@ -109,6 +82,9 @@ export default {
     user() {
       return this.$store.state.user.name;
     },
+  },
+  created() {
+    store.commit('SET_BAR_TITLE', '个人中心');
   },
   methods: {
     logout() {

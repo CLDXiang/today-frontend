@@ -1,34 +1,20 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col md="10" lg="8">
-        <v-card class="mx-auto" outlined>
-          <v-list>
-            <v-subheader>
-              <strong>
-                <font size="3">
-                  关注课程
-                </font>
-              </strong>
-            </v-subheader>
-            <div v-for="item in starLectures" :key="item.id">
-              <v-divider />
-              <v-list-item :to="`/rate/${item.code}/${item.idx}`">
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.name" />
-                  <v-list-item-subtitle v-text="item.teacher" />
-                </v-list-item-content>
-              </v-list-item>
-            </div>
-          </v-list>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-list>
+    <div v-for="(item, index) in starLectures" :key="item.id">
+      <v-list-item :to="`/rate/${item.code}/${item.idx}`">
+        <v-list-item-content>
+          <v-list-item-title v-text="item.name" />
+          <v-list-item-subtitle v-text="item.teacher" />
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider v-if="index + 1 < starLectures.length" :key="index" />
+    </div>
+  </v-list>
 </template>
 
 <script>
 import { getLectureById } from '../../services/profile.service';
+import store from '../../store';
 
 export default {
   data() {
@@ -37,6 +23,7 @@ export default {
     };
   },
   created() {
+    store.commit('SET_BAR_TITLE', '关注课程');
     this.fetchData();
   },
   methods: {

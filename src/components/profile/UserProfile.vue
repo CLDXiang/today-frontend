@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -82,6 +84,13 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'countUserRate',
+      'countUserStar',
+      'countFollower',
+      'countFollowing',
+      'countHistory',
+    ]),
     user() {
       return this.$store.state.user.name;
     },
@@ -92,11 +101,11 @@ export default {
   },
   methods: {
     fetchData() {
-      this.cols[0].count = this.$store.getters.countUserRate;
-      this.cols[1].count = this.$store.getters.countUserStar;
-      this.cols[2].count = this.$store.getters.countFollower;
-      this.cols[3].count = this.$store.getters.countFollowing;
-      this.cols[4].count = this.$store.getters.countHistory;
+      this.cols[0].count = this.countUserRate;
+      this.cols[1].count = this.countUserStar;
+      this.cols[2].count = this.countFollower;
+      this.cols[3].count = this.countFollowing;
+      this.cols[4].count = this.countHistory;
     },
     logout() {
       this.$store.commit('LOGOUT');

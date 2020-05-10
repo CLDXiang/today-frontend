@@ -5,7 +5,7 @@
         <v-list-item>
           <v-list-item-content>{{ user }}</v-list-item-content>
         </v-list-item>
-        <div v-show="this.$store.getters.userLoggedIn">
+        <div v-show="userLoggedIn">
           <v-list-item @click="toStar">
             <v-list-item-action>
               <v-icon>mdi-book</v-icon>
@@ -15,7 +15,7 @@
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
-                {{ $store.getters.countUserStar }}
+                {{ countUserStar }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -28,7 +28,7 @@
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
-                {{ this.$store.getters.countUserRate }}
+                {{ countUserRate }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -41,7 +41,7 @@
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
-                {{ this.$store.getters.countFollowing }}
+                {{ countFollowing }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -54,7 +54,7 @@
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
-                {{ this.$store.getters.countFollower }}
+                {{ countFollower }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -67,7 +67,7 @@
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
-                {{ this.$store.getters.countHistory }}
+                {{ countHistory }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -113,6 +113,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import log from '../../utils/log';
 
 export default {
@@ -121,6 +122,14 @@ export default {
     showMenu: false,
   }),
   computed: {
+    ...mapGetters([
+      'userLoggedIn',
+      'countUserRate',
+      'countUserStar',
+      'countFollower',
+      'countFollowing',
+      'countHistory',
+    ]),
     user() {
       return this.$store.state.user.name;
     },
@@ -128,7 +137,7 @@ export default {
       return this.$store.state.app.barTitle;
     },
     status() {
-      return this.$store.getters.userLoggedIn ? '登出' : '登录';
+      return this.userLoggedIn ? '登出' : '登录';
     },
   },
   methods: {
@@ -141,7 +150,7 @@ export default {
       this.$router.back();
     },
     logout() {
-      if (this.$store.getters.userLoggedIn) {
+      if (this.userLoggedIn) {
         log.info('logout');
         this.$store.commit('LOGOUT');
         this.$router.replace({ name: 'Timetable' });

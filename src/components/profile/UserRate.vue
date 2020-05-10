@@ -23,22 +23,22 @@
 </template>
 
 <script>
-import { getLectureById, renderTime } from '../../services/profile.service';
-import store from '../../store';
+import getLectureById from '../../utils/lecture';
+import renderTime from '../../utils/time';
 
 export default {
   data: () => ({
     items: [],
   }),
   created() {
-    store.commit('SET_BAR_TITLE', '历史评论');
+    this.$store.commit('SET_BAR_TITLE', '历史评论');
     this.fetchData();
   },
   methods: {
     fetchData() {
       this.$store.state.profile.userRate.forEach((element) => {
         const time = { time: renderTime(element.createdAt) };
-        this.items.push(Object.assign(getLectureById(element.lectureId), element, time));
+        this.items.push({ ...getLectureById(element.lectureId), ...element, ...time });
       });
     },
   },

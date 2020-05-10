@@ -86,6 +86,7 @@ export default {
     getProfile() {
       getUserStar()
         .then((userStar) => {
+          this.$store.commit('SET_USER_STAR', userStar);
           log.info(userStar);
         })
         .catch((err) => {
@@ -93,6 +94,7 @@ export default {
         });
       getUserRate()
         .then((userRate) => {
+          this.$store.commit('SET_USER_RATE', userRate);
           log.info(userRate);
         })
         .catch((err) => {
@@ -100,6 +102,7 @@ export default {
         });
       getFollowing()
         .then((following) => {
+          this.$store.commit('SET_FOLLOWING', following);
           log.info(following);
         })
         .catch((err) => {
@@ -107,6 +110,7 @@ export default {
         });
       getFollower()
         .then((follower) => {
+          this.$store.commit('SET_FOLLOWER', follower);
           log.info(follower);
         })
         .catch((err) => {
@@ -114,6 +118,7 @@ export default {
         });
       getHistory()
         .then((history) => {
+          this.$store.commit('SET_HISTORY', history);
           log.info(history);
         })
         .catch((err) => {
@@ -128,7 +133,7 @@ export default {
           this.showAlert('success', '登录成功');
           const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);
-          this.$options.methods.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
+          this.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
           if (redirect) {
             log.info('redirected!');
             this.$router.push(redirect);

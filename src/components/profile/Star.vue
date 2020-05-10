@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import { getLectureById } from '../../services/profile.service';
-import store from '../../store';
+import getLectureById from '../../utils/lecture';
 
 export default {
   data() {
@@ -23,7 +22,7 @@ export default {
     };
   },
   created() {
-    store.commit('SET_BAR_TITLE', '关注课程');
+    this.$store.commit('SET_BAR_TITLE', '关注课程');
     this.fetchData();
   },
   methods: {

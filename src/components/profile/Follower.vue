@@ -18,14 +18,12 @@
 </template>
 
 <script>
-import store from '../../store';
-
 export default {
   data: () => ({
     items: [],
   }),
   created() {
-    store.commit('SET_BAR_TITLE', '我的粉丝');
+    this.$store.commit('SET_BAR_TITLE', '我的粉丝');
     this.fetchData();
   },
   methods: {
@@ -41,7 +39,7 @@ export default {
       };
 
       this.$store.state.profile.follower.forEach((element) => {
-        this.items.push(Object.assign(element, userIcon, bio));
+        this.items.push({ ...element, ...userIcon, ...bio });
       });
     },
   },

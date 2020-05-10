@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import { getLectureById, renderTime } from '../../services/profile.service';
-import store from '../../store';
+import getLectureById from '../../utils/lecture';
+import renderTime from '../../utils/time';
 
 export default {
   data() {
@@ -28,14 +28,14 @@ export default {
     };
   },
   created() {
-    store.commit('SET_BAR_TITLE', '最近浏览');
+    this.$store.commit('SET_BAR_TITLE', '最近浏览');
     this.fetchData();
   },
   methods: {
     fetchData() {
       this.$store.state.profile.history.forEach((element) => {
         const time = { time: renderTime(element.created_at) };
-        this.history.push(Object.assign(getLectureById(element.history_about_id), time));
+        this.history.push({ ...getLectureById(element.history_about_id), ...time });
       });
     },
   },

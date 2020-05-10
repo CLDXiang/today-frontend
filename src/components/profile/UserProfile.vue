@@ -49,31 +49,34 @@
 </template>
 
 <script>
-import store from '../../store';
-
 export default {
   data() {
     return {
       cols: [
         {
           name: '关注课程',
-          count: this.$store.getters.countUserStar,
+          count: '',
           to: { name: 'StarCourse' },
         },
         {
           name: '我的评论',
-          count: this.$store.getters.countUserRate,
+          count: '',
           to: { name: 'UserRate' },
         },
         {
           name: '粉丝',
-          count: this.$store.getters.countFollower,
+          count: '',
           to: { name: 'Follower' },
         },
         {
           name: '关注用户',
-          count: this.$store.getters.countFollowing,
+          count: '',
           to: { name: 'Following' },
+        },
+        {
+          name: '浏览历史',
+          count: '',
+          to: { name: 'History' },
         },
       ],
     };
@@ -84,9 +87,17 @@ export default {
     },
   },
   created() {
-    store.commit('SET_BAR_TITLE', '个人中心');
+    this.$store.commit('SET_BAR_TITLE', '个人中心');
+    this.fetchData();
   },
   methods: {
+    fetchData() {
+      this.cols[0].count = this.$store.getters.countUserRate;
+      this.cols[1].count = this.$store.getters.countUserStar;
+      this.cols[2].count = this.$store.getters.countFollower;
+      this.cols[3].count = this.$store.getters.countFollowing;
+      this.cols[4].count = this.$store.getters.countHistory;
+    },
     logout() {
       this.$store.commit('LOGOUT');
       this.$router.replace({ name: 'Login', query: { redirect: '/profile' } });

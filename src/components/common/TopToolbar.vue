@@ -150,35 +150,35 @@ export default {
       }
     },
     toStar() {
-      if (window.location.pathname === '/profile/star') {
+      if (this.$route.path === '/profile/star') {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'StarCourse' });
       }
     },
     toMyRate() {
-      if (window.location.pathname === '/profile/rate') {
+      if (this.$route.path === '/profile/rate') {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'UserRate' });
       }
     },
     toFollower() {
-      if (window.location.pathname === '/profile/follower') {
+      if (this.$route.path === '/profile/follower') {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'Follower' });
       }
     },
     toFollowing() {
-      if (window.location.pathname === '/profile/following') {
+      if (this.$route.path === '/profile/following') {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'Following' });
       }
     },
     toHistory() {
-      if (window.location.pathname === '/profile/history') {
+      if (this.$route.path === '/profile/history') {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'History' });

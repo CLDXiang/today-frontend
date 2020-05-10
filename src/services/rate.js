@@ -1,12 +1,9 @@
+import log from '../utils/log';
 import axios from 'axios';
 
 import dayjs from 'dayjs';
-
 import 'dayjs/locale/zh-cn';
-
 import relativeTime from 'dayjs/plugin/relativeTime';
-
-import log from '../utils/log';
 
 import store from '../store';
 
@@ -161,7 +158,7 @@ export function getReplies(ids) {
             userId: data.userId,
             userName: data.username,
             avatar: data.avatar || defaultAvatar,
-            time: data.createdAt, // TODO to natural language
+            time: dayjs(data.createdAt).fromNow(),
             content: data.content,
           })),
         );
@@ -186,7 +183,8 @@ export function postReply(type, id, content) {
         resolve({
           id: resp.data.rateId,
           userId: resp.data.userId,
-          userName: '',
+          userName: '', // FIXME
+          time: dayjs(data.createdAt).fromNow(),
           avatar: resp.data.avatar || defaultAvatar,
           content: resp.data.content,
           reactions: [],

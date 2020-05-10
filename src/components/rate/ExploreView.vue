@@ -208,18 +208,17 @@ export default {
         ],
       },
 
-      // type should be defined in api/lecture.js
       categories: [
-        { name: '思政', type: 'Politics' },
-        { name: '英语', type: 'English' },
-        { name: '体育', type: 'Physics' },
+        { name: '思政', type: 'Politics', processedResult: [] },
+        { name: '英语', type: 'English', processedResult: [] },
+        { name: '体育', type: 'Physics', processedResult: [] },
       ],
     };
   },
 
   watch: {
     tabIndex(newi) {
-      this.searchResult = this.categories[newi].processedResult;
+      if (newi) this.searchResult = this.categories[newi].processedResult;
     },
     searchInput() {
       this.loading = true;

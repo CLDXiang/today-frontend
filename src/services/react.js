@@ -1,7 +1,6 @@
 import axios from 'axios';
 import emojiData from 'emoji-mart-vue-fast/data/twitter.json';
 import log from '../utils/log';
-
 import store from '../store';
 
 import { API_URL } from '../utils/config';

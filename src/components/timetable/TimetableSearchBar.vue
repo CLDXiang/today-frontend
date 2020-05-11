@@ -50,12 +50,12 @@
             {{ `${item.codeId} ${item.name}` }}
           </div>
           <div class="result-line cut">
-            {{ item.teachers }}
+            {{ item.teachersText }}
           </div>
-          <div v-for="(ts, tsIndex) in item.timeSlots.slice(0, 3)" :key="tsIndex" class="result-line">
+          <div v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)" :key="tsIndex" class="result-line">
             {{ ts }}
           </div>
-          <div v-if="item.timeSlots.length > 3" class="result-line">
+          <div v-if="item.timeSlotsTexts.length > 3" class="result-line">
             ……
           </div>
         </div>

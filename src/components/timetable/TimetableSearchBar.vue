@@ -33,7 +33,9 @@
       </template>
     </v-text-field>
     <v-btn v-show="searchResults.length !== 0" class="results-visible-button" @click="handleChangeResultsVisible">
-      <v-icon left style="color: #000">{{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}</v-icon>
+      <v-icon left style="color: #000">
+        {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
+      </v-icon>
       {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
     </v-btn>
     <v-scroll-y-transition>

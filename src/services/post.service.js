@@ -108,7 +108,7 @@ export async function getSecret() {
 
 export async function getSecretById(id) {
   log.info('getSecretById', id);
-  return new Promise((res, rej) => {
+  return new Promise((resolve, rej) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -118,7 +118,7 @@ export async function getSecretById(id) {
       })
       .then((resp) => {
         log.info(resp);
-        res(resp.data);
+        resolve(resp.data);
       })
       .catch((error) => rej(error));
   });
@@ -126,7 +126,7 @@ export async function getSecretById(id) {
 
 export async function getSecretReply(id) {
   log.info('getSecretReply', id);
-  return new Promise((res, rej) => {
+  return new Promise((resolve, rej) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -136,7 +136,7 @@ export async function getSecretReply(id) {
       })
       .then((resp) => {
         log.info(resp);
-        res(resp.data);
+        resolve(resp.data);
       })
       .catch((error) => rej(error));
   });

@@ -290,8 +290,8 @@ export default {
           const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
           timeSlots.push({
             week,
-            day,
-            section: [sectionStart, sectionEnd],
+            day, // 注意此处的对应关系，day 1 对应 周一，而非索引
+            section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
             place,
             dayText: this.mapDay(day),
           });
@@ -300,13 +300,13 @@ export default {
         const { name, department } = course;
 
         // 搜索索引字符串
-        const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
-          (s, ts) =>
-            `${s}|${ts.week}周|周${ts.dayText}|星期${ts.dayText}|第${ts.section.join('-')}节|${
-              ts.place
-            }`,
-          '',
-        )}|${course.code_id}`;
+        // const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
+        //   (s, ts) =>
+        //     `${s}|${ts.week}周|周${ts.dayText}|星期${ts.dayText}|第${ts.section.join('-')}节|${
+        //       ts.place
+        //     }`,
+        //   '',
+        // )}|${course.code_id}`;
 
         // const index = `${timeSlots.reduce(
         //   (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
@@ -338,8 +338,6 @@ export default {
           courseId: parseInt(courseId, 10),
           teachersText,
           timeSlotsTexts,
-          // for test:
-          index,
         });
       });
       this.searchIndex = searchIndex;
@@ -503,7 +501,7 @@ export default {
 .timetable__search-bar-box {
   // height: 17rem;
   height: $search-bar-height;
-  margin: 10px;
+  margin: 0 10px;
   display: flex;
 }
 

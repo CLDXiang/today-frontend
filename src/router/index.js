@@ -5,7 +5,10 @@ import Register from '../components/common/Register.vue';
 import Profile from '../components/profile/Profile.vue';
 import UserProfile from '../components/profile/UserProfile.vue';
 import Star from '../components/profile/Star.vue';
-import Rates from '../components/profile/Rates.vue';
+import UserRate from '../components/profile/UserRate.vue';
+import Follower from '../components/profile/Follower.vue';
+import Following from '../components/profile/Following.vue';
+import History from '../components/profile/History.vue';
 import Hole from '../components/secret/Hole.vue';
 
 import Rate from '../components/rate/Rate.vue';
@@ -43,9 +46,24 @@ const routes = [
         component: Star,
       },
       {
-        path: 'rates',
-        name: 'UserRates',
-        component: Rates,
+        path: 'rate',
+        name: 'UserRate',
+        component: UserRate,
+      },
+      {
+        path: 'follower',
+        name: 'Follower',
+        component: Follower,
+      },
+      {
+        path: 'following',
+        name: 'Following',
+        component: Following,
+      },
+      {
+        path: 'history',
+        name: 'History',
+        component: History,
       },
     ],
   },

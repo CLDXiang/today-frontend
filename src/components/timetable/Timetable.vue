@@ -278,8 +278,8 @@ export default {
       const searchIndex = [];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
       Object.entries(this.allCourses).forEach(([courseId, course]) => {
-        let teachers = new Set();
-        let timeSlots = [];
+        const teachers = new Set();
+        const timeSlots = [];
         course.time_slot.forEach((ts) => {
           ts.teacher.forEach((teacher) => {
             if (teacher.trim() !== '') {
@@ -287,40 +287,57 @@ export default {
             }
           });
           const { week, day, section, place } = ts;
+          const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
           timeSlots.push({
             week,
-            day: this.mapDay(day),
-            section,
+            day, // 注意此处的对应关系，day 1 对应 周一，而非索引
+            section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
             place,
+            dayText: this.mapDay(day),
           });
         });
 
         const { name, department } = course;
 
         // 搜索索引字符串
-        const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
-          (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
-          '',
-        )}|${course.code_id}`;
+        // const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
+        //   (s, ts) =>
+        //     `${s}|${ts.week}周|周${ts.dayText}|星期${ts.dayText}|第${ts.section.join('-')}节|${
+        //       ts.place
+        //     }`,
+        //   '',
+        // )}|${course.code_id}`;
+
         // const index = `${timeSlots.reduce(
         //   (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
         //   '',
         // )}`;
 
         // 这里提前处理便于直接显示用，如果未来需要单独使用其中的字段可以注释掉，然后在其他地方处理
-        teachers = [...teachers].join(', ');
-        timeSlots = timeSlots.map((ts) => `周${ts.day} ${ts.section} ${ts.place}`);
+        const teachersText = [...teachers].join(', ');
+        // TODO: 考虑如何把 week 整进来
+        const timeSlotsTexts = timeSlots.map(
+          (ts) => `周${ts.dayText} ${ts.section.join('-')} ${ts.place}`,
+        );
+
+        /* 每个字段分别搜索
+        name: 局部匹配
+        teachers: 以数组形式输入，要求用户用英文逗号作为分隔符，全字匹配
+        department: 局部匹配
+        timeSlots: 只要任一 ts 符合搜索要求即显示。对每一 ts，day 属于所选范围即可，section 以 pair 形式输入，在所选范围即选中，place 局部匹配
+        codeId: 局部匹配
+        courseId: 不作为搜索字段
+        */
 
         searchIndex.push({
           name,
-          // teachers: [...teachers],
-          teachers,
+          teachers: [...teachers],
           department,
           timeSlots,
-          index,
           codeId: course.code_id,
           courseId: parseInt(courseId, 10),
-          // for test:
+          teachersText,
+          timeSlotsTexts,
         });
       });
       this.searchIndex = searchIndex;
@@ -484,7 +501,7 @@ export default {
 .timetable__search-bar-box {
   // height: 17rem;
   height: $search-bar-height;
-  margin: 10px;
+  margin: 0 10px;
   display: flex;
 }
 

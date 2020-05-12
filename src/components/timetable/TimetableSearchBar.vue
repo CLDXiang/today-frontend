@@ -112,7 +112,7 @@
       />
     </div>
     <div class="search-bar__content-line">
-      <v-range-slider
+      <!-- <v-range-slider
         v-model="searchQuery.dayRange"
         label="星期"
         :tick-labels="dayLabels"
@@ -124,7 +124,18 @@
         <template v-slot:thumb-label="props">
           {{ '周' + dayLabels[props.value] }}
         </template>
-      </v-range-slider>
+      </v-range-slider> -->
+      <v-select
+        v-model="searchQuery.day"
+        :items="dayLabels"
+        label="星期"
+        dense
+        outlined
+        autocomplete="off"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
+        :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
+      />
     </div>
     <div class="search-bar__content-line">
       <v-range-slider
@@ -181,14 +192,15 @@ export default {
         name: '',
         teachers: '',
         department: '',
-        dayRange: [0, 6],
+        day: '全部',
+        // dayRange: [0, 6],
         sectionRange: [0, 13],
         place: '',
         codeId: '',
       },
 
-      dayLabels: ['一', '二', '三', '四', '五', '六', '日'],
-      // sectionLabels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'],
+      // dayLabels: ['一', '二', '三', '四', '五', '六', '日'],
+      dayLabels: ['全部', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
 
       isSearchResultsVisible: false,
       /** 搜索结果
@@ -220,8 +232,9 @@ export default {
         sq.name.trim() === '' &&
         sq.teachers.trim() === '' &&
         sq.department.trim() === '' &&
-        sq.dayRange[0] === 0 &&
-        sq.dayRange[1] === 6 &&
+        // sq.dayRange[0] === 0 &&
+        // sq.dayRange[1] === 6 &&
+        sq.day === '全部' &&
         sq.sectionRange[0] === 0 &&
         sq.sectionRange[1] === 13 &&
         sq.place.trim() === '' &&
@@ -253,7 +266,8 @@ export default {
       this.searchQuery.name = '';
       this.searchQuery.teachers = '';
       this.searchQuery.department = '';
-      this.searchQuery.dayRange = [0, 6];
+      // this.searchQuery.dayRange = [0, 6];
+      this.searchQuery.day = '全部';
       this.searchQuery.sectionRange = [0, 13];
       this.searchQuery.place = '';
       this.searchQuery.codeId = '';
@@ -281,8 +295,9 @@ export default {
         const departmentTrimmed = sq.department.trim();
         const placeTrimmed = sq.place.trim();
         const codeIdTrimmed = sq.codeId.trim();
-        const dayRangeStart = sq.dayRange[0] + 1;
-        const dayRangeEnd = sq.dayRange[1] + 1;
+        // const dayRangeStart = sq.dayRange[0] + 1;
+        // const dayRangeEnd = sq.dayRange[1] + 1;
+        const { day } = sq;
         const sectionRangeStart = sq.sectionRange[0] + 1;
         const sectionRangeEnd = sq.sectionRange[1] + 1;
 
@@ -302,8 +317,9 @@ export default {
             // timeSlots 相关，匹配任意一个即可
             if (
               placeTrimmed ||
-              dayRangeStart !== 1 ||
-              dayRangeEnd !== 7 ||
+              // dayRangeStart !== 1 ||
+              // dayRangeEnd !== 7 ||
+              day !== '全部' ||
               sectionRangeStart !== 1 ||
               sectionRangeEnd !== 14
             ) {
@@ -311,7 +327,14 @@ export default {
               // eslint-disable-next-line no-restricted-syntax
               for (const ts of timeSlots) {
                 if (placeTrimmed && !placeReg.test(ts.place)) continue;
-                if (dayRangeStart > ts.day || dayRangeEnd < ts.day) continue;
+                // if (dayRangeStart > ts.day || dayRangeEnd < ts.day) continue;
+                if (day === '星期一' && ts.day !== 1) continue;
+                if (day === '星期二' && ts.day !== 2) continue;
+                if (day === '星期三' && ts.day !== 3) continue;
+                if (day === '星期四' && ts.day !== 4) continue;
+                if (day === '星期五' && ts.day !== 5) continue;
+                if (day === '星期六' && ts.day !== 6) continue;
+                if (day === '星期日' && ts.day !== 7) continue;
                 if (sectionRangeStart > ts.section[0] || sectionRangeEnd < ts.section[1]) continue;
                 return true;
               }

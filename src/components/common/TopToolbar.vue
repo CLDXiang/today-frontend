@@ -2,9 +2,24 @@
   <div>
     <v-navigation-drawer v-model="showMenu" app fixed>
       <v-list dense>
-        <v-list-item>
-          <v-list-item-content>{{ user }}</v-list-item-content>
-        </v-list-item>
+        <div v-show="!userLoggedIn">
+          <v-list-item>
+            <v-list-item-content>
+              未登录
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+        <div v-show="userLoggedIn">
+          <v-list-item two-line @click="toSettings">
+            <v-list-item-avatar>
+              <img src="https://randomuser.me/api/portraits/men/81.jpg">
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ user.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ user.bio }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
         <div v-show="userLoggedIn">
           <v-list-item @click="toStar">
             <v-list-item-action>
@@ -72,7 +87,7 @@
             </v-list-item-content>
           </v-list-item>
         </div>
-        <v-list-item @click="doNothing">
+        <v-list-item @click="toSettings">
           <v-list-item-action>
             <v-icon>mdi-cog</v-icon>
           </v-list-item-action>
@@ -113,7 +128,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import log from '../../utils/log';
 
 export default {
@@ -122,6 +137,7 @@ export default {
     showMenu: false,
   }),
   computed: {
+    ...mapState(['user']),
     ...mapGetters([
       'userLoggedIn',
       'countUserRate',
@@ -130,9 +146,6 @@ export default {
       'countFollowing',
       'countHistory',
     ]),
-    user() {
-      return this.$store.state.user.name;
-    },
     barTitle() {
       return this.$store.state.app.barTitle;
     },
@@ -191,6 +204,13 @@ export default {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'History' });
+      }
+    },
+    toSettings() {
+      if (this.$route.path === '/profile/settings') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'Settings' });
       }
     },
   },

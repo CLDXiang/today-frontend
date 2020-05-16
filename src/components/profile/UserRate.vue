@@ -1,14 +1,14 @@
 <template>
-  <v-list two-line>
+  <v-list three-line>
     <template v-for="(item, index) in items">
       <!-- TODO: 路由的目标不对 -->
       <v-list-item :key="item.lectureId" :to="`/rate/${item.code}/${item.idx}`">
         <v-list-item-content>
           <v-list-item-title v-text="item.name + ' · ' + item.teacher" />
-          <v-list-item-subtitle
+          <!-- <v-list-item-subtitle
             class="text--primary"
             v-text="'难度 ' + item.difficulty + ' · 工作量 ' + item.workload + ' · 给分 ' + item.grading"
-          />
+          /> -->
           <v-list-item-subtitle v-text="item.content" />
         </v-list-item-content>
 

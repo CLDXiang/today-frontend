@@ -11,6 +11,9 @@ const store = new Vuex.Store({
       jwt_token: '',
       id: '',
       name: '',
+      bio: '',
+      avatar: '',
+      nickName: '',
       email: '',
     },
     profile: {

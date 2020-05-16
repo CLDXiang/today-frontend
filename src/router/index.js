@@ -9,6 +9,7 @@ import UserRate from '../components/profile/UserRate.vue';
 import Follower from '../components/profile/Follower.vue';
 import Following from '../components/profile/Following.vue';
 import History from '../components/profile/History.vue';
+import Settings from '../components/profile/Settings.vue';
 import Hole from '../components/secret/Hole.vue';
 
 import ExploreView from '../components/rate/ExploreView.vue';
@@ -61,6 +62,11 @@ const routes = [
         path: 'history',
         name: 'History',
         component: History,
+      },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: Settings,
       },
     ],
   },

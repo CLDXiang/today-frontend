@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list two-line>
     <div v-for="(item, index) in starLectures" :key="item.id">
       <v-list-item :to="`/rate/${item.code}/${item.idx}`">
         <v-list-item-content>

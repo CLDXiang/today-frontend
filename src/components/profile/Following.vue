@@ -1,5 +1,5 @@
 <template>
-  <v-list three-line>
+  <v-list two-line>
     <template v-for="(item, index) in items">
       <!-- TODO: add @click="" -->
       <v-list-item :key="item.id">

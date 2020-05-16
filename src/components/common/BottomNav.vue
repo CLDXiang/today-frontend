@@ -11,13 +11,13 @@
       <v-icon>mdi-domain</v-icon>
     </v-btn>
 
-    <v-btn value="hole" @click="holeClick">
-      <span>树洞</span>
-      <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
-    </v-btn>
-
     <v-btn value="rate" @click="rateClick">
       <span>评课</span>
+      <v-icon>mdi-poll</v-icon>
+    </v-btn>
+
+    <v-btn value="hole" @click="holeClick">
+      <span>树洞</span>
       <v-icon>mdi-arrow-up-bold-box-outline</v-icon>
     </v-btn>
 

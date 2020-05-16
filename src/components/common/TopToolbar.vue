@@ -5,6 +5,73 @@
         <v-list-item>
           <v-list-item-content>{{ user }}</v-list-item-content>
         </v-list-item>
+        <div v-show="userLoggedIn">
+          <v-list-item @click="toStar">
+            <v-list-item-action>
+              <v-icon>mdi-book</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>关注课程</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countUserStar }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toMyRate">
+            <v-list-item-action>
+              <v-icon>mdi-comment-processing</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>我的课评</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countUserRate }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toFollowing">
+            <v-list-item-action>
+              <v-icon>mdi-eye</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>关注的人</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countFollowing }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toFollower">
+            <v-list-item-action>
+              <v-icon>mdi-human-greeting</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>我的粉丝</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countFollower }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toHistory">
+            <v-list-item-action>
+              <v-icon>mdi-history</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>浏览历史</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countHistory }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
         <v-list-item @click="doNothing">
           <v-list-item-action>
             <v-icon>mdi-cog</v-icon>
@@ -46,6 +113,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import log from '../../utils/log';
 
 export default {
@@ -54,6 +122,14 @@ export default {
     showMenu: false,
   }),
   computed: {
+    ...mapGetters([
+      'userLoggedIn',
+      'countUserRate',
+      'countUserStar',
+      'countFollower',
+      'countFollowing',
+      'countHistory',
+    ]),
     user() {
       return this.$store.state.user.name;
     },
@@ -61,7 +137,7 @@ export default {
       return this.$store.state.app.barTitle;
     },
     status() {
-      return this.$store.getters.userLoggedIn ? '登出' : '登录';
+      return this.userLoggedIn ? '登出' : '登录';
     },
   },
   methods: {
@@ -74,12 +150,47 @@ export default {
       this.$router.back();
     },
     logout() {
-      if (this.$store.getters.userLoggedIn) {
+      if (this.userLoggedIn) {
         log.info('logout');
         this.$store.commit('LOGOUT');
         this.$router.replace({ name: 'Timetable' });
       } else {
         this.$router.replace({ name: 'Login', query: { redirect: '/profile' } });
+      }
+    },
+    toStar() {
+      if (this.$route.path === '/profile/star') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'StarCourse' });
+      }
+    },
+    toMyRate() {
+      if (this.$route.path === '/profile/rate') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'UserRate' });
+      }
+    },
+    toFollower() {
+      if (this.$route.path === '/profile/follower') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'Follower' });
+      }
+    },
+    toFollowing() {
+      if (this.$route.path === '/profile/following') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'Following' });
+      }
+    },
+    toHistory() {
+      if (this.$route.path === '/profile/history') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'History' });
       }
     },
   },

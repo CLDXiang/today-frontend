@@ -47,6 +47,13 @@
 <script>
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
+import {
+  getUserStar,
+  getUserRate,
+  getFollowing,
+  getFollower,
+  getHistory,
+} from '../../services/profile.service';
 
 export default {
   data: () => ({
@@ -76,6 +83,48 @@ export default {
         this.alertShown = false;
       }, 3000);
     },
+    getProfile() {
+      getUserStar()
+        .then((userStar) => {
+          this.$store.commit('SET_USER_STAR', userStar);
+          log.info(userStar);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getUserRate()
+        .then((userRate) => {
+          this.$store.commit('SET_USER_RATE', userRate);
+          log.info(userRate);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getFollowing()
+        .then((following) => {
+          this.$store.commit('SET_FOLLOWING', following);
+          log.info(following);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getFollower()
+        .then((follower) => {
+          this.$store.commit('SET_FOLLOWER', follower);
+          log.info(follower);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getHistory()
+        .then((history) => {
+          this.$store.commit('SET_HISTORY', history);
+          log.info(history);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     login() {
       log.info(this.$router.url);
       login(this.name, this.password)
@@ -84,6 +133,7 @@ export default {
           this.showAlert('success', '登录成功');
           const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);
+          this.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
           if (redirect) {
             log.info('redirected!');
             this.$router.push(redirect);

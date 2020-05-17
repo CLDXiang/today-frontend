@@ -11,7 +11,7 @@
         <v-avatar size="150" @click="uploadAvatar">
           <img :src="avatar" alt="avatar">
         </v-avatar>
-        <input type="file" accept="image/*" class="hiddenInput" @change="handleFile">
+        <input type="file" accept="image/*" class="hiddenInput" @change="handleAvatar">
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -42,20 +42,43 @@
         />
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar"
+      :color="snackbarColor"
+      :timeout="snackbarTimeout"
+    >
+      {{ snackbarText }}
+      <v-btn
+        dark
+        text
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
     <v-row justify="center">
       <div class="my-2">
-        <v-btn large color="primary">保存更改</v-btn>
+        <v-btn large color="primary" @click="changeProfile" @keyup.enter="changeProfile">
+          保存更改
+        </v-btn>
       </div>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { editProfile } from '../../services/profile.service';
+import log from '../../utils/log';
+
 export default {
   data: () => ({
     avatar: 'https://cdn.vuetifyjs.com/images/john.jpg',
     nickName: '',
     bio: '',
+    snackbar: '',
+    snackbarColor: '',
+    snackbarText: '',
+    snackbarTimeout: 2000,
   }),
   created() {
     this.$store.commit('SET_BAR_TITLE', '用户设置');
@@ -63,15 +86,32 @@ export default {
   },
   methods: {
     fetchData() {
-      // this.avatar = this.$store.state.user.avatar;
+      this.avatar = this.$store.state.user.avatar;
       this.bio = this.$store.state.user.bio;
       this.nickName = this.$store.state.user.nickName;
+    },
+    showSnackbar(type, content) {
+      this.snackbarColor = type;
+      this.snackbarText = content;
+      this.snackbar = true;
+    },
+    changeProfile() {
+      const UpdateUserDto = { nickName: this.nickName, bio: this.bio };
+      editProfile(UpdateUserDto)
+        .then((resp) => {
+          this.$store.commit('SET_USER_PROFILE', resp);
+          this.showSnackbar('success', '更新完成');
+        })
+        .catch((err) => {
+          log.info(err);
+          this.showSnackbar('error', '发生了错误');
+        });
     },
     uploadAvatar() {
       this.$el.querySelector('.hiddenInput').click();
     },
     // 将头像显示
-    handleFile(e) {
+    handleAvatar(e) {
       const $target = e.target || e.srcElement;
       const file = $target.files[0];
       const reader = new FileReader();

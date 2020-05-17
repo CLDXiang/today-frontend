@@ -3,7 +3,7 @@
     <template v-for="(item, index) in history">
       <v-list-item :key="item.lectureId" :to="`/rate/${item.code}/${item.idx}`">
         <v-list-item-content>
-          <v-list-item-title v-text="item.name" />
+          <v-list-item-title v-text="item.code+'.'+item.idx+' '+item.name" />
           <v-list-item-subtitle v-text="item.teacher" />
         </v-list-item-content>
 

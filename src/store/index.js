@@ -22,6 +22,7 @@ const store = new Vuex.Store({
       follower: [],
       following: [],
       history: [],
+      notification: [],
     },
     editor: {
       draft: {
@@ -99,6 +100,9 @@ const store = new Vuex.Store({
     SET_HISTORY(state, history) {
       state.profile.history = history;
     },
+    SET_NOTIFICATION(state, notification) {
+      state.profile.notification = notification;
+    },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
     },
@@ -143,6 +147,7 @@ const store = new Vuex.Store({
     countFollower: (state) => Object.keys(state.profile.follower).length,
     countFollowing: (state) => Object.keys(state.profile.following).length,
     countHistory: (state) => Object.keys(state.profile.history).length,
+    countNotification: (state) => Object.keys(state.profile.notification).length,
   },
   plugins: [
     createPersistedState({

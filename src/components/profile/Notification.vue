@@ -23,7 +23,7 @@ export default {
     items: [],
   }),
   created() {
-    this.$store.commit('SET_BAR_TITLE', '我的粉丝');
+    this.$store.commit('SET_BAR_TITLE', '通知动态');
     this.fetchData();
   },
   methods: {

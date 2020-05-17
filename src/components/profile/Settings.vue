@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { editProfile } from '../../services/profile.service';
+import { editProfile, uploadAvatar } from '../../services/profile.service';
 import log from '../../utils/log';
 
 export default {
@@ -114,12 +114,23 @@ export default {
     handleAvatar(e) {
       const $target = e.target || e.srcElement;
       const file = $target.files[0];
+      const dto = new FormData();
+      dto.append('file', file);
       const reader = new FileReader();
       reader.onload = (data) => {
         const res = data.target || data.srcElement;
         this.avatar = res.result;
       };
       reader.readAsDataURL(file);
+      uploadAvatar(dto)
+        .then((resp) => {
+          this.$store.commit('SET_USER_PROFILE', resp);
+          this.showSnackbar('success', '更换头像成功');
+        })
+        .catch((err) => {
+          log.info(err);
+          this.showSnackbar('error', '发生了错误');
+        });
     },
   },
 };

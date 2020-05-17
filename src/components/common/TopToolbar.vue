@@ -10,9 +10,9 @@
           </v-list-item>
         </div>
         <div v-show="userLoggedIn">
-          <v-list-item two-line @click="toSettings">
+          <v-list-item two-line @click="doNothing">
             <v-list-item-avatar>
-              <img src="https://randomuser.me/api/portraits/men/81.jpg">
+              <img :src="user.avatar">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ user.name }}</v-list-item-title>
@@ -86,23 +86,28 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item @click="toNotification">
+            <v-list-item-action>
+              <v-icon>mdi-bell</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>通知动态</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countNotification }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="toSettings">
+            <v-list-item-action>
+              <v-icon>mdi-cog</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>设置</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </div>
-        <v-list-item @click="toSettings">
-          <v-list-item-action>
-            <v-icon>mdi-cog</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>设置</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="doNothing">
-          <v-list-item-action>
-            <v-icon>mdi-help</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>帮助</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
@@ -145,6 +150,7 @@ export default {
       'countFollower',
       'countFollowing',
       'countHistory',
+      'countNotification',
     ]),
     barTitle() {
       return this.$store.state.app.barTitle;
@@ -204,6 +210,13 @@ export default {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'History' });
+      }
+    },
+    toNotification() {
+      if (this.$route.path === '/profile/notification') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'Notification' });
       }
     },
     toSettings() {

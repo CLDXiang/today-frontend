@@ -36,6 +36,21 @@ export async function editProfile(UpdateUserDto) {
   });
 }
 
+export async function uploadAvatar(userAvatar) {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .post(`${API_URL}/user/profile/avatar`, userAvatar, { headers: authHeader })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
 export async function getUserStar(userId = store.state.user.id) {
   return new Promise((resolve, reject) => {
     const authHeader = {

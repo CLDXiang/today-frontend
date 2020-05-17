@@ -1,8 +1,7 @@
 <template>
   <v-list two-line>
     <template v-for="(item, index) in items">
-      <!-- TODO: add @click="" -->
-      <v-list-item :key="item.id">
+      <v-list-item :key="item.id" @click="toUserProfile(item.id)">
         <v-list-item-avatar>
           <v-img :src="item.avatar" />
         </v-list-item-avatar>
@@ -30,6 +29,14 @@ export default {
     fetchData() {
       this.$store.state.profile.following.forEach((element) => {
         this.items.push(element);
+      });
+    },
+    toUserProfile(userId) {
+      this.$router.push({
+        name: 'UserProfile',
+        params: {
+          id: userId,
+        },
       });
     },
   },

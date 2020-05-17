@@ -72,7 +72,7 @@ import log from '../../utils/log';
 
 export default {
   data: () => ({
-    avatar: 'https://cdn.vuetifyjs.com/images/john.jpg',
+    avatar: '',
     nickName: '',
     bio: '',
     snackbar: '',

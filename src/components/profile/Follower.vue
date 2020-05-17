@@ -2,7 +2,7 @@
   <v-list two-line>
     <template v-for="(item, index) in items">
       <!-- TODO: add @click="" -->
-      <v-list-item :key="item.name">
+      <v-list-item :key="item.nickName">
         <v-list-item-avatar>
           <v-img :src="item.avatar" />
         </v-list-item-avatar>

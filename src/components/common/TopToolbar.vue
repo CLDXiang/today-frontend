@@ -15,7 +15,7 @@
               <img :src="user.avatar">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ user.name }}</v-list-item-title>
+              <v-list-item-title>{{ user.nickName }}</v-list-item-title>
               <v-list-item-subtitle>{{ user.bio }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

@@ -25,6 +25,20 @@
         @conflictionResolved="onConflictionResolved"
       />
     </v-dialog>
+    <v-dialog
+      fullscreen
+      scrollable
+      transition="dialog-bottom-transition"
+      :value="isMobileMode && isSearchDialogVisible"
+    >
+      <timetable-search-dialog-content
+        v-if="isMobileMode"
+        :search-index="searchIndex"
+        :is-loading-courses="isLoadingCourses"
+        @addcourse="addSelectedCourse"
+        @hideSearchDialog="hideSearchDialog"
+      />
+    </v-dialog>
 
     <div class="timetable__body">
       <div class="timetable__day-box">
@@ -53,13 +67,21 @@
           @addcourse="addSelectedCourse"
         />
       </div>
-    </div>
-    <div v-if="isMobileMode" class="timetable__search-bar-box">
-      <timetable-search-bar
-        :search-index="searchIndex"
-        :is-loading-courses="isLoadingCourses"
-        @addcourse="addSelectedCourse"
-      />
+
+      <v-btn
+        v-if="isMobileMode"
+        class="floating_button"
+        color="blue"
+        dark
+        small
+        fixed
+        bottom
+        right
+        fab
+        @click="showSearchDialog"
+      >
+        <v-icon>search</v-icon>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -71,6 +93,7 @@ import TimetableDay from './TimetableDay.vue';
 import TimetableSearchBar from './TimetableSearchBar.vue';
 import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
 import TimetableConflictionDialogContent from './TimetableConflictionDialogContent.vue';
+import TimetableSearchDialogContent from './TimetableSearchDialogContent.vue';
 import {
   getSelectedCourses as getSelectedCoursesService,
   addSelectedCourse as addSelectedCourseService,
@@ -84,6 +107,7 @@ export default {
     TimetableSearchBar,
     TimetableDetailDialogContent,
     TimetableConflictionDialogContent,
+    TimetableSearchDialogContent,
   },
   props: {},
   data() {
@@ -134,6 +158,8 @@ export default {
        */
       isOffline: false,
       isConflictionDialogVisible: false,
+
+      isSearchDialogVisible: false,
     };
   },
   computed: {
@@ -426,6 +452,12 @@ export default {
     hideConflictionDialog() {
       this.isConflictionDialogVisible = false;
     },
+    showSearchDialog() {
+      this.isSearchDialogVisible = true;
+    },
+    hideSearchDialog() {
+      this.isSearchDialogVisible = false;
+    },
     mapDay(day) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
     },
@@ -518,5 +550,10 @@ export default {
     color: #69707a;
     font-size: 14px;
   }
+}
+
+.floating_button {
+  bottom: 76px;
+  right: 20px;
 }
 </style>

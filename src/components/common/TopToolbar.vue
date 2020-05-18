@@ -86,19 +86,6 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="toNotification">
-            <v-list-item-action>
-              <v-icon>mdi-bell</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>通知动态</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ countNotification }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
           <v-list-item @click="toSettings">
             <v-list-item-action>
               <v-icon>mdi-cog</v-icon>
@@ -210,13 +197,6 @@ export default {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'History' });
-      }
-    },
-    toNotification() {
-      if (this.$route.path === '/profile/notification') {
-        this.showMenu = false;
-      } else {
-        this.$router.push({ name: 'Notification' });
       }
     },
     toSettings() {

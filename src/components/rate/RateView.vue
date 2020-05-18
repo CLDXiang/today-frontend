@@ -1,246 +1,206 @@
 <template>
-  <div>
-    <sign-in />
-    <sign-up />
-    <reply id="discuss" />
-    <base-layout>
-      <main>
-        <div class="mark main-container responsive-padding responsive-width">
-          <h3>{{ info.name }}</h3>
+  <div class="landscape-container">
+    <div class="mark">
+      <h3>欢迎参与评课！</h3>
+      <p>您正在对<span class="inline-highlight">「{{ lecture.teacher }}」</span>的<span class="inline-highlight">「{{ lecture.name }}」</span>课程进行评价，首先，请选择您想评价的学期</p>
 
-          <RatePicker />
+      <div style="display: flex;">
+        <v-select
+          v-model="selects.semester.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 5rem;"
+          :items="selects.semester.choices"
+        />
+      </div>
 
-          <div class="tag-container">
-            <!-- TODO: customize button style -->
-            <button v-for="tag in info.tags" :key="tag.id" class="light">
-              {{ tag.name }}
-            </button>
-          </div>
+      <p>您觉得本课程的工作量和难易程度如何？</p>
 
-          <p class="intro-paragraph">
-            {{ info.intro }}
-          </p>
-          <div class="action-bar responsive-padding responsive-border">
-            <svg-set variant="edit" class="action-switch--edit" />
-            <svg-set variant="heart" class="action-switch--fav" />
-          </div>
+      <div style="display: flex; align-items: center;">
+        <span style="margin: 0 1rem;">作业总量</span><v-select
+          v-model="selects.workload.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 6rem;"
+          :items="selects.workload.choices"
+        />
+      </div>
+      <div style="display: flex; align-items: center;">
+        <span style="margin: 0 1rem;">难易程度</span><v-select
+          v-model="selects.difficulty.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 6rem;"
+          :items="selects.difficulty.choices"
+        />
+      </div>
+      <div style="display: flex; align-items: center;">
+        <span style="margin: 0 1rem;">给分情况</span><v-select
+          v-model="selects.grading.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 6rem;"
+          :items="selects.grading.choices"
+        />
+      </div>
+            
+      <h3>您对此课程的体验如何？</h3>
+      <p>您可在此畅所欲言，并为学弟学妹们提供一些详实有效的信息</p>
+      <div class="rate-input">
+        <v-textarea v-model="comment" rows="5" />
+      </div>
 
-          <h4 class="comment-title">
-            Comments<span class="comment-count">{{ info.rateCount }}</span>
-          </h4>
+      <h3>您在此课程上所得成绩如何？</h3>
+      <p>此信息将会以完全匿名的方式参与统计，可以选择跳过此步骤</p>
+      <div style="display: flex;">
+        <v-select
+          v-model="selects.score.value"
+          solo
+          dense
+          style="max-width: 10rem; width: 5rem;"
+          :items="selects.score.choices"
+        />
+      </div>
 
-          <div class="rate-list">
-            <div
-              v-for="rate in rates"
-              :key="rate.id"
-              class="responsive-margin responsive-padding responsive-border-radius responsive-background"
-            >
-              <p class="rate-content">
-                {{ rate.content }}
-              </p>
-              <div class="rate-action-bar">
-                <span class="rate-action__author">{{ rate.author }}</span>
-                <span class="rate-action__time">{{ rate.time }}</span>
-                <a class="rate-action__fav link">Like</a>
-                <a class="link" href="#discuss">Reply</a>
-                <!-- <a class="link" @click="$router.push('reply#discuss')">Reply</a> -->
-              </div>
-            </div>
-          </div>
-        </div>
+      <h3>{{ rangeRates[0].title }}</h3>
+      <div style="display: flex;">
+        <v-select
+          v-model="rangeRates[0].choiceValue"
+          solo
+          dense
+          style="max-width: 10rem; width: 7rem;"
+          :items="rangeRates[0].choices"
+        />
+      </div>
 
-        <nav class="nav-container">
-          <div class="mark nav-container-inner">
-            <h4 class="nav-section__title">
-              More Professors
-            </h4>
-            <p class="nav-section__subtitle">
-              Professors that related to this cource
-            </p>
-            <div class="list">
-              <div v-for="p in relatedProfessors" :key="p.id">
-                <a class="link">{{ p.name }}</a>
-              </div>
-            </div>
+      <h3>感谢您的参与！</h3>
+      <p>
+        在<span class="inline-highlight">100</span>个课程中<br>
+        已有<span class="inline-highlight">25</span>位学生进行了有效评测
+      </p>
 
-            <h4 class="nav-section__title">
-              More Courses
-            </h4>
-            <p class="nav-section__subtitle">
-              Other courses of the professor
-            </p>
-            <div class="list">
-              <div v-for="c in relatedCourses" :key="c.id">
-                <a class="link">{{ c.name }}</a>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </main>
-    </base-layout>
+      <div>
+        <v-btn color="primary" @click="submit">
+          提交评论
+        </v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import BaseLayout from './BaseLayout.vue';
-import SignIn from './SignIn.vue';
-import SignUp from './SignUp.vue';
-import RatePicker from './RatePicker.vue';
-import Reply from './Reply.vue';
-import SvgSet from './SvgSet.vue';
+import log from '../../utils/log';
+
+// API
+import { getLectureByCodeAndIdx } from '../../services/lecture';
+import { postRate } from '../../services/rate';
 
 export default {
-  components: {
-    BaseLayout,
-    SignIn,
-    SignUp,
-    RatePicker,
-    Reply,
-    SvgSet,
-  },
+  components: {},
   data() {
     return {
-      info: {
-        name: 'Introduction to Algorithm',
-        fav: 13,
-        score: 9.9,
-        rateCount: '99+',
-        tags: [
-          { id: 1, name: 'Naive' },
-          { id: 2, name: 'Medium Workload' },
-        ],
-        intro:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      lecture: {},
+      comment: '',
+      selects: {
+        semester: {
+          value: '2020',
+          choices: ['2019', '2020'],
+        },
+        workload: {
+          value: '一般',
+          choices: ['随便浪', '摸鱼', '一般', '适度肝', '头皮发麻'],
+        },
+        difficulty: {
+          value: '一般',
+          choices: ['简单', '普通', '一般', '困难', '噩梦'],
+        },
+        grading: {
+          value: '一般',
+          choices: ['慎选', '差', '一般', '还行', '良心'],
+        },
+        score: {
+          value: '跳过',
+          choices: ['跳过', 'A', 'A-', 'B+', 'B', 'B-'],
+        },
       },
-      relatedProfessors: [
-        { id: 1, name: 'Foo' },
-        { id: 2, name: 'Bar' },
-      ],
-      relatedCourses: [
-        { id: 1, name: 'Math' },
-        { id: 2, name: 'Chinese' },
-        { id: 3, name: 'English' },
-      ],
-      rates: [
+      rangeRates: [
         {
-          id: 1,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-        {
-          id: 2,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        },
-        {
-          id: 3,
-          author: 'Airey',
-          time: '',
-          content:
-            'Lorem   m dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+          title: '您觉得本课程是否值得推荐？',
+          choices: ['不推荐', '一般', '推荐', '比较推荐', '强烈推荐'],
+          choiceValue: '一般',
+          value: 1,
         },
       ],
+      snapScrollIndex: 0,
     };
+  },
+  created() {
+    this.lecture = getLectureByCodeAndIdx(this.$route.params.code, this.$route.params.idx);
+    log.info(this.lecture);
+  },
+  methods: {
+    submit() {
+      postRate(
+        this.lecture.id,
+        this.selects.workload.choices.indexOf(this.selects.workload.value) - 2,
+        this.selects.difficulty.choices.indexOf(this.selects.difficulty.value) - 2,
+        this.selects.grading.choices.indexOf(this.selects.grading.value) - 2,
+        this.comment,
+        this.selects.semester.value,
+        this.rangeRates[0].value,
+      )
+        .then((resp) => {
+          log.info(resp);
+          if (resp.status === 201) {
+            this.$message.success('提交成功！');
+            this.$router.go(-1);
+          } else {
+            this.$message.success('提交失败！');
+          }
+        })
+        .catch((err) => {
+          const code = err.response.status;
+          if (code === 409) {
+            this.$message.warn('您已经评价过此课程！');
+            this.$router.push(`/lecture/${this.$route.params.code}/${this.$route.params.idx}`);
+          } else if (code === 400) {
+            this.$message.error('您似乎填写格式有误？');
+          } else if (code === 401) {
+            this.$message.warn('请您先登录');
+            this.$router.push(`/login?redirect=${this.$route.path}`);
+          }
+        });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/config.scss';
+@import '../../scss/utils.scss';
+@import '../../scss/mark.scss';
 
-.main-container {
-  --padding--landscape: 0 3rem 0 3rem;
-  --padding--portrait: 0 0 0 0;
-}
-
-.nav-container {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-.nav-container__inner {
-  --padding--landscape: 0 3rem 0 0;
-}
-.nav-section__title {
-  margin-bottom: 0.13em;
-}
-.nav-section__subtitle {
-  opacity: 0.6;
-}
-
-.course-name {
-  font-size: 1.9em;
-}
-.tag-container {
+.mark {
+  @include mark;
   display: flex;
-  font-size: 0.8em;
-  > button {
-    margin-right: 1em;
+  flex-direction: column;
+}
+.inline-highlight {
+  padding: 0 0.5rem;
+}
+.landscape-container {
+  $use-portrait: true;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  @if $use-portrait {
+    @include portrait {
+      padding: 0;
+    }
+  }
+  > div {
+    max-width: 0.6 * $main-width;
   }
 }
-.intro-paragraph {
-  margin-bottom: 0;
-}
-.action-bar {
-  display: flex;
-  align-items: center;
-  font-size: 0.8rem;
-  margin: 0;
-  --padding--landscape: 2rem 0 0 0;
-  --padding--portrait: 1.4rem 1rem 1.6rem 1rem;
-  --border--portrait: 1px solid rgba(0, 0, 0, 0.12);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
-.action-switch--edit {
-  margin-left: auto;
-  margin-right: 1rem;
-}
-.action-switch--fav {
-  margin-right: 0.7rem;
-}
-
-.comment-title {
-  margin-bottom: 0;
-}
-.comment-count {
-  font-size: 0.6em;
-  margin-left: 1rem;
-}
-.rate-list {
-  margin: 0;
-  --opacity: 0.38;
-  --opacity--hover: 0.6;
-  --margin--landscape: 1.5rem 0;
-  --padding--landscape: 1.2rem 1.4rem 1.5rem 1.4rem;
-  --border-radius--landscape: 0.6em;
-  --background--landscape: rgba(0, 0, 0, 0.03);
-  --margin--portrait: 0;
-  --padding--portrait: 1rem 1rem 1rem 1rem;
-  --border-radius--portrait: 0;
-  --background--portrait: transparent;
-}
-.rate-content {
-  margin: 0;
-}
-.rate-action-bar {
-  display: flex;
-  align-items: center;
-  margin-top: 0.8rem;
-  font-size: 0.8rem;
-}
-.rate-action__author {
-  margin-right: 1rem;
-}
-.rate-action__time {
-  opacity: var(--opacity);
-}
-.rate-action__fav {
-  margin-left: auto;
-  margin-right: 1rem;
-}
 </style>
+
+

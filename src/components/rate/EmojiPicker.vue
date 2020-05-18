@@ -56,9 +56,14 @@ export default {
     EmojiPicker,
     EmojiIcon,
   },
+  props: {
+    items: {
+      type: Array,
+      default: () => [{ id: 'santa', cnt: 3, active: true }],
+    },
+  },
   data() {
     return {
-      items: [{ id: 'santa', cnt: 3, active: true }],
       showPicker: false,
       index,
     };
@@ -92,7 +97,7 @@ export default {
       if (i.active) {
         i.cnt += 1;
         this.showPicker = false;
-        this.$emit('activate', i.id);
+        this.$emit('activate', i);
       } else {
         i.cnt -= 1;
         if (i.cnt === 0) {
@@ -101,7 +106,7 @@ export default {
             this.items.splice(idx, 1);
           }
         }
-        this.$emit('deactivate', i.id);
+        this.$emit('deactivate', i);
       }
     },
   },

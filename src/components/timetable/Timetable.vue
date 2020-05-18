@@ -529,14 +529,14 @@ export default {
 .timetable__day-box {
   overflow-x: auto;
   display: flex;
-  flex: 3;
+  flex: 618;
 
   border: 1px solid #ddd;
   border-radius: 6px;
 }
 
 .timetable__search-bar-box {
-  flex: 2;
+  flex: 382;
   // height: 17rem;
   height: $search-bar-height;
   margin: 0 10px;

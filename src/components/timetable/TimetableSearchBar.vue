@@ -1,7 +1,7 @@
 <template>
   <div class="timetable__search-bar">
-    <v-btn v-show="searchResults.length !== 0" class="results-visible-button" @click="handleChangeResultsVisible">
-      <v-icon left style="color: #000">
+    <v-btn v-show="searchResults.length !== 0" class="results-visible-button" :color="isSearchResultsVisible ? 'primary' : ''" @click="handleChangeResultsVisible">
+      <v-icon left :style="isSearchResultsVisible ? 'color: #fff' : ''">
         {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
       </v-icon>
       {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}

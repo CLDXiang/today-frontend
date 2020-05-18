@@ -473,6 +473,10 @@ export default {
 
   display: flex;
   flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+
+  max-width: 2560px;
 }
 
 .timetable__body {
@@ -525,12 +529,14 @@ export default {
 .timetable__day-box {
   overflow-x: auto;
   display: flex;
+  flex: 3;
 
   border: 1px solid #ddd;
   border-radius: 6px;
 }
 
 .timetable__search-bar-box {
+  flex: 2;
   // height: 17rem;
   height: $search-bar-height;
   margin: 0 10px;

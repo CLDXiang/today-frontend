@@ -96,7 +96,7 @@ export default {
   height: 100%;
   border-right: 1px solid #ddd;
 
-  flex: 0 0 auto;
+  flex: 1 0 auto;
 
   display: flex;
   flex-direction: column;

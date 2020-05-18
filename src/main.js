@@ -6,7 +6,6 @@ import router from './router';
 import store from './store';
 import message from './utils/message';
 
-import 'material-design-icons/iconfont/material-icons.css';
 // import log from './utils/log';
 // import * as config from './utils/config';
 // alert(config.API_URL);

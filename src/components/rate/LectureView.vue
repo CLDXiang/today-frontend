@@ -321,7 +321,7 @@ import {
 } from '../../services/rate';
 import { postReaction, deleteReaction } from '../../services/react';
 
-import { lectures, getLectureByCodeAndIdx } from '../../services/lecture';
+import { initLecture, lectures, getLectureByCodeAndIdx } from '../../services/lecture';
 
 export default {
   directives: {
@@ -431,7 +431,8 @@ export default {
     },
   },
 
-  created() {
+  async created() {
+    await initLecture();
     this.refresh();
   },
   methods: {
@@ -514,38 +515,35 @@ export default {
     loadNextRateBatch() {
       // load rates in batch when scroll down
       this.loadingRates = true;
-      const nextIds = this.rateIds.slice(this.rateValidTil, this.rateValidTil + this.rateBatchSize);
+      const nextIdsAndDeleted = this.rateIds.slice(
+        this.rateValidTil,
+        this.rateValidTil + this.rateBatchSize,
+      );
+      const nextIds = nextIdsAndDeleted.map((d) => d.id);
       if (nextIds.length === 0) return;
+
+      const id2deleted = new Map(nextIdsAndDeleted.map((d) => [d.id, d.deleted]));
 
       getRateBatch(nextIds)
         .then((resp) => {
-          const getIds = resp.map((data) => data.id);
-
-          if (getIds.sort().join(',') === nextIds.sort().join(',')) {
-            const id2rate = new Map();
-            resp.forEach((data) => {
-              id2rate.set(data.id, data);
+          resp.forEach((data) => {
+            this.rates.push({
+              id: data.id,
+              deleted: id2deleted.get(data.id),
+              userName: data.userName,
+              userId: data.userId,
+              avatar: data.avatar,
+              time: data.time,
+              content: data.content,
+              replyCnt: data.replyCnt,
+              replyIds: data.replyIds,
+              reactions: data.reactions,
+              input: '',
+              openReplies: false,
+              replies: [],
+              userInfo: { valid: false, followed: false },
             });
-            nextIds.forEach((i) => {
-              const data = id2rate.get(i);
-              this.rates.push({
-                id: data.id,
-                userName: data.userName,
-                userId: data.userId,
-                avatar: data.avatar,
-                time: data.time,
-                content: data.content,
-                replyCnt: data.replyCnt,
-                replyIds: data.replyIds,
-                reactions: data.reactions,
-                input: '',
-                openReplies: false,
-                replies: [],
-                userInfo: { valid: false },
-              });
-            });
-          }
-          if (resp.length < this.rateBatchSize) this.loadingRates = false;
+          });
         })
         .catch((e) => log.info(e));
     },
@@ -577,6 +575,7 @@ export default {
 
       const thread = rthread;
       thread.userInfo.followed = follow;
+      log.info(follow);
       if (follow) {
         postFollow(thread.userId)
           .then((resp) => log.info(resp))
@@ -610,7 +609,7 @@ export default {
               time: data.time,
               avatar: data.avatar,
               reactions: [],
-              userInfo: { valid: false },
+              userInfo: { valid: false, followed: false },
             });
           })
           .catch((e) => {
@@ -625,18 +624,20 @@ export default {
       if (open && rate.replies.length === 0) {
         log.info('open');
         if (rate.replyCnt > 0) {
-          getReplies(rate.replyIds)
+          const id2deleted = new Map(rate.replyIds.map((d) => [d.id, d.deleted]));
+          getReplies(rate.replyIds.map((d) => d.id))
             .then((d) => {
               d.forEach((data) => {
                 rate.replies.push({
                   id: data.id,
+                  deleted: id2deleted.get(data.id),
                   userName: data.userName,
                   userId: data.userId,
                   avatar: data.avatar,
                   time: data.time,
                   content: data.content,
                   reactions: data.reactions,
-                  userInfo: { valid: false },
+                  userInfo: { valid: false, followed: false },
                   // replyCnt: data.replyCnt,
                   // replyIds: data.replyIds,
                   // input: "",
@@ -652,20 +653,54 @@ export default {
     // Reaction
     postReact(target, ritem) {
       const item = ritem;
-      const { cnt } = item;
-      postReaction(target, item.id) // item.id is an emoji string
-        .then((resp) => {
-          if (item.cnt !== cnt) deleteReaction(target, item.reactId);
-          // Roll back
-          else item.reactId = resp.id;
-        })
-        .catch((e) => {
-          log.info(e);
-        });
+      if (!item.lock) {
+        item.lock = true;
+        const { cnt } = item;
+        postReaction(target, item.id) // item.id is an emoji string
+          .then((resp) => {
+            item.reactId = resp.id;
+
+            // User deactivate during posting
+            if (item.cnt !== cnt)
+              deleteReaction(target, item.id)
+                .then(() => {
+                  item.lock = false;
+                })
+                .catch((e) => {
+                  log.info(e);
+                  item.lock = false;
+                });
+            else item.lock = false;
+          })
+          .catch((e) => {
+            log.info(e);
+            item.lock = false;
+          });
+      }
     },
-    deleteReact(target, item) {
-      if (item.reactId) {
-        deleteReaction(target, item.reactId);
+    deleteReact(target, ritem) {
+      const item = ritem;
+      if (!item.lock && item.reactId) {
+        const { cnt } = item;
+        item.lock = true;
+        deleteReaction(target, item.reactId)
+          .then(() => {
+            if (item.cnt !== cnt)
+              postReaction(target, item.reactId)
+                .then((resp) => {
+                  item.reactId = resp.id;
+                  item.lock = false;
+                })
+                .catch((e) => {
+                  log.info(e);
+                  item.lock = false;
+                });
+            else item.lock = false;
+          })
+          .catch((e) => {
+            log.info(e);
+            item.lock = false;
+          });
       }
     },
 
@@ -891,10 +926,11 @@ h4.skeleton-loader {
     }
 
     & > .rate-title-popup {
+      box-shadow: 0px 0px 1em -0.5em rgba(0, 0, 0, $divider-opacity);
       visibility: hidden;
       opacity: 0;
       transform: translateX(1em);
-      transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.5s,
+      transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.3s,
         transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s, visibility 0s 1.3s;
     }
 

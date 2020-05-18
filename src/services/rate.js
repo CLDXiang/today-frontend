@@ -24,15 +24,27 @@ const defaultBio = '然鹅这位童鞋并没有留下什么话语';
  */
 
 export function getRateIds(lectureId) {
-  const headers = {
-    Authorization: `Bearer ${store.state.user.jwt_token}`,
-  };
+  if (store.state.user.jwt_token) {
+    const headers = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_URL}/rate/lecture/auth/${lectureId}`, { headers })
+        .then((resp) => {
+          log.info('GET rate ids resp', resp);
+          resolve({ rateIds: resp.data.rates });
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
   return new Promise((resolve, reject) => {
     axios
-      .get(`${API_URL}/rate/lecture/${lectureId}`, { headers })
+      .get(`${API_URL}/rate/lecture/${lectureId}`)
       .then((resp) => {
         log.info('GET rate ids resp', resp);
-        resolve({ rateIds: resp.data.ids });
+        resolve({ rateIds: resp.data.rates });
       })
       .catch((err) => reject(err));
   });
@@ -42,31 +54,44 @@ export function getRateBatch(ids) {
   const headers = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
+  const userId = store.state.user.jwt_token
+    ? JSON.parse(window.atob(store.state.user.jwt_token.split('.')[1])).sub
+    : 0;
   return new Promise((resolve, reject) => {
-    const params = { ids };
+    const params = { ids, userId };
     axios
-      .get(`${API_URL}/rate/lecture`, { params, headers })
-      .then((resp) => {
-        log.info('GET rate batch resp', resp);
-        resolve(
-          resp.data.map((data) => ({
-            id: data.id,
-            userName: data.username,
-            userId: data.user_id,
-            avatar: data.avatar || defaultAvatar,
-            time: dayjs(data.created_at).fromNow(),
-            content: data.content,
-            replyIds: data.replys,
-            replyCnt: data.replys.length,
-            reactions: data.reacts.map((r) => ({
-              id: emojiIntToStr.get(r.emoji),
-              cnt: r.count,
-              active: r.reacted > 0,
-              reactId: r.reacted,
-            })),
-          })),
-        );
-      })
+      .all([
+        axios.get(`${API_URL}/rate/lecture`, { params, headers }),
+        ...ids.map((id) => axios.get(`${API_URL}/rate/${id}/reply`)),
+      ])
+      .then(
+        axios.spread((rates, ...replyIds) => {
+          const rateId2replyIds = new Map(replyIds.map((resp, i) => [ids[i], resp.data]));
+          const rateId2data = new Map(rates.data.map((data) => [data.id, data]));
+
+          const resp = ids.map((i) => {
+            const data = rateId2data.get(i);
+            return {
+              id: data.id,
+              userName: data.username,
+              userId: data.user_id,
+              avatar: data.avatar || defaultAvatar,
+              time: dayjs(data.last_update).fromNow(),
+              content: data.content,
+              replyIds: rateId2replyIds.get(data.id),
+              replyCnt: rateId2replyIds.get(data.id).length,
+              reactions: data.reacts.map((r) => ({
+                id: emojiIntToStr.get(r.emoji),
+                cnt: r.count,
+                active: r.reacted > 0,
+                reactId: r.reacted,
+              })),
+            };
+          });
+          log.info('GET rate batch resp', resp);
+          resolve(resp);
+        }),
+      )
       .catch((err) => reject(err));
   });
 }
@@ -91,8 +116,8 @@ export function getLectureRateInfo(id) {
             favorCount: starInfo.data.count,
             favored: starInfo.data.stared,
 
-            rateIds: rateInfo.data.ids,
-            rateCount: rateInfo.data.ids.length,
+            rateIds: rateInfo.data.rates,
+            rateCount: rateInfo.data.rates.length,
 
             difficultyName: ['随便浪', '摸鱼', '一般', '适度肝', '头皮发麻'][
               Math.round(rateInfo.data.avg_difficulty + 2)
@@ -181,7 +206,7 @@ export function postReply(type, id, content) {
       .then((resp) => {
         log.info('POST reply resp', resp);
         resolve({
-          id: resp.data.rateId,
+          id: resp.data.id,
           userId: resp.data.userId,
           userName: '', // FIXME
           time: dayjs(data.createdAt).fromNow(),

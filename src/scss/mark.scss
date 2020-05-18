@@ -1,93 +1,78 @@
 @import "./config.scss";
 
-.mark {
-    $spacing: $large-spacing/2;
-    $line-height: 1.4em;
+// margin, font-size, line-height for hx, p, div
+@mixin mark {
 
-    display: flex;
-    flex-direction: column;
-    padding: var(--padding--landscape, 0);
-    @media (max-width: $break-width) { padding: var(--padding--portrait, 0); }
+  $spacing: $large-spacing/2;
+  $line-height: 1.4em;
 
-    h1, h2, h3, h4, h5, h6, li, ul, p {
-        color: rgba($on-surface-color, $high-emphasis-opacity);
-        line-height: $line-height;
+  h1, h2, h3, h4, h5, h6, li, ul, p {
+      color: rgba(black, $active-opacity);
+      line-height: $line-height;
+      font-weight: normal;
+  }
+
+  //Spacing
+  > h1, > h2, > h3, > h4, > h5, > h6, > p { margin: 0 $medium-spacing calc(#{$spacing} - #{($line-height - 1em)/2}) $medium-spacing; }
+  & > div { margin: 0 $medium-spacing $spacing $medium-spacing; }
+
+  //Section spacing
+  > h1, > h2, > h3, > h4, > h5, > h6 { margin-top: $spacing;}
+  > h1, > h2, > h3, > h4, > h5, > h6 {
+    & + h1, & + h2, & + h3, & + h4, & + h5, & + h6 {
+      margin-top: 0;
     }
+  }
+  & > *:first-child {margin-top: calc(#{$spacing} - #{($line-height - 1em)/2});}
+  & > *:last-child { margin-bottom: $large-spacing/2;}
 
-    //Spacing
-    > h1, > h2, > h3, > h4, > h5, > h6, > p { margin: 0 $medium-spacing calc(#{$spacing} - #{($line-height - 1em)/2}) $medium-spacing; }
-    & > div, & > pre { margin: 0 $medium-spacing $spacing $medium-spacing; }
+  //TODO Font-size
+  p { font-size: 1em; }
 
-    //Section spacing
-    > h1, > h2, > h3, > h4, > h5, > h6 { margin-top: $spacing;}
-    > h1, > h2, > h3, > h4, > h5, > h6 {
-      & + h1, & + h2, & + h3, & + h4, & + h5, & + h6 {
-        margin-top: 0;
-      }
+  h1 { font-size: 2.7em;}
+  h2 { font-size: 2.3em;}
+  h3 { font-size: 1.9em;}
+  h4 { font-size: 1.5em;}
+  h5 { font-size: 1.3em;}
+  h6 { font-size: 1em;}
+  
+  /*
+  > p > a {
+    color: #0070c9;
+    text-decoration: none;
+    &:hover {
+        cursor: pointer;
+        text-decoration: var(--text-decoration--hover, underline);
     }
-    & > *:first-child {margin-top: 0;}
-    & > *:last-child { margin-bottom: 0;}
+  }
+  */
+  // Support customized link
+  & .link {
+    opacity: var(--opacity, $active-opacity);
+    &:hover {
+      cursor: pointer;
+      opacity: var(--opacity--hover, $inactive-opacity);
+    }
+  }
 
+  // Staggering animation
+  $max-delay: 10s;
+  $interval: .3s;
 
-    //TODO Font-size
-    p { font-size: 1em; }
-
-    h1 { font-size: 2.7em;}
-    h2 { font-size: 2.3em;}
-    h3 { font-size: 1.9em;}
-    h4 { font-size: 1.5em;}
-    h5 { font-size: 1.3em;}
-    h6 { font-size: 1em;}
+  & > * {
+    animation-delay: $max-delay;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    // animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
     
-    > p > a {
-        color: #0070c9;
-        text-decoration: none;
-        &:hover {
-            cursor: pointer;
-            text-decoration: var(--text-decoration--hover, underline);
-        }
-    
+  @for $i from 1 to 10 {
+    & > *:nth-child(#{$i}) {
+      animation-delay: #{ $interval * $i};
+      // animation-delay: #{$max-delay/2 - $max-delay/(1+$i)};
     }
-    // Support customized link
-    & .link {
-        opacity: var(--opacity, $high-emphasis-opacity);
-        &:hover {
-            cursor: pointer;
-            opacity: var(--opacity--hover, $inactive-opacity);
-        }
-    }
+  }
 
-    // Wrap when landscape
-    // TODO add into doc
-    > .responsive-list {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        max-height: var(--max-height--landscape);
-    }
 }
 
-//Portrait
-@media (max-width: $break-width) {
-
-    $spacing: $large-spacing/2;
-    $line-height: 1.4em;
-
-    .mark > *:first-child {margin-top: calc(#{$spacing} - #{($line-height - 1em)/2});}
-    .mark > *:last-child { margin-bottom: $large-spacing/2;}
-
-    .mark > .responsive-list {
-        flex-wrap: nowrap;
-    }
-    .mark > .mark--fullwidth {
-        margin-left: 0;
-        margin-right: 0;
-        overflow: auto;
-        // Fix table
-        > table {
-            border-left: none;
-            border-right: none;
-        }
-    }
-}
 

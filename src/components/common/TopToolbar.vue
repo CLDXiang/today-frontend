@@ -10,7 +10,7 @@
           </v-list-item>
         </div>
         <div v-show="userLoggedIn">
-          <v-list-item two-line @click="doNothing">
+          <v-list-item two-line @click="toProfile">
             <v-list-item-avatar>
               <img :src="user.avatar">
             </v-list-item-avatar>
@@ -224,6 +224,13 @@ export default {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'Settings' });
+      }
+    },
+    toProfile() {
+      if (this.$route.path === '/profile') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'UserProfile' });
       }
     },
   },

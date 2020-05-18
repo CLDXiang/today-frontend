@@ -2,62 +2,48 @@
   <div>
     <v-list-item three-line>
       <v-list-item-avatar size="80" color="grey">
-        <img :src="userInfo.avatar" alt="avatar">
+        <img :src="user.avatar" alt="avatar">
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline mb-1">
-          {{ userInfo.nickName }}
+          {{ user.nickName }}
         </v-list-item-title>
-        <v-list-item-subtitle>
-          登录名：{{ userInfo.name }}
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          个性签名：{{ userInfo.bio }}
-        </v-list-item-subtitle>
+        <v-list-item-subtitle> 登录名：{{ user.name }} </v-list-item-subtitle>
+        <v-list-item-subtitle> 个性签名：{{ user.bio }} </v-list-item-subtitle>
       </v-list-item-content>
-      <v-row align="center" justify="end">
-        <v-icon
-          class="mr-1"
-          :color="isFollowing ? 'red' : 'gray'"
-          @click="starUnstar"
-        >
-          mdi-heart
-        </v-icon>
-        <span class="subheading mr-2">{{ profile.countFollower }}</span>
-      </v-row>
     </v-list-item>
-    <v-tabs centered grow>
-      <v-tabs-slider />
 
+    <v-tabs center-active grow show-arrows>
+      <v-tabs-slider />
       <v-tab href="#tab-1">
-        关注课程 {{ profile.countStar }}
+        关注课程 {{ countUserStar }}
       </v-tab>
       <v-tab-item value="tab-1">
         <!-- <v-card flat tile> -->
         <v-list two-line>
-          <div v-for="(item, index) in profile.star" :key="item.id">
-            <v-list-item :to="`/rate/${item.code}/${item.idx}`">
+          <div v-for="(item, index) in star" :key="item.id">
+            <v-list-item :to="`/lecture/${item.code}/${item.idx}`">
               <v-list-item-content>
                 <v-list-item-title v-text="item.name" />
                 <v-list-item-subtitle v-text="item.teacher" />
               </v-list-item-content>
             </v-list-item>
-            <v-divider v-if="index + 1 < profile.star.length" :key="index" />
+            <v-divider v-if="index + 1 < star.length" :key="index" />
           </div>
         </v-list>
         <!-- </v-card> -->
       </v-tab-item>
       <v-tab href="#tab-2">
-        他的课评 {{ profile.countRate }}
+        我的评课 {{ countUserRate }}
       </v-tab>
       <v-tab-item value="tab-2">
         <v-card flat tile>
           <v-list three-line>
-            <template v-for="(item, index) in profile.rate">
+            <template v-for="(item, index) in rate">
               <!-- TODO: 路由的目标不对 -->
               <v-list-item
                 :key="item.lectureId"
-                :to="`/rate/${item.code}/${item.idx}`"
+                :to="`/lecture/${item.code}/${item.idx}`"
               >
                 <v-list-item-content>
                   <v-list-item-title
@@ -70,99 +56,148 @@
                   <v-list-item-action-text v-text="item.time" />
                 </v-list-item-action>
               </v-list-item>
-
-              <v-divider v-if="index + 1 < profile.rate.length" :key="index" />
+              <v-divider v-if="index + 1 < rate.length" :key="index" />
             </template>
           </v-list>
         </v-card>
+      </v-tab-item>
+      <v-tab href="#tab-3">
+        关注的人 {{ countFollowing }}
+      </v-tab>
+      <v-tab-item value="tab-3">
+        <v-card flat tile>
+          <v-list two-line>
+            <template v-for="(item, index) in following">
+              <v-list-item :key="item.id" :to="`/user/${item.id}`">
+                <v-list-item-avatar>
+                  <v-img :src="item.avatar" />
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.nickName" />
+                  <v-list-item-subtitle v-text="item.bio" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider v-if="index + 1 < following.length" :key="index" />
+            </template>
+          </v-list>
+        </v-card>
+      </v-tab-item>
+      <v-tab href="#tab-4">
+        我的粉丝 {{ countFollower }}
+      </v-tab>
+      <v-tab-item value="tab-4">
+        <v-card flat tile>
+          <v-list two-line>
+            <template v-for="(item, index) in follower">
+              <v-list-item :key="item.nickName" :to="`/user/${item.id}`">
+                <v-list-item-avatar>
+                  <v-img :src="item.avatar" />
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.name" />
+                  <v-list-item-subtitle v-text="item.bio" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider v-if="index + 1 < follower.length" :key="index" />
+            </template>
+          </v-list>
+        </v-card>
+      </v-tab-item>
+      <v-tab href="#tab-5">
+        浏览历史 {{ countHistory }}
+      </v-tab>
+      <v-tab-item value="tab-5">
+        <v-card flat tile>
+          <v-list two-line>
+            <template v-for="(item, index) in history">
+              <v-list-item
+                :key="item.lectureId"
+                :to="`/rate/${item.code}/${item.idx}`"
+              >
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-text="item.code + '.' + item.idx + ' ' + item.name"
+                  />
+                  <v-list-item-subtitle v-text="item.teacher" />
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-list-item-action-text v-text="item.time" />
+                </v-list-item-action>
+              </v-list-item>
+
+              <v-divider v-if="index + 1 < history.length" :key="index" />
+            </template>
+          </v-list>
+        </v-card>
+      </v-tab-item>
+      <v-tab href="#tab-6">
+        通知动态 {{ countNotification }}
+      </v-tab>
+      <v-tab-item value="tab-6">
+        <v-card flat tile />
       </v-tab-item>
     </v-tabs>
   </div>
 </template>
 
 <script>
-import {
-  getUserProfile,
-  getUserStar,
-  getUserRate,
-  getFollower,
-} from '../../services/profile.service';
-import log from '../../utils/log';
+import { mapGetters, mapState } from 'vuex';
 import getLectureById from '../../utils/lecture';
 import renderTime from '../../utils/time';
 
 export default {
   data: () => ({
-    isFollowing: '',
-    isFollower: '',
-    id: '',
-    userInfo: [],
-    profile: {
-      rate: [],
-      star: [],
-      countFollower: '',
-      countRate: '',
-      countStar: '',
-    },
-
-    text: '123132',
+    rate: [],
+    star: [],
+    follower: [],
+    following: [],
+    history: [],
   }),
+  computed: {
+    ...mapState(['user', 'profile']),
+    ...mapGetters([
+      'countUserRate',
+      'countUserStar',
+      'countFollower',
+      'countFollowing',
+      'countHistory',
+      'countNotification',
+    ]),
+  },
   created() {
-    this.getParams();
+    this.$store.commit('SET_BAR_TITLE', '个人主页');
     this.fetchData();
   },
   methods: {
-    getParams() {
-      this.id = this.$route.params.id;
-    },
     fetchData() {
-      getUserProfile(this.id)
-        .then((profile) => {
-          this.userInfo = profile;
-          log.info(profile);
-        })
-        .catch((err) => {
-          log.info(err);
+      this.profile.userRate.forEach((element) => {
+        const time = { time: renderTime(element.createdAt) };
+        this.rate.push({
+          ...getLectureById(element.lectureId),
+          ...element,
+          ...time,
         });
-      getUserStar(this.id)
-        .then((userStar) => {
-          userStar.forEach((element) => {
-            this.profile.star.push(getLectureById(element.lecture_id));
-          });
-          this.profile.countStar = Object.keys(userStar).length;
-          log.info(userStar);
-        })
-        .catch((err) => {
-          log.info(err);
+      });
+      this.profile.userStar.forEach((element) => {
+        this.star.push(getLectureById(element.lecture_id));
+      });
+      this.profile.follower.forEach((element) => {
+        this.follower.push(element);
+      });
+      this.profile.following.forEach((element) => {
+        this.following.push(element);
+      });
+      this.$store.state.profile.history.forEach((element) => {
+        const time = { time: renderTime(element.created_at) };
+        this.history.push({
+          ...getLectureById(element.history_about_id),
+          ...time,
         });
-      getUserRate(this.id)
-        .then((userRate) => {
-          userRate.forEach((element) => {
-            const time = { time: renderTime(element.createdAt) };
-            this.profile.rate.push({ ...getLectureById(element.lectureId), ...element, ...time });
-          });
-          this.profile.countRate = Object.keys(userRate).length;
-          log.info(userRate);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollower()
-        .then((follower) => {
-          this.profile.countFollower = Object.keys(follower).length;
-          log.info(follower);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      this.isFollowing = false;
-      this.$store.state.profile.following.forEach((element) => {
-        if (this.id === element.id) {
-          this.isFollowing = true;
-        }
       });
     },
-    starUnstar() {},
   },
 };
 </script>

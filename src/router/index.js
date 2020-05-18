@@ -4,6 +4,7 @@ import Login from '../components/common/Login.vue';
 import Register from '../components/common/Register.vue';
 import Profile from '../components/profile/Profile.vue';
 import UserProfile from '../components/profile/UserProfile.vue';
+import OthersProfile from '../components/profile/OthersProfile.vue';
 import Star from '../components/profile/Star.vue';
 import UserRate from '../components/profile/UserRate.vue';
 import Follower from '../components/profile/Follower.vue';
@@ -91,7 +92,7 @@ const routes = [
     component: RateView,
   },
   // rate end
-
+  { path: '/user/:id', component: OthersProfile, props: true },
   { path: '/hole', name: 'Hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
   { path: '*', component: Timetable },

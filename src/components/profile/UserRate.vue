@@ -2,7 +2,7 @@
   <v-list three-line>
     <template v-for="(item, index) in items">
       <!-- TODO: 路由的目标不对 -->
-      <v-list-item :key="item.lectureId" :to="`/rate/${item.code}/${item.idx}`">
+      <v-list-item :key="item.lectureId" :to="`/lecture/${item.code}/${item.idx}`">
         <v-list-item-content>
           <v-list-item-title v-text="item.name + ' · ' + item.teacher" />
           <!-- <v-list-item-subtitle

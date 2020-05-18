@@ -129,7 +129,8 @@ export default {
         })
         .catch((err) => {
           log.info(err);
-          this.showSnackbar('error', '发生了错误');
+          this.showSnackbar('error', '请选择一张不超过200K的图片');
+          this.avatar = this.$store.state.user.avatar;
         });
     },
   },

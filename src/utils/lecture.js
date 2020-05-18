@@ -9,7 +9,7 @@ const lectures = rawLectures
       code: d.code,
       credit: d.credit,
       teacher: d.taught_by.replace(/@@/g, ', ').trim(), // 替换多位老师授课的'@@'
-      idx: d.lecture_index < 10 ? `0${d.lecture_index}` : d.lecture_index,
+      idx: d.lecture_index,
     };
   })
   // drop empty teacher

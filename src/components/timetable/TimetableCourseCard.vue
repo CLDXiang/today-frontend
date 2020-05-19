@@ -63,7 +63,8 @@ export default {
 
   box-sizing: border-box;
   position: absolute;
-  width: $cell-width - 2px;
+  width: calc(100% - 2px);
+  min-width: $cell-width - 2px;
   left: 1px;
   border-radius: 6px;
   border-bottom: 0.2rem solid;

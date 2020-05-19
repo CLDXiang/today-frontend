@@ -153,8 +153,8 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn v-show="searchResults.length !== 0" @click="handleChangeResultsVisible">
-        <v-icon left style="color: #000">
+      <v-btn v-show="searchResults.length !== 0" :color="isSearchResultsVisible ? 'primary' : ''" @click="handleChangeResultsVisible">
+        <v-icon left :style="isSearchResultsVisible ? 'color: #fff' : ''">
           {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
         </v-icon>
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}

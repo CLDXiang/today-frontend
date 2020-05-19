@@ -1,6 +1,6 @@
 <template>
   <v-list three-line>
-    <template v-for="(item, index) in items">
+    <template v-for="(item, index) in rates">
       <!-- TODO: 路由的目标不对 -->
       <v-list-item :key="item.lectureId" :to="`/lecture/${item.code}/${item.idx}`">
         <v-list-item-content>
@@ -17,7 +17,7 @@
         </v-list-item-action>
       </v-list-item>
 
-      <v-divider v-if="index + 1 < items.length" :key="index" />
+      <v-divider v-if="index + 1 < rates.length" :key="index" />
     </template>
   </v-list>
 </template>
@@ -28,7 +28,7 @@ import renderTime from '../../utils/time';
 
 export default {
   data: () => ({
-    items: [],
+    rates: [],
   }),
   created() {
     this.$store.commit('SET_BAR_TITLE', '历史评论');
@@ -38,7 +38,7 @@ export default {
     fetchData() {
       this.$store.state.profile.userRate.forEach((element) => {
         const time = { time: renderTime(element.createdAt) };
-        this.items.push({ ...getLectureById(element.lectureId), ...element, ...time });
+        this.rates.push({ ...getLectureById(element.lectureId), ...element, ...time });
       });
     },
   },

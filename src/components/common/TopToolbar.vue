@@ -2,14 +2,14 @@
   <div>
     <v-navigation-drawer v-model="showMenu" app fixed>
       <v-list dense>
-        <div v-show="!userLoggedIn">
+        <div v-if="!userLoggedIn">
           <v-list-item>
             <v-list-item-content>
               未登录
             </v-list-item-content>
           </v-list-item>
         </div>
-        <div v-show="userLoggedIn">
+        <div v-if="userLoggedIn">
           <v-list-item two-line @click="toProfile">
             <v-list-item-avatar>
               <img :src="user.avatar">

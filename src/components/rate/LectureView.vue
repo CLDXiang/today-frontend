@@ -321,7 +321,7 @@ import {
 } from '../../services/rate';
 import { postReaction, deleteReaction } from '../../services/react';
 
-import { lectures, getLectureByCodeAndIdx } from '../../services/lecture';
+import { initLecture, lectures, getLectureByCodeAndIdx } from '../../services/lecture';
 
 export default {
   directives: {
@@ -431,7 +431,8 @@ export default {
     },
   },
 
-  created() {
+  async created() {
+    await initLecture();
     this.refresh();
   },
   methods: {

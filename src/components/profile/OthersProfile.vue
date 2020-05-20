@@ -184,17 +184,16 @@ export default {
         });
       this.isFollowing = !this.isFollowing;
     },
-    // TODO
     followUnfollow() {
-      if (this.isFollowing === false) {
-        postFollow(this.id)
+      if (this.isFollowing) {
+        deleteFollow(this.id)
           .then((resp) => {
             log.info(resp);
             this.updateData();
           })
           .catch((e) => log.info(e));
       } else {
-        deleteFollow(this.id)
+        postFollow(this.id)
           .then((resp) => {
             log.info(resp);
             this.updateData();

@@ -253,6 +253,7 @@ export function postFollow(id) {
       .post(`${API_URL}/user/${id}/following`, {}, { headers: header })
       .then((resp) => {
         log.info('POST following resp', resp);
+        resolve(resp);
       })
       .catch((e) => reject(e));
   });
@@ -267,6 +268,7 @@ export function deleteFollow(id) {
       .delete(`${API_URL}/user/${id}/following`, { headers: header })
       .then((resp) => {
         log.info('DELETE following resp', resp);
+        resolve(resp);
       })
       .catch((e) => reject(e));
   });

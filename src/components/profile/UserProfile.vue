@@ -67,7 +67,7 @@
       <v-tab-item value="tab-3">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(item, index) in following">
+            <template v-for="(item, index) in profile.following">
               <v-list-item :key="item.id" :to="`/user/${item.id}`">
                 <v-list-item-avatar>
                   <v-img :src="item.avatar" />
@@ -78,7 +78,7 @@
                   <v-list-item-subtitle v-text="item.bio" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < following.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.following.length" :key="index" />
             </template>
           </v-list>
         </v-card>
@@ -89,18 +89,18 @@
       <v-tab-item value="tab-4">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(item, index) in follower">
+            <template v-for="(item, index) in profile.follower">
               <v-list-item :key="item.nickName" :to="`/user/${item.id}`">
                 <v-list-item-avatar>
                   <v-img :src="item.avatar" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.name" />
+                  <v-list-item-title v-text="item.nickName" />
                   <v-list-item-subtitle v-text="item.bio" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < follower.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
             </template>
           </v-list>
         </v-card>
@@ -152,8 +152,6 @@ export default {
   data: () => ({
     rate: [],
     star: [],
-    follower: [],
-    following: [],
     history: [],
   }),
   computed: {
@@ -183,12 +181,6 @@ export default {
       });
       this.profile.userStar.forEach((element) => {
         this.star.push(getLectureById(element.lecture_id));
-      });
-      this.profile.follower.forEach((element) => {
-        this.follower.push(element);
-      });
-      this.profile.following.forEach((element) => {
-        this.following.push(element);
       });
       this.$store.state.profile.history.forEach((element) => {
         const time = { time: renderTime(element.created_at) };

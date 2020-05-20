@@ -19,7 +19,7 @@
         <v-icon
           class="mr-1"
           :color="isFollowing ? 'red' : 'gray'"
-          @click="starUnstar"
+          @click="followUnfollow"
         >
           mdi-heart
         </v-icon>
@@ -85,7 +85,9 @@ import {
   getUserStar,
   getUserRate,
   getFollower,
+  getFollowing,
 } from '../../services/profile.service';
+import { postFollow, deleteFollow } from '../../services/rate';
 import log from '../../utils/log';
 import getLectureById from '../../utils/lecture';
 import renderTime from '../../utils/time';
@@ -93,8 +95,7 @@ import renderTime from '../../utils/time';
 export default {
   data: () => ({
     isFollowing: '',
-    isFollower: '',
-    id: '$route.params.newsId',
+    id: '',
     userInfo: [],
     profile: {
       rate: [],
@@ -103,8 +104,6 @@ export default {
       countRate: '',
       countStar: '',
     },
-
-    text: '123132',
   }),
   created() {
     this.getParams();
@@ -161,13 +160,48 @@ export default {
 
       this.isFollowing = false;
       this.$store.state.profile.following.forEach((element) => {
-        if (this.id === element.id) {
+        if (this.id === String(element.id)) {
           this.isFollowing = true;
         }
       });
     },
+    updateData() {
+      getFollower(this.id)
+        .then((follower) => {
+          this.profile.countFollower = Object.keys(follower).length;
+          log.info('his follower', follower);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getFollowing(this.$store.state.user.id)
+        .then((myFollowing) => {
+          this.$store.commit('SET_FOLLOWING', myFollowing);
+          log.info('my follower', myFollowing);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      this.isFollowing = !this.isFollowing;
+    },
     // TODO
-    starUnstar() {},
+    followUnfollow() {
+      if (this.isFollowing === false) {
+        postFollow(this.id)
+          .then((resp) => {
+            log.info(resp);
+            this.updateData();
+          })
+          .catch((e) => log.info(e));
+      } else {
+        deleteFollow(this.id)
+          .then((resp) => {
+            log.info(resp);
+            this.updateData();
+          })
+          .catch((e) => log.info(e));
+      }
+    },
   },
 };
 </script>

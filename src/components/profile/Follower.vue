@@ -7,7 +7,7 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title v-text="item.name" />
+          <v-list-item-title v-text="item.nickName" />
           <v-list-item-subtitle v-text="item.bio" />
         </v-list-item-content>
       </v-list-item>

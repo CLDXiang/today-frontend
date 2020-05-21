@@ -1,19 +1,19 @@
 <template>
   <v-list three-line>
-    <template v-for="(item, index) in rates">
+    <template v-for="(rate, index) in rates">
       <!-- TODO: 路由的目标不对 -->
-      <v-list-item :key="item.lectureId" :to="`/lecture/${item.code}/${item.idx}`">
+      <v-list-item :key="rate.lectureId" :to="`/lecture/${rate.code}/${rate.idx}`">
         <v-list-item-content>
-          <v-list-item-title v-text="item.name + ' · ' + item.teacher" />
+          <v-list-item-title v-text="`${rate.name} · ${rate.teacher}`" />
           <!-- <v-list-item-subtitle
             class="text--primary"
             v-text="'难度 ' + item.difficulty + ' · 工作量 ' + item.workload + ' · 给分 ' + item.grading"
           /> -->
-          <v-list-item-subtitle v-text="item.content" />
+          <v-list-item-subtitle v-text="rate.content" />
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-list-item-action-text v-text="item.time" />
+          <v-list-item-action-text v-text="rate.time" />
         </v-list-item-action>
       </v-list-item>
 

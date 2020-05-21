@@ -1,10 +1,10 @@
 <template>
   <v-list two-line>
-    <div v-for="(item, index) in starLectures" :key="item.id">
-      <v-list-item :to="`/lecture/${item.code}/${item.idx}`">
+    <div v-for="(lecture, index) in starLectures" :key="lecture.id">
+      <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
         <v-list-item-content>
-          <v-list-item-title v-text="item.code+'.'+item.idx+' '+item.name" />
-          <v-list-item-subtitle v-text="item.teacher" />
+          <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
+          <v-list-item-subtitle v-text="lecture.teacher" />
         </v-list-item-content>
       </v-list-item>
       <v-divider v-if="index + 1 < starLectures.length" :key="index" />

@@ -15,8 +15,8 @@
               <img :src="user.avatar">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ user.nickName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ user.bio }}</v-list-item-subtitle>
+              <v-list-item-title>{{ user.nickName||'Anonymous' }}</v-list-item-title>
+              <v-list-item-subtitle>{{ user.bio||'这个人还没有个性签名哦' }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -207,7 +207,7 @@ export default {
       }
     },
     toProfile() {
-      if (this.$route.path === '/profile') {
+      if (this.$route.path === '/profile/' || this.$route.path === '/profile') {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'UserProfile' });

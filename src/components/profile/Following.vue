@@ -1,14 +1,14 @@
 <template>
   <v-list two-line>
-    <template v-for="(item, index) in profile.following">
-      <v-list-item :key="item.id" :to="`/user/${item.id}`">
+    <template v-for="(user, index) in profile.following">
+      <v-list-item :key="user.id" :to="`/user/${user.id}`">
         <v-list-item-avatar>
-          <v-img :src="item.avatar" />
+          <v-img :src="user.avatar" />
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title v-text="item.nickName" />
-          <v-list-item-subtitle v-text="item.bio" />
+          <v-list-item-title v-text="user.nickName||'Anonymous'" />
+          <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
         </v-list-item-content>
       </v-list-item>
       <v-divider v-if="index + 1 < profile.following.length" :key="index" />

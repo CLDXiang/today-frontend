@@ -6,13 +6,13 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline mb-1">
-          {{ userInfo.nickName }}
+          {{ userInfo.nickName||'Anonymous' }}
         </v-list-item-title>
         <v-list-item-subtitle>
           登录名：{{ userInfo.name }}
         </v-list-item-subtitle>
         <v-list-item-subtitle>
-          个性签名：{{ userInfo.bio }}
+          个性签名：{{ userInfo.bio||'这个人还没有个性签名哦' }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-row align="center" justify="end">
@@ -35,11 +35,11 @@
       <v-tab-item value="tab-1">
         <!-- <v-card flat tile> -->
         <v-list two-line>
-          <div v-for="(item, index) in profile.star" :key="item.id">
-            <v-list-item :to="`/lecture/${item.code}/${item.idx}`">
+          <div v-for="(lecture, index) in profile.star" :key="lecture.id">
+            <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
               <v-list-item-content>
-                <v-list-item-title v-text="item.code+'.'+item.idx+' '+item.name" />
-                <v-list-item-subtitle v-text="item.teacher" />
+                <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
+                <v-list-item-subtitle v-text="lecture.teacher" />
               </v-list-item-content>
             </v-list-item>
             <v-divider v-if="index + 1 < profile.star.length" :key="index" />
@@ -53,21 +53,21 @@
       <v-tab-item value="tab-2">
         <v-card flat tile>
           <v-list three-line>
-            <template v-for="(item, index) in profile.rate">
+            <template v-for="(rate, index) in profile.rate">
               <!-- TODO: 路由的目标不对 -->
               <v-list-item
-                :key="item.lectureId"
-                :to="`/lecture/${item.code}/${item.idx}`"
+                :key="rate.lectureId"
+                :to="`/lecture/${rate.code}/${rate.idx}`"
               >
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="item.name + ' · ' + item.teacher"
+                    v-text="`${rate.name} · ${rate.teacher}`"
                   />
-                  <v-list-item-subtitle v-text="item.content" />
+                  <v-list-item-subtitle v-text="rate.content" />
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-list-item-action-text v-text="item.time" />
+                  <v-list-item-action-text v-text="rate.time" />
                 </v-list-item-action>
               </v-list-item>
               <v-divider v-if="index + 1 < profile.rate.length" :key="index" />

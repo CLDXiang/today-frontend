@@ -6,10 +6,10 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline mb-1">
-          {{ user.nickName }}
+          {{ user.nickName||'Anonymous' }}
         </v-list-item-title>
         <v-list-item-subtitle> 登录名：{{ user.name }} </v-list-item-subtitle>
-        <v-list-item-subtitle> 个性签名：{{ user.bio }} </v-list-item-subtitle>
+        <v-list-item-subtitle> 个性签名：{{ user.bio||'这个人还没有个性签名哦' }} </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
@@ -21,11 +21,11 @@
       <v-tab-item value="tab-1">
         <!-- <v-card flat tile> -->
         <v-list two-line>
-          <div v-for="(item, index) in star" :key="item.id">
-            <v-list-item :to="`/lecture/${item.code}/${item.idx}`">
+          <div v-for="(lecture, index) in star" :key="lecture.id">
+            <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
               <v-list-item-content>
-                <v-list-item-title v-text="item.code+'.'+item.idx+' '+item.name" />
-                <v-list-item-subtitle v-text="item.teacher" />
+                <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
+                <v-list-item-subtitle v-text="lecture.teacher" />
               </v-list-item-content>
             </v-list-item>
             <v-divider v-if="index + 1 < star.length" :key="index" />
@@ -47,7 +47,7 @@
               >
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="item.name + ' · ' + item.teacher"
+                    v-text="`${item.name} · ${item.teacher}`"
                   />
                   <v-list-item-subtitle v-text="item.content" />
                 </v-list-item-content>
@@ -74,8 +74,8 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.nickName" />
-                  <v-list-item-subtitle v-text="item.bio" />
+                  <v-list-item-title v-text="item.nickName||'Anonymous'" />
+                  <v-list-item-subtitle v-text="item.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
               <v-divider v-if="index + 1 < profile.following.length" :key="index" />
@@ -96,8 +96,8 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.nickName" />
-                  <v-list-item-subtitle v-text="item.bio" />
+                  <v-list-item-title v-text="item.nickName||'Anonymous'" />
+                  <v-list-item-subtitle v-text="item.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
               <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
@@ -118,7 +118,7 @@
               >
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="item.code + '.' + item.idx + ' ' + item.name"
+                    v-text="`${item.code}.${item.idx} ${item.name}`"
                   />
                   <v-list-item-subtitle v-text="item.teacher" />
                 </v-list-item-content>

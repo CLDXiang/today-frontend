@@ -11,6 +11,8 @@
         <v-avatar size="150" @click="uploadAvatar">
           <img :src="avatar" alt="avatar">
         </v-avatar>
+        <v-file-input show-size accept="image/*" label="File input" />
+
         <input type="file" accept="image/*" class="hiddenInput" @change="handleAvatar">
       </v-col>
     </v-row>
@@ -42,20 +44,6 @@
         />
       </v-col>
     </v-row>
-    <v-snackbar
-      v-model="snackbar"
-      :color="snackbarColor"
-      :timeout="snackbarTimeout"
-    >
-      {{ snackbarText }}
-      <v-btn
-        dark
-        text
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>
-    </v-snackbar>
     <v-row justify="center">
       <div class="my-2">
         <v-btn large color="primary" @click="changeProfile" @keyup.enter="changeProfile">
@@ -90,21 +78,16 @@ export default {
       this.bio = this.$store.state.user.bio;
       this.nickName = this.$store.state.user.nickName;
     },
-    showSnackbar(type, content) {
-      this.snackbarColor = type;
-      this.snackbarText = content;
-      this.snackbar = true;
-    },
     changeProfile() {
       const UpdateUserDto = { nickName: this.nickName, bio: this.bio };
       editProfile(UpdateUserDto)
         .then((resp) => {
           this.$store.commit('SET_USER_PROFILE', resp);
-          this.showSnackbar('success', '更新完成');
+          this.$message.success('更新完成');
         })
         .catch((err) => {
           log.info(err);
-          this.showSnackbar('error', '发生了错误');
+          this.$message.error('发生了错误');
         });
     },
     uploadAvatar() {
@@ -125,11 +108,11 @@ export default {
       uploadAvatar(dto)
         .then((resp) => {
           this.$store.commit('SET_USER_PROFILE', resp);
-          this.showSnackbar('success', '更换头像成功');
+          this.$message.success('更新头像成功');
         })
         .catch((err) => {
           log.info(err);
-          this.showSnackbar('error', '请选择一张不超过200K的图片');
+          this.$message.error('请选择一张不超过200K的图片');
           this.avatar = this.$store.state.user.avatar;
         });
     },

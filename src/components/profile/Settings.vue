@@ -8,12 +8,16 @@
         lg="4"
         class="text-center"
       >
-        <v-avatar size="150" @click="uploadAvatar">
+        <v-avatar size="150" @click="clickAvatar">
           <img :src="avatar" alt="avatar">
         </v-avatar>
-        <v-file-input show-size accept="image/*" label="File input" />
-
-        <input type="file" accept="image/*" class="hiddenInput" @change="handleAvatar">
+        <v-file-input
+          v-show="false"
+          id="input"
+          v-model="newAvatar"
+          accept="image/png, image/jpeg, image/bmp"
+          @change="changeAvatar"
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -46,7 +50,7 @@
     </v-row>
     <v-row justify="center">
       <div class="my-2">
-        <v-btn large color="primary" @click="changeProfile" @keyup.enter="changeProfile">
+        <v-btn large color="primary" @click="changeProfile">
           保存更改
         </v-btn>
       </div>
@@ -63,10 +67,7 @@ export default {
     avatar: '',
     nickName: '',
     bio: '',
-    snackbar: '',
-    snackbarColor: '',
-    snackbarText: '',
-    snackbarTimeout: 2000,
+    newAvatar: [],
   }),
   created() {
     this.$store.commit('SET_BAR_TITLE', '用户设置');
@@ -90,21 +91,18 @@ export default {
           this.$message.error('发生了错误');
         });
     },
-    uploadAvatar() {
-      this.$el.querySelector('.hiddenInput').click();
+    clickAvatar() {
+      this.$el.querySelector('#input').click();
     },
-    // 将头像显示
-    handleAvatar(e) {
-      const $target = e.target || e.srcElement;
-      const file = $target.files[0];
-      const dto = new FormData();
-      dto.append('file', file);
+    changeAvatar() {
       const reader = new FileReader();
       reader.onload = (data) => {
         const res = data.target || data.srcElement;
         this.avatar = res.result;
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(this.newAvatar);
+      const dto = new FormData();
+      dto.append('file', this.newAvatar);
       uploadAvatar(dto)
         .then((resp) => {
           this.$store.commit('SET_USER_PROFILE', resp);
@@ -119,9 +117,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.hiddenInput {
-  display: none;
-}
-</style>

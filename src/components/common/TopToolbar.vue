@@ -9,7 +9,7 @@
             </v-list-item-content>
           </v-list-item>
         </div>
-        <div v-if="userLoggedIn">
+        <div v-else>
           <v-list-item two-line @click="toProfile">
             <v-list-item-avatar>
               <img :src="user.avatar">

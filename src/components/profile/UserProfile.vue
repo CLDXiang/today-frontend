@@ -2,7 +2,7 @@
   <div>
     <v-list-item three-line>
       <v-list-item-avatar size="80" color="grey">
-        <img :src="user.avatar" alt="avatar">
+        <img :src="processAvatar(user.avatar)" alt="avatar">
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline mb-1">
@@ -70,7 +70,7 @@
             <template v-for="(item, index) in profile.following">
               <v-list-item :key="item.id" :to="`/user/${item.id}`">
                 <v-list-item-avatar>
-                  <v-img :src="item.avatar" />
+                  <v-img :src="processAvatar(item.avatar)" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -92,7 +92,7 @@
             <template v-for="(item, index) in profile.follower">
               <v-list-item :key="item.nickName" :to="`/user/${item.id}`">
                 <v-list-item-avatar>
-                  <v-img :src="item.avatar" />
+                  <v-img :src="processAvatar(item.avatar)" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -189,6 +189,13 @@ export default {
           ...time,
         });
       });
+    },
+    processAvatar(originAvatar) {
+      if (originAvatar.substring(originAvatar.length - 18) === 'default_avatar.png') {
+        // eslint-disable-next-line global-require
+        return require('../../assets/default_avatar.png');
+      }
+      return originAvatar;
     },
   },
 };

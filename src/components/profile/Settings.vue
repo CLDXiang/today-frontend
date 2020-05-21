@@ -9,7 +9,7 @@
         class="text-center"
       >
         <v-avatar size="150" @click="clickAvatar">
-          <img :src="avatar" alt="avatar">
+          <img :src="processAvatar(avatar)" alt="avatar">
         </v-avatar>
         <v-file-input
           v-show="false"
@@ -113,6 +113,13 @@ export default {
           this.$message.error('请选择一张不超过200K的图片');
           this.avatar = this.$store.state.user.avatar;
         });
+    },
+    processAvatar(originAvatar) {
+      if (originAvatar.substring(originAvatar.length - 18) === 'default_avatar.png') {
+        // eslint-disable-next-line global-require
+        return require('../../assets/default_avatar.png');
+      }
+      return originAvatar;
     },
   },
 };

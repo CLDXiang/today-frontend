@@ -3,7 +3,7 @@
     <template v-for="(user, index) in profile.follower">
       <v-list-item :key="user.id" :to="`/user/${user.id}`">
         <v-list-item-avatar>
-          <v-img :src="user.avatar" />
+          <v-img :src="processAvatar(user.avatar)" />
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -26,6 +26,15 @@ export default {
   },
   created() {
     this.$store.commit('SET_BAR_TITLE', '我的粉丝');
+  },
+  methods: {
+    processAvatar(originAvatar) {
+      if (originAvatar.substring(originAvatar.length - 18) === 'default_avatar.png') {
+        // eslint-disable-next-line global-require
+        return require('../../assets/default_avatar.png');
+      }
+      return originAvatar;
+    },
   },
 };
 </script>

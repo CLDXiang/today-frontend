@@ -12,7 +12,7 @@
         <div v-else>
           <v-list-item two-line @click="toProfile">
             <v-list-item-avatar>
-              <img :src="user.avatar">
+              <img :src="processAvatar(user.avatar)">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ user.nickName||'Anonymous' }}</v-list-item-title>
@@ -154,6 +154,13 @@ export default {
     back() {
       // this.$router.push('login');
       this.$router.back();
+    },
+    processAvatar(originAvatar) {
+      if (originAvatar.substring(originAvatar.length - 18) === 'default_avatar.png') {
+        // eslint-disable-next-line global-require
+        return require('../../assets/default_avatar.png');
+      }
+      return originAvatar;
     },
     logout() {
       if (this.userLoggedIn) {

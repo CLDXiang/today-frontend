@@ -2,7 +2,7 @@
   <div>
     <v-list-item three-line>
       <v-list-item-avatar size="80" color="grey">
-        <img :src="userInfo.avatar" alt="avatar">
+        <img :src="processAvatar(userInfo.avatar)" alt="avatar">
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline mb-1">
@@ -200,6 +200,13 @@ export default {
           })
           .catch((e) => log.info(e));
       }
+    },
+    processAvatar(originAvatar) {
+      if (originAvatar.substring(originAvatar.length - 18) === 'default_avatar.png') {
+        // eslint-disable-next-line global-require
+        return require('../../assets/default_avatar.png');
+      }
+      return originAvatar;
     },
   },
 };

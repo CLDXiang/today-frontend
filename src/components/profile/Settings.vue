@@ -59,27 +59,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { editProfile, uploadAvatar } from '../../services/profile.service';
 import defaultAvatar from '../../assets/default_avatar.png';
 import log from '../../utils/log';
 
 export default {
   data: () => ({
-    avatar: '',
-    nickName: '',
-    bio: '',
     newAvatar: [],
+  }),
+  computed: mapState({
+    avatar: (state) => state.user.avatar,
+    bio: (state) => state.user.bio,
+    nickName: (state) => state.user.nickName,
   }),
   created() {
     this.$store.commit('SET_BAR_TITLE', '用户设置');
-    this.fetchData();
   },
   methods: {
-    fetchData() {
-      this.avatar = this.$store.state.user.avatar;
-      this.bio = this.$store.state.user.bio;
-      this.nickName = this.$store.state.user.nickName;
-    },
     changeProfile() {
       const UpdateUserDto = { nickName: this.nickName, bio: this.bio };
       editProfile(UpdateUserDto)

@@ -64,7 +64,7 @@
     </v-row>
     <v-row justify="center">
       <div class="my-2">
-        <v-btn large color="primary" @click="changeProfile">
+        <v-btn large color="primary" :disabled="isDisabled" @click="changeProfile">
           保存更改
         </v-btn>
       </div>
@@ -90,6 +90,16 @@ export default {
   }),
   computed: {
     ...mapState(['user']),
+    isDisabled() {
+      if (
+        (this.newAvatar !== undefined && this.newAvatar.size > 200000) ||
+        this.nickName.length > 30 ||
+        this.bio.length > 128
+      ) {
+        return true;
+      }
+      return false;
+    },
   },
   created() {
     this.$store.commit('SET_BAR_TITLE', '用户设置');

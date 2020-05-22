@@ -94,7 +94,10 @@ export default {
       if (
         (this.newAvatar !== undefined && this.newAvatar.size > 200000) ||
         this.nickName.length > 30 ||
-        this.bio.length > 128
+        this.bio.length > 128 ||
+        (this.avatar === this.user.avatar &&
+          this.nickName === this.user.nickName &&
+          this.bio === this.user.bio)
       ) {
         return true;
       }
@@ -137,7 +140,6 @@ export default {
           .catch((err) => {
             log.info(err);
             result = false;
-            // this.$message.error('发生了错误');
           });
       }
       if (this.avatar !== this.user.avatar) {
@@ -150,7 +152,6 @@ export default {
           .catch((err) => {
             log.info(err);
             result = false;
-            // this.$message.error('请选择一张不超过200K的图片');
           });
       }
       if (result) {

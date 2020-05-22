@@ -133,12 +133,6 @@
           </v-list>
         </v-card>
       </v-tab-item>
-      <v-tab href="#tab-6">
-        通知动态 {{ countNotification }}
-      </v-tab>
-      <v-tab-item value="tab-6">
-        <v-card flat tile />
-      </v-tab-item>
     </v-tabs>
   </div>
 </template>
@@ -163,7 +157,6 @@ export default {
       'countFollower',
       'countFollowing',
       'countHistory',
-      'countNotification',
     ]),
   },
   created() {

@@ -39,7 +39,7 @@
               <v-icon>mdi-comment-processing</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>我的课评</v-list-item-title>
+              <v-list-item-title>我的评课</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
@@ -138,7 +138,6 @@ export default {
       'countFollower',
       'countFollowing',
       'countHistory',
-      'countNotification',
     ]),
     barTitle() {
       return this.$store.state.app.barTitle;

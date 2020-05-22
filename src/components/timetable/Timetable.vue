@@ -13,12 +13,12 @@
     <v-dialog
       :fullscreen="isMobileMode"
       scrollable
+      persistent
       :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
       :value="isConflictionDialogVisible"
       :max-width="isMobileMode ? '' : '368px'"
     >
       <timetable-confliction-dialog-content
-        persistent
         :selected-courses-ids="selectedCoursesIds"
         :selected-courses-ids-from-database="selectedCoursesIdsFromDatabase"
         :courses="allCourses"

@@ -7,6 +7,7 @@ export async function initLecture() {
   if (lectures.length !== 0) return;
 
   const resp = await axios.get('/lectures.json');
+  if (lectures.length !== 0) return;
 
   resp.data
     .map((d) => ({

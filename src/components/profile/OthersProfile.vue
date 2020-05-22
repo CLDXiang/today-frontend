@@ -91,6 +91,7 @@ import { postFollow, deleteFollow } from '../../services/rate';
 import log from '../../utils/log';
 import getLectureById from '../../utils/lecture';
 import renderTime from '../../utils/time';
+import defaultAvatar from '../../assets/default_avatar.png';
 
 export default {
   data: () => ({
@@ -202,9 +203,9 @@ export default {
       }
     },
     processAvatar(originAvatar) {
-      if (originAvatar.substring(originAvatar.length - 18) === 'default_avatar.png') {
-        // eslint-disable-next-line global-require
-        return require('../../assets/default_avatar.png');
+      // FIXME: 后端改掉对应默认图像路由后，这里只留下那一个路由的匹配串
+      if (originAvatar.includes('/default_avatar.png') || originAvatar.includes('/default.png')) {
+        return defaultAvatar;
       }
       return originAvatar;
     },

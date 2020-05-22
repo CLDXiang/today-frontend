@@ -183,7 +183,7 @@
 <script>
 import debounce from 'lodash/debounce';
 
-import { filterLecturesByType, filterLectures } from '../../services/lecture';
+import { initLecture, filterLecturesByType, filterLectures } from '../../services/lecture';
 
 export default {
   components: {},
@@ -218,15 +218,16 @@ export default {
 
   watch: {
     tabIndex(newi) {
-      if (newi) this.searchResult = this.categories[newi].processedResult;
+      if (typeof newi === 'number') this.searchResult = this.categories[newi].processedResult;
     },
     searchInput() {
       this.loading = true;
       this.dUpdateSearchResult(filterLectures(this.searchInput));
     },
   },
-  created() {
+  async created() {
     this.dUpdateSearchResult = debounce(this.updateSearchResult, 500);
+    await initLecture();
     for (let i = 0; i < this.categories.length; i += 1)
       this.categories[i].processedResult = this.getFilterResult(
         filterLecturesByType(this.categories[i].type),

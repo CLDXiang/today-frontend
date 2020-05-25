@@ -26,29 +26,29 @@
         <span class="subheading mr-2">{{ profile.countFollower }}</span>
       </v-row>
     </v-list-item>
-    <v-tabs centered grow>
-      <v-tabs-slider />
 
+    <v-tabs center-active grow show-arrows>
+      <v-tabs-slider />
       <v-tab href="#tab-1">
         关注课程 {{ profile.countStar }}
       </v-tab>
       <v-tab-item value="tab-1">
-        <!-- <v-card flat tile> -->
-        <v-list two-line>
-          <div v-for="(lecture, index) in profile.star" :key="lecture.id">
-            <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
-              <v-list-item-content>
-                <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
-                <v-list-item-subtitle v-text="lecture.teacher" />
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider v-if="index + 1 < profile.star.length" :key="index" />
-          </div>
-        </v-list>
-        <!-- </v-card> -->
+        <v-card flat tile>
+          <v-list two-line>
+            <div v-for="(lecture, index) in profile.star" :key="lecture.id">
+              <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
+                <v-list-item-content>
+                  <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
+                  <v-list-item-subtitle v-text="lecture.teacher" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider v-if="index + 1 < profile.star.length" :key="index" />
+            </div>
+          </v-list>
+        </v-card>
       </v-tab-item>
       <v-tab href="#tab-2">
-        发表评课 {{ profile.countRate }}
+        Ta的评课 {{ profile.countRate }}
       </v-tab>
       <v-tab-item value="tab-2">
         <v-card flat tile>
@@ -71,6 +71,50 @@
                 </v-list-item-action>
               </v-list-item>
               <v-divider v-if="index + 1 < profile.rate.length" :key="index" />
+            </template>
+          </v-list>
+        </v-card>
+      </v-tab-item>
+      <v-tab href="#tab-3">
+        Ta的关注 {{ profile.countFollowing }}
+      </v-tab>
+      <v-tab-item value="tab-3">
+        <v-card flat tile>
+          <v-list two-line>
+            <template v-for="(user, index) in profile.following">
+              <v-list-item :key="user.name" :to="`/user/${user.id}`">
+                <v-list-item-avatar>
+                  <v-img :src="processAvatar(user.avatar)" />
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title v-text="user.nickName||'Anonymous'" />
+                  <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider v-if="index + 1 < profile.following.length" :key="index" />
+            </template>
+          </v-list>
+        </v-card>
+      </v-tab-item>
+      <v-tab href="#tab-4">
+        Ta的粉丝 {{ profile.countFollower }}
+      </v-tab>
+      <v-tab-item value="tab-4">
+        <v-card flat tile>
+          <v-list two-line>
+            <template v-for="(user, index) in profile.follower">
+              <v-list-item :key="user.name" :to="`/user/${user.id}`">
+                <v-list-item-avatar>
+                  <v-img :src="processAvatar(user.avatar)" />
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title v-text="user.nickName||'Anonymous'" />
+                  <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
             </template>
           </v-list>
         </v-card>
@@ -101,12 +145,16 @@ export default {
     profile: {
       rate: [],
       star: [],
+      follower: [],
+      following: [],
+      countFollowing: '',
       countFollower: '',
       countRate: '',
       countStar: '',
     },
   }),
   created() {
+    this.$store.commit('SET_BAR_TITLE', 'Ta的主页');
     this.getParams();
     this.fetchData();
   },
@@ -114,7 +162,7 @@ export default {
     getParams() {
       this.id = this.$route.params.id;
     },
-    fetchData() {
+    getHisProfile() {
       getUserProfile(this.id)
         .then((profile) => {
           this.userInfo = profile;
@@ -123,21 +171,24 @@ export default {
         .catch((err) => {
           log.info(err);
         });
+    },
+    getHisStar() {
       getUserStar(this.id)
         .then((userStar) => {
           userStar.forEach((element) => {
             this.profile.star.push(getLectureById(element.lecture_id));
           });
           this.profile.countStar = Object.keys(userStar).length;
-          log.info(userStar);
         })
         .catch((err) => {
           log.info(err);
         });
+    },
+    getHisRates() {
       getUserRate(this.id)
         .then((userRate) => {
           userRate.forEach((element) => {
-            const time = { time: renderTime(element.createdAt) };
+            const time = { time: renderTime(element.lastUpdate) };
             this.profile.rate.push({
               ...getLectureById(element.lectureId),
               ...element,
@@ -145,20 +196,37 @@ export default {
             });
           });
           this.profile.countRate = Object.keys(userRate).length;
-          log.info(userRate);
         })
         .catch((err) => {
           log.info(err);
         });
+    },
+    getHisFollower() {
       getFollower(this.id)
         .then((follower) => {
+          this.profile.follower = follower;
           this.profile.countFollower = Object.keys(follower).length;
-          log.info(follower);
         })
         .catch((err) => {
           log.info(err);
         });
-
+    },
+    getHisFollowing() {
+      getFollowing(this.id)
+        .then((following) => {
+          this.profile.following = following;
+          this.profile.countFollowing = Object.keys(following).length;
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
+    fetchData() {
+      this.getHisProfile();
+      this.getHisStar();
+      this.getHisRates();
+      this.getHisFollower();
+      this.getHisFollowing();
       this.isFollowing = false;
       this.$store.state.profile.following.forEach((element) => {
         if (this.id === String(element.id)) {
@@ -167,14 +235,7 @@ export default {
       });
     },
     updateData() {
-      getFollower(this.id)
-        .then((follower) => {
-          this.profile.countFollower = Object.keys(follower).length;
-          log.info('his follower', follower);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
+      this.getHisFollower();
       getFollowing(this.$store.state.user.id)
         .then((myFollowing) => {
           this.$store.commit('SET_FOLLOWING', myFollowing);
@@ -203,8 +264,7 @@ export default {
       }
     },
     processAvatar(originAvatar) {
-      // FIXME: 后端改掉对应默认图像路由后，这里只留下那一个路由的匹配串
-      if (originAvatar.includes('/default_avatar.png') || originAvatar.includes('/default.png')) {
+      if (originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

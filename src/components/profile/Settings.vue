@@ -111,8 +111,9 @@ export default {
   methods: {
     fetchData() {
       this.avatar = this.user.avatar;
-      this.bio = this.user.bio;
-      this.nickName = this.user.nickName;
+      this.bio = this.user.bio || '';
+      this.nickName = this.user.nickName || '';
+      console.log(this.nickName);
     },
     clickAvatar() {
       this.$el.querySelector('#input').click();
@@ -164,8 +165,7 @@ export default {
       }
     },
     processAvatar(originAvatar) {
-      // FIXME: 后端改掉对应默认图像路由后，这里只留下那一个路由的匹配串
-      if (originAvatar.includes('/default_avatar.png') || originAvatar.includes('/default.png')) {
+      if (originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

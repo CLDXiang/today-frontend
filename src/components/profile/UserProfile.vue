@@ -19,19 +19,19 @@
         关注课程 {{ countUserStar }}
       </v-tab>
       <v-tab-item value="tab-1">
-        <!-- <v-card flat tile> -->
-        <v-list two-line>
-          <div v-for="(lecture, index) in star" :key="lecture.id">
-            <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
-              <v-list-item-content>
-                <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
-                <v-list-item-subtitle v-text="lecture.teacher" />
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider v-if="index + 1 < star.length" :key="index" />
-          </div>
-        </v-list>
-        <!-- </v-card> -->
+        <v-card flat tile>
+          <v-list two-line>
+            <div v-for="(lecture, index) in star" :key="lecture.id">
+              <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
+                <v-list-item-content>
+                  <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
+                  <v-list-item-subtitle v-text="lecture.teacher" />
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider v-if="index + 1 < star.length" :key="index" />
+            </div>
+          </v-list>
+        </v-card>
       </v-tab-item>
       <v-tab href="#tab-2">
         我的评课 {{ countUserRate }}
@@ -39,24 +39,24 @@
       <v-tab-item value="tab-2">
         <v-card flat tile>
           <v-list three-line>
-            <template v-for="(item, index) in rate">
+            <template v-for="(rate, index) in rates">
               <!-- TODO: 路由的目标不对 -->
               <v-list-item
-                :key="item.lectureId"
-                :to="`/lecture/${item.code}/${item.idx}`"
+                :key="rate.lectureId"
+                :to="`/lecture/${rate.code}/${rate.idx}`"
               >
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="`${item.name} · ${item.teacher}`"
+                    v-text="`${rate.name} · ${rate.teacher}`"
                   />
-                  <v-list-item-subtitle v-text="item.content" />
+                  <v-list-item-subtitle v-text="rate.content" />
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-list-item-action-text v-text="item.time" />
+                  <v-list-item-action-text v-text="rate.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < rate.length" :key="index" />
+              <v-divider v-if="index + 1 < rates.length" :key="index" />
             </template>
           </v-list>
         </v-card>
@@ -67,15 +67,14 @@
       <v-tab-item value="tab-3">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(item, index) in profile.following">
-              <v-list-item :key="item.id" :to="`/user/${item.id}`">
+            <template v-for="(user, index) in profile.following">
+              <v-list-item :key="user.name" :to="`/user/${user.id}`">
                 <v-list-item-avatar>
-                  <v-img :src="processAvatar(item.avatar)" />
+                  <v-img :src="processAvatar(user.avatar)" />
                 </v-list-item-avatar>
-
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.nickName||'Anonymous'" />
-                  <v-list-item-subtitle v-text="item.bio||'这个人还没有个性签名哦'" />
+                  <v-list-item-title v-text="user.nickName||'Anonymous'" />
+                  <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
               <v-divider v-if="index + 1 < profile.following.length" :key="index" />
@@ -89,15 +88,14 @@
       <v-tab-item value="tab-4">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(item, index) in profile.follower">
-              <v-list-item :key="item.nickName" :to="`/user/${item.id}`">
+            <template v-for="(user, index) in profile.follower">
+              <v-list-item :key="user.name" :to="`/user/${user.id}`">
                 <v-list-item-avatar>
-                  <v-img :src="processAvatar(item.avatar)" />
+                  <v-img :src="processAvatar(user.avatar)" />
                 </v-list-item-avatar>
-
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.nickName||'Anonymous'" />
-                  <v-list-item-subtitle v-text="item.bio||'这个人还没有个性签名哦'" />
+                  <v-list-item-title v-text="user.nickName||'Anonymous'" />
+                  <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
               <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
@@ -114,7 +112,7 @@
             <template v-for="(item, index) in history">
               <v-list-item
                 :key="item.lectureId"
-                :to="`/rate/${item.code}/${item.idx}`"
+                :to="`/lecture/${item.code}/${item.idx}`"
               >
                 <v-list-item-content>
                   <v-list-item-title
@@ -122,12 +120,10 @@
                   />
                   <v-list-item-subtitle v-text="item.teacher" />
                 </v-list-item-content>
-
                 <v-list-item-action>
                   <v-list-item-action-text v-text="item.time" />
                 </v-list-item-action>
               </v-list-item>
-
               <v-divider v-if="index + 1 < history.length" :key="index" />
             </template>
           </v-list>
@@ -145,7 +141,7 @@ import defaultAvatar from '../../assets/default_avatar.png';
 
 export default {
   data: () => ({
-    rate: [],
+    rates: [],
     star: [],
     history: [],
   }),
@@ -166,8 +162,8 @@ export default {
   methods: {
     fetchData() {
       this.profile.userRate.forEach((element) => {
-        const time = { time: renderTime(element.createdAt) };
-        this.rate.push({
+        const time = { time: renderTime(element.lastUpdate) };
+        this.rates.push({
           ...getLectureById(element.lectureId),
           ...element,
           ...time,
@@ -185,8 +181,7 @@ export default {
       });
     },
     processAvatar(originAvatar) {
-      // FIXME: 后端改掉对应默认图像路由后，这里只留下那一个路由的匹配串
-      if (originAvatar.includes('/default_avatar.png') || originAvatar.includes('/default.png')) {
+      if (originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

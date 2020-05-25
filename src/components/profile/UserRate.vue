@@ -37,7 +37,7 @@ export default {
   methods: {
     fetchData() {
       this.$store.state.profile.userRate.forEach((element) => {
-        const time = { time: renderTime(element.createdAt) };
+        const time = { time: renderTime(element.lastUpdate) };
         this.rates.push({ ...getLectureById(element.lectureId), ...element, ...time });
       });
     },

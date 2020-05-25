@@ -1,31 +1,35 @@
-import rawLectures from '../assets/lectures.json';
+import axios from 'axios';
 
-// const rawLectures = () => import("../assets/lectures.json");
+export const lectures = [];
+export const code2lecture = {};
 
-// Preprocess raw data exported from backend
-const lectures = rawLectures
-  .map((d) => {
-    return {
+export async function initLecture() {
+  if (lectures.length !== 0) return;
+
+  const resp = await axios.get('/lectures.json');
+  if (lectures.length !== 0) return;
+
+  resp.data
+    .map((d) => ({
       id: d.id,
       name: d.name,
       code: d.code,
       credit: d.credit,
       teacher: d.taught_by.replace(/@@/g, ', ').trim(),
       idx: d.lecture_index,
-    };
-  })
-  // drop empty teacher
-  .filter((d) => {
-    return d.teacher.length > 0;
+    }))
+    // drop empty teacher
+    .filter((d) => {
+      return d.teacher.length > 0;
+    })
+    .forEach((d) => {
+      lectures.push(d);
+    });
+
+  lectures.forEach((data) => {
+    code2lecture[`${data.code}.${data.idx}`] = data;
   });
-
-const code2lecture = {};
-
-lectures.forEach((data) => {
-  code2lecture[`${data.code}.${data.idx}`] = data;
-});
-
-export { lectures };
+}
 
 export function getLectureByCodeAndIdx(code, idx) {
   return code2lecture[`${code}.${idx}`];

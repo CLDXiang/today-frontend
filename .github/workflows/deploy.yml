@@ -23,6 +23,7 @@ jobs:
         persist-credentials: false
     - run: npm install
     - run: echo 'VUE_APP_API_URL=https://dev.fudan.today/api' > .env.production
+    - run: npm run update-public-data
     - run: npm run build --if-present
     - name: deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3

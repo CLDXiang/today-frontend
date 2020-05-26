@@ -2,9 +2,24 @@
   <div>
     <v-navigation-drawer v-model="showMenu" app fixed>
       <v-list dense>
-        <v-list-item>
-          <v-list-item-content>{{ user }}</v-list-item-content>
-        </v-list-item>
+        <div v-if="!userLoggedIn">
+          <v-list-item>
+            <v-list-item-content>
+              未登录
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+        <div v-else>
+          <v-list-item two-line @click="toProfile">
+            <v-list-item-avatar>
+              <img :src="processAvatar(user.avatar)">
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ user.nickName||'Anonymous' }}</v-list-item-title>
+              <v-list-item-subtitle>{{ user.bio||'这个人还没有个性签名哦' }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
         <div v-show="userLoggedIn">
           <v-list-item @click="toStar">
             <v-list-item-action>
@@ -24,7 +39,7 @@
               <v-icon>mdi-comment-processing</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>我的课评</v-list-item-title>
+              <v-list-item-title>我的评课</v-list-item-title>
             </v-list-item-content>
             <v-list-item-content>
               <v-list-item-title>
@@ -71,23 +86,15 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item @click="toSettings">
+            <v-list-item-action>
+              <v-icon>mdi-cog</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>设置</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </div>
-        <v-list-item @click="doNothing">
-          <v-list-item-action>
-            <v-icon>mdi-cog</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>设置</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="doNothing">
-          <v-list-item-action>
-            <v-icon>mdi-help</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>帮助</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
@@ -113,8 +120,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import log from '../../utils/log';
+import defaultAvatar from '../../assets/default_avatar.png';
 
 export default {
   name: 'TopToolbar',
@@ -122,6 +130,7 @@ export default {
     showMenu: false,
   }),
   computed: {
+    ...mapState(['user']),
     ...mapGetters([
       'userLoggedIn',
       'countUserRate',
@@ -130,9 +139,6 @@ export default {
       'countFollowing',
       'countHistory',
     ]),
-    user() {
-      return this.$store.state.user.name;
-    },
     barTitle() {
       return this.$store.state.app.barTitle;
     },
@@ -148,6 +154,13 @@ export default {
     back() {
       // this.$router.push('login');
       this.$router.back();
+    },
+    processAvatar(originAvatar) {
+      // FIXME: 后端改掉对应默认图像路由后，这里只留下那一个路由的匹配串
+      if (originAvatar.includes('/default_avatar.png') || originAvatar.includes('/default.png')) {
+        return defaultAvatar;
+      }
+      return originAvatar;
     },
     logout() {
       if (this.userLoggedIn) {
@@ -191,6 +204,20 @@ export default {
         this.showMenu = false;
       } else {
         this.$router.push({ name: 'History' });
+      }
+    },
+    toSettings() {
+      if (this.$route.path === '/profile/settings') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'Settings' });
+      }
+    },
+    toProfile() {
+      if (this.$route.path === '/profile/' || this.$route.path === '/profile') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'UserProfile' });
       }
     },
   },

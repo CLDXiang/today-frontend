@@ -1,14 +1,14 @@
 <template>
   <v-list two-line>
-    <template v-for="(item, index) in history">
-      <v-list-item :key="item.lectureId" :to="`/rate/${item.code}/${item.idx}`">
+    <template v-for="(lecture, index) in history">
+      <v-list-item :key="lecture.lectureId" :to="`/lecture/${lecture.code}/${lecture.idx}`">
         <v-list-item-content>
-          <v-list-item-title v-text="item.name" />
-          <v-list-item-subtitle v-text="item.teacher" />
+          <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
+          <v-list-item-subtitle v-text="lecture.teacher" />
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-list-item-action-text v-text="item.time" />
+          <v-list-item-action-text v-text="lecture.time" />
         </v-list-item-action>
       </v-list-item>
 

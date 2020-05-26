@@ -36,13 +36,6 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
-        <v-alert v-if="alertShown" :type="alertType" :dismissible="true">
-          {{ alertContent }}
-        </v-alert>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
       <v-btn class="ma-2" color="primary" @click="register">
         提交
       </v-btn>
@@ -74,28 +67,17 @@ export default {
     alertContent: '',
   }),
   methods: {
-    showAlert(type, content) {
-      this.alertType = type;
-      this.alertContent = content;
-      this.alertShown = true;
-      setTimeout(() => {
-        this.alertShown = false;
-      }, 3000);
-    },
     register() {
       register(this.name, this.email, this.password).then((resp) => {
         if (resp.data.result === 'success') {
-          this.showAlert('success', '注册成功，跳转登录页面……');
+          this.$message.success('注册成功，跳转登录页面……');
           setTimeout(() => {
             this.$router.push('login');
           }, 1000);
         }
         if (resp.data.result === 'failed') {
           this.result = 'already_exist';
-          this.showAlert(
-            'warning',
-            '注册失败，注册失败，该邮箱已经被使用，请直接登录或者更改注册邮箱',
-          );
+          this.$message.warn('注册失败，该邮箱已经被使用，请直接登录或者更改注册邮箱');
         }
       });
     },

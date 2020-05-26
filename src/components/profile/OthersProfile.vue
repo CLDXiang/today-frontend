@@ -19,6 +19,7 @@
         <v-icon
           class="mr-1"
           :color="isFollowing ? 'red' : 'gray'"
+          :disabled="isMe"
           @click="followUnfollow"
         >
           mdi-heart
@@ -42,7 +43,7 @@
                   <v-list-item-subtitle v-text="lecture.teacher" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.star.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.star.length" :key="'divider'+index" />
             </div>
           </v-list>
         </v-card>
@@ -70,7 +71,7 @@
                   <v-list-item-action-text v-text="rate.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.rate.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.rate.length" :key="'divider'+index" />
             </template>
           </v-list>
         </v-card>
@@ -92,7 +93,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.following.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.following.length" :key="'divider'+index" />
             </template>
           </v-list>
         </v-card>
@@ -114,7 +115,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.follower.length" :key="'divider'+index" />
             </template>
           </v-list>
         </v-card>
@@ -153,6 +154,21 @@ export default {
       countStar: '',
     },
   }),
+  computed: {
+    isMe() {
+      if (this.id && this.id.toString() === this.$store.state.user.id.toString()) {
+        return true;
+      }
+      return false;
+    },
+  },
+  watch: {
+    $route() {
+      if (this.$route.params.id !== undefined) {
+        this.refresh();
+      }
+    },
+  },
   async created() {
     this.$store.commit('SET_BAR_TITLE', 'Ta的主页');
     await initLecture();
@@ -263,6 +279,14 @@ export default {
           })
           .catch((e) => log.info(e));
       }
+    },
+    refresh() {
+      this.profile.rate = [];
+      this.profile.star = [];
+      this.profile.follower = [];
+      this.profile.following = [];
+      this.getParams();
+      this.fetchData();
     },
     processAvatar(originAvatar) {
       if (originAvatar && originAvatar.includes('/default_avatar.png')) {

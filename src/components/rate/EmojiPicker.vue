@@ -13,7 +13,12 @@
     </div>
 
     <div :key="upvote.id" class="emoji-tag-container">
-      <input v-model="upvote.active" class="upvote-tag-toggle" type="checkbox" @change="toggleEmoji(upvote)">
+      <div
+        class="upvote-tag-toggle"
+        :class="{'upvote-tag-toggle--active': upvote.active }"
+        @click="toggleEmoji(upvote)"
+      />
+
       <div class="upvote-tag-background" />
       <div class="upvote-tag-icon">
         <i class="material-icons-round">arrow_drop_up</i>
@@ -24,7 +29,11 @@
     </div>
 
     <div :key="downvote.id" class="emoji-tag-container">
-      <input v-model="downvote.active" class="upvote-tag-toggle" type="checkbox" @change="toggleEmoji(downvote)">
+      <div
+        class="upvote-tag-toggle"
+        :class="{'upvote-tag-toggle--active': downvote.active }"
+        @click="toggleEmoji(downvote)"
+      />
       <div class="upvote-tag-background" />
       <div class="upvote-tag-icon">
         <i class="material-icons-round">arrow_drop_down</i>
@@ -32,14 +41,17 @@
     </div>
 
 
-
     <template v-for="i in items">
       <div
-        v-if="i.id !== 'upvote' && i.id !== 'downvote'"
+        v-if="i.id !== 'upvote' && i.id !== 'downvote' && !(i.cnt === 0 && i.locked)"
         :key="i.id"
         class="emoji-tag-container"
       >
-        <input v-model="i.active" class="emoji-tag-toggle" type="checkbox" @change="toggleEmoji(i)">
+        <div
+          class="emoji-tag-toggle"
+          :class="{'emoji-tag-toggle--active': i.active }"
+          @click="toggleEmoji(i)"
+        />
         <div class="emoji-tag-background" />
         <emoji-icon 
           :emoji="i.id" 
@@ -68,6 +80,8 @@ import { StaticPicker as EmojiPicker, Emoji as EmojiIcon, EmojiIndex } from 'emo
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
 
 import vClickOutside from 'v-click-outside';
+import log from '../../utils/log';
+import { postReaction, deleteReaction } from '../../services/react';
 
 const index = new EmojiIndex(data);
 
@@ -83,6 +97,10 @@ export default {
     items: {
       type: Array,
       default: () => [{ id: 'santa', cnt: 3, active: true }],
+    },
+    target: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -113,7 +131,6 @@ export default {
         const item = this.items[i];
         if (item.id === e.id) {
           if (item.active === false) {
-            item.active = true;
             this.toggleEmoji(item);
             added = true;
             break;
@@ -121,26 +138,127 @@ export default {
         }
       }
       if (!added && valid) {
-        const item = { id: e.id, cnt: 0, active: true };
+        const item = { id: e.id, cnt: 0, active: false, locked: true };
         this.items.push(item);
-        this.toggleEmoji(item);
+        this.toggleEmoji(item, false);
+      } else if (!valid) {
+        this.$toast.warn('您已添加过该表情');
       }
+      this.showPicker = false;
     },
-    toggleEmoji(ii) {
+    toggleEmoji(ii, checkLock = true) {
       const i = ii;
-      if (i.active) {
-        i.cnt += 1;
-        this.showPicker = false;
-        this.$emit('activate', i);
+
+      if (checkLock && i.locked) {
+        log.info('May be a deadlock or click too fast');
       } else {
-        i.cnt -= 1;
-        if (i.cnt === 0 && i.id !== this.upvote.id && i.id !== this.downvote.id) {
-          const idx = this.items.indexOf(i);
-          if (idx !== -1) {
-            this.items.splice(idx, 1);
+        i.locked = true;
+
+        if (!i.active) {
+          // upvote/downvote collision
+          if (i.id === this.upvote.id || i.id === this.downvote.id) {
+            const toActive = i;
+            const toDeactive = i.id === this.upvote.id ? this.downvote : this.upvote;
+            log.info('u/d', toActive, toDeactive);
+            if (toDeactive.locked) {
+              i.locked = false;
+              return;
+            }
+            toDeactive.locked = true;
+
+            if (toDeactive.active) {
+              deleteReaction(this.target, toDeactive.reactId)
+                .then(() => {
+                  toDeactive.cnt -= 1;
+                  toDeactive.reactId = undefined;
+                  toDeactive.active = false;
+
+                  postReaction(this.target, toActive.id)
+                    .then((resp) => {
+                      toActive.reactId = resp.id;
+                      toActive.cnt += 1;
+                      toActive.active = true;
+
+                      toActive.locked = false;
+                      toDeactive.locked = false;
+                      if (!toActive.reactId) log.info('ERROR: react id undefined');
+                    })
+                    .catch((e) => {
+                      toActive.locked = false;
+                      toDeactive.locked = false;
+                      log.info(e);
+                    });
+                })
+                .catch((e) => {
+                  toActive.locked = false;
+                  toDeactive.locked = false;
+                  log.info(e);
+                });
+            } else {
+              postReaction(this.target, toActive.id)
+                .then((resp) => {
+                  toActive.reactId = resp.id;
+                  toActive.cnt += 1;
+                  toActive.active = true;
+
+                  toActive.locked = false;
+                  toDeactive.locked = false;
+                  if (!toActive.reactId) log.info('ERROR: react id undefined');
+                })
+                .catch((e) => {
+                  toActive.locked = false;
+                  toDeactive.locked = false;
+                  if (e.response.status === 403) this.$toast.error('抱歉，您添加的表情过多');
+                  else log.info(e);
+                });
+            }
           }
+          // Normal reactions
+          else {
+            postReaction(this.target, i.id)
+              .then((resp) => {
+                i.cnt += 1;
+                i.reactId = resp.id;
+                i.active = true;
+                i.locked = false;
+              })
+              .catch((e) => {
+                if (i.cnt === 0 && i.id !== this.upvote.id && i.id !== this.downvote.id) {
+                  const idx = this.items.indexOf(i);
+                  if (idx !== -1) {
+                    this.items.splice(idx, 1);
+                  }
+                }
+
+                i.locked = false;
+                if (e.response.status === 403) {
+                  this.$toast.error('抱歉，您添加的表情过多');
+                } else log.info(e);
+              });
+          }
+        } else if (i.reactId) {
+          deleteReaction(this.target, i.reactId)
+            .then(() => {
+              i.cnt -= 1;
+
+              if (i.cnt === 0 && i.id !== this.upvote.id && i.id !== this.downvote.id) {
+                const idx = this.items.indexOf(i);
+                if (idx !== -1) {
+                  this.items.splice(idx, 1);
+                }
+              }
+
+              i.reactId = undefined;
+              i.active = false;
+              i.locked = false;
+            })
+            .catch((e) => {
+              i.locked = false;
+              log.info(e);
+            });
+        } else {
+          log.info('ERROR: React to Id not found ?');
         }
-        this.$emit('deactivate', i);
       }
     },
   },
@@ -148,7 +266,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/utils.scss';
+@import '../../scss/utils.scss';
 .emoji-bar-container {
   $spacing: 1rem;
   display: flex;
@@ -212,14 +330,15 @@ $spacing: 0.6 * $small-spacing;
     margin: 0 0.8 * $spacing 0 1.4 * $spacing;
     color: $primary-color;
   }
-
-  &:checked + .upvote-tag-background {
-    background: rgba($primary-color, 1);
+}
+.upvote-tag-toggle--active {
+  & + .upvote-tag-background {
+    background: rgba($primary-color, 1) !important;
     //border: 2px solid rgba($primary-color, $inactive-opacity);
   }
-  &:checked ~ .upvote-tag-cnt,
-  &:checked ~ .upvote-tag-icon {
-    color: white;
+  & ~ .upvote-tag-cnt,
+  & ~ .upvote-tag-icon {
+    color: white !important;
   }
 }
 
@@ -248,12 +367,14 @@ $spacing: 0.6 * $small-spacing;
     transition: border 0.2s, background 0.1s;
     background: rgba(0, 0, 0, 0.03);
   }
-  &:checked + .emoji-tag-background {
-    background: rgba($primary-color, 0.06);
-    border: 2px solid rgba($primary-color, $inactive-opacity);
+}
+.emoji-tag-toggle--active {
+  & + .emoji-tag-background {
+    background: rgba($primary-color, 0.06) !important;
+    border: 2px solid rgba($primary-color, $inactive-opacity) !important;
   }
-  &:checked ~ .emoji-tag-cnt {
-    color: $primary-color;
+  & ~ .emoji-tag-cnt {
+    color: $primary-color !important;
   }
 }
 

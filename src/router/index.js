@@ -4,11 +4,13 @@ import Login from '../components/common/Login.vue';
 import Register from '../components/common/Register.vue';
 import Profile from '../components/profile/Profile.vue';
 import UserProfile from '../components/profile/UserProfile.vue';
+import OthersProfile from '../components/profile/OthersProfile.vue';
 import Star from '../components/profile/Star.vue';
 import UserRate from '../components/profile/UserRate.vue';
 import Follower from '../components/profile/Follower.vue';
 import Following from '../components/profile/Following.vue';
 import History from '../components/profile/History.vue';
+import Settings from '../components/profile/Settings.vue';
 import Hole from '../components/secret/Hole.vue';
 
 import ExploreView from '../components/rate/ExploreView.vue';
@@ -62,6 +64,11 @@ const routes = [
         name: 'History',
         component: History,
       },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: Settings,
+      },
     ],
   },
 
@@ -79,7 +86,7 @@ const routes = [
     component: RateView,
   },
   // rate end
-
+  { path: '/user/:id', component: OthersProfile, props: true },
   { path: '/hole', name: 'Hole', component: Hole, meta: { requiresAuth: true } },
   { path: '/post/:id', component: PostView, props: true },
   { path: '*', component: Timetable },

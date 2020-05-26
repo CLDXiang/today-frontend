@@ -48,6 +48,7 @@
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
 import {
+  getUserProfile,
   getUserStar,
   getUserRate,
   getFollowing,
@@ -84,6 +85,14 @@ export default {
       }, 3000);
     },
     getProfile() {
+      getUserProfile()
+        .then((profile) => {
+          this.$store.commit('SET_USER_PROFILE', profile);
+          log.info(profile);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
       getUserStar()
         .then((userStar) => {
           this.$store.commit('SET_USER_STAR', userStar);

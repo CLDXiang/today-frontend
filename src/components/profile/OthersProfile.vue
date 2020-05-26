@@ -133,7 +133,7 @@ import {
 } from '../../services/profile.service';
 import { postFollow, deleteFollow } from '../../services/rate';
 import log from '../../utils/log';
-import getLectureById from '../../utils/lecture';
+import { initLecture, getLectureById } from '../../services/lecture';
 import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
@@ -153,8 +153,9 @@ export default {
       countStar: '',
     },
   }),
-  created() {
+  async created() {
     this.$store.commit('SET_BAR_TITLE', 'Ta的主页');
+    await initLecture();
     this.getParams();
     this.fetchData();
   },
@@ -264,7 +265,7 @@ export default {
       }
     },
     processAvatar(originAvatar) {
-      if (originAvatar.includes('/default_avatar.png')) {
+      if (originAvatar && originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

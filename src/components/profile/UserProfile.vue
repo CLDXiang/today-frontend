@@ -135,7 +135,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import getLectureById from '../../utils/lecture';
+import { initLecture, getLectureById } from '../../services/lecture';
 import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
@@ -155,8 +155,9 @@ export default {
       'countHistory',
     ]),
   },
-  created() {
+  async created() {
     this.$store.commit('SET_BAR_TITLE', '个人主页');
+    await initLecture();
     this.fetchData();
   },
   methods: {
@@ -181,7 +182,7 @@ export default {
       });
     },
     processAvatar(originAvatar) {
-      if (originAvatar.includes('/default_avatar.png')) {
+      if (originAvatar && originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import getLectureById from '../../utils/lecture';
+import { initLecture, getLectureById } from '../../services/lecture';
 
 export default {
   data() {
@@ -21,8 +21,9 @@ export default {
       starLectures: [],
     };
   },
-  created() {
+  async created() {
     this.$store.commit('SET_BAR_TITLE', '关注课程');
+    await initLecture();
     this.fetchData();
   },
   methods: {

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import getLectureById from '../../utils/lecture';
+import { initLecture, getLectureById } from '../../services/lecture';
 import renderTime from '../../utils/time';
 
 export default {
@@ -27,8 +27,9 @@ export default {
       history: [],
     };
   },
-  created() {
+  async created() {
     this.$store.commit('SET_BAR_TITLE', '最近浏览');
+    await initLecture();
     this.fetchData();
   },
   methods: {

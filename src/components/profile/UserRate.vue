@@ -23,15 +23,16 @@
 </template>
 
 <script>
-import getLectureById from '../../utils/lecture';
+import { initLecture, getLectureById } from '../../services/lecture';
 import renderTime from '../../utils/time';
 
 export default {
   data: () => ({
     rates: [],
   }),
-  created() {
+  async created() {
     this.$store.commit('SET_BAR_TITLE', '历史评论');
+    await initLecture();
     this.fetchData();
   },
   methods: {

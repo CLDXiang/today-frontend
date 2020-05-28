@@ -156,7 +156,7 @@ export default {
   }),
   computed: {
     isMe() {
-      if (this.id && this.id.toString() === this.$store.state.user.id.toString()) {
+      if (this.id.toString() === this.$store.state.user.id.toString()) {
         return true;
       }
       return false;

@@ -142,7 +142,7 @@ export default {
         this.items.push(item);
         this.toggleEmoji(item, false);
       } else if (!valid) {
-        this.$toast.warn('您已添加过该表情');
+        this.$message.warn('您已添加过该表情');
       }
       this.showPicker = false;
     },
@@ -208,7 +208,7 @@ export default {
                 .catch((e) => {
                   toActive.locked = false;
                   toDeactive.locked = false;
-                  if (e.response.status === 403) this.$toast.error('抱歉，您添加的表情过多');
+                  if (e.response.status === 403) this.$message.error('抱歉，您添加的表情过多');
                   else log.info(e);
                 });
             }
@@ -232,7 +232,7 @@ export default {
 
                 i.locked = false;
                 if (e.response.status === 403) {
-                  this.$toast.error('抱歉，您添加的表情过多');
+                  this.$message.error('抱歉，您添加的表情过多');
                 } else log.info(e);
               });
           }

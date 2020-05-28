@@ -454,11 +454,11 @@ export default {
       this.$router.push(`${this.$route.path}/rate`);
     },
     requireLogin() {
-      this.$toast.warn('请您先登录');
+      this.$message.warn('请您先登录');
       this.$router.push(`/login?redirect=${this.$route.path}`);
     },
     requireNetwork() {
-      this.$toast.error('无法连接网络');
+      this.$message.error('无法连接网络');
     },
 
     refresh() {
@@ -573,6 +573,7 @@ export default {
             u.nrates = resp.nrates;
             u.nfollowers = resp.nfollowers;
             u.nreplies = resp.nreplies;
+            u.followed = resp.followed;
           })
           .catch((e) => {
             log.info(e);
@@ -609,7 +610,7 @@ export default {
       if (this.$store.state.user.jwt_token === '') {
         this.requireLogin();
       } else if (content === '') {
-        this.$toast.warn('请您输入非空白字符哦');
+        this.$message.warn('请您输入非空白字符哦');
       } else {
         item.input = '';
         postReply(type, id, content)

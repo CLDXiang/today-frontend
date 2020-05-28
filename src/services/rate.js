@@ -247,20 +247,25 @@ export function getUserInfo(id) {
   const headers = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
+  const userId = store.state.user.jwt_token
+    ? JSON.parse(window.atob(store.state.user.jwt_token.split('.')[1])).sub
+    : 0;
 
   return new Promise((resolve, reject) => {
-    // Rate cnt, follower cnt, TODO: reply cnt, follwed
+    // TODO: reply cnt
     axios
       .all([
         axios.get(`${API_URL}/user/rates/${id}`, { headers }),
         axios.get(`${API_URL}/user/${id}/follower`, { headers }),
+        axios.get(`${API_URL}/user/profile`, { headers, params: { userId: id } }),
       ])
       .then(
-        axios.spread((rates, followers) => {
-          // TODO fetch intro
-          info.intro = defaultBio;
+        axios.spread((rates, followers, profile) => {
+          info.intro = defaultBio || profile.data.bio;
           info.nrates = rates.data.length;
           info.nfollowers = followers.data.length;
+          info.followed = followers.data.filter((obj) => obj.id === userId).length > 0;
+
           log.info('GET user info RESP', info);
           resolve(info);
         }),
@@ -278,7 +283,7 @@ export function postFollow(id) {
       .post(`${API_URL}/user/${id}/following`, {}, { headers: header })
       .then((resp) => {
         log.info('POST following resp', resp);
-        resolve(resp);
+        resolve(resp.data);
       })
       .catch((e) => reject(e));
   });
@@ -293,7 +298,7 @@ export function deleteFollow(id) {
       .delete(`${API_URL}/user/${id}/following`, { headers: header })
       .then((resp) => {
         log.info('DELETE following resp', resp);
-        resolve(resp);
+        resolve(resp.data);
       })
       .catch((e) => reject(e));
   });

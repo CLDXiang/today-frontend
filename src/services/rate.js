@@ -14,7 +14,8 @@ import { API_URL } from '../utils/config';
 dayjs.extend(relativeTime);
 dayjs.locale('zh-cn');
 
-const defaultAvatar = 'https://img.icons8.com/offices/80/000000/user.png';
+const defaultAvatar = require('../assets/default_avatar.png');
+
 const defaultBio = '然鹅这位童鞋并没有留下什么话语';
 
 /**

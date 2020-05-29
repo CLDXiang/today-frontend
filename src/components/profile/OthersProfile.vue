@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {
   getUserProfile,
   getUserStar,
@@ -134,7 +135,7 @@ import {
 } from '../../services/profile.service';
 import { postFollow, deleteFollow } from '../../services/rate';
 import log from '../../utils/log';
-import { initLecture, getLectureById } from '../../services/lecture';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
@@ -155,6 +156,7 @@ export default {
     },
   }),
   computed: {
+    ...mapGetters(['id2lecture']),
     isMe() {
       if (this.id.toString() === this.$store.state.user.id.toString()) {
         return true;
@@ -193,7 +195,7 @@ export default {
       getUserStar(this.id)
         .then((userStar) => {
           userStar.forEach((element) => {
-            this.profile.star.push(getLectureById(element.lecture_id));
+            this.profile.star.push(this.id2lecture[`${element.lecture_id}`]);
           });
           this.profile.countStar = Object.keys(userStar).length;
         })
@@ -207,7 +209,7 @@ export default {
           userRate.forEach((element) => {
             const time = { time: renderTime(element.lastUpdate) };
             this.profile.rate.push({
-              ...getLectureById(element.lectureId),
+              ...this.id2lecture[`${element.lectureId}`],
               ...element,
               ...time,
             });

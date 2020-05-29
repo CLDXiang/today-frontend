@@ -37,6 +37,7 @@ const store = new Vuex.Store({
       posts: [],
       postsMapping: [],
     },
+    lectures: [],
     isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
 
@@ -99,6 +100,9 @@ const store = new Vuex.Store({
     SET_HISTORY(state, history) {
       state.profile.history = history;
     },
+    SET_LECTURES(state, lectures) {
+      state.lectures = lectures;
+    },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
     },
@@ -143,6 +147,20 @@ const store = new Vuex.Store({
     countFollower: (state) => Object.keys(state.profile.follower).length,
     countFollowing: (state) => Object.keys(state.profile.following).length,
     countHistory: (state) => Object.keys(state.profile.history).length,
+    code2lecture: (state) => {
+      const code2lecture = {};
+      state.lectures.forEach((data) => {
+        code2lecture[`${data.code}.${data.idx}`] = data;
+      });
+      return code2lecture;
+    },
+    id2lecture: (state) => {
+      const id2lecture = {};
+      state.lectures.forEach((data) => {
+        id2lecture[`${data.id}`] = data;
+      });
+      return id2lecture;
+    },
   },
   plugins: [
     createPersistedState({

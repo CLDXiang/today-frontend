@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { initLecture, getLectureById } from '../../services/lecture';
+import { initLecture } from '../../services/lecture';
 
 export default {
   data() {
@@ -29,7 +29,7 @@ export default {
   methods: {
     fetchData() {
       this.$store.state.profile.userStar.forEach((element) => {
-        this.starLectures.push(getLectureById(element.lecture_id));
+        this.starLectures.push(this.$store.getters.id2lecture[`${element.lecture_id}`]);
       });
     },
   },

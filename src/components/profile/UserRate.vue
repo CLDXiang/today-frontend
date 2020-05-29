@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { initLecture, getLectureById } from '../../services/lecture';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 
 export default {
@@ -39,7 +39,11 @@ export default {
     fetchData() {
       this.$store.state.profile.userRate.forEach((element) => {
         const time = { time: renderTime(element.lastUpdate) };
-        this.rates.push({ ...getLectureById(element.lectureId), ...element, ...time });
+        this.rates.push({
+          ...this.$store.getters.id2lecture[`${element.lectureId}`],
+          ...element,
+          ...time,
+        });
       });
     },
   },

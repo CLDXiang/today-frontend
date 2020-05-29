@@ -135,7 +135,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { initLecture, getLectureById } from '../../services/lecture';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
@@ -153,6 +153,7 @@ export default {
       'countFollower',
       'countFollowing',
       'countHistory',
+      'id2lecture',
     ]),
   },
   async created() {
@@ -165,18 +166,18 @@ export default {
       this.profile.userRate.forEach((element) => {
         const time = { time: renderTime(element.lastUpdate) };
         this.rates.push({
-          ...getLectureById(element.lectureId),
+          ...this.id2lecture[`${element.lectureId}`],
           ...element,
           ...time,
         });
       });
       this.profile.userStar.forEach((element) => {
-        this.star.push(getLectureById(element.lecture_id));
+        this.star.push(this.id2lecture[`${element.lecture_id}`]);
       });
       this.$store.state.profile.history.forEach((element) => {
         const time = { time: renderTime(element.created_at) };
         this.history.push({
-          ...getLectureById(element.history_about_id),
+          ...this.id2lecture[`${element.history_about_id}`],
           ...time,
         });
       });

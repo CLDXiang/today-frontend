@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { initLecture, getLectureById } from '../../services/lecture';
+import { mapGetters, mapState } from 'vuex';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 
 export default {
@@ -27,6 +28,10 @@ export default {
       history: [],
     };
   },
+  computed: {
+    ...mapGetters(['id2lecture']),
+    ...mapState(['profile']),
+  },
   async created() {
     this.$store.commit('SET_BAR_TITLE', '最近浏览');
     await initLecture();
@@ -34,9 +39,9 @@ export default {
   },
   methods: {
     fetchData() {
-      this.$store.state.profile.history.forEach((element) => {
+      this.profile.history.forEach((element) => {
         const time = { time: renderTime(element.created_at) };
-        this.history.push({ ...getLectureById(element.history_about_id), ...time });
+        this.history.push({ ...this.id2lecture[`${element.history_about_id}`], ...time });
       });
     },
   },

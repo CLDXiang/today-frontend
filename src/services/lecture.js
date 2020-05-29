@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../store';
 
 export const lectures = [];
 export const code2lecture = {};
@@ -27,21 +28,15 @@ export async function initLecture() {
       lectures.push(d);
     });
 
-  lectures.forEach((data) => {
-    code2lecture[`${data.code}.${data.idx}`] = data;
-  });
+  store.commit('SET_LECTURES', lectures);
 
   lectures.forEach((data) => {
-    id2lecture[`${data.id}`] = data;
+    code2lecture[`${data.code}.${data.idx}`] = data;
   });
 }
 
 export function getLectureByCodeAndIdx(code, idx) {
   return code2lecture[`${code}.${idx}`];
-}
-
-export function getLectureById(id) {
-  return id2lecture[`${id}`];
 }
 
 export function filterLecturesByType(type) {

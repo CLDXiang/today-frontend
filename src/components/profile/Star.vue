@@ -17,21 +17,22 @@ import { initLecture } from '../../services/lecture';
 
 export default {
   data() {
-    return {
-      starLectures: [],
-    };
+    return {};
   },
-  async created() {
-    this.$store.commit('SET_BAR_TITLE', '关注课程');
-    await initLecture();
-    this.fetchData();
-  },
-  methods: {
-    fetchData() {
+  computed: {
+    starLectures() {
+      const starLectures = [];
       this.$store.state.profile.userStar.forEach((element) => {
-        this.starLectures.push(this.$store.getters.id2lecture[`${element.lecture_id}`]);
+        if (this.$store.getters.id2lecture[`${element.lecture_id}`]) {
+          starLectures.push(this.$store.getters.id2lecture[`${element.lecture_id}`]);
+        }
       });
+      return starLectures;
     },
+  },
+  created() {
+    this.$store.commit('SET_BAR_TITLE', '关注课程');
+    initLecture();
   },
 };
 </script>

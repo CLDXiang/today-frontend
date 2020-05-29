@@ -34,3 +34,6 @@ export default {
   },
 };
 </script>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Material+Icons+Round|Material+Icons');
+</style>

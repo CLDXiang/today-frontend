@@ -116,12 +116,7 @@
             </h4>
 
 
-            <div
-              v-infinite-scroll="loadNextRateBatch"
-              infinite-scroll-disabled="loadingRates"
-              infinite-scroll-distance="10"
-              class="rate-list"
-            >
+            <div ref="rateList" class="rate-list">
               <div
                 v-for="rate in rates"
                 :key="rate.id"
@@ -188,8 +183,7 @@
                   v-if="!rate.openReplies"
                   class="rate-action"
                   :items="rate.reactions"
-                  @activate="postReact(`rates ${rate.id}`, $event)"
-                  @deactivate="deleteReact(`rates ${rate.id}`, $event)"
+                  :target="`rates ${rate.id}`"
                 />
 
                 <div
@@ -250,14 +244,16 @@
                     </div>
 
                     <div class="rate-content">
-                      <p>{{ reply.content }}</p>
+                      <p style="margin-bottom: 0;">
+                        {{ reply.content }}
+                      </p>
                     </div>
 
-                    <my-picker
-                      class="rate-action"
-                      @activate="postReact(`reply ${reply.id}`, $event)"
-                      @deactivate="deleteReact(`reply ${reply.id}`, $event)"
+                    <!-- TODO support react to reply 
+                    <!my-picker class="rate-action"
+                      :target="`reply ${reply.id}`"
                     />
+                    -->
                   </div>
                 </div>
               </div>
@@ -302,7 +298,7 @@
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
+import throttle from 'lodash/throttle';
 import log from '../../utils/log';
 
 import MyPicker from './EmojiPicker.vue';
@@ -324,9 +320,6 @@ import { postReaction, deleteReaction } from '../../services/react';
 import { initLecture, lectures, getLectureByCodeAndIdx } from '../../services/lecture';
 
 export default {
-  directives: {
-    infiniteScroll,
-  },
   components: {
     SvgSwitch,
     MyPicker,
@@ -348,7 +341,7 @@ export default {
       rateCount: '99+',
       rateIds: [],
       rateValidTil: -1,
-      rateBatchSize: 10, // scroll down and load rates in batch
+      rateBatchSize: 1, // scroll down and load rates in batch
       rateOrder: 'default', // by time
 
       difficultyName: '噩梦',
@@ -419,6 +412,7 @@ export default {
       ],
     };
   },
+
   watch: {
     $route() {
       // won't fetch data when routing out of this page
@@ -435,19 +429,36 @@ export default {
     await initLecture();
     this.refresh();
   },
+  mounted() {
+    this.throttledHandleScroll = throttle(this.handleScroll, 300);
+    window.addEventListener('scroll', this.throttledHandleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.throttledHandleScroll);
+  },
   methods: {
     scrollToTop() {
       window.scrollTo({ top: 0 });
+    },
+    handleScroll() {
+      const minDistance = 200;
+      if (this.$refs.rateList) {
+        const toWindowBottom =
+          this.$refs.rateList.getBoundingClientRect().bottom - window.innerHeight;
+        if (!this.loadingRates && toWindowBottom < minDistance) {
+          this.loadNextRateBatch();
+        }
+      }
     },
     routeToRate() {
       this.$router.push(`${this.$route.path}/rate`);
     },
     requireLogin() {
-      this.$toast.warn('请您先登录');
+      this.$message.warn('请您先登录');
       this.$router.push(`/login?redirect=${this.$route.path}`);
     },
     requireNetwork() {
-      this.$toast.error('无法连接网络');
+      this.$message.error('无法连接网络');
     },
 
     refresh() {
@@ -515,38 +526,38 @@ export default {
     loadNextRateBatch() {
       // load rates in batch when scroll down
       this.loadingRates = true;
-      const nextIds = this.rateIds.slice(this.rateValidTil, this.rateValidTil + this.rateBatchSize);
+      const nextIdsAndDeleted = this.rateIds.slice(
+        this.rateValidTil,
+        this.rateValidTil + this.rateBatchSize,
+      );
+      const nextIds = nextIdsAndDeleted.map((d) => d.id);
+      log.info(nextIds);
       if (nextIds.length === 0) return;
+
+      const id2deleted = new Map(nextIdsAndDeleted.map((d) => [d.id, d.deleted]));
 
       getRateBatch(nextIds)
         .then((resp) => {
-          const getIds = resp.map((data) => data.id);
-
-          if (getIds.sort().join(',') === nextIds.sort().join(',')) {
-            const id2rate = new Map();
-            resp.forEach((data) => {
-              id2rate.set(data.id, data);
+          resp.forEach((data) => {
+            this.rates.push({
+              id: data.id,
+              deleted: id2deleted.get(data.id),
+              userName: data.userName,
+              userId: data.userId,
+              avatar: data.avatar,
+              time: data.time,
+              content: data.content,
+              replyCnt: data.replyCnt,
+              replyIds: data.replyIds,
+              reactions: data.reactions,
+              input: '',
+              openReplies: false,
+              replies: [],
+              userInfo: { valid: false, followed: false },
             });
-            nextIds.forEach((i) => {
-              const data = id2rate.get(i);
-              this.rates.push({
-                id: data.id,
-                userName: data.userName,
-                userId: data.userId,
-                avatar: data.avatar,
-                time: data.time,
-                content: data.content,
-                replyCnt: data.replyCnt,
-                replyIds: data.replyIds,
-                reactions: data.reactions,
-                input: '',
-                openReplies: false,
-                replies: [],
-                userInfo: { valid: false },
-              });
-            });
-          }
-          if (resp.length < this.rateBatchSize) this.loadingRates = false;
+            this.rateValidTil += 1;
+          });
+          this.loadingRates = false;
         })
         .catch((e) => log.info(e));
     },
@@ -562,6 +573,7 @@ export default {
             u.nrates = resp.nrates;
             u.nfollowers = resp.nfollowers;
             u.nreplies = resp.nreplies;
+            u.followed = resp.followed;
           })
           .catch((e) => {
             log.info(e);
@@ -578,6 +590,7 @@ export default {
 
       const thread = rthread;
       thread.userInfo.followed = follow;
+      log.info(follow);
       if (follow) {
         postFollow(thread.userId)
           .then((resp) => log.info(resp))
@@ -597,7 +610,7 @@ export default {
       if (this.$store.state.user.jwt_token === '') {
         this.requireLogin();
       } else if (content === '') {
-        this.$toast.warn('请您输入非空白字符哦');
+        this.$message.warn('请您输入非空白字符哦');
       } else {
         item.input = '';
         postReply(type, id, content)
@@ -611,7 +624,7 @@ export default {
               time: data.time,
               avatar: data.avatar,
               reactions: [],
-              userInfo: { valid: false },
+              userInfo: { valid: false, followed: false },
             });
           })
           .catch((e) => {
@@ -626,18 +639,20 @@ export default {
       if (open && rate.replies.length === 0) {
         log.info('open');
         if (rate.replyCnt > 0) {
-          getReplies(rate.replyIds)
+          const id2deleted = new Map(rate.replyIds.map((d) => [d.id, d.deleted]));
+          getReplies(rate.replyIds.map((d) => d.id))
             .then((d) => {
               d.forEach((data) => {
                 rate.replies.push({
                   id: data.id,
+                  deleted: id2deleted.get(data.id),
                   userName: data.userName,
                   userId: data.userId,
                   avatar: data.avatar,
                   time: data.time,
                   content: data.content,
                   reactions: data.reactions,
-                  userInfo: { valid: false },
+                  userInfo: { valid: false, followed: false },
                   // replyCnt: data.replyCnt,
                   // replyIds: data.replyIds,
                   // input: "",
@@ -647,26 +662,6 @@ export default {
             })
             .catch((e) => log.info(e));
         }
-      }
-    },
-
-    // Reaction
-    postReact(target, ritem) {
-      const item = ritem;
-      const { cnt } = item;
-      postReaction(target, item.id) // item.id is an emoji string
-        .then((resp) => {
-          if (item.cnt !== cnt) deleteReaction(target, item.reactId);
-          // Roll back
-          else item.reactId = resp.id;
-        })
-        .catch((e) => {
-          log.info(e);
-        });
-    },
-    deleteReact(target, item) {
-      if (item.reactId) {
-        deleteReaction(target, item.reactId);
       }
     },
 
@@ -836,11 +831,11 @@ h4.skeleton-loader {
 // Rate List
 .rate-list {
   > .rate-item > .rate-reply > .rate-reply__item {
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 
   @include portrait {
-    margin: 0 0 2rem 0 !important;
+    margin: 0 0 1rem 0 !important;
     > .rate-item {
       > .rate-title,
       > .rate-content,
@@ -856,7 +851,7 @@ h4.skeleton-loader {
         $shift: -1.3em;
         margin-top: $shift;
         background: rgba(0, 0, 0, 0.03);
-        padding: 0 1rem 2rem 1rem;
+        padding: 0 1rem 1rem 1rem;
       }
     }
   }
@@ -892,10 +887,11 @@ h4.skeleton-loader {
     }
 
     & > .rate-title-popup {
+      box-shadow: 0px 0px 1em -0.5em rgba(0, 0, 0, $divider-opacity);
       visibility: hidden;
       opacity: 0;
       transform: translateX(1em);
-      transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.5s,
+      transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.3s,
         transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s, visibility 0s 1.3s;
     }
 

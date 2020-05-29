@@ -83,7 +83,10 @@
 
 <script>
 export default {
-  props: ['variant', 'value'],
+  props: {
+    variant: { type: String },
+    value: { type: Boolean },
+  },
   methods: {
     handleChange() {
       this.$emit('input', !this.value);

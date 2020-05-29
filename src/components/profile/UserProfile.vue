@@ -21,14 +21,14 @@
       <v-tab-item value="tab-1">
         <v-card flat tile>
           <v-list two-line>
-            <div v-for="(lecture, index) in star" :key="lecture.id">
+            <div v-for="(lecture, index) in stars" :key="lecture.id">
               <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
                 <v-list-item-content>
                   <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
                   <v-list-item-subtitle v-text="lecture.teacher" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < star.length" :key="index" />
+              <v-divider v-if="index + 1 < stars.length" :key="index" />
             </div>
           </v-list>
         </v-card>
@@ -109,7 +109,7 @@
       <v-tab-item value="tab-5">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(item, index) in history">
+            <template v-for="(item, index) in histories">
               <v-list-item
                 :key="item.lectureId"
                 :to="`/lecture/${item.code}/${item.idx}`"
@@ -124,7 +124,7 @@
                   <v-list-item-action-text v-text="item.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < history.length" :key="index" />
+              <v-divider v-if="index + 1 < histories.length" :key="index" />
             </template>
           </v-list>
         </v-card>
@@ -140,11 +140,7 @@ import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
 export default {
-  data: () => ({
-    rates: [],
-    star: [],
-    history: [],
-  }),
+  data: () => ({}),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters([
@@ -155,33 +151,42 @@ export default {
       'countHistory',
       'id2lecture',
     ]),
-  },
-  async created() {
-    this.$store.commit('SET_BAR_TITLE', '个人主页');
-    await initLecture();
-    this.fetchData();
-  },
-  methods: {
-    fetchData() {
+    rates() {
+      const rates = [];
       this.profile.userRate.forEach((element) => {
         const time = { time: renderTime(element.lastUpdate) };
-        this.rates.push({
+        rates.push({
           ...this.id2lecture[`${element.lectureId}`],
           ...element,
           ...time,
         });
       });
+      return rates;
+    },
+    stars() {
+      const stars = [];
       this.profile.userStar.forEach((element) => {
-        this.star.push(this.id2lecture[`${element.lecture_id}`]);
+        stars.push(this.id2lecture[`${element.lecture_id}`]);
       });
+      return stars;
+    },
+    histories() {
+      const histories = [];
       this.$store.state.profile.history.forEach((element) => {
         const time = { time: renderTime(element.created_at) };
-        this.history.push({
+        histories.push({
           ...this.id2lecture[`${element.history_about_id}`],
           ...time,
         });
       });
+      return histories;
     },
+  },
+  created() {
+    this.$store.commit('SET_BAR_TITLE', '个人主页');
+    initLecture();
+  },
+  methods: {
     processAvatar(originAvatar) {
       if (originAvatar && originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;

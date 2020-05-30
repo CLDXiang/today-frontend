@@ -49,6 +49,8 @@ import log from '../../utils/log';
 import { login } from '../../services/auth.service';
 import {
   getUserProfile,
+  getNotifications,
+  getTrends,
   getUserStar,
   getUserRate,
   getFollowing,
@@ -89,6 +91,22 @@ export default {
         .then((profile) => {
           this.$store.commit('SET_USER_PROFILE', profile);
           log.info(profile);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getNotifications()
+        .then((notifications) => {
+          this.$store.commit('SET_NOTIFICATIONS', notifications);
+          log.info(notifications);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getTrends()
+        .then((trends) => {
+          this.$store.commit('SET_TRENDS', trends);
+          log.info(trends);
         })
         .catch((err) => {
           log.info(err);

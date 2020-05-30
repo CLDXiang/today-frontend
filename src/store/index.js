@@ -17,6 +17,8 @@ const store = new Vuex.Store({
       email: '',
     },
     profile: {
+      notifications: [],
+      trends: [],
       userStar: [],
       userRate: [],
       follower: [],
@@ -85,6 +87,12 @@ const store = new Vuex.Store({
     SET_BAR_TITLE(state, barTitle) {
       state.app.barTitle = barTitle;
     },
+    SET_NOTIFICATIONS(state, notifications) {
+      state.profile.notifications = notifications;
+    },
+    SET_TRENDS(state, trends) {
+      state.profile.trends = trends;
+    },
     SET_USER_STAR(state, userStar) {
       state.profile.userStar = userStar;
     },
@@ -142,6 +150,8 @@ const store = new Vuex.Store({
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
+    countNotification: (state) => Object.keys(state.profile.notifications).length,
+    countTrend: (state) => Object.keys(state.profile.trends).length,
     countUserStar: (state) => Object.keys(state.profile.userStar).length,
     countUserRate: (state) => Object.keys(state.profile.userRate).length,
     countFollower: (state) => Object.keys(state.profile.follower).length,

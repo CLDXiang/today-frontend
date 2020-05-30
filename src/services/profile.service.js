@@ -51,6 +51,100 @@ export async function uploadAvatar(userAvatar) {
   });
 }
 
+export async function getNotifications() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/notice/notice`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function getTrends() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/notice/rate`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function deleteNotice(noticeId) {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .delete(`${API_URL}/notice/${noticeId}`, { headers: authHeader })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function readNotice(noticeId) {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .post(`${API_URL}/notice/${noticeId}`, { headers: authHeader })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function readAllNotifications() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .post(`${API_URL}/notice/notice`, { headers: authHeader })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
+export async function readAllTrends() {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .post(`${API_URL}/notice/rate`, { headers: authHeader })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}
+
 export async function getUserStar(userId = store.state.user.id) {
   return new Promise((resolve, reject) => {
     const authHeader = {

@@ -7,10 +7,17 @@ import { API_URL } from '../utils/config';
 
 export const emojiStrToInt = new Map();
 export const emojiIntToStr = new Map();
-let i = 0;
+
+function bimap1(emojiStr, idx) {
+  emojiStrToInt.set(emojiStr, idx);
+  emojiIntToStr.set(idx, emojiStr);
+}
+
+bimap1('upvote', 0);
+bimap1('downvote', 1);
+let i = 2;
 Object.keys(emojiData.emojis).forEach((emojiStr) => {
-  emojiStrToInt.set(emojiStr, i);
-  emojiIntToStr.set(i, emojiStr);
+  bimap1(emojiStr, i);
   i += 1;
 });
 

@@ -21,14 +21,14 @@
       <v-tab-item value="tab-1">
         <v-card flat tile>
           <v-list two-line>
-            <div v-for="(lecture, index) in star" :key="lecture.id">
+            <div v-for="(lecture, index) in stars" :key="lecture.id">
               <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
                 <v-list-item-content>
                   <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
                   <v-list-item-subtitle v-text="lecture.teacher" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < star.length" :key="index" />
+              <v-divider v-if="index + 1 < stars.length" :key="`divider-${index}`" />
             </div>
           </v-list>
         </v-card>
@@ -56,7 +56,7 @@
                   <v-list-item-action-text v-text="rate.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < rates.length" :key="index" />
+              <v-divider v-if="index + 1 < rates.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -77,7 +77,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.following.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.following.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -98,7 +98,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.follower.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -109,7 +109,7 @@
       <v-tab-item value="tab-5">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(item, index) in history">
+            <template v-for="(item, index) in histories">
               <v-list-item
                 :key="item.lectureId"
                 :to="`/lecture/${item.code}/${item.idx}`"
@@ -124,7 +124,7 @@
                   <v-list-item-action-text v-text="item.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < history.length" :key="index" />
+              <v-divider v-if="index + 1 < histories.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -135,16 +135,12 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import getLectureById from '../../utils/lecture';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
 export default {
-  data: () => ({
-    rates: [],
-    star: [],
-    history: [],
-  }),
+  data: () => ({}),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters([
@@ -153,35 +149,52 @@ export default {
       'countFollower',
       'countFollowing',
       'countHistory',
+      'id2lecture',
     ]),
+    rates() {
+      const rates = [];
+      this.profile.userRate.forEach((element) => {
+        if (this.id2lecture[`${element.lectureId}`]) {
+          const time = { time: renderTime(element.lastUpdate) };
+          rates.push({
+            ...this.id2lecture[`${element.lectureId}`],
+            ...element,
+            ...time,
+          });
+        }
+      });
+      return rates;
+    },
+    stars() {
+      const stars = [];
+      this.profile.userStar.forEach((element) => {
+        if (this.id2lecture[`${element.lecture_id}`]) {
+          stars.push(this.id2lecture[`${element.lecture_id}`]);
+        }
+      });
+      return stars;
+    },
+    histories() {
+      const histories = [];
+      this.$store.state.profile.history.forEach((element) => {
+        if (this.id2lecture[`${element.history_about_id}`]) {
+          const time = { time: renderTime(element.created_at) };
+          histories.push({
+            ...this.id2lecture[`${element.history_about_id}`],
+            ...time,
+          });
+        }
+      });
+      return histories;
+    },
   },
   created() {
     this.$store.commit('SET_BAR_TITLE', '个人主页');
-    this.fetchData();
+    initLecture();
   },
   methods: {
-    fetchData() {
-      this.profile.userRate.forEach((element) => {
-        const time = { time: renderTime(element.lastUpdate) };
-        this.rates.push({
-          ...getLectureById(element.lectureId),
-          ...element,
-          ...time,
-        });
-      });
-      this.profile.userStar.forEach((element) => {
-        this.star.push(getLectureById(element.lecture_id));
-      });
-      this.$store.state.profile.history.forEach((element) => {
-        const time = { time: renderTime(element.created_at) };
-        this.history.push({
-          ...getLectureById(element.history_about_id),
-          ...time,
-        });
-      });
-    },
     processAvatar(originAvatar) {
-      if (originAvatar.includes('/default_avatar.png')) {
+      if (originAvatar && originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

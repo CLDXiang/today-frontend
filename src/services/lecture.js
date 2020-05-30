@@ -1,7 +1,9 @@
 import axios from 'axios';
+import store from '../store';
 
 export const lectures = [];
 export const code2lecture = {};
+export const id2lecture = {};
 
 export async function initLecture() {
   if (lectures.length !== 0) return;
@@ -25,6 +27,8 @@ export async function initLecture() {
     .forEach((d) => {
       lectures.push(d);
     });
+
+  store.commit('SET_LECTURES', lectures);
 
   lectures.forEach((data) => {
     code2lecture[`${data.code}.${data.idx}`] = data;

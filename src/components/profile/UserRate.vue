@@ -1,6 +1,6 @@
 <template>
   <v-list three-line>
-    <template v-for="(rate, index) in rates">
+    <template v-for="(rate, index) in userRates">
       <!-- TODO: 路由的目标不对 -->
       <v-list-item :key="rate.lectureId" :to="`/lecture/${rate.code}/${rate.idx}`">
         <v-list-item-content>
@@ -17,30 +17,36 @@
         </v-list-item-action>
       </v-list-item>
 
-      <v-divider v-if="index + 1 < rates.length" :key="index" />
+      <v-divider v-if="index + 1 < userRates.length" :key="`divider-${index}`" />
     </template>
   </v-list>
 </template>
 
 <script>
-import getLectureById from '../../utils/lecture';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 
 export default {
-  data: () => ({
-    rates: [],
-  }),
+  data: () => ({}),
+  computed: {
+    userRates() {
+      const userRates = [];
+      this.$store.state.profile.userRate.forEach((element) => {
+        if (this.$store.getters.id2lecture[`${element.lectureId}`]) {
+          const time = { time: renderTime(element.lastUpdate) };
+          userRates.push({
+            ...this.$store.getters.id2lecture[`${element.lectureId}`],
+            ...element,
+            ...time,
+          });
+        }
+      });
+      return userRates;
+    },
+  },
   created() {
     this.$store.commit('SET_BAR_TITLE', '历史评论');
-    this.fetchData();
-  },
-  methods: {
-    fetchData() {
-      this.$store.state.profile.userRate.forEach((element) => {
-        const time = { time: renderTime(element.lastUpdate) };
-        this.rates.push({ ...getLectureById(element.lectureId), ...element, ...time });
-      });
-    },
+    initLecture();
   },
 };
 </script>

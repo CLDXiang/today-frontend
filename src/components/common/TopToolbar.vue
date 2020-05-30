@@ -134,8 +134,8 @@ import { mapGetters, mapState } from 'vuex';
 import debounce from 'lodash/debounce';
 import log from '../../utils/log';
 import defaultAvatar from '../../assets/default_avatar.png';
-import { initLecture, filterLecturesByType, filterLectures } from '../../services/lecture';
-import { searchUser } from '../../services/search.service';
+import { initLecture, filterLectures } from '../../services/lecture';
+import searchUser from '../../services/search.service';
 
 export default {
   name: 'TopToolbar',
@@ -188,14 +188,12 @@ export default {
       });
       result.push({ header: '用户' });
       const data = await searchUser(val);
-      data.forEach(d => {
+      data.forEach((d) => {
         result.push({
           text: `${d.name}(${d.nickName})`,
           value: `/user/${d.id}`,
         });
-      })
-      console.log(data);
-
+      });
       if (result.length > 2) {
         this.searchItems = result;
       }

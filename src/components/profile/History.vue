@@ -29,11 +29,13 @@ export default {
     lectureHistory() {
       const lectureHistory = [];
       this.$store.state.profile.history.forEach((element) => {
-        const time = { time: renderTime(element.created_at) };
-        lectureHistory.push({
-          ...this.$store.getters.id2lecture[`${element.history_about_id}`],
-          ...time,
-        });
+        if (this.$store.getters.id2lecture[`${element.history_about_id}`]) {
+          const time = { time: renderTime(element.created_at) };
+          lectureHistory.push({
+            ...this.$store.getters.id2lecture[`${element.history_about_id}`],
+            ...time,
+          });
+        }
       });
       return lectureHistory;
     },

@@ -28,7 +28,7 @@
                   <v-list-item-subtitle v-text="lecture.teacher" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < stars.length" :key="index" />
+              <v-divider v-if="index + 1 < stars.length" :key="`divider-${index}`" />
             </div>
           </v-list>
         </v-card>
@@ -56,7 +56,7 @@
                   <v-list-item-action-text v-text="rate.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < rates.length" :key="index" />
+              <v-divider v-if="index + 1 < rates.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -77,7 +77,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.following.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.following.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -98,7 +98,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.follower.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -124,7 +124,7 @@
                   <v-list-item-action-text v-text="item.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < histories.length" :key="index" />
+              <v-divider v-if="index + 1 < histories.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -154,30 +154,36 @@ export default {
     rates() {
       const rates = [];
       this.profile.userRate.forEach((element) => {
-        const time = { time: renderTime(element.lastUpdate) };
-        rates.push({
-          ...this.id2lecture[`${element.lectureId}`],
-          ...element,
-          ...time,
-        });
+        if (this.id2lecture[`${element.lectureId}`]) {
+          const time = { time: renderTime(element.lastUpdate) };
+          rates.push({
+            ...this.id2lecture[`${element.lectureId}`],
+            ...element,
+            ...time,
+          });
+        }
       });
       return rates;
     },
     stars() {
       const stars = [];
       this.profile.userStar.forEach((element) => {
-        stars.push(this.id2lecture[`${element.lecture_id}`]);
+        if (this.id2lecture[`${element.lecture_id}`]) {
+          stars.push(this.id2lecture[`${element.lecture_id}`]);
+        }
       });
       return stars;
     },
     histories() {
       const histories = [];
       this.$store.state.profile.history.forEach((element) => {
-        const time = { time: renderTime(element.created_at) };
-        histories.push({
-          ...this.id2lecture[`${element.history_about_id}`],
-          ...time,
-        });
+        if (this.id2lecture[`${element.history_about_id}`]) {
+          const time = { time: renderTime(element.created_at) };
+          histories.push({
+            ...this.id2lecture[`${element.history_about_id}`],
+            ...time,
+          });
+        }
       });
       return histories;
     },

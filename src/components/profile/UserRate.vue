@@ -17,7 +17,7 @@
         </v-list-item-action>
       </v-list-item>
 
-      <v-divider v-if="index + 1 < userRates.length" :key="index" />
+      <v-divider v-if="index + 1 < userRates.length" :key="`divider-${index}`" />
     </template>
   </v-list>
 </template>
@@ -32,12 +32,14 @@ export default {
     userRates() {
       const userRates = [];
       this.$store.state.profile.userRate.forEach((element) => {
-        const time = { time: renderTime(element.lastUpdate) };
-        userRates.push({
-          ...this.$store.getters.id2lecture[`${element.lectureId}`],
-          ...element,
-          ...time,
-        });
+        if (this.$store.getters.id2lecture[`${element.lectureId}`]) {
+          const time = { time: renderTime(element.lastUpdate) };
+          userRates.push({
+            ...this.$store.getters.id2lecture[`${element.lectureId}`],
+            ...element,
+            ...time,
+          });
+        }
       });
       return userRates;
     },

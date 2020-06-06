@@ -46,8 +46,8 @@
           :rules="passwordRules"
           :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
           :type="passwordShow ? 'text' : 'password'"
-          @click:append="passwordShow = !passwordShow"
           required
+          @click:append="passwordShow = !passwordShow"
         />
       </div>
       <div>
@@ -77,9 +77,7 @@ export default {
     code: '',
     password: '',
     passwordShow: false,
-    passwordRules: [
-      (v) => !!v || 'password is required',
-    ],
+    passwordRules: [(v) => !!v || 'password is required'],
     alertType: 'success',
     alertShown: false,
     alertContent: '',

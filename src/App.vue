@@ -14,6 +14,11 @@
 </template>
 
 <script>
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import 'highlight.js/styles/github.css';
+
 import TopToolbar from './components/common/TopToolbar.vue';
 import BottomNav from './components/common/BottomNav.vue';
 import Message from './components/common/Message.vue';
@@ -37,6 +42,12 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css?family=Material+Icons+Round|Material+Icons');
 
+.tui-editor-contents {
+  font-size: 1rem;
+}
+.te-md-container .CodeMirror {
+  font-size: 1rem;
+}
 .tui-editor-contents pre code {
   box-shadow: none;
   -webkit-box-shadow: none;

@@ -176,7 +176,7 @@
                 </div>
 
                 <div class="rate-content">
-                  <viewer :initial-value="rate.content" />
+                  <viewer :initial-value="rate.content" :options="viewerOptions" />
                 </div>
 
                 <my-picker
@@ -302,8 +302,9 @@
 
 <script>
 import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/vue-editor';
+import hljs from 'highlight.js';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 
 import throttle from 'lodash/throttle';
 import log from '../../utils/log';
@@ -418,6 +419,10 @@ export default {
           openReplies: false,
         },
       ],
+      viewerOptions: {
+        useageStatistics: false,
+        plugins: [[codeSyntaxHighlight, { hljs }]],
+      },
     };
   },
 

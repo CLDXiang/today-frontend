@@ -1,10 +1,8 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <h1>注册</h1>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+  <div class="register-container">
+    <div class="mark">
+      <h2>欢迎加入Today!</h2>
+      <div>
         <v-text-field
           v-model="name"
           :rules="nameRules"
@@ -12,20 +10,36 @@
           label="昵称"
           required
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+      </div>
+      <div class="email-bar">
         <v-text-field
+          v-if="state === 'init'"
           v-model="email"
           :rules="emailRules"
-          label="E-mail"
+          label="邮箱"
           required
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-text-field
+          v-else
+          v-model="code"
+          label="验证码"
+          required
+        />
+
+        <v-divider class="email-divider" vertical />
+        <v-btn
+          class="email-btn"
+          color="primary"
+          depressed
+          :disabled="cooldownCnt !== 0"
+          :loading="state === 'requesting'"
+          @click="requestCode"
+        >
+          {{ state === 'init' || state === 'requesting'? '获取验证码'
+            : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
+        </v-btn>
+      </div>
+      <div>
         <v-text-field
           v-model="password"
           type="password"
@@ -33,17 +47,18 @@
           label="密码"
           required
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-btn class="ma-2" color="primary" @click="register">
-        提交
-      </v-btn>
-    </v-row>
-  </v-container>
+      </div>
+      <div>
+        <v-btn color="primary" @click="register">
+          注册
+        </v-btn>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import { register } from '../../services/auth.service';
+import { register, requestCode } from '../../services/auth.service';
+import log from '../../utils/log';
 
 export default {
   data: () => ({
@@ -57,6 +72,7 @@ export default {
       (v) => !!v || 'E-mail is required',
       (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
+    code: '',
     password: '',
     passwordRules: [
       (v) => !!v || 'password is required',
@@ -65,10 +81,13 @@ export default {
     alertType: 'success',
     alertShown: false,
     alertContent: '',
+
+    cooldownCnt: 0,
+    state: 'init',
   }),
   methods: {
     register() {
-      register(this.name, this.email, this.password).then((resp) => {
+      register(this.name, this.code, this.password).then((resp) => {
         if (resp.data.result === 'success') {
           this.$message.success('注册成功，跳转登录页面……');
           setTimeout(() => {
@@ -81,6 +100,60 @@ export default {
         }
       });
     },
+    requestCode() {
+      if (this.state === 'init') {
+        this.state = 'requesting';
+
+        requestCode(this.name, this.email)
+          .then(() => {
+            this.state = 'cooldown';
+            const vm = this;
+            vm.cooldownCnt = 5; // FIXME
+            setTimeout(function countdown() {
+              vm.cooldownCnt -= 1;
+              if (vm.cooldownCnt === 0) vm.state = 'resend';
+              else if (vm.state === 'cooldown') setTimeout(countdown, 1000);
+            }, 1000);
+          })
+          .catch((e) => {
+            this.state = 'init';
+            log.info('send code failed', e);
+          });
+      } else if (this.state === 'cooldown' || this.state === 'requesting') {
+        log.info('cooldown-ing or requesting');
+      } else if (this.state === 'resend') {
+        this.state = 'init';
+      } else {
+        log.info('Unexpected state');
+      }
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../../scss/utils.scss';
+@import '../../scss/mark.scss';
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.mark {
+  display: flex;
+  flex-direction: column;
+  max-width: $main-width/2;
+  width: 100%;
+  @include mark;
+}
+
+.email-bar {
+  display: flex;
+  align-items: center;
+  > .email-divider {
+    margin: 1em 1em;
+  }
+}
+</style>

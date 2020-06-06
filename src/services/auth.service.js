@@ -57,11 +57,11 @@ export function login(username, password) {
   });
 }
 
-export function register(name, email, password) {
+export function register(name, code, password) {
   return new Promise((resolve, reject) => {
     const payload = {
       name,
-      email,
+      code,
       password,
     };
     log.info('register payload: ', payload);
@@ -69,6 +69,17 @@ export function register(name, email, password) {
       .post(`${API_URL}/auth/register`, payload)
       .then((resp) => {
         log.info('register resp', resp);
+        resolve(resp);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+export function requestCode(name, email) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${API_URL}/auth/register-mail`, { name, email })
+      .then((resp) => {
         resolve(resp);
       })
       .catch((err) => reject(err));

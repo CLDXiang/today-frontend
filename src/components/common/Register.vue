@@ -42,9 +42,11 @@
       <div>
         <v-text-field
           v-model="password"
-          type="password"
-          :rules="passwordRules"
           label="密码"
+          :rules="passwordRules"
+          :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="passwordShow ? 'text' : 'password'"
+          @click:append="passwordShow = !passwordShow"
           required
         />
       </div>
@@ -74,9 +76,9 @@ export default {
     ],
     code: '',
     password: '',
+    passwordShow: false,
     passwordRules: [
       (v) => !!v || 'password is required',
-      //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
     alertType: 'success',
     alertShown: false,

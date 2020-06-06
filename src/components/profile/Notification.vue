@@ -8,14 +8,14 @@
       <v-card flat tile>
         <v-list two-line>
           <template v-for="(user, index) in newFollowers">
-            <v-list-item :key="user.element.id" :to="`/user/${user.profile.id}`">
+            <v-list-item :key="user.id" :to="`/user/${user.userProfile.id}`">
               <v-list-item-avatar>
-                <v-img :src="processAvatar(user.profile.avatar)" />
+                <v-img :src="processAvatar(user.userProfile.avatar)" />
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title v-text="user.profile.nickName||'Anonymous'" />
-                <v-list-item-subtitle v-text="user.profile.bio||'这个人还没有个性签名哦'" />
+                <v-list-item-title v-text="user.userProfile.nickName||'Anonymous'" />
+                <v-list-item-subtitle v-text="user.userProfile.bio||'这个人还没有个性签名哦'" />
               </v-list-item-content>
               <v-list-item-action-text v-text="user.time" />
             </v-list-item>
@@ -29,26 +29,22 @@
     </v-tab>
     <v-tab-item value="tab-2">
       <v-card flat tile>
-        <!-- <v-list three-line>
-          <template v-for="(rate, index) in rates">
-            <v-list-item
-              :key="rate.lectureId"
-              :to="`/lecture/${rate.code}/${rate.idx}`"
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  v-text="`${rate.name} · ${rate.teacher}`"
-                />
-                <v-list-item-subtitle v-text="rate.content" />
-              </v-list-item-content>
+        <v-list two-line>
+          <template v-for="(reply, index) in newReplies">
+            <v-list-item :key="reply.id" :to="`/lecture/${reply.lectureInfo.code}/${reply.lectureInfo.idx}`">
+              <v-list-item-avatar>
+                <v-img :src="processAvatar(reply.userProfile.avatar)" />
+              </v-list-item-avatar>
 
-              <v-list-item-action>
-                <v-list-item-action-text v-text="rate.time" />
-              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="reply.userProfile.nickName||'Anonymous'" />
+                <v-list-item-subtitle v-text="`回复了您对《${reply.lectureInfo.name}》的评价`" />
+              </v-list-item-content>
+              <v-list-item-action-text v-text="reply.time" />
             </v-list-item>
-            <v-divider v-if="index + 1 < rates.length" :key="`divider-${index}`" />
+            <v-divider v-if="index + 1 < newFollowers.length" :key="`divider-${index}`" />
           </template>
-        </v-list> -->
+        </v-list>
       </v-card>
     </v-tab-item>
     <v-tab href="#tab-3">
@@ -58,14 +54,14 @@
       <v-card flat tile>
         <v-list two-line>
           <template v-for="(rate, index) in newRates">
-            <v-list-item :key="rate.element.id" :to="`/lecture/${rate.lectureInfo.code}/${rate.lectureInfo.idx}`">
+            <v-list-item :key="rate.id" :to="`/lecture/${rate.lectureInfo.code}/${rate.lectureInfo.idx}`">
               <v-list-item-avatar>
-                <v-img :src="processAvatar(rate.profile.avatar)" />
+                <v-img :src="processAvatar(rate.userProfile.avatar)" />
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title v-text="`${rate.lectureInfo.name} · ${rate.lectureInfo.teacher}`" />
-                <v-list-item-subtitle v-text="rate.element.content" />
+                <v-list-item-title v-text="`${rate.userProfile.nickName} 最近评论了《${rate.lectureInfo.name}》`" />
+                <v-list-item-subtitle v-text="rate.content" />
               </v-list-item-content>
               <v-list-item-action-text v-text="rate.time" />
             </v-list-item>
@@ -79,7 +75,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { getUserProfile, getNotifications, getTrends } from '../../services/profile.service';
+import { getNotifications, getTrends } from '../../services/profile.service';
 import renderTime from '../../utils/time';
 // import { processAvatar } from '../../utils/avatar';
 import defaultAvatar from '../../assets/default_avatar.png';
@@ -97,11 +93,9 @@ export default {
       this.profile.notifications.forEach((element) => {
         if (element.type === 'follow') {
           const time = renderTime(element.created_at);
-          const profile = this.getHisProfile(element.from_user_id);
-          newFollowers.push({ profile, element, time });
+          newFollowers.push({ ...element, time });
         }
       });
-      console.log('newFollowers', newFollowers);
       return newFollowers;
     },
     newReplies() {
@@ -111,23 +105,14 @@ export default {
           if (this.id2lecture[`${element.notice_about_id}`]) {
             const time = renderTime(element.created_at);
             const lectureInfo = this.id2lecture[`${element.notice_about_id}`];
-            let profile = [];
-            this.getHisProfile(element.from_user_id).then((data) => {
-              profile = data;
-            });
-            // this.getHisProfile(element.from_user_id).then((data) => {
-            //   profile = data;
-            // });
             newReplies.push({
-              profile,
               lectureInfo,
-              element,
+              ...element,
               time,
             });
           }
         }
       });
-      console.log('newReplies', newReplies);
       return newReplies;
     },
     newRates() {
@@ -137,17 +122,14 @@ export default {
           if (this.id2lecture[`${element.notice_about_id}`]) {
             const time = renderTime(element.created_at);
             const lectureInfo = this.id2lecture[`${element.notice_about_id}`];
-            const profile = this.getHisProfile(element.from_user_id);
             newRates.push({
-              profile,
               lectureInfo,
-              element,
+              ...element,
               time,
             });
           }
         }
       });
-      console.log('newRates', newRates);
       return newRates;
     },
   },
@@ -157,19 +139,6 @@ export default {
     this.fetchData();
   },
   methods: {
-    async getHisProfile(userId) {
-      let profile = [];
-      await getUserProfile(userId)
-        .then((data) => {
-          console.log(data);
-          profile = data;
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      return profile;
-    },
-
     fetchData() {
       getNotifications()
         .then((notifications) => {

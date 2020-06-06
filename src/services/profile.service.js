@@ -61,8 +61,18 @@ export async function getNotifications() {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
-        resolve(resp.data);
+        const re = [];
+        resp.data.forEach((element) => {
+          getUserProfile(element.from_user_id)
+            .then((userProfile) => {
+              re.push({ ...element, userProfile });
+            })
+            .catch((err) => {
+              log.info(err);
+            });
+        });
+        log.info('notification', re);
+        resolve(re);
       })
       .catch((error) => reject(error));
   });
@@ -78,8 +88,18 @@ export async function getTrends() {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
-        resolve(resp.data);
+        const re = [];
+        resp.data.forEach((element) => {
+          getUserProfile(element.from_user_id)
+            .then((userProfile) => {
+              re.push({ ...element, userProfile });
+            })
+            .catch((err) => {
+              log.info(err);
+            });
+        });
+        log.info('trends', re);
+        resolve(re);
       })
       .catch((error) => reject(error));
   });

@@ -74,3 +74,27 @@ export function register(name, email, password) {
       .catch((err) => reject(err));
   });
 }
+
+export function requestCodeForForgotPassword(email) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${API_URL}/auth/forgot-password`, { email })
+      .then((resp) => {
+        log.info('forgot password request code resp', resp);
+        resolve(resp);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+export function modifyPassword(email, code, password) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${API_URL}/auth/modify-password`, { email, code, password })
+      .then((resp) => {
+        log.info('modify password resp', resp);
+        resolve(resp);
+      })
+      .catch((err) => reject(err));
+  });
+}

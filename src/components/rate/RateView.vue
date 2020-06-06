@@ -47,7 +47,11 @@
       <h3>您对此课程的体验如何？</h3>
       <p>您可在此畅所欲言，并为学弟学妹们提供一些详实有效的信息</p>
       <div class="rate-input">
-        <v-textarea v-model="comment" rows="5" />
+        <editor
+          ref="contentEditor"
+          :options="editorOptions"
+          preview-style="tab"
+        />
       </div>
 
       <h3>您在此课程上所得成绩如何？</h3>
@@ -89,18 +93,25 @@
 </template>
 
 <script>
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { Editor } from '@toast-ui/vue-editor';
+
 import log from '../../utils/log';
 
 // API
 import { getLectureByCodeAndIdx } from '../../services/lecture';
 import { postRate } from '../../services/rate';
+import uploadImage from '../../services/upload.service';
 
 export default {
-  components: {},
+  components: {
+    Editor,
+  },
   data() {
     return {
       lecture: {},
-      comment: '',
       selects: {
         semester: {
           value: '2020',
@@ -132,6 +143,12 @@ export default {
         },
       ],
       snapScrollIndex: 0,
+      editorOptions: {
+        useageStatistics: false,
+        hooks: {
+          addImageBlobHook: uploadImage,
+        },
+      },
     };
   },
   created() {
@@ -145,7 +162,7 @@ export default {
         this.selects.workload.choices.indexOf(this.selects.workload.value) - 2,
         this.selects.difficulty.choices.indexOf(this.selects.difficulty.value) - 2,
         this.selects.grading.choices.indexOf(this.selects.grading.value) - 2,
-        this.comment,
+        this.$refs.contentEditor.invoke('getMarkdown'),
         this.selects.semester.value,
         this.rangeRates[0].value,
       )
@@ -202,5 +219,3 @@ export default {
   }
 }
 </style>
-
-

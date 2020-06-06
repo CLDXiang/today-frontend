@@ -36,4 +36,18 @@ export default {
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css?family=Material+Icons+Round|Material+Icons');
+
+.tui-editor-contents pre code {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.tui-editor-contents code {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.v-application .tui-editor-contents code:before,
+.v-application .tui-editor-contents code:after {
+  content: "";
+  letter-spacing: 0;
+}
 </style>

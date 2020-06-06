@@ -1005,7 +1005,7 @@ h4.skeleton-loader {
   flex-direction: column;
 }
 
-.reply-content{
+.reply-content {
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }

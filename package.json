@@ -13,9 +13,11 @@
     "update-public-data": "cd public && wget https://github.com/fudan-today/today.backend/releases/download/public_data/public_data.tar && tar -xvf public_data.tar && rm public_data.tar && cd .."
   },
   "dependencies": {
+    "@toast-ui/editor": "^2.1.2",
     "@toast-ui/vue-editor": "^2.1.2",
     "@vue/cli": "^3.11.0",
     "axios": "^0.19.0",
+    "codemirror": "^5.54.0",
     "core-js": "^2.6.5",
     "dayjs": "^1.8.26",
     "dotenv": "^8.2.0",

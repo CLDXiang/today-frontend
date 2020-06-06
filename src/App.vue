@@ -47,7 +47,7 @@ export default {
 }
 .v-application .tui-editor-contents code:before,
 .v-application .tui-editor-contents code:after {
-  content: "";
+  content: '';
   letter-spacing: 0;
 }
 </style>

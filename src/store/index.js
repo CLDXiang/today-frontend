@@ -111,6 +111,35 @@ const store = new Vuex.Store({
     SET_LECTURES(state, lectures) {
       state.lectures = lectures;
     },
+    readNotice(state, noticeId) {
+      for (let i = 0; i < Object.keys(state.profile.notifications).length; i += 1) {
+        if (state.profile.notifications[i].id === noticeId) {
+          state.profile.notifications[i].mark = 0;
+        }
+      }
+    },
+    readTrend(state, noticeId) {
+      state.profile.trends.forEach((element) => {
+        if (element.id === noticeId) {
+          // eslint-disable-next-line no-param-reassign
+          element.mark = 0;
+        }
+      });
+    },
+    deleteNotice(state, noticeId) {
+      for (let i = 0; i < Object.keys(state.profile.notifications).length; i += 1) {
+        if (state.profile.notifications[i].id === noticeId) {
+          state.profile.notifications.splice(i, 1);
+        }
+      }
+    },
+    deleteTrend(state, noticeId) {
+      for (let i = 0; i < Object.keys(state.profile.trends).length; i += 1) {
+        if (state.profile.trends[i].id === noticeId) {
+          state.profile.trends.splice(i, 1);
+        }
+      }
+    },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
     },

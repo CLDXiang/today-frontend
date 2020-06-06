@@ -304,3 +304,20 @@ export function deleteFollow(id) {
       .catch((e) => reject(e));
   });
 }
+
+export async function getRateByRateId(rateId) {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/rate/${rateId}`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}

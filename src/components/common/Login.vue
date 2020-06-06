@@ -49,14 +49,13 @@ import log from '../../utils/log';
 import { login } from '../../services/auth.service';
 import {
   getUserProfile,
-  getNotifications,
-  getTrends,
   getUserStar,
   getUserRate,
   getFollowing,
   getFollower,
   getHistory,
 } from '../../services/profile.service';
+import { getNotifications, getTrends } from '../../services/notice.service';
 
 export default {
   data: () => ({

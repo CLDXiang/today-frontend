@@ -896,6 +896,8 @@ h4.skeleton-loader {
     }
 
     > .rate-title-avatar {
+      // https://css-tricks.com/almanac/properties/o/object-fit/
+      object-fit: cover;
       cursor: pointer;
       width: $img-size;
       height: $img-size;

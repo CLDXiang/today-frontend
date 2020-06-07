@@ -172,8 +172,12 @@ export function getReplies(ids) {
   const headers = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
+  const userId = store.state.user.jwt_token
+    ? JSON.parse(window.atob(store.state.user.jwt_token.split('.')[1])).sub
+    : 0;
+
   return new Promise((resolve, reject) => {
-    const params = { ids };
+    const params = { ids, userId };
     axios
       .get(`${API_URL}/rate/reply`, { params, headers })
       .then((resp) => {
@@ -184,7 +188,7 @@ export function getReplies(ids) {
             userId: data.userId,
             userName: data.username,
             avatar: data.avatar || defaultAvatar,
-            time: dayjs(data.createdAt).fromNow(),
+            time: dayjs(data.lastUpdate).fromNow(),
             content: data.content,
           })),
         );
@@ -209,8 +213,8 @@ export function postReply(type, id, content) {
         resolve({
           id: resp.data.id,
           userId: resp.data.userId,
-          userName: '', // FIXME
-          time: dayjs(data.createdAt).fromNow(),
+          userName: resp.data.username,
+          time: dayjs(data.createdAt).fromNow(), // FIXME
           avatar: resp.data.avatar || defaultAvatar,
           content: resp.data.content,
           reactions: [],

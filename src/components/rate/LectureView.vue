@@ -58,7 +58,7 @@
             </div>
 
             <p>
-              本门课程是「{{ lecture.depart }}」的课程，授课老师为「{{ lecture.teacher }}」，学分数为「{{ lecture.credit }}」
+              本门课程的授课老师为「{{ lecture.teacher }}」，学分数为「{{ lecture.credit }}」
             </p>
 
             <div class="post-button portrait-only">
@@ -147,11 +147,11 @@
                           {{ rate.userInfo.intro }}
                         </p>
                         <div class="rate-title-user-info">
-                          <div>点评</div><div>回复</div><div>关注者</div>
+                          <div>点评</div><!--div>回复</div--><div>关注者</div>
                         </div>
                         <div class="rate-title-user-info">
                           <div>{{ rate.userInfo.nrates }}</div>
-                          <div>{{ rate.userInfo.nreplies }}</div>
+                          <!--div>{{ rate.userInfo.nreplies }}</div-->
                           <div>{{ rate.userInfo.nfollowers }}</div>
                         </div>
                         <svg-switch class="rate-title-user-btn" variant="heart" :value="rate.userInfo.followed" @input="toggleFollow(rate, $event)" />
@@ -232,11 +232,11 @@
                               {{ reply.userInfo.intro }}
                             </p>
                             <div class="rate-title-user-info">
-                              <div>点评</div><div>回复</div><div>关注者</div>
+                              <div>点评</div><!--div>回复</div--><div>关注者</div>
                             </div>
                             <div class="rate-title-user-info">
                               <div>{{ reply.userInfo.nrates }}</div>
-                              <div>{{ reply.userInfo.nreplies }}</div>
+                              <!--div>{{ reply.userInfo.nreplies }}</div-->
                               <div>{{ reply.userInfo.nfollowers }}</div>
                             </div>
                             <svg-switch class="rate-title-user-btn" variant="heart" :value="reply.userInfo.followed" @input="toggleFollow(reply, $event)" />
@@ -595,7 +595,14 @@ export default {
               input: '',
               openReplies: false,
               replies: [],
-              userInfo: { valid: false, followed: false },
+              userInfo: {
+                valid: false,
+                followed: false,
+                intro: '',
+                nrates: 0,
+                nfollowers: 0,
+                nreplies: 0,
+              },
             });
             this.rateValidTil += 1;
           });
@@ -651,6 +658,7 @@ export default {
         postFollow(thread.userId)
           .then((resp) => {
             log.info(resp);
+            thread.userInfo.nfollowers += 1;
             this.updateFollow();
           })
           .catch((e) => log.info(e));
@@ -658,6 +666,7 @@ export default {
         deleteFollow(thread.userId)
           .then((resp) => {
             log.info(resp);
+            thread.userInfo.nfollowers -= 1;
             this.updateFollow();
           })
           .catch((e) => log.info(e));

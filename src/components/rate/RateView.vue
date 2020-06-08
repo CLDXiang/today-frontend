@@ -78,10 +78,6 @@
       </div>
 
       <h3>感谢您的参与！</h3>
-      <p>
-        在<span class="inline-highlight">100</span>个课程中<br>
-        已有<span class="inline-highlight">25</span>位学生进行了有效评测
-      </p>
 
       <div>
         <v-btn color="primary" @click="submit">

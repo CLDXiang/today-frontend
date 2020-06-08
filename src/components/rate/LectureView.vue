@@ -177,7 +177,7 @@
                 </div>
 
                 <div class="rate-content">
-                  <p>{{ rate.content }}</p>
+                  <viewer :initial-value="rate.content" :options="viewerOptions" />
                 </div>
 
                 <my-picker
@@ -189,19 +189,24 @@
 
                 <div
                   v-if="rate.openReplies"
-                  class="rate-input"
+                  class="rate-input my-2"
                 >
                   <v-textarea
                     v-model="rate.input"
-                    rows="5"
-                    class="rate-input__input"
+                    label="回复"
+                    rows="2"
+                    dense
+                    hide-details
+                    outlined
+                    auto-grow
+                    class="px-2 rate-input__input"
                   />
-                  <v-btn color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
+                  <v-btn text color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
                     发表回复
                   </v-btn>
                 </div>
 
-                <div v-if="rate.openReplies && rate.replies" class="rate-reply">
+                <div v-if="rate.openReplies && rate.replies" class="rate-reply mt-2">
                   <div v-for="reply in rate.replies" :key="reply.id" class="rate-reply__item">
                     <div class="rate-title">
                       <div class="rate-title-span">
@@ -244,10 +249,8 @@
                       </div>
                     </div>
 
-                    <div class="rate-content">
-                      <p style="margin-bottom: 0;">
-                        {{ reply.content }}
-                      </p>
+                    <div class="rate-content reply-content">
+                      <p style="margin-bottom: 0;" v-text="reply.content" />
                     </div>
 
                     <!-- TODO support react to reply 
@@ -299,6 +302,11 @@
 </template>
 
 <script>
+import 'codemirror/lib/codemirror.css';
+import { Viewer } from '@toast-ui/vue-editor';
+import hljs from 'highlight.js';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+
 import throttle from 'lodash/throttle';
 import log from '../../utils/log';
 
@@ -333,6 +341,7 @@ export default {
     SvgSwitch,
     MyPicker,
     RatePicker,
+    Viewer,
   },
   data() {
     return {
@@ -423,6 +432,10 @@ export default {
           openReplies: false,
         },
       ],
+      viewerOptions: {
+        useageStatistics: false,
+        plugins: [[codeSyntaxHighlight, { hljs }]],
+      },
     };
   },
 
@@ -1079,6 +1092,11 @@ h4.skeleton-loader {
   padding-left: 2rem;
   display: flex;
   flex-direction: column;
+}
+
+.reply-content {
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 // input for reply dialog

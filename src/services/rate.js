@@ -222,17 +222,13 @@ export function postReply(type, id, content) {
       .post(`${API_URL}/rate/${id}/reply`, data, { headers: header })
       .then((resp) => {
         log.info('POST reply resp', resp);
-        resolve({
-          id: resp.data.id,
-          userId: resp.data.userId,
-          userName: resp.data.username,
-          time: dayjs(data.createdAt).fromNow(), // FIXME
-          avatar: getAvatar(resp.data.avatar),
-          content: resp.data.content,
-          reactions: [],
-        });
+        getReplies([resp.data.id])
+          .then((d) => {
+            resolve(d[0]);
+          })
+          .catch((e) => reject(e));
       })
-      .catch((err) => reject(err));
+      .catch((e) => reject(e));
   });
 }
 

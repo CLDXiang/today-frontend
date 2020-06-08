@@ -19,10 +19,8 @@ const defaultAvatar = require('../assets/default_avatar.png');
 const defaultBio = '然鹅这位童鞋并没有留下什么话语';
 
 function getAvatar(avatarUrl) {
-  if (avatarUrl.includes('DEFAULT'))
-    return defaultAvatar;
-  else
-    return avatarUrl;
+  if (avatarUrl && avatarUrl.includes('DEFAULT')) return defaultAvatar;
+  return avatarUrl;
 }
 
 /**
@@ -31,14 +29,21 @@ function getAvatar(avatarUrl) {
  ******************************
  */
 
-export function getRateIds(lectureId) {
+export function getRateIds(lectureId, rateBy) {
+  const params =
+    rateBy === 'default'
+      ? {}
+      : {
+          rateBy,
+        };
+
   if (store.state.user.jwt_token) {
     const headers = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_URL}/rate/lecture/auth/${lectureId}`, { headers })
+        .get(`${API_URL}/rate/lecture/auth/${lectureId}`, { headers, params })
         .then((resp) => {
           log.info('GET rate ids resp', resp);
           resolve({ rateIds: resp.data.rates });
@@ -49,7 +54,7 @@ export function getRateIds(lectureId) {
 
   return new Promise((resolve, reject) => {
     axios
-      .get(`${API_URL}/rate/lecture/${lectureId}`)
+      .get(`${API_URL}/rate/lecture/${lectureId}`, { params })
       .then((resp) => {
         log.info('GET rate ids resp', resp);
         resolve({ rateIds: resp.data.rates });

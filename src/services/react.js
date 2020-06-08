@@ -13,8 +13,8 @@ function bimap1(emojiStr, idx) {
   emojiIntToStr.set(idx, emojiStr);
 }
 
-bimap1('upvote', 0);
-bimap1('downvote', 1);
+bimap1('upvote', 1);
+bimap1('downvote', 0);
 let i = 2;
 Object.keys(emojiData.emojis).forEach((emojiStr) => {
   bimap1(emojiStr, i);

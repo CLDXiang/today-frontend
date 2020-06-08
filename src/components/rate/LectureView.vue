@@ -112,6 +112,7 @@
                 style="max-width: 10rem;"
                 class="comment-sort"
                 :items="sortChoices"
+                :disabled="loadingRates"
               />
             </h4>
 
@@ -330,8 +331,12 @@ export default {
       // For UI control
       loadingLecture: true,
       loadingRates: false,
-      sort: '默认排序',
-      sortChoices: ['默认排序', '按时间排序'],
+      sort: 'default',
+      sortChoices: [
+        { text: '默认排序', value: 'default' },
+        { text: '按赞同数排序', value: 'upvote' },
+        { text: '按回复数排序', value: 'reply' },
+      ],
 
       lecture: {},
 
@@ -421,7 +426,7 @@ export default {
       }
     },
     sort(val) {
-      log.info(val);
+      this.switchRateOrder(val);
     },
   },
 
@@ -510,10 +515,10 @@ export default {
 
     // Rates
     // FIXME: support order
-    switchRateOrder() {
-      log.info('switch rate order');
+    switchRateOrder(order) {
+      log.info('switch rate order', order);
       this.rates = [];
-      getRateIds(this.lecture.id)
+      getRateIds(this.lecture.id, order)
         .then((resp) => {
           this.rateIds = resp.rateIds;
           this.rateValidTil = 0;
@@ -531,9 +536,11 @@ export default {
         this.rateValidTil + this.rateBatchSize,
       );
       const nextIds = nextIdsAndDeleted.map((d) => d.id);
+      if (nextIds.length === 0) {
+        this.loadingRates = false;
+        return;
+      }
       log.info(nextIds);
-      if (nextIds.length === 0) return;
-
       const id2deleted = new Map(nextIdsAndDeleted.map((d) => [d.id, d.deleted]));
 
       getRateBatch(nextIds)
@@ -559,7 +566,7 @@ export default {
           });
           this.loadingRates = false;
         })
-        .catch((e) => log.info(e));
+        .catch((e) => log.info(e)); // FIXME: still retry after network error
     },
 
     getUserInfo(thread) {

@@ -171,3 +171,21 @@ export async function createSecretReply(postId, content) {
       .catch((error) => reject(error));
   });
 }
+
+export async function postImage(blob) {
+  return new Promise((resolve, reject) => {
+    const form = new FormData();
+    form.append('file', blob);
+    axios
+      .post(`${API_URL}/file`, form, {
+        headers: {
+          'Content-Type': `multipart/form-data; boundary=${form.boundary}`,
+          Authorization: `Bearer ${store.state.user.jwt_token}`,
+        },
+      })
+      .then((resp) => {
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
+  });
+}

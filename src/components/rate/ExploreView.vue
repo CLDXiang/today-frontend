@@ -2,7 +2,9 @@
   <div>
     <v-dialog v-model="showModal" max-width="400">
       <v-card max-width="500">
-        <v-card-title class="headline">请选择授课老师</v-card-title>
+        <v-card-title class="headline">
+          请选择授课老师
+        </v-card-title>
         <v-list>
           <v-list-item
             v-for="t in modalTeacherList" 
@@ -15,7 +17,7 @@
           </v-list-item>
         </v-list>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             color="primary"
             text
@@ -40,21 +42,19 @@
             <span class="explore-leading">高级</span>
 
             <div class="option-list">
-
               <div class="option-item">
                 <label>
-                  <input type="radio" value="default" v-model="sortBy">
+                  <input v-model="sortBy" type="radio" value="default">
                   <span>默认排序</span>
                 </label>
               </div>
 
               <div class="option-item">
                 <label>
-                  <input type="radio" value="name" v-model="sortBy">
+                  <input v-model="sortBy" type="radio" value="name">
                   <span>按课程名称排序</span>
                 </label>
               </div>
-
             </div>
           </div>
           <div class="right-box">
@@ -195,7 +195,7 @@ export default {
       openSearch: false,
       loading: true,
 
-      sortBy: "default",
+      sortBy: 'default',
 
       tabIndex: '',
       searchInput: '',
@@ -217,7 +217,7 @@ export default {
       this.loading = true;
       this.dUpdateSearchResult(filterLectures(this.searchInput));
     },
-    sortBy(val) {
+    sortBy() {
       this.loading = true;
       this.dUpdateSearchResult(filterLectures(this.searchInput));
     },
@@ -244,18 +244,18 @@ export default {
         c2t[data.name].push({
           name: data.teacher,
           code: data.code,
-          to: `/lecture/${data.code}/${data.idx}`
+          to: `/lecture/${data.code}/${data.idx}`,
         });
       });
-      let result = Object.keys(c2t).map(lectureName => {
+      const result = Object.keys(c2t).map((lectureName) => {
         return { name: lectureName, teachers: c2t[lectureName] };
-      })
-      if (this.sortBy == 'name') {
+      });
+      if (this.sortBy === 'name') {
         result.sort((a, b) => {
-          return a.name.localeCompare(b.name,"zh");
+          return a.name.localeCompare(b.name, 'zh');
         });
       }
-     
+
       return result;
     },
     updateSearchResult(tuples) {
@@ -321,7 +321,9 @@ export default {
   $use-dense: true;
   @if $use-dense {
     height: calc(100vh - 112px);
-    > div:last-child { margin-bottom: 56px; }
+    > div:last-child {
+      margin-bottom: 56px;
+    }
   } @else {
     height: 100vh;
     overflow: auto;

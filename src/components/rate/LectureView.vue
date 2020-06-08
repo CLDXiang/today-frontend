@@ -128,7 +128,7 @@
                     <img
                       class="rate-title-avatar"
                       :src="rate.avatar"
-                      @click="$router.push('/user')"
+                      @click="$router.push(`/user/${rate.userId}`)"
                       @mouseenter="getUserInfo(rate)"
                     >
 
@@ -208,7 +208,7 @@
                         <img
                           class="rate-title-avatar"
                           :src="reply.avatar"
-                          @click="$router.push('/user')"
+                          @click="$router.push(`/user/${reply.userId}`)"
                           @mouseenter="getUserInfo(reply)"
                         >
 

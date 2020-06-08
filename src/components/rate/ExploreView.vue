@@ -59,7 +59,7 @@
           </div>
           <div class="right-box">
             <div class="explore-input-container">
-              <input v-model="searchInput" class="explore-input" placeholder="请输入课程名称">
+              <input v-model="searchInput" class="explore-input" placeholder="请输入课程名称或老师名称">
             </div>
             <div class="explore-showlist">
               <transition name="fade">
@@ -128,7 +128,7 @@
               id="search-input"
               v-model="searchInput"
               class="search-bar"
-              placeholder="请输入课程名称"
+              placeholder="请输入课程名称或老师名称"
             >
             <div class="category-bar">
               <label v-for="(c, idx) in categories" :key="c.name" class="category-button">
@@ -155,7 +155,7 @@
               >
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title v-text="lecture.name" />
+                    <v-list-item-title v-text="`${lecture.name}（${lecture.teachers.map(t => t.name).join('/')}）`" />
                   </v-list-item-content>
                 </template>
   

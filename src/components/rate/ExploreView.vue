@@ -2,20 +2,28 @@
   <div>
     <v-dialog v-model="showModal" max-width="400">
       <v-card max-width="500">
-        <v-toolbar>
-          <v-toolbar-title>请选择授课老师</v-toolbar-title>
-        </v-toolbar>
+        <v-card-title class="headline">请选择授课老师</v-card-title>
         <v-list>
           <v-list-item
             v-for="t in modalTeacherList" 
-            :key="t[2]"
-            @click="$router.push(t[2])"
+            :key="t.to"
+            @click="$router.push(t.to)"
           >
             <v-list-item-content>
-              <v-list-item-title v-text="t[0]" />
+              <v-list-item-title v-text="t.name" />
             </v-list-item-content>
           </v-list-item>
         </v-list>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="showModal = false"
+          >
+            返回
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
 
@@ -27,36 +35,31 @@
         <div class="page-container main-container">
           <div class="left-box">
             <h1 class="explore-title">
-              EXPLORE
+              搜索课程
             </h1>
             <span class="explore-leading">高级</span>
 
             <div class="option-list">
+
               <div class="option-item">
                 <label>
-                  <input type="checkbox">
+                  <input type="radio" value="default" v-model="sortBy">
+                  <span>默认排序</span>
+                </label>
+              </div>
+
+              <div class="option-item">
+                <label>
+                  <input type="radio" value="name" v-model="sortBy">
                   <span>按课程名称排序</span>
                 </label>
               </div>
 
-              <div class="option-item">
-                <label>
-                  <input type="checkbox">
-                  <span>按学分数排序</span>
-                </label>
-              </div>
-
-              <div class="option-item">
-                <label>
-                  <input type="checkbox">
-                  <span>显示学分</span>
-                </label>
-              </div>
             </div>
           </div>
           <div class="right-box">
             <div class="explore-input-container">
-              <input v-model="searchInput" class="explore-input" placeholder="Search by class, teacher and code">
+              <input v-model="searchInput" class="explore-input" placeholder="请输入课程名称">
             </div>
             <div class="explore-showlist">
               <transition name="fade">
@@ -81,12 +84,12 @@
               <transition name="fade">
                 <div v-show="!loading" class="explore-showlist__result">
                   <div 
-                    v-for="(teachers, lecture) in searchResult" 
-                    :key="lecture" 
+                    v-for="lecture in searchResult" 
+                    :key="lecture.name" 
                     class="explore-listitem"
-                    @click="openTeacherModal(teachers)"
+                    @click="openTeacherModal(lecture.teachers)"
                   >
-                    {{ lecture }}
+                    {{ lecture.name }}
                   </div>
                 </div>
               </transition>
@@ -102,11 +105,11 @@
         </div>
         <div class="page-container page-columns">
           <div
-            v-for="(teachers, lecture) in c.processedResult"
-            :key="lecture"
-            @click="openTeacherModal(teachers)"
+            v-for="lecture in c.processedResult"
+            :key="lecture.name"
+            @click="openTeacherModal(lecture.teachers)"
           >
-            {{ lecture }}
+            {{ lecture.name }}
           </div>
         </div>
       </div>
@@ -114,58 +117,55 @@
 
     <!-- Portrait View -->
     <div class="portrait-only">
-      <h1 class="title">
-        Explore
-      </h1>
+      <div :class="{'skeleton-loader-white': loading}">
+        <h1 class="title">
+          搜索课程
+        </h1>
 
-      <div class="query-bar">
-        <div class="query-container">
-          <input
-            id="search-input"
-            v-model="searchInput"
-            class="search-bar"
-            placeholder="Search by name, teacher or code"
-          >
-          <div class="category-bar">
-            <label v-for="(c, idx) in categories" :key="c.name" class="category-button">
-              <input v-model="tabIndex" type="radio" :value="idx">
-              <span>{{ c.name }}</span>
-            </label>
+        <div class="query-bar">
+          <div class="query-container">
+            <input
+              id="search-input"
+              v-model="searchInput"
+              class="search-bar"
+              placeholder="请输入课程名称"
+            >
+            <div class="category-bar">
+              <label v-for="(c, idx) in categories" :key="c.name" class="category-button">
+                <input v-model="tabIndex" type="radio" :value="idx">
+                <span>{{ c.name }}</span>
+              </label>
+            </div>
           </div>
+          <label for="search-input" class="search-icon-container">
+            <i class="search-icon" />
+          </label>
         </div>
-        <label for="search-input" class="search-icon-container">
-          <transition name="fade">
-            <v-progress-circular v-show="loading" indeterminate color="primary" size="24" />
-          </transition>
-          <transition name="fade">
-            <i v-show="!loading" class="search-icon" />
-          </transition>
-        </label>
       </div>
 
       <div class="result-body">
         <div class="result-box">
           <!-- portrait list start -->
           
-          <v-card>
+          <v-card outlined>
             <v-list>
               <v-list-group
-                v-for="(teachers, lecture) in searchResult"
-                :key="lecture"
+                v-for="lecture in searchResult"
+                :key="lecture.name"
               >
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title v-text="lecture" />
+                    <v-list-item-title v-text="lecture.name" />
                   </v-list-item-content>
                 </template>
   
                 <v-list-item
-                  v-for="t in teachers"
-                  :key="t[2]"
-                  :to="t[2]"
+                  v-for="t in lecture.teachers"
+                  :key="t.to"
+                  :to="t.to"
                 >
                   <v-list-item-content>
-                    <v-list-item-title v-text="t[0]" />
+                    <v-list-item-title v-text="t.name" />
                   </v-list-item-content>
                 </v-list-item>
               </v-list-group>
@@ -195,18 +195,11 @@ export default {
       openSearch: false,
       loading: true,
 
+      sortBy: "default",
+
       tabIndex: '',
       searchInput: '',
-      searchResult: {
-        Mathematics: [
-          ['TA', 'code a', '/lecture/codea/idx1'],
-          ['TB', 'code a', '/lecture/codea/idx2'],
-        ],
-        'Computer Science': [
-          ['TA', 'code b', '/lecture/codeb/idx1'],
-          ['TB', 'code b', '/lecture/codeb/idx2'],
-        ],
-      },
+      searchResult: [],
 
       categories: [
         { name: '思政', type: 'Politics', processedResult: [] },
@@ -221,6 +214,10 @@ export default {
       if (typeof newi === 'number') this.searchResult = this.categories[newi].processedResult;
     },
     searchInput() {
+      this.loading = true;
+      this.dUpdateSearchResult(filterLectures(this.searchInput));
+    },
+    sortBy(val) {
       this.loading = true;
       this.dUpdateSearchResult(filterLectures(this.searchInput));
     },
@@ -244,9 +241,22 @@ export default {
       const c2t = {};
       tuples.forEach((data) => {
         if (!c2t[data.name]) c2t[data.name] = [];
-        c2t[data.name].push([data.teacher, data.code, `/lecture/${data.code}/${data.idx}`]);
+        c2t[data.name].push({
+          name: data.teacher,
+          code: data.code,
+          to: `/lecture/${data.code}/${data.idx}`
+        });
       });
-      return c2t;
+      let result = Object.keys(c2t).map(lectureName => {
+        return { name: lectureName, teachers: c2t[lectureName] };
+      })
+      if (this.sortBy == 'name') {
+        result.sort((a, b) => {
+          return a.name.localeCompare(b.name,"zh");
+        });
+      }
+     
+      return result;
     },
     updateSearchResult(tuples) {
       this.searchResult = this.getFilterResult(tuples);
@@ -259,6 +269,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../scss/utils.scss';
+
+@keyframes loader {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+.skeleton-loader-white {
+  @include skeleton-loader(loader, true);
+  @include no-select;
+}
 
 .fade-enter-active,
 .fade-leave-active {
@@ -298,6 +321,7 @@ export default {
   $use-dense: true;
   @if $use-dense {
     height: calc(100vh - 112px);
+    > div:last-child { margin-bottom: 56px; }
   } @else {
     height: 100vh;
     overflow: auto;
@@ -456,7 +480,8 @@ export default {
 }
 
 .explore-title {
-  font-size: 2.7rem;
+  font-size: 2.7rem !important;
+  font-weight: normal;
   opacity: $active-opacity;
 }
 .explore-leading {
@@ -544,7 +569,8 @@ $height: 1em + 2 * $spacing;
 
 .title {
   color: rgba(0, 0, 0, $active-opacity);
-  font-size: 2.7em;
+  font-size: 2.7em !important;
+  font-weight: normal;
   padding: 3em 1.4rem 0.8em 1.4rem;
   margin: 0;
 }

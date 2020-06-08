@@ -47,7 +47,11 @@
       <h3>您对此课程的体验如何？</h3>
       <p>您可在此畅所欲言，并为学弟学妹们提供一些详实有效的信息</p>
       <div class="rate-input">
-        <v-textarea v-model="comment" rows="5" />
+        <editor
+          ref="contentEditor"
+          :options="editorOptions"
+          preview-style="tab"
+        />
       </div>
 
       <h3>您在此课程上所得成绩如何？</h3>
@@ -74,10 +78,6 @@
       </div>
 
       <h3>感谢您的参与！</h3>
-      <p>
-        在<span class="inline-highlight">100</span>个课程中<br>
-        已有<span class="inline-highlight">25</span>位学生进行了有效评测
-      </p>
 
       <div>
         <v-btn color="primary" @click="submit">
@@ -89,18 +89,25 @@
 </template>
 
 <script>
+import { Editor } from '@toast-ui/vue-editor';
+import hljs from 'highlight.js';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+
 import log from '../../utils/log';
 
 // API
 import { getLectureByCodeAndIdx } from '../../services/lecture';
 import { postRate } from '../../services/rate';
+import { getUserRate } from '../../services/profile.service';
+import uploadImage from '../../services/upload.service';
 
 export default {
-  components: {},
+  components: {
+    Editor,
+  },
   data() {
     return {
       lecture: {},
-      comment: '',
       selects: {
         semester: {
           value: '2020',
@@ -132,6 +139,13 @@ export default {
         },
       ],
       snapScrollIndex: 0,
+      editorOptions: {
+        useageStatistics: false,
+        hooks: {
+          addImageBlobHook: uploadImage,
+        },
+        plugins: [[codeSyntaxHighlight, { hljs }]],
+      },
     };
   },
   created() {
@@ -139,13 +153,23 @@ export default {
     log.info(this.lecture);
   },
   methods: {
+    updateUserRate() {
+      getUserRate(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_RATE', data);
+          log.info('my rate', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     submit() {
       postRate(
         this.lecture.id,
         this.selects.workload.choices.indexOf(this.selects.workload.value) - 2,
         this.selects.difficulty.choices.indexOf(this.selects.difficulty.value) - 2,
         this.selects.grading.choices.indexOf(this.selects.grading.value) - 2,
-        this.comment,
+        this.$refs.contentEditor.invoke('getMarkdown'),
         this.selects.semester.value,
         this.rangeRates[0].value,
       )
@@ -154,6 +178,7 @@ export default {
           if (resp.status === 201) {
             this.$message.success('提交成功！');
             this.$router.go(-1);
+            this.updateUserRate();
           } else {
             this.$message.success('提交失败！');
           }
@@ -202,5 +227,3 @@ export default {
   }
 }
 </style>
-
-

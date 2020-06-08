@@ -124,9 +124,19 @@
       <v-toolbar-title>{{ barTitle }}</v-toolbar-title>
       <v-spacer />
       <!-- <v-icon @click.stop="back">mdi-face</v-icon> -->
-      <v-btn @click.stop="back">
-        返回
-      </v-btn>
+
+      <v-autocomplete
+        v-model="searchSelect"
+        :loading="loading"
+        :items="searchItems"
+        :search-input.sync="searchInput"
+        flat
+        dense
+        hide-no-data
+        hide-details
+        label="Looking for some courses or user?"
+        solo-inverted
+      />
       <!-- <v-app-bar-nav-icon @click.stop="toggleStatus"></v-app-bar-nav-icon> -->
     </v-app-bar>
   </div>
@@ -134,14 +144,35 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import debounce from 'lodash/debounce';
 import log from '../../utils/log';
 import defaultAvatar from '../../assets/default_avatar.png';
+import { initLecture, filterLectures } from '../../services/lecture';
+import searchUser from '../../services/search.service';
 
 export default {
   name: 'TopToolbar',
   data: () => ({
     showMenu: false,
+    loading: false,
+    searchSelect: null,
+    searchInput: '',
+    searchItems: [],
   }),
+  watch: {
+    searchInput(val) {
+      this.loading = true;
+      this.dUpdateSearchResult(val);
+    },
+    searchSelect(val) {
+      this.$router.push(val);
+    },
+  },
+  async created() {
+    this.dUpdateSearchResult = debounce(this.updateSearchResult, 500);
+    await initLecture();
+    this.dUpdateSearchResult('');
+  },
   computed: {
     ...mapState(['user']),
     ...mapGetters([
@@ -162,6 +193,27 @@ export default {
     },
   },
   methods: {
+    async updateSearchResult(val) {
+      const result = [{ header: '课程' }];
+      filterLectures(val).forEach((data) => {
+        result.push({
+          text: `${data.name}(${data.teacher})`,
+          value: `/lecture/${data.code}/${data.idx}`,
+        });
+      });
+      result.push({ header: '用户' });
+      const data = await searchUser(val);
+      data.forEach((d) => {
+        result.push({
+          text: `${d.name}(${d.nickName})`,
+          value: `/user/${d.id}`,
+        });
+      });
+      if (result.length > 2) {
+        this.searchItems = result;
+      }
+      this.loading = false;
+    },
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },

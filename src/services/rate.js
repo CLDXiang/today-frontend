@@ -18,20 +18,35 @@ const defaultAvatar = require('../assets/default_avatar.png');
 
 const defaultBio = '然鹅这位童鞋并没有留下什么话语';
 
+function getAvatar(avatarUrl) {
+  if (avatarUrl && avatarUrl.includes('DEFAULT')) return defaultAvatar;
+  return avatarUrl;
+}
+function getBio(bio) {
+  return bio || defaultBio;
+}
+
 /**
  ******************************
  * @API
  ******************************
  */
 
-export function getRateIds(lectureId) {
+export function getRateIds(lectureId, rateBy) {
+  const params =
+    rateBy === 'default'
+      ? {}
+      : {
+          rateBy,
+        };
+
   if (store.state.user.jwt_token) {
     const headers = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_URL}/rate/lecture/auth/${lectureId}`, { headers })
+        .get(`${API_URL}/rate/lecture/auth/${lectureId}`, { headers, params })
         .then((resp) => {
           log.info('GET rate ids resp', resp);
           resolve({ rateIds: resp.data.rates });
@@ -42,7 +57,7 @@ export function getRateIds(lectureId) {
 
   return new Promise((resolve, reject) => {
     axios
-      .get(`${API_URL}/rate/lecture/${lectureId}`)
+      .get(`${API_URL}/rate/lecture/${lectureId}`, { params })
       .then((resp) => {
         log.info('GET rate ids resp', resp);
         resolve({ rateIds: resp.data.rates });
@@ -76,7 +91,7 @@ export function getRateBatch(ids) {
               id: data.id,
               userName: data.username,
               userId: data.user_id,
-              avatar: data.avatar || defaultAvatar,
+              avatar: getAvatar(data.avatar),
               time: dayjs(data.last_update).fromNow(),
               content: data.content,
               replyIds: rateId2replyIds.get(data.id),
@@ -172,8 +187,12 @@ export function getReplies(ids) {
   const headers = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
+  const userId = store.state.user.jwt_token
+    ? JSON.parse(window.atob(store.state.user.jwt_token.split('.')[1])).sub
+    : 0;
+
   return new Promise((resolve, reject) => {
-    const params = { ids };
+    const params = { ids, userId };
     axios
       .get(`${API_URL}/rate/reply`, { params, headers })
       .then((resp) => {
@@ -183,8 +202,8 @@ export function getReplies(ids) {
             id: data.id,
             userId: data.userId,
             userName: data.username,
-            avatar: data.avatar || defaultAvatar,
-            time: dayjs(data.createdAt).fromNow(),
+            avatar: getAvatar(data.avatar),
+            time: dayjs(data.lastUpdate).fromNow(),
             content: data.content,
           })),
         );
@@ -206,17 +225,13 @@ export function postReply(type, id, content) {
       .post(`${API_URL}/rate/${id}/reply`, data, { headers: header })
       .then((resp) => {
         log.info('POST reply resp', resp);
-        resolve({
-          id: resp.data.id,
-          userId: resp.data.userId,
-          userName: '', // FIXME
-          time: dayjs(data.createdAt).fromNow(),
-          avatar: resp.data.avatar || defaultAvatar,
-          content: resp.data.content,
-          reactions: [],
-        });
+        getReplies([resp.data.id])
+          .then((d) => {
+            resolve(d[0]);
+          })
+          .catch((e) => reject(e));
       })
-      .catch((err) => reject(err));
+      .catch((e) => reject(e));
   });
 }
 
@@ -262,7 +277,7 @@ export function getUserInfo(id) {
       ])
       .then(
         axios.spread((rates, followers, profile) => {
-          info.intro = defaultBio || profile.data.bio;
+          info.intro = getBio(profile.data.bio);
           info.nrates = rates.data.length;
           info.nfollowers = followers.data.length;
           info.followed = followers.data.filter((obj) => obj.id === userId).length > 0;

@@ -78,10 +78,6 @@
       </div>
 
       <h3>感谢您的参与！</h3>
-      <p>
-        在<span class="inline-highlight">100</span>个课程中<br>
-        已有<span class="inline-highlight">25</span>位学生进行了有效评测
-      </p>
 
       <div>
         <v-btn color="primary" @click="submit">
@@ -102,6 +98,7 @@ import log from '../../utils/log';
 // API
 import { getLectureByCodeAndIdx } from '../../services/lecture';
 import { postRate } from '../../services/rate';
+import { getUserRate } from '../../services/profile.service';
 import uploadImage from '../../services/upload.service';
 
 export default {
@@ -156,6 +153,16 @@ export default {
     log.info(this.lecture);
   },
   methods: {
+    updateUserRate() {
+      getUserRate(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_RATE', data);
+          log.info('my rate', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     submit() {
       postRate(
         this.lecture.id,
@@ -171,6 +178,7 @@ export default {
           if (resp.status === 201) {
             this.$message.success('提交成功！');
             this.$router.go(-1);
+            this.updateUserRate();
           } else {
             this.$message.success('提交失败！');
           }

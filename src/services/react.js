@@ -13,8 +13,8 @@ function bimap1(emojiStr, idx) {
   emojiIntToStr.set(idx, emojiStr);
 }
 
-bimap1('upvote', 0);
-bimap1('downvote', 1);
+bimap1('upvote', 1);
+bimap1('downvote', 0);
 let i = 2;
 Object.keys(emojiData.emojis).forEach((emojiStr) => {
   bimap1(emojiStr, i);
@@ -34,6 +34,7 @@ export function postReaction(target, emojiStr) {
         .post(`${API_URL}/course/${reactToId}/star`, {}, { headers })
         .then((resp) => {
           log.info('POST star resp', resp);
+          resolve(resp.data);
         })
         .catch((e) => reject(e));
     });
@@ -71,6 +72,7 @@ export function deleteReaction(target, emojiStr) {
         .delete(`${API_URL}/course/${reactToId}/star`, { headers })
         .then((resp) => {
           log.info('DELETE star resp', resp);
+          resolve(resp.data);
         })
         .catch((e) => reject(e));
     });
@@ -83,7 +85,7 @@ export function deleteReaction(target, emojiStr) {
         .delete(`${API_URL}/rate/react/${emojiStr}`, { headers })
         .then((resp) => {
           log.info('DELETE reaction resp', resp);
-          resolve(resp);
+          resolve(resp.data);
         })
         .catch((e) => reject(e));
     });

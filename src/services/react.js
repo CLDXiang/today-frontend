@@ -34,6 +34,7 @@ export function postReaction(target, emojiStr) {
         .post(`${API_URL}/course/${reactToId}/star`, {}, { headers })
         .then((resp) => {
           log.info('POST star resp', resp);
+          resolve(resp.data);
         })
         .catch((e) => reject(e));
     });
@@ -71,6 +72,7 @@ export function deleteReaction(target, emojiStr) {
         .delete(`${API_URL}/course/${reactToId}/star`, { headers })
         .then((resp) => {
           log.info('DELETE star resp', resp);
+          resolve(resp.data);
         })
         .catch((e) => reject(e));
     });
@@ -83,7 +85,7 @@ export function deleteReaction(target, emojiStr) {
         .delete(`${API_URL}/rate/react/${emojiStr}`, { headers })
         .then((resp) => {
           log.info('DELETE reaction resp', resp);
-          resolve(resp);
+          resolve(resp.data);
         })
         .catch((e) => reject(e));
     });

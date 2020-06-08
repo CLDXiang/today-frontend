@@ -94,6 +94,7 @@ import log from '../../utils/log';
 // API
 import { getLectureByCodeAndIdx } from '../../services/lecture';
 import { postRate } from '../../services/rate';
+import { getUserRate } from '../../services/profile.service';
 
 export default {
   components: {},
@@ -139,6 +140,16 @@ export default {
     log.info(this.lecture);
   },
   methods: {
+    updateUserRate() {
+      getUserRate(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_RATE', data);
+          log.info('my rate', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     submit() {
       postRate(
         this.lecture.id,
@@ -154,6 +165,7 @@ export default {
           if (resp.status === 201) {
             this.$message.success('提交成功！');
             this.$router.go(-1);
+            this.updateUserRate();
           } else {
             this.$message.success('提交失败！');
           }

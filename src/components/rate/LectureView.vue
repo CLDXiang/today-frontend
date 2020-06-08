@@ -316,6 +316,13 @@ import {
   deleteFollow,
   postReply,
 } from '../../services/rate';
+
+import {
+  getFollowing,
+  getUserStar,
+  // getUserReply
+} from '../../services/profile.service';
+
 import { postReaction, deleteReaction } from '../../services/react';
 
 import { initLecture, lectures, getLectureByCodeAndIdx } from '../../services/lecture';
@@ -596,6 +603,16 @@ export default {
     },
 
     // Follow
+    updateFollow() {
+      getFollowing(this.$store.state.user.id)
+        .then((myFollowing) => {
+          this.$store.commit('SET_FOLLOWING', myFollowing);
+          log.info('my follower', myFollowing);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     toggleFollow(rthread, follow) {
       if (this.$store.state.user.jwt_token === '') {
         this.requireLogin();
@@ -607,16 +624,36 @@ export default {
       log.info(follow);
       if (follow) {
         postFollow(thread.userId)
-          .then((resp) => log.info(resp))
+          .then((resp) => {
+            log.info(resp);
+            this.updateFollow();
+          })
           .catch((e) => log.info(e));
       } else {
         deleteFollow(thread.userId)
-          .then((resp) => log.info(resp))
+          .then((resp) => {
+            log.info(resp);
+            this.updateFollow();
+          })
           .catch((e) => log.info(e));
       }
     },
 
     // Reply
+    updateReply() {
+      // FIXME
+      log.info('TODO: update reply in vuex');
+      /*
+      getUserReply(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_REPLY', data);
+          log.info('my star', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      */
+    },
     postReply(type, ritem) {
       const item = ritem;
       const { id } = item;
@@ -632,7 +669,7 @@ export default {
             log.info(data);
             item.replies.push({
               id: data.id,
-              userName: data.userName, // by jwt
+              userName: data.userName,
               userId: data.userId,
               content: data.content,
               time: data.time,
@@ -640,6 +677,7 @@ export default {
               reactions: [],
               userInfo: { valid: false, followed: false },
             });
+            this.updateReply();
           })
           .catch((e) => {
             log.info(e);
@@ -679,23 +717,41 @@ export default {
       }
     },
 
-    // Favor
+    // Favor/Star
+    updateStar() {
+      getUserStar(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_STAR', data);
+          log.info('my star', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     syncFavor(checked) {
       this.favored = checked;
       if (checked) {
         this.favorCount += 1;
-        postReaction(`lecture ${this.lecture.id}`, 'favor').catch((e) => {
-          if (e.response.status === 401) this.requireLogin();
-          // this.favorCount -= 1;
-          // this.favored = false;
-        });
+        postReaction(`lecture ${this.lecture.id}`, 'favor')
+          .then(() => {
+            this.updateStar();
+          })
+          .catch((e) => {
+            if (e.response.status === 401) this.requireLogin();
+            // this.favorCount -= 1;
+            // this.favored = false;
+          });
       } else {
         this.favorCount -= 1;
-        deleteReaction(`lecture ${this.lecture.id}`, 'favor').catch((e) => {
-          if (e.response.status === 401) this.requireLogin();
-          // this.favorCount += 1;
-          // this.favored = true;
-        });
+        deleteReaction(`lecture ${this.lecture.id}`, 'favor')
+          .then(() => {
+            this.updateStar();
+          })
+          .catch((e) => {
+            if (e.response.status === 401) this.requireLogin();
+            // this.favorCount += 1;
+            // this.favored = true;
+          });
       }
     },
   },

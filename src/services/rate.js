@@ -18,6 +18,13 @@ const defaultAvatar = require('../assets/default_avatar.png');
 
 const defaultBio = '然鹅这位童鞋并没有留下什么话语';
 
+function getAvatar(avatarUrl) {
+  if (avatarUrl.includes('DEFAULT'))
+    return defaultAvatar;
+  else
+    return avatarUrl;
+}
+
 /**
  ******************************
  * @API
@@ -76,7 +83,7 @@ export function getRateBatch(ids) {
               id: data.id,
               userName: data.username,
               userId: data.user_id,
-              avatar: data.avatar || defaultAvatar,
+              avatar: getAvatar(data.avatar),
               time: dayjs(data.last_update).fromNow(),
               content: data.content,
               replyIds: rateId2replyIds.get(data.id),
@@ -187,7 +194,7 @@ export function getReplies(ids) {
             id: data.id,
             userId: data.userId,
             userName: data.username,
-            avatar: data.avatar || defaultAvatar,
+            avatar: getAvatar(data.avatar),
             time: dayjs(data.lastUpdate).fromNow(),
             content: data.content,
           })),
@@ -215,7 +222,7 @@ export function postReply(type, id, content) {
           userId: resp.data.userId,
           userName: resp.data.username,
           time: dayjs(data.createdAt).fromNow(), // FIXME
-          avatar: resp.data.avatar || defaultAvatar,
+          avatar: getAvatar(resp.data.avatar),
           content: resp.data.content,
           reactions: [],
         });

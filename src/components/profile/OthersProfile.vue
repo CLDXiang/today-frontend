@@ -19,6 +19,7 @@
         <v-icon
           class="mr-1"
           :color="isFollowing ? 'red' : 'gray'"
+          :disabled="isMe"
           @click="followUnfollow"
         >
           mdi-heart
@@ -35,14 +36,14 @@
       <v-tab-item value="tab-1">
         <v-card flat tile>
           <v-list two-line>
-            <div v-for="(lecture, index) in profile.star" :key="lecture.id">
+            <div v-for="(lecture, index) in stars" :key="lecture.id">
               <v-list-item :to="`/lecture/${lecture.code}/${lecture.idx}`">
                 <v-list-item-content>
                   <v-list-item-title v-text="`${lecture.code}.${lecture.idx} ${lecture.name}`" />
                   <v-list-item-subtitle v-text="lecture.teacher" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.star.length" :key="index" />
+              <v-divider v-if="index + 1 < stars.length" :key="`divider-${index}`" />
             </div>
           </v-list>
         </v-card>
@@ -53,7 +54,7 @@
       <v-tab-item value="tab-2">
         <v-card flat tile>
           <v-list three-line>
-            <template v-for="(rate, index) in profile.rate">
+            <template v-for="(rate, index) in rates">
               <!-- TODO: 路由的目标不对 -->
               <v-list-item
                 :key="rate.lectureId"
@@ -70,7 +71,7 @@
                   <v-list-item-action-text v-text="rate.time" />
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.rate.length" :key="index" />
+              <v-divider v-if="index + 1 < rates.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -81,7 +82,7 @@
       <v-tab-item value="tab-3">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(user, index) in profile.following">
+            <template v-for="(user, index) in profile.followings">
               <v-list-item :key="user.name" :to="`/user/${user.id}`">
                 <v-list-item-avatar>
                   <v-img :src="processAvatar(user.avatar)" />
@@ -92,7 +93,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.following.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.followings.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -103,7 +104,7 @@
       <v-tab-item value="tab-4">
         <v-card flat tile>
           <v-list two-line>
-            <template v-for="(user, index) in profile.follower">
+            <template v-for="(user, index) in profile.followers">
               <v-list-item :key="user.name" :to="`/user/${user.id}`">
                 <v-list-item-avatar>
                   <v-img :src="processAvatar(user.avatar)" />
@@ -114,7 +115,7 @@
                   <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
                 </v-list-item-content>
               </v-list-item>
-              <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
+              <v-divider v-if="index + 1 < profile.followers.length" :key="`divider-${index}`" />
             </template>
           </v-list>
         </v-card>
@@ -124,6 +125,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {
   getUserProfile,
   getUserStar,
@@ -133,7 +135,7 @@ import {
 } from '../../services/profile.service';
 import { postFollow, deleteFollow } from '../../services/rate';
 import log from '../../utils/log';
-import getLectureById from '../../utils/lecture';
+import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.png';
 
@@ -143,18 +145,58 @@ export default {
     id: '',
     userInfo: [],
     profile: {
-      rate: [],
-      star: [],
-      follower: [],
-      following: [],
+      rawRates: [],
+      rawStars: [],
+      followers: [],
+      followings: [],
       countFollowing: '',
       countFollower: '',
       countRate: '',
       countStar: '',
     },
   }),
+  computed: {
+    ...mapGetters(['id2lecture']),
+    rates() {
+      const rates = [];
+      this.profile.rawRates.forEach((element) => {
+        if (this.id2lecture[`${element.lectureId}`]) {
+          const time = { time: renderTime(element.lastUpdate) };
+          rates.push({
+            ...this.id2lecture[`${element.lectureId}`],
+            ...element,
+            ...time,
+          });
+        }
+      });
+      return rates;
+    },
+    stars() {
+      const stars = [];
+      this.profile.rawStars.forEach((element) => {
+        if (this.id2lecture[`${element.lecture_id}`]) {
+          stars.push(this.id2lecture[`${element.lecture_id}`]);
+        }
+      });
+      return stars;
+    },
+    isMe() {
+      if (this.id.toString() === this.$store.state.user.id.toString()) {
+        return true;
+      }
+      return false;
+    },
+  },
+  watch: {
+    $route() {
+      if (this.$route.params.id !== undefined) {
+        this.refresh();
+      }
+    },
+  },
   created() {
     this.$store.commit('SET_BAR_TITLE', 'Ta的主页');
+    initLecture();
     this.getParams();
     this.fetchData();
   },
@@ -175,9 +217,7 @@ export default {
     getHisStar() {
       getUserStar(this.id)
         .then((userStar) => {
-          userStar.forEach((element) => {
-            this.profile.star.push(getLectureById(element.lecture_id));
-          });
+          this.profile.rawStars = userStar;
           this.profile.countStar = Object.keys(userStar).length;
         })
         .catch((err) => {
@@ -187,14 +227,7 @@ export default {
     getHisRates() {
       getUserRate(this.id)
         .then((userRate) => {
-          userRate.forEach((element) => {
-            const time = { time: renderTime(element.lastUpdate) };
-            this.profile.rate.push({
-              ...getLectureById(element.lectureId),
-              ...element,
-              ...time,
-            });
-          });
+          this.profile.rawRates = userRate;
           this.profile.countRate = Object.keys(userRate).length;
         })
         .catch((err) => {
@@ -204,7 +237,7 @@ export default {
     getHisFollower() {
       getFollower(this.id)
         .then((follower) => {
-          this.profile.follower = follower;
+          this.profile.followers = follower;
           this.profile.countFollower = Object.keys(follower).length;
         })
         .catch((err) => {
@@ -214,7 +247,7 @@ export default {
     getHisFollowing() {
       getFollowing(this.id)
         .then((following) => {
-          this.profile.following = following;
+          this.profile.followings = following;
           this.profile.countFollowing = Object.keys(following).length;
         })
         .catch((err) => {
@@ -263,8 +296,16 @@ export default {
           .catch((e) => log.info(e));
       }
     },
+    refresh() {
+      this.profile.rawRates = [];
+      this.profile.rawStars = [];
+      this.profile.followers = [];
+      this.profile.followings = [];
+      this.getParams();
+      this.fetchData();
+    },
     processAvatar(originAvatar) {
-      if (originAvatar.includes('/default_avatar.png')) {
+      if (originAvatar && originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;

@@ -13,24 +13,26 @@
 </template>
 
 <script>
-import getLectureById from '../../utils/lecture';
+import { initLecture } from '../../services/lecture';
 
 export default {
   data() {
-    return {
-      starLectures: [],
-    };
+    return {};
+  },
+  computed: {
+    starLectures() {
+      const starLectures = [];
+      this.$store.state.profile.userStar.forEach((element) => {
+        if (this.$store.getters.id2lecture[`${element.lecture_id}`]) {
+          starLectures.push(this.$store.getters.id2lecture[`${element.lecture_id}`]);
+        }
+      });
+      return starLectures;
+    },
   },
   created() {
     this.$store.commit('SET_BAR_TITLE', '关注课程');
-    this.fetchData();
-  },
-  methods: {
-    fetchData() {
-      this.$store.state.profile.userStar.forEach((element) => {
-        this.starLectures.push(getLectureById(element.lecture_id));
-      });
-    },
+    initLecture();
   },
 };
 </script>

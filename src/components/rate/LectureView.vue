@@ -58,7 +58,7 @@
             </div>
 
             <p>
-              本门课程是「{{ lecture.depart }}」的课程，授课老师为「{{ lecture.teacher }}」，学分数为「{{ lecture.credit }}」
+              本门课程的授课老师为「{{ lecture.teacher }}」，学分数为「{{ lecture.credit }}」
             </p>
 
             <div class="post-button portrait-only">
@@ -112,6 +112,7 @@
                 style="max-width: 10rem;"
                 class="comment-sort"
                 :items="sortChoices"
+                :disabled="loadingRates"
               />
             </h4>
 
@@ -127,7 +128,7 @@
                     <img
                       class="rate-title-avatar"
                       :src="rate.avatar"
-                      @click="$router.push('/user')"
+                      @click="$router.push(`/user/${rate.userId}`)"
                       @mouseenter="getUserInfo(rate)"
                     >
 
@@ -146,11 +147,11 @@
                           {{ rate.userInfo.intro }}
                         </p>
                         <div class="rate-title-user-info">
-                          <div>点评</div><div>回复</div><div>关注者</div>
+                          <div>点评</div><!--div>回复</div--><div>关注者</div>
                         </div>
                         <div class="rate-title-user-info">
                           <div>{{ rate.userInfo.nrates }}</div>
-                          <div>{{ rate.userInfo.nreplies }}</div>
+                          <!--div>{{ rate.userInfo.nreplies }}</div-->
                           <div>{{ rate.userInfo.nfollowers }}</div>
                         </div>
                         <svg-switch class="rate-title-user-btn" variant="heart" :value="rate.userInfo.followed" @input="toggleFollow(rate, $event)" />
@@ -176,7 +177,7 @@
                 </div>
 
                 <div class="rate-content">
-                  <p>{{ rate.content }}</p>
+                  <viewer :initial-value="rate.content" :options="viewerOptions" />
                 </div>
 
                 <my-picker
@@ -188,26 +189,31 @@
 
                 <div
                   v-if="rate.openReplies"
-                  class="rate-input"
+                  class="rate-input my-2"
                 >
                   <v-textarea
                     v-model="rate.input"
-                    rows="5"
-                    class="rate-input__input"
+                    label="回复"
+                    rows="2"
+                    dense
+                    hide-details
+                    outlined
+                    auto-grow
+                    class="px-2 rate-input__input"
                   />
-                  <v-btn color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
+                  <v-btn text color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
                     发表回复
                   </v-btn>
                 </div>
 
-                <div v-if="rate.openReplies && rate.replies" class="rate-reply">
+                <div v-if="rate.openReplies && rate.replies" class="rate-reply mt-2">
                   <div v-for="reply in rate.replies" :key="reply.id" class="rate-reply__item">
                     <div class="rate-title">
                       <div class="rate-title-span">
                         <img
                           class="rate-title-avatar"
                           :src="reply.avatar"
-                          @click="$router.push('/user')"
+                          @click="$router.push(`/user/${reply.userId}`)"
                           @mouseenter="getUserInfo(reply)"
                         >
 
@@ -226,11 +232,11 @@
                               {{ reply.userInfo.intro }}
                             </p>
                             <div class="rate-title-user-info">
-                              <div>点评</div><div>回复</div><div>关注者</div>
+                              <div>点评</div><!--div>回复</div--><div>关注者</div>
                             </div>
                             <div class="rate-title-user-info">
                               <div>{{ reply.userInfo.nrates }}</div>
-                              <div>{{ reply.userInfo.nreplies }}</div>
+                              <!--div>{{ reply.userInfo.nreplies }}</div-->
                               <div>{{ reply.userInfo.nfollowers }}</div>
                             </div>
                             <svg-switch class="rate-title-user-btn" variant="heart" :value="reply.userInfo.followed" @input="toggleFollow(reply, $event)" />
@@ -243,10 +249,8 @@
                       </div>
                     </div>
 
-                    <div class="rate-content">
-                      <p style="margin-bottom: 0;">
-                        {{ reply.content }}
-                      </p>
+                    <div class="rate-content reply-content">
+                      <p style="margin-bottom: 0;" v-text="reply.content" />
                     </div>
 
                     <!-- TODO support react to reply 
@@ -298,6 +302,11 @@
 </template>
 
 <script>
+import 'codemirror/lib/codemirror.css';
+import { Viewer } from '@toast-ui/vue-editor';
+import hljs from 'highlight.js';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+
 import throttle from 'lodash/throttle';
 import log from '../../utils/log';
 
@@ -315,6 +324,14 @@ import {
   deleteFollow,
   postReply,
 } from '../../services/rate';
+
+import {
+  getFollowing,
+  getUserStar,
+  getHistory,
+  // getUserReply
+} from '../../services/profile.service';
+
 import { postReaction, deleteReaction } from '../../services/react';
 
 import { initLecture, lectures, getLectureByCodeAndIdx } from '../../services/lecture';
@@ -324,14 +341,19 @@ export default {
     SvgSwitch,
     MyPicker,
     RatePicker,
+    Viewer,
   },
   data() {
     return {
       // For UI control
       loadingLecture: true,
       loadingRates: false,
-      sort: '默认排序',
-      sortChoices: ['默认排序', '按时间排序'],
+      sort: 'default',
+      sortChoices: [
+        { text: '默认排序', value: 'default' },
+        { text: '按赞同数排序', value: 'upvote' },
+        { text: '按回复数排序', value: 'reply' },
+      ],
 
       lecture: {},
 
@@ -410,6 +432,10 @@ export default {
           openReplies: false,
         },
       ],
+      viewerOptions: {
+        useageStatistics: false,
+        plugins: [[codeSyntaxHighlight, { hljs }]],
+      },
     };
   },
 
@@ -421,7 +447,7 @@ export default {
       }
     },
     sort(val) {
-      log.info(val);
+      this.switchRateOrder(val);
     },
   },
 
@@ -461,6 +487,16 @@ export default {
       this.$message.error('无法连接网络');
     },
 
+    updateHistory() {
+      getHistory(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_HISTORY', data);
+          log.info('my history', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     refresh() {
       log.info('refresh');
       this.loadingLecture = true;
@@ -509,31 +545,37 @@ export default {
     },
 
     // Rates
-    // FIXME: support order
-    switchRateOrder() {
-      log.info('switch rate order');
+    switchRateOrder(order) {
+      log.info('switch rate order', order);
+      this.loadingRates = true;
       this.rates = [];
-      getRateIds(this.lecture.id)
+      getRateIds(this.lecture.id, order)
         .then((resp) => {
           this.rateIds = resp.rateIds;
           this.rateValidTil = 0;
+          this.loadingRates = false;
           this.loadNextRateBatch();
+          this.updateHistory();
         })
-        .catch((e) => log.info(e));
-
-      // this.loadAllRates();
+        .catch((e) => {
+          log.info(e);
+          this.loadingRates = false;
+        });
     },
     loadNextRateBatch() {
       // load rates in batch when scroll down
+      if (this.loadingRates) return;
       this.loadingRates = true;
       const nextIdsAndDeleted = this.rateIds.slice(
         this.rateValidTil,
         this.rateValidTil + this.rateBatchSize,
       );
       const nextIds = nextIdsAndDeleted.map((d) => d.id);
+      if (nextIds.length === 0) {
+        this.loadingRates = false;
+        return;
+      }
       log.info(nextIds);
-      if (nextIds.length === 0) return;
-
       const id2deleted = new Map(nextIdsAndDeleted.map((d) => [d.id, d.deleted]));
 
       getRateBatch(nextIds)
@@ -553,13 +595,24 @@ export default {
               input: '',
               openReplies: false,
               replies: [],
-              userInfo: { valid: false, followed: false },
+              userInfo: {
+                valid: false,
+                followed: false,
+                intro: '',
+                nrates: 0,
+                nfollowers: 0,
+                nreplies: 0,
+              },
             });
             this.rateValidTil += 1;
           });
           this.loadingRates = false;
+          this.throttledHandleScroll();
         })
-        .catch((e) => log.info(e));
+        .catch((e) => {
+          log.info(e);
+          this.loadingRates = false;
+        });
     },
 
     getUserInfo(thread) {
@@ -582,6 +635,16 @@ export default {
     },
 
     // Follow
+    updateFollow() {
+      getFollowing(this.$store.state.user.id)
+        .then((myFollowing) => {
+          this.$store.commit('SET_FOLLOWING', myFollowing);
+          log.info('my follower', myFollowing);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     toggleFollow(rthread, follow) {
       if (this.$store.state.user.jwt_token === '') {
         this.requireLogin();
@@ -593,16 +656,38 @@ export default {
       log.info(follow);
       if (follow) {
         postFollow(thread.userId)
-          .then((resp) => log.info(resp))
+          .then((resp) => {
+            log.info(resp);
+            thread.userInfo.nfollowers += 1;
+            this.updateFollow();
+          })
           .catch((e) => log.info(e));
       } else {
         deleteFollow(thread.userId)
-          .then((resp) => log.info(resp))
+          .then((resp) => {
+            log.info(resp);
+            thread.userInfo.nfollowers -= 1;
+            this.updateFollow();
+          })
           .catch((e) => log.info(e));
       }
     },
 
     // Reply
+    updateReply() {
+      // FIXME
+      log.info('TODO: update reply in vuex');
+      /*
+      getUserReply(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_REPLY', data);
+          log.info('my star', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      */
+    },
     postReply(type, ritem) {
       const item = ritem;
       const { id } = item;
@@ -618,7 +703,7 @@ export default {
             log.info(data);
             item.replies.push({
               id: data.id,
-              userName: data.userName, // by jwt
+              userName: data.userName,
               userId: data.userId,
               content: data.content,
               time: data.time,
@@ -626,6 +711,7 @@ export default {
               reactions: [],
               userInfo: { valid: false, followed: false },
             });
+            this.updateReply();
           })
           .catch((e) => {
             log.info(e);
@@ -665,23 +751,41 @@ export default {
       }
     },
 
-    // Favor
+    // Favor/Star
+    updateStar() {
+      getUserStar(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_STAR', data);
+          log.info('my star', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     syncFavor(checked) {
       this.favored = checked;
       if (checked) {
         this.favorCount += 1;
-        postReaction(`lecture ${this.lecture.id}`, 'favor').catch((e) => {
-          if (e.response.status === 401) this.requireLogin();
-          // this.favorCount -= 1;
-          // this.favored = false;
-        });
+        postReaction(`lecture ${this.lecture.id}`, 'favor')
+          .then(() => {
+            this.updateStar();
+          })
+          .catch((e) => {
+            if (e.response.status === 401) this.requireLogin();
+            // this.favorCount -= 1;
+            // this.favored = false;
+          });
       } else {
         this.favorCount -= 1;
-        deleteReaction(`lecture ${this.lecture.id}`, 'favor').catch((e) => {
-          if (e.response.status === 401) this.requireLogin();
-          // this.favorCount += 1;
-          // this.favored = true;
-        });
+        deleteReaction(`lecture ${this.lecture.id}`, 'favor')
+          .then(() => {
+            this.updateStar();
+          })
+          .catch((e) => {
+            if (e.response.status === 401) this.requireLogin();
+            // this.favorCount += 1;
+            // this.favored = true;
+          });
       }
     },
   },
@@ -896,6 +1000,8 @@ h4.skeleton-loader {
     }
 
     > .rate-title-avatar {
+      // https://css-tricks.com/almanac/properties/o/object-fit/
+      object-fit: cover;
       cursor: pointer;
       width: $img-size;
       height: $img-size;
@@ -995,6 +1101,11 @@ h4.skeleton-loader {
   padding-left: 2rem;
   display: flex;
   flex-direction: column;
+}
+
+.reply-content {
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 // input for reply dialog

@@ -89,7 +89,7 @@
                     class="explore-listitem"
                     @click="openTeacherModal(lecture.teachers)"
                   >
-                    {{ lecture.name }}
+                    {{ `${lecture.name}（${lecture.teachers.map(t => t.name).join('/')}）` }}
                   </div>
                 </div>
               </transition>

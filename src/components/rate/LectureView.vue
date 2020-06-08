@@ -320,6 +320,7 @@ import {
 import {
   getFollowing,
   getUserStar,
+  getHistory,
   // getUserReply
 } from '../../services/profile.service';
 
@@ -473,6 +474,16 @@ export default {
       this.$message.error('无法连接网络');
     },
 
+    updateHistory() {
+      getHistory(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_HISTORY', data);
+          log.info('my history', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+    },
     refresh() {
       log.info('refresh');
       this.loadingLecture = true;
@@ -531,6 +542,7 @@ export default {
           this.rateValidTil = 0;
           this.loadingRates = false;
           this.loadNextRateBatch();
+          this.updateHistory();
         })
         .catch((e) => {
           log.info(e);

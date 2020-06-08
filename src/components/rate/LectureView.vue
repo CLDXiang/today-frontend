@@ -514,22 +514,25 @@ export default {
     },
 
     // Rates
-    // FIXME: support order
     switchRateOrder(order) {
       log.info('switch rate order', order);
+      this.loadingRates = true;
       this.rates = [];
       getRateIds(this.lecture.id, order)
         .then((resp) => {
           this.rateIds = resp.rateIds;
           this.rateValidTil = 0;
+          this.loadingRates = false;
           this.loadNextRateBatch();
         })
-        .catch((e) => log.info(e));
-
-      // this.loadAllRates();
+        .catch((e) => {
+          log.info(e);
+          this.loadingRates = false;
+        });
     },
     loadNextRateBatch() {
       // load rates in batch when scroll down
+      if (this.loadingRates) return;
       this.loadingRates = true;
       const nextIdsAndDeleted = this.rateIds.slice(
         this.rateValidTil,
@@ -565,8 +568,12 @@ export default {
             this.rateValidTil += 1;
           });
           this.loadingRates = false;
+          this.throttledHandleScroll();
         })
-        .catch((e) => log.info(e)); // FIXME: still retry after network error
+        .catch((e) => {
+          log.info(e);
+          this.loadingRates = false;
+        });
     },
 
     getUserInfo(thread) {

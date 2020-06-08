@@ -1,5 +1,40 @@
 <template>
   <div>
+    <v-dialog
+      v-model="openDeleteDialog"
+      max-width="290"
+      :persistent="deleteDialogPersistent"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          {{ deleteDialogTitle }}
+        </v-card-title>
+
+        <v-card-text>
+          {{ deleteDialogText }}
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="openDeleteDialog = false"
+          >
+            否
+          </v-btn>
+
+          <v-btn
+            color="red darken-1"
+            text
+            @click="handleDeleteThread"
+          >
+            是
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <div class="skeleton-loader-container">
       <transition name="fade" mode="out-in" @before-enter="scrollToTop">
         <!-- main's skeleton loader -->
@@ -118,149 +153,174 @@
 
 
             <div ref="rateList" class="rate-list">
-              <div
-                v-for="rate in rates"
-                :key="rate.id"
-                class="rate-item"
-              >
-                <div class="rate-title">
-                  <div class="rate-title-span">
-                    <img
-                      class="rate-title-avatar"
-                      :src="rate.avatar"
-                      @click="$router.push(`/user/${rate.userId}`)"
-                      @mouseenter="getUserInfo(rate)"
-                    >
-
-                    <div class="rate-title-info">
-                      <div class="rate-title-info__author">
-                        {{ rate.userName }}
-                      </div>
-                      <div class="rate-title-info__time">
-                        {{ rate.time }}
-                      </div>
-                    </div>
-
-                    <div class="landscape-only rate-title-popup">
-                      <template v-if="rate.userInfo.valid">
-                        <p class="rate-title-user-intro">
-                          {{ rate.userInfo.intro }}
-                        </p>
-                        <div class="rate-title-user-info">
-                          <div>点评</div><!--div>回复</div--><div>关注者</div>
-                        </div>
-                        <div class="rate-title-user-info">
-                          <div>{{ rate.userInfo.nrates }}</div>
-                          <!--div>{{ rate.userInfo.nreplies }}</div-->
-                          <div>{{ rate.userInfo.nfollowers }}</div>
-                        </div>
-                        <svg-switch class="rate-title-user-btn" variant="heart" :value="rate.userInfo.followed" @input="toggleFollow(rate, $event)" />
-                      </template>
-
-                      <template v-else>
-                        <div class="rate-title-user-loader skeleton-loader-white" />
-                      </template>
-                    </div>
-                  </div>
-
-                  <div class="rate-title-reply">
-                    <div v-if="rate.replyCnt > 0" class="rate-title-reply__cnt">
-                      {{ rate.replyCnt }}人回复
-                    </div>
-                    <svg-switch
-                      class="rate-title-reply__icon"
-                      variant="edit" 
-                      :value="rate.openReplies"
-                      @input="handleOpenReplies(rate, $event)"
-                    />
-                  </div>
-                </div>
-
-                <div class="rate-content">
-                  <viewer :initial-value="rate.content" :options="viewerOptions" />
-                </div>
-
-                <my-picker
-                  v-if="!rate.openReplies"
-                  class="rate-action"
-                  :items="rate.reactions"
-                  :target="`rates ${rate.id}`"
-                />
-
+              <template v-for="rate in rates">
                 <div
-                  v-if="rate.openReplies"
-                  class="rate-input my-2"
+                  v-if="!rate.deleted || getReplyCnt(rate) > 0"
+                  :key="rate.id"
+                  class="rate-item"
                 >
-                  <v-textarea
-                    v-model="rate.input"
-                    label="回复"
-                    rows="2"
-                    dense
-                    hide-details
-                    outlined
-                    auto-grow
-                    class="px-2 rate-input__input"
-                  />
-                  <v-btn text color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
-                    发表回复
-                  </v-btn>
-                </div>
+                  <div v-if="rate.deleted" class="rate-title--deleted">
+                    该评论已经被删除
+                    （{{ rate.replyIds.filter(r => !r.deleted).length }}条回复）
+                  </div>
+                  <div v-else class="rate-title">
+                    <div class="rate-title-span">
+                      <img
+                        class="rate-title-avatar"
+                        :src="rate.avatar"
+                        @click="$router.push(`/user/${rate.userId}`)"
+                        @mouseenter="getUserInfo(rate)"
+                      >
 
-                <div v-if="rate.openReplies && rate.replies" class="rate-reply mt-2">
-                  <div v-for="reply in rate.replies" :key="reply.id" class="rate-reply__item">
-                    <div class="rate-title">
-                      <div class="rate-title-span">
-                        <img
-                          class="rate-title-avatar"
-                          :src="reply.avatar"
-                          @click="$router.push(`/user/${reply.userId}`)"
-                          @mouseenter="getUserInfo(reply)"
-                        >
-
-                        <div class="rate-title-info">
-                          <div class="rate-title-info__author">
-                            {{ reply.userName }}
-                          </div>
-                          <div class="rate-title-info__time">
-                            {{ reply.time }}
-                          </div>
+                      <div class="rate-title-info">
+                        <div class="rate-title-info__author">
+                          {{ rate.userName }}
                         </div>
-
-                        <div class="landscape-only rate-title-popup">
-                          <template v-if="reply.userInfo.valid">
-                            <p class="rate-title-user-intro">
-                              {{ reply.userInfo.intro }}
-                            </p>
-                            <div class="rate-title-user-info">
-                              <div>点评</div><!--div>回复</div--><div>关注者</div>
-                            </div>
-                            <div class="rate-title-user-info">
-                              <div>{{ reply.userInfo.nrates }}</div>
-                              <!--div>{{ reply.userInfo.nreplies }}</div-->
-                              <div>{{ reply.userInfo.nfollowers }}</div>
-                            </div>
-                            <svg-switch class="rate-title-user-btn" variant="heart" :value="reply.userInfo.followed" @input="toggleFollow(reply, $event)" />
-                          </template>
-
-                          <template v-else>
-                            <div class="rate-title-user-loader skeleton-loader-white" />
-                          </template>
+                        <div class="rate-title-info__time">
+                          {{ rate.time }}
                         </div>
+                      </div>
+
+                      <div class="landscape-only rate-title-popup">
+                        <template v-if="rate.userInfo.valid">
+                          <p class="rate-title-user-intro">
+                            {{ rate.userInfo.intro }}
+                          </p>
+                          <div class="rate-title-user-info">
+                            <div>点评</div><!--div>回复</div--><div>关注者</div>
+                          </div>
+                          <div class="rate-title-user-info">
+                            <div>{{ rate.userInfo.nrates }}</div>
+                            <!--div>{{ rate.userInfo.nreplies }}</div-->
+                            <div>{{ rate.userInfo.nfollowers }}</div>
+                          </div>
+                          <svg-switch class="rate-title-user-btn" variant="heart" :value="rate.userInfo.followed" @input="toggleFollow(rate, $event)" />
+                        </template>
+
+                        <template v-else>
+                          <div class="rate-title-user-loader skeleton-loader-white" />
+                        </template>
                       </div>
                     </div>
 
-                    <div class="rate-content reply-content">
-                      <p style="margin-bottom: 0;" v-text="reply.content" />
+                    <div class="rate-title-reply">
+                      <div v-if="getReplyCnt(rate) > 0" class="rate-title-reply__cnt">
+                        {{ getReplyCnt(rate) }}条回复
+                      </div>
+                      <svg-switch
+                        class="rate-title-reply__icon"
+                        variant="edit" 
+                        :value="rate.openReplies"
+                        @input="handleOpenReplies(rate, $event)"
+                      />
+                      <svg-switch
+                        v-if="!rate.deleted && rate.isSelf"
+                        class="rate-title-reply__delete"
+                        variant="trash" 
+                        controlled
+                        @click="openDeleteRate(rate)"
+                      />
                     </div>
+                  </div>
 
-                    <!-- TODO support react to reply 
+                  <div v-if="!rate.deleted" class="rate-content">
+                    <viewer :initial-value="rate.content" :options="viewerOptions" />
+                  </div>
+
+                  <my-picker
+                    v-if="!rate.openReplies && !rate.deleted"
+                    class="rate-action"
+                    :items="rate.reactions"
+                    :target="`rates ${rate.id}`"
+                  />
+
+                  <div
+                    v-if="rate.openReplies && !rate.deleted"
+                    class="rate-input my-2"
+                  >
+                    <v-textarea
+                      v-model="rate.input"
+                      label="回复"
+                      rows="2"
+                      dense
+                      hide-details
+                      outlined
+                      auto-grow
+                      class="px-2 rate-input__input"
+                    />
+                    <v-btn text color="primary" class="rate-input__btn" @click="postReply('reply', rate)">
+                      发表回复
+                    </v-btn>
+                  </div>
+
+                  <div v-if="rate.openReplies && rate.replies" class="rate-reply mt-2">
+                    <template v-for="reply in rate.replies">
+                      <div v-if="!reply.deleted" :key="reply.id" class="rate-reply__item">
+                        <div class="rate-title">
+                          <div class="rate-title-span">
+                            <img
+                              class="rate-title-avatar"
+                              :src="reply.avatar"
+                              @click="$router.push(`/user/${reply.userId}`)"
+                              @mouseenter="getUserInfo(reply)"
+                            >
+
+                            <div class="rate-title-info">
+                              <div class="rate-title-info__author">
+                                {{ reply.userName }}
+                              </div>
+                              <div class="rate-title-info__time">
+                                {{ reply.time }}
+                              </div>
+                            </div>
+
+                            <div class="landscape-only rate-title-popup">
+                              <template v-if="reply.userInfo.valid">
+                                <p class="rate-title-user-intro">
+                                  {{ reply.userInfo.intro }}
+                                </p>
+                                <div class="rate-title-user-info">
+                                  <div>点评</div><!--div>回复</div--><div>关注者</div>
+                                </div>
+                                <div class="rate-title-user-info">
+                                  <div>{{ reply.userInfo.nrates }}</div>
+                                  <!--div>{{ reply.userInfo.nreplies }}</div-->
+                                  <div>{{ reply.userInfo.nfollowers }}</div>
+                                </div>
+                                <svg-switch class="rate-title-user-btn" variant="heart" :value="reply.userInfo.followed" @input="toggleFollow(reply, $event)" />
+                              </template>
+
+                              <template v-else>
+                                <div class="rate-title-user-loader skeleton-loader-white" />
+                              </template>
+                            </div>
+                          </div>
+
+                          <div class="rate-title-reply">
+                            <svg-switch
+                              v-if="!reply.deleted && reply.isSelf"
+                              class="rate-title-reply__delete"
+                              variant="trash" 
+                              controlled
+                              @click="openDeleteReply(reply, rate.replyIds)"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="rate-content reply-content">
+                          <p style="margin-bottom: 0;" v-text="reply.content" />
+                        </div>
+
+                        <!-- TODO support react to reply 
                     <!my-picker class="rate-action"
                       :target="`reply ${reply.id}`"
                     />
                     -->
+                      </div>
+                    </template>
                   </div>
                 </div>
-              </div>
+              </template>
             </div>
           </main>
 
@@ -319,10 +379,12 @@ import {
   getReplies,
   getRateIds,
   getRateBatch,
+  deleteRate,
   getUserInfo,
   postFollow,
   deleteFollow,
   postReply,
+  deleteReply,
 } from '../../services/rate';
 
 import {
@@ -354,6 +416,13 @@ export default {
         { text: '按赞同数排序', value: 'upvote' },
         { text: '按回复数排序', value: 'reply' },
       ],
+
+      openDeleteDialog: false,
+      deleteDialogTitle: '',
+      deleteDialogText: '',
+      deleteDialogPersistent: false,
+      deleteItem: undefined,
+      deleteIds: [],
 
       lecture: {},
 
@@ -551,7 +620,14 @@ export default {
       this.rates = [];
       getRateIds(this.lecture.id, order)
         .then((resp) => {
-          this.rateIds = resp.rateIds;
+          // Deleted rate should be at last
+
+          this.rateIds = resp.rateIds.filter((id) => !id.deleted);
+
+          resp.rateIds.forEach((id) => {
+            if (id.deleted) this.rateIds.push(id);
+          });
+
           this.rateValidTil = 0;
           this.loadingRates = false;
           this.loadNextRateBatch();
@@ -584,12 +660,12 @@ export default {
             this.rates.push({
               id: data.id,
               deleted: id2deleted.get(data.id),
+              isSelf: data.isSelf,
               userName: data.userName,
               userId: data.userId,
               avatar: data.avatar,
               time: data.time,
               content: data.content,
-              replyCnt: data.replyCnt,
               replyIds: data.replyIds,
               reactions: data.reactions,
               input: '',
@@ -613,6 +689,60 @@ export default {
           log.info(e);
           this.loadingRates = false;
         });
+    },
+    handleDeleteThread() {
+      const t = this.deleteDialogTarget.split(' ');
+      const type = t[0];
+      const id = parseInt(t[1], 10);
+      this.deleteDialogPersistent = true;
+      if (type === 'rate') {
+        deleteRate(id)
+          .then(() => {
+            this.deleteItem.deleted = true;
+            this.deleteDialogPersistent = false;
+            this.openDeleteDialog = false;
+          })
+          .catch(() => {
+            this.$message.error('删除失败');
+            this.deleteDialogPersistent = false;
+            this.openDeleteDialog = false;
+          });
+      } else if (type === 'reply') {
+        deleteReply(id)
+          .then(() => {
+            this.deleteItem.deleted = true;
+            this.deleteDialogPersistent = false;
+            this.openDeleteDialog = false;
+            for (let i = 0; i < this.deleteIds.length; i += 1) {
+              if (this.deleteIds[i].id === id) {
+                this.deleteIds[i].deleted = true;
+                log.info('SSSS');
+              }
+            }
+            log.info(this.deleteIds);
+          })
+          .catch(() => {
+            this.$message.error('删除失败');
+            this.deleteDialogPersistent = false;
+            this.openDeleteDialog = false;
+          });
+      }
+    },
+    openDeleteRate(item, ids) {
+      this.deleteDialogTitle = '是否要删除此评论';
+      this.deleteDialogText = '若是该评论下有回复的话，此评论只会被隐藏';
+      this.deleteDialogTarget = `rate ${item.id}`;
+      this.deleteItem = item;
+      this.deleteIds = ids;
+      this.openDeleteDialog = true;
+    },
+    openDeleteReply(item, ids) {
+      this.deleteDialogTitle = '是否要删除此回复';
+      this.deleteDialogText = '';
+      this.deleteDialogTarget = `reply ${item.id}`;
+      this.deleteItem = item;
+      this.deleteIds = ids;
+      this.openDeleteDialog = true;
     },
 
     getUserInfo(thread) {
@@ -674,6 +804,9 @@ export default {
     },
 
     // Reply
+    getReplyCnt(item) {
+      return item.replyIds.filter((r) => !r.deleted).length;
+    },
     updateReply() {
       // FIXME
       log.info('TODO: update reply in vuex');
@@ -703,6 +836,8 @@ export default {
             log.info(data);
             item.replies.push({
               id: data.id,
+              isSelf: true,
+              deleted: false,
               userName: data.userName,
               userId: data.userId,
               content: data.content,
@@ -711,6 +846,7 @@ export default {
               reactions: [],
               userInfo: { valid: false, followed: false },
             });
+            item.replyIds.push({ id: data.id, deleted: false });
             this.updateReply();
           })
           .catch((e) => {
@@ -724,7 +860,7 @@ export default {
       rate.openReplies = open;
       if (open && rate.replies.length === 0) {
         log.info('open');
-        if (rate.replyCnt > 0) {
+        if (rate.replyIds.filter((r) => !r.deleted).length > 0) {
           const id2deleted = new Map(rate.replyIds.map((d) => [d.id, d.deleted]));
           getReplies(rate.replyIds.map((d) => d.id))
             .then((d) => {
@@ -732,6 +868,7 @@ export default {
                 rate.replies.push({
                   id: data.id,
                   deleted: id2deleted.get(data.id),
+                  isSelf: data.isSelf,
                   userName: data.userName,
                   userId: data.userId,
                   avatar: data.avatar,
@@ -963,6 +1100,15 @@ h4.skeleton-loader {
 .rate-item {
   margin-bottom: 2rem;
 }
+.rate-title--deleted {
+  background: rgba(0, 0, 0, 0.03);
+  opacity: $inactive-opacity;
+  border-left: 0.25em solid rgba(0, 0, 0, 0.24);
+  padding: 1em;
+  @include portrait {
+    padding: 0.8em 1em;
+  }
+}
 .rate-title {
   $spacing: 1rem;
   $img-size: 3rem;
@@ -1073,6 +1219,10 @@ h4.skeleton-loader {
     }
     > .rate-title-reply__icon {
       align-self: flex-end;
+    }
+    > .rate-title-reply__delete {
+      align-self: flex-end;
+      margin-left: 0.5em;
     }
   }
 }

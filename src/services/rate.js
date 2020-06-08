@@ -22,6 +22,9 @@ function getAvatar(avatarUrl) {
   if (avatarUrl && avatarUrl.includes('DEFAULT')) return defaultAvatar;
   return avatarUrl;
 }
+function getBio(bio) {
+  return bio || defaultBio;
+}
 
 /**
  ******************************
@@ -274,7 +277,7 @@ export function getUserInfo(id) {
       ])
       .then(
         axios.spread((rates, followers, profile) => {
-          info.intro = defaultBio || profile.data.bio;
+          info.intro = getBio(profile.data.bio);
           info.nrates = rates.data.length;
           info.nfollowers = followers.data.length;
           info.followed = followers.data.filter((obj) => obj.id === userId).length > 0;

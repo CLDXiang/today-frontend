@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <label v-if="variant === 'heart'" class="switch--heart">
+  <div class="pointer" @click="handleClick">
+    <label v-if="variant === 'heart'" class="switch--heart" :class="{'non-clickable': controlled}">
       <input type="checkbox" :checked="value" @change="handleChange"><span />
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@
       </svg>
     </label>
 
-    <label v-if="variant === 'edit'" class="action-switch--edit switch--edit">
+    <label v-else-if="variant === 'edit'" class="switch--edit" :class="{'non-clickable': controlled}">
       <input type="checkbox" :checked="value" @change="handleChange"><span />
 
       <!-- SVGs -->
@@ -78,6 +78,68 @@
         </g>
       </svg>
     </label>
+
+    <label v-else-if="variant === 'trash'" class="switch--trash" :class="{'non-clickable': controlled}">
+      <input type="checkbox" :checked="value" @change="handleChange">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 21 25" version="1.1">
+        <g
+          id="Page-1"
+          stroke="none"
+          stroke-width="1"
+          fill="none"
+          fill-rule="evenodd"
+        >
+          <g id="Full-Color" transform="translate(-302.000000, -150.000000)">
+            <g id="trash" transform="translate(302.000000, 150.000000)">
+              <path id="Fill-1" d="M18.5,3.5 L2.5,3.5 L4.328,22.689 C4.425,23.716 5.288,24.5 6.318,24.5 L14.682,24.5 C15.712,24.5 16.575,23.716 16.672,22.689 L18.5,3.5 Z" fill="var(--fill, #7F2EFF)" />
+              <path id="Stroke-5" d="M14.8384,22 C15.542421,22 16.1542694,21.5549994 16.3484609,20.9231184 C16.5253407,20.347568 17.3811695,20.5179353 17.3241533,21.1173465 L17.170139,22.736496 C17.047663,24.0199948 15.9702237,25 14.6814,25 L6.3184,25 C5.02957628,25 3.95213701,24.0199948 3.82964674,22.7363465 L3.67564674,21.1173465 C3.61863048,20.5179353 4.47445929,20.347568 4.6513391,20.9231184 C4.84553064,21.5549994 5.45737898,22 6.1614,22 L14.8384,22 Z" fill="var(--shadow, rgba(0, 0, 0, .24))" fill-rule="nonzero" />
+              <path
+                id="Stroke-8"
+                d="M10.5,21.5 L10.5,6.5"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="Stroke-10"
+                d="M7.5,21.5 L6.5,6.5"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="Stroke-12"
+                d="M13.5,21.5 L14.5,6.5"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="Stroke-14"
+                d="M18.5,3.5 L2.5,3.5 L4.328,22.689 C4.425,23.716 5.288,24.5 6.318,24.5 L14.682,24.5 C15.712,24.5 16.575,23.716 16.672,22.689 L18.5,3.5 Z"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="Stroke-16"
+                d="M0.5,3.5 L20.5,3.5"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="Stroke-18"
+                d="M14.5,3.5 L6.5,3.5 L6.5,1.5 C6.5,0.948 6.948,0.5 7.5,0.5 L13.5,0.5 C14.052,0.5 14.5,0.948 14.5,1.5 L14.5,3.5 Z"
+                stroke="var(--border, #000000)"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          </g>
+        </g>
+      </svg>
+    </label>
   </div>
 </template>
 
@@ -86,10 +148,14 @@ export default {
   props: {
     variant: { type: String },
     value: { type: Boolean },
+    controlled: { type: Boolean },
   },
   methods: {
     handleChange() {
       this.$emit('input', !this.value);
+    },
+    handleClick() {
+      this.$emit('click');
     },
   },
 };
@@ -128,7 +194,12 @@ $border-color--inactive: #777;
     --shadow: var(--shadow-color);
   }
 }
-
+.non-clickable {
+  pointer-events: none;
+}
+.pointer {
+  cursor: pointer;
+}
 // Heart Begin
 $bubble-d: 2.3em; // bubble diameter
 $bubble-r: 0.5 * $bubble-d; // bubble-radius
@@ -429,5 +500,8 @@ $edit-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
     width: 0;
     transition: width 0.6 * $duration cubic-bezier(0.68, 0, 0.77, 0) 0.4 * $duration;
   }
+}
+.switch--trash {
+  @extend %svg-switch;
 }
 </style>

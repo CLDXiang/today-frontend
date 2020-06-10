@@ -12,7 +12,7 @@
         </v-list-item-action>
       </v-list-item>
 
-      <v-divider v-if="index + 1 < lectureHistory.length" :key="index" />
+      <v-divider v-if="index + 1 < lectureHistory.length" :key="`divider-${index}`" />
     </template>
   </v-list>
 </template>

@@ -21,6 +21,19 @@
           </v-list-item>
         </div>
         <div v-show="userLoggedIn">
+          <v-list-item @click="toNotice">
+            <v-list-item-action>
+              <v-icon>mdi-bell</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>通知动态</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ countNotification + countTrend }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item @click="toStar">
             <v-list-item-action>
               <v-icon>mdi-book</v-icon>
@@ -169,6 +182,8 @@ export default {
       'countFollower',
       'countFollowing',
       'countHistory',
+      'countNotification',
+      'countTrend',
     ]),
     barTitle() {
       return this.$store.state.app.barTitle;
@@ -221,6 +236,13 @@ export default {
         this.$router.replace({ name: 'Timetable' });
       } else {
         this.$router.replace({ name: 'Login', query: { redirect: '/profile' } });
+      }
+    },
+    toNotice() {
+      if (this.$route.path === '/profile/notice') {
+        this.showMenu = false;
+      } else {
+        this.$router.push({ name: 'Notification' });
       }
     },
     toStar() {

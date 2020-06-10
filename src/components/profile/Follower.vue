@@ -11,7 +11,7 @@
           <v-list-item-subtitle v-text="user.bio||'这个人还没有个性签名哦'" />
         </v-list-item-content>
       </v-list-item>
-      <v-divider v-if="index + 1 < profile.follower.length" :key="index" />
+      <v-divider v-if="index + 1 < profile.follower.length" :key="`divider-${index}`" />
     </template>
   </v-list>
 </template>

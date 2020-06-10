@@ -40,7 +40,11 @@ export default {
         if (/\/hole\/?.*$/.test(path)) {
           return 'hole';
         }
-        if (/\/profile\/?.*$/.test(path) || /\/login\/?.*$/.test(path)) {
+        if (
+          /\/profile\/?.*$/.test(path) ||
+          /\/login\/?.*$/.test(path) ||
+          /\/user\/?.*$/.test(path)
+        ) {
           return 'status';
         }
         if (/\/explore\/?.*$/.test(path) || /\/lecture\/?.*$/.test(path)) {

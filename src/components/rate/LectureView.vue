@@ -139,7 +139,7 @@
 
 
             <h4 class="comment-title">
-              点评<span class="comment-count">{{ rateCount }}</span>
+              点评<span class="comment-count">{{ getThreadCnt(rateIds) }}</span>
               <v-select
                 v-model="sort"
                 solo
@@ -155,13 +155,13 @@
             <div ref="rateList" class="rate-list">
               <template v-for="rate in rates">
                 <div
-                  v-if="!rate.deleted || getReplyCnt(rate) > 0"
+                  v-if="!rate.deleted || getThreadCnt(rate.replyIds) > 0"
                   :key="rate.id"
                   class="rate-item"
                 >
                   <div v-if="rate.deleted" class="rate-title--deleted">
                     该评论已经被删除
-                    （{{ rate.replyIds.filter(r => !r.deleted).length }}条回复）
+                    （{{ getThreadCnt(rate.replyIds) }}条回复）
                   </div>
                   <div v-else class="rate-title">
                     <div class="rate-title-span">
@@ -204,8 +204,8 @@
                     </div>
 
                     <div class="rate-title-reply">
-                      <div v-if="getReplyCnt(rate) > 0" class="rate-title-reply__cnt">
-                        {{ getReplyCnt(rate) }}条回复
+                      <div v-if="getThreadCnt(rate.replyIds) > 0" class="rate-title-reply__cnt">
+                        {{ getThreadCnt(rate.replyIds) }}条回复
                       </div>
                       <svg-switch
                         class="rate-title-reply__icon"
@@ -391,6 +391,7 @@ import {
   getFollowing,
   getUserStar,
   getHistory,
+  getUserRate,
   // getUserReply
 } from '../../services/profile.service';
 
@@ -698,9 +699,18 @@ export default {
       if (type === 'rate') {
         deleteRate(id)
           .then(() => {
+            // Update rate ids
+            for (let i = 0; i < this.rateIds.length; i += 1) {
+              if (this.rateIds[i].id === id) {
+                this.rateIds[i].deleted = true;
+                break;
+              }
+            }
+
             this.deleteItem.deleted = true;
             this.deleteDialogPersistent = false;
             this.openDeleteDialog = false;
+            this.updateUserRate();
           })
           .catch(() => {
             this.$message.error('删除失败');
@@ -716,17 +726,27 @@ export default {
             for (let i = 0; i < this.deleteIds.length; i += 1) {
               if (this.deleteIds[i].id === id) {
                 this.deleteIds[i].deleted = true;
-                log.info('SSSS');
               }
             }
-            log.info(this.deleteIds);
+            this.updateReply();
           })
-          .catch(() => {
+          .catch((e) => {
+            log.info(e);
             this.$message.error('删除失败');
             this.deleteDialogPersistent = false;
             this.openDeleteDialog = false;
           });
       }
+    },
+    updateUserRate() {
+      getUserRate(this.$store.state.user.id)
+        .then((data) => {
+          this.$store.commit('SET_USER_RATE', data);
+          log.info('my rate', data);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
     },
     openDeleteRate(item, ids) {
       this.deleteDialogTitle = '是否要删除此评论';
@@ -803,10 +823,11 @@ export default {
       }
     },
 
-    // Reply
-    getReplyCnt(item) {
-      return item.replyIds.filter((r) => !r.deleted).length;
+    getThreadCnt(ids) {
+      return ids.filter((r) => !r.deleted).length;
     },
+
+    // Reply
     updateReply() {
       // FIXME
       log.info('TODO: update reply in vuex');

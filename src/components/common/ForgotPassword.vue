@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     modifyPassword() {
-      modifyPassword(this.email, this.code, this.password)
+      modifyPassword(this.email, parseInt(this.code, 10), this.password)
         .then(() => {
           this.$message.success('修改成功');
         })

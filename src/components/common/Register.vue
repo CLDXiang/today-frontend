@@ -102,9 +102,13 @@ export default {
     },
     requestCode() {
       if (this.state === 'init') {
+        const email = this.email.trim();
+        if (!email.endsWith('@fudan.edu.cn')) {
+          this.$message.error('邮箱格式错误');
+          return;
+        }
         this.state = 'requesting';
-
-        requestCode(this.email)
+        requestCode(email)
           .then(() => {
             this.state = 'cooldown';
             const vm = this;
@@ -119,7 +123,6 @@ export default {
             this.state = 'init';
             const code = e.response.status;
             if (code === 400) this.$message.error('邮箱格式错误或邮箱已被注册');
-            // else if (code === 409) this.$message.error('该邮箱已被注册');
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
         log.info('cooldown-ing or requesting');

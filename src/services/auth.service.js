@@ -76,10 +76,10 @@ export function register(name, email, code, password) {
   });
 }
 
-export function requestCode(name, email) {
+export function requestCode(email) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/auth/register-mail`, { name, email })
+      .post(`${API_URL}/auth/register-mail`, { email })
       .then((resp) => {
         resolve(resp);
       })

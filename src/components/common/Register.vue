@@ -104,7 +104,7 @@ export default {
       if (this.state === 'init') {
         this.state = 'requesting';
 
-        requestCode(this.name, this.email)
+        requestCode(this.email)
           .then(() => {
             this.state = 'cooldown';
             const vm = this;
@@ -118,8 +118,8 @@ export default {
           .catch((e) => {
             this.state = 'init';
             const code = e.response.status;
-            if (code === 400) this.$message.error('用户名或邮箱格式错误');
-            else if (code === 409) this.$message.error('该邮箱已被注册');
+            if (code === 400) this.$message.error('邮箱格式错误或邮箱已被注册');
+            // else if (code === 409) this.$message.error('该邮箱已被注册');
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
         log.info('cooldown-ing or requesting');

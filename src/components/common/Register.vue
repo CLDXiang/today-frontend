@@ -87,7 +87,7 @@ export default {
   }),
   methods: {
     register() {
-      register(this.name, this.code, this.password).then((resp) => {
+      register(this.name, this.email, this.code, this.password).then((resp) => {
         if (resp.data.result === 'success') {
           this.$message.success('注册成功，跳转登录页面……');
           setTimeout(() => {
@@ -117,7 +117,9 @@ export default {
           })
           .catch((e) => {
             this.state = 'init';
-            log.info('send code failed', e);
+            const code = e.response.status;
+            if (code === 400) this.$message.error('用户名或邮箱格式错误');
+            else if (code === 409) this.$message.error('该邮箱已被注册');
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
         log.info('cooldown-ing or requesting');

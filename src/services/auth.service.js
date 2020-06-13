@@ -57,12 +57,13 @@ export function login(username, password) {
   });
 }
 
-export function register(name, code, password) {
+export function register(name, email, code, password) {
   return new Promise((resolve, reject) => {
     const payload = {
       name,
-      code,
+      code: parseInt(code, 10),
       password,
+      email,
     };
     log.info('register payload: ', payload);
     axios

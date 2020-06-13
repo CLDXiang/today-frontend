@@ -89,6 +89,7 @@ export function getRateBatch(ids) {
             const data = rateId2data.get(i);
             return {
               id: data.id,
+              isSelf: data.user_id === userId,
               userName: data.username,
               userId: data.user_id,
               avatar: getAvatar(data.avatar),
@@ -183,6 +184,21 @@ export function postRate(lectureId, workload, difficulty, grading, content, seme
   });
 }
 
+export function deleteRate(id) {
+  const headers = {
+    Authorization: `Bearer ${store.state.user.jwt_token}`,
+  };
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${API_URL}/rate/${id}`, { headers })
+      .then((resp) => {
+        log.info('DELETE rate resp', resp);
+        resolve(resp.data);
+      })
+      .catch((e) => reject(e));
+  });
+}
+
 export function getReplies(ids) {
   const headers = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
@@ -200,6 +216,7 @@ export function getReplies(ids) {
         resolve(
           resp.data.map((data) => ({
             id: data.id,
+            isSelf: data.userId === userId,
             userId: data.userId,
             userName: data.username,
             avatar: getAvatar(data.avatar),
@@ -236,16 +253,15 @@ export function postReply(type, id, content) {
 }
 
 export function deleteReply(replyId) {
+  const headers = {
+    Authorization: `Bearer ${store.state.user.jwt_token}`,
+  };
   return new Promise((resolve, reject) => {
-    // FIXME
-    // const header = {
-    //   Authorization: `Bearer ${store.state.user.jwt_token}`,
-    // };
     axios
-      .delete(`${API_URL}/rate/reply/${replyId}`)
+      .delete(`${API_URL}/rate/reply/${replyId}`, { headers })
       .then((resp) => {
         log.info('DELETE reply resp', resp);
-        resolve(resp);
+        resolve(resp.data);
       })
       .catch((err) => reject(err));
   });
@@ -317,5 +333,22 @@ export function deleteFollow(id) {
         resolve(resp.data);
       })
       .catch((e) => reject(e));
+  });
+}
+
+export async function getRateByRateId(rateId) {
+  return new Promise((resolve, reject) => {
+    const authHeader = {
+      Authorization: `Bearer ${store.state.user.jwt_token}`,
+    };
+    axios
+      .get(`${API_URL}/rate/${rateId}`, {
+        headers: authHeader,
+      })
+      .then((resp) => {
+        log.info(resp);
+        resolve(resp.data);
+      })
+      .catch((error) => reject(error));
   });
 }

@@ -113,7 +113,6 @@ export default {
       this.avatar = this.user.avatar;
       this.bio = this.user.bio || '';
       this.nickName = this.user.nickName || '';
-      console.log(this.nickName);
     },
     clickAvatar() {
       this.$el.querySelector('#input').click();

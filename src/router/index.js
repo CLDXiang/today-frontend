@@ -13,6 +13,7 @@ import UserRate from '../components/profile/UserRate.vue';
 import Follower from '../components/profile/Follower.vue';
 import Following from '../components/profile/Following.vue';
 import History from '../components/profile/History.vue';
+import Notification from '../components/profile/Notification.vue';
 import Settings from '../components/profile/Settings.vue';
 import Hole from '../components/secret/Hole.vue';
 
@@ -72,6 +73,11 @@ const routes = [
         path: 'settings',
         name: 'Settings',
         component: Settings,
+      },
+      {
+        path: 'notice',
+        name: 'Notification',
+        component: Notification,
       },
     ],
   },

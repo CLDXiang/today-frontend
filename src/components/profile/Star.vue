@@ -7,7 +7,7 @@
           <v-list-item-subtitle v-text="lecture.teacher" />
         </v-list-item-content>
       </v-list-item>
-      <v-divider v-if="index + 1 < starLectures.length" :key="index" />
+      <v-divider v-if="index + 1 < starLectures.length" :key="`divider-${index}`" />
     </div>
   </v-list>
 </template>

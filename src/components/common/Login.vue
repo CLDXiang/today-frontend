@@ -49,6 +49,7 @@ import {
   getFollower,
   getHistory,
 } from '../../services/profile.service';
+import { getNotifications, getTrends } from '../../services/notice.service';
 
 export default {
   data: () => ({
@@ -72,7 +73,20 @@ export default {
       getUserProfile()
         .then((profile) => {
           this.$store.commit('SET_USER_PROFILE', profile);
-          log.info(profile);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getNotifications()
+        .then((notifications) => {
+          this.$store.commit('SET_NOTIFICATIONS', notifications);
+        })
+        .catch((err) => {
+          log.info(err);
+        });
+      getTrends()
+        .then((trends) => {
+          this.$store.commit('SET_TRENDS', trends);
         })
         .catch((err) => {
           log.info(err);
@@ -80,7 +94,6 @@ export default {
       getUserStar()
         .then((userStar) => {
           this.$store.commit('SET_USER_STAR', userStar);
-          log.info(userStar);
         })
         .catch((err) => {
           log.info(err);
@@ -88,7 +101,6 @@ export default {
       getUserRate()
         .then((userRate) => {
           this.$store.commit('SET_USER_RATE', userRate);
-          log.info(userRate);
         })
         .catch((err) => {
           log.info(err);
@@ -96,7 +108,6 @@ export default {
       getFollowing()
         .then((following) => {
           this.$store.commit('SET_FOLLOWING', following);
-          log.info(following);
         })
         .catch((err) => {
           log.info(err);
@@ -104,7 +115,6 @@ export default {
       getFollower()
         .then((follower) => {
           this.$store.commit('SET_FOLLOWER', follower);
-          log.info(follower);
         })
         .catch((err) => {
           log.info(err);
@@ -112,7 +122,6 @@ export default {
       getHistory()
         .then((history) => {
           this.$store.commit('SET_HISTORY', history);
-          log.info(history);
         })
         .catch((err) => {
           log.info(err);

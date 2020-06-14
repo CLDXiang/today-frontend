@@ -89,6 +89,22 @@ export default {
   },
   methods: {
     register() {
+      if (this.name === '') {
+        this.$message.warn('名称不能为空哦');
+        return;
+      }
+      if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
+        this.$message.warn('请输入11位学号邮箱');
+        return;
+      }
+      if (!/^\d{6}$/.test(this.code)) {
+        this.$message.warn('请输入6位验证码');
+        return;
+      }
+      if (this.password === '') {
+        this.$message.warn('密码不能为空哦');
+        return;
+      }
       register(this.name, this.realEmail, this.code, this.password)
         .then(() => {
           this.$message.success('注册成功');
@@ -98,21 +114,20 @@ export default {
         })
         .catch((e) => {
           const code = e.response.status;
-          if (code === 400) this.$message.warn('格式错误');
-          else if (code === 409) {
-            this.$message.error(e.response.data.message);
-          }
+          if (code === 400) this.$message.warn('姓名或邮箱格式错误');
+          else if (code === 404) this.$message.error(e.response.data.message);
+          else if (code === 409) this.$message.error(e.response.data.message);
+          else log.info('Error: Unexpected reponse', e.response);
         });
     },
     requestCode() {
       if (this.state === 'init' || this.state === 'resend') {
-        const email = this.realEmail.trim();
-        if (!/^\d{11}@fudan\.edu\.cn$/.test(email)) {
-          this.$message.error('邮箱格式错误');
+        if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
+          this.$message.error('请输入11位学号邮箱');
           return;
         }
         this.state = 'requesting';
-        requestCode(email)
+        requestCode(this.realEmail)
           .then(() => {
             this.state = 'cooldown';
             const vm = this;
@@ -127,12 +142,13 @@ export default {
             this.state = 'init';
             const code = e.response.status;
             if (code === 400) this.$message.error(e.response.data.message);
-            else log.info('Warning: unexpected code');
+            else if (code === 409) this.$message.error('该邮箱已被注册');
+            else log.info('Error: unexpected code');
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
-        log.info('cooldown-ing or requesting');
+        log.info('Warning: cooldown-ing or requesting');
       } else {
-        log.info('Unexpected state');
+        log.info('Error: Unexpected state');
       }
     },
   },

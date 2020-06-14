@@ -4,14 +4,16 @@
       <h2>找回密码</h2>
       <div class="email-bar">
         <v-text-field
-          v-if="state === 'init'"
           v-model="email"
           :rules="emailRules"
+          :suffix="emailSuffix"
           label="邮箱"
           required
         />
+      </div>
+
+      <div class="email-bar">
         <v-text-field
-          v-else
           v-model="code"
           label="验证码"
           required
@@ -30,6 +32,7 @@
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
         </v-btn>
       </div>
+ 
       <div>
         <v-text-field
           v-model="password"
@@ -67,16 +70,14 @@ import log from '../../utils/log';
 export default {
   data: () => ({
     email: '',
-    emailRules: [
-      (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
+    emailSuffix: '@fudan.edu.cn',
+    emailRules: [(v) => !!v || '邮箱不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号'],
     code: '',
 
     showPassword: false,
 
     password: '',
-    passwordRules: [(v) => !!v || 'password is required'],
+    passwordRules: [(v) => !!v || '密码不能为空'],
     password2: '',
 
     alertType: 'success',
@@ -90,20 +91,23 @@ export default {
     password2Rules() {
       return [(v) => v === this.password || '密码不一致'];
     },
+    realEmail() {
+      return this.email.trim() + this.emailSuffix;
+    },
   },
   methods: {
     modifyPassword() {
-      modifyPassword(this.email, parseInt(this.code, 10), this.password)
+      modifyPassword(this.realEmail, parseInt(this.code, 10), this.password)
         .then(() => {
           this.$message.success('修改成功');
         })
-        .catch((e) => log.info(e));
+        .catch((e) => log.info(e, e.response));
     },
     requestCode() {
-      if (this.state === 'init') {
+      if (this.state === 'init' || this.state === 'resend') {
         this.state = 'requesting';
 
-        requestCodeForForgotPassword(this.email)
+        requestCodeForForgotPassword(this.realEmail)
           .then(() => {
             this.state = 'cooldown';
             const vm = this;
@@ -120,8 +124,6 @@ export default {
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
         log.info('cooldown-ing or requesting');
-      } else if (this.state === 'resend') {
-        this.state = 'init';
       } else {
         log.info('Unexpected state');
       }

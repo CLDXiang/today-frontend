@@ -70,7 +70,7 @@ export function register(name, email, code, password) {
       .post(`${API_URL}/auth/register`, payload)
       .then((resp) => {
         log.info('register resp', resp);
-        resolve(resp);
+        resolve(resp.data);
       })
       .catch((err) => reject(err));
   });

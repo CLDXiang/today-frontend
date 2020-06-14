@@ -13,14 +13,16 @@
       </div>
       <div class="email-bar">
         <v-text-field
-          v-if="state === 'init'"
           v-model="email"
           :rules="emailRules"
           label="邮箱"
           required
+          suffix="@fudan.edu.cn"
         />
+      </div>
+
+      <div class="email-bar">
         <v-text-field
-          v-else
           v-model="code"
           label="验证码"
           required
@@ -39,6 +41,7 @@
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
         </v-btn>
       </div>
+ 
       <div>
         <v-text-field
           v-model="password"
@@ -65,19 +68,13 @@ import log from '../../utils/log';
 export default {
   data: () => ({
     name: '',
-    nameRules: [
-      (v) => !!v || 'Name is required',
-      (v) => v.length <= 10 || 'Name must be less than 10 characters',
-    ],
+    nameRules: [(v) => !!v || '名称不能为空', (v) => v.length <= 10 || '名称过长'],
     email: '',
-    emailRules: [
-      (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
+    emailRules: [(v) => !!v || '邮箱不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号'],
     code: '',
     password: '',
     passwordShow: false,
-    passwordRules: [(v) => !!v || 'password is required'],
+    passwordRules: [(v) => !!v || '密码不能为空'],
     alertType: 'success',
     alertShown: false,
     alertContent: '',
@@ -85,25 +82,32 @@ export default {
     cooldownCnt: 0,
     state: 'init',
   }),
+  computed: {
+    realEmail() {
+      return `${this.email}@fudan.edu.cn`;
+    },
+  },
   methods: {
     register() {
-      register(this.name, this.email, this.code, this.password).then((resp) => {
-        if (resp.data.result === 'success') {
-          this.$message.success('注册成功，跳转登录页面……');
+      register(this.name, this.realEmail, this.code, this.password)
+        .then(() => {
+          this.$message.success('注册成功');
           setTimeout(() => {
             this.$router.push('login');
-          }, 1000);
-        }
-        if (resp.data.result === 'failed') {
-          this.result = 'already_exist';
-          this.$message.warn('注册失败，该邮箱已经被使用，请直接登录或者更改注册邮箱');
-        }
-      });
+          }, 500);
+        })
+        .catch((e) => {
+          const code = e.response.status;
+          if (code === 400) this.$message.warn('格式错误');
+          else if (code === 409) {
+            this.$message.error(e.response.data.message);
+          }
+        });
     },
     requestCode() {
-      if (this.state === 'init') {
-        const email = this.email.trim();
-        if (!email.endsWith('@fudan.edu.cn')) {
+      if (this.state === 'init' || this.state === 'resend') {
+        const email = this.realEmail.trim();
+        if (!/^\d{11}@fudan\.edu\.cn$/.test(email)) {
           this.$message.error('邮箱格式错误');
           return;
         }
@@ -122,12 +126,11 @@ export default {
           .catch((e) => {
             this.state = 'init';
             const code = e.response.status;
-            if (code === 400) this.$message.error('邮箱格式错误或邮箱已被注册');
+            if (code === 400) this.$message.error(e.response.data.message);
+            else log.info('Warning: unexpected code');
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
         log.info('cooldown-ing or requesting');
-      } else if (this.state === 'resend') {
-        this.state = 'init';
       } else {
         log.info('Unexpected state');
       }

@@ -1,10 +1,8 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <h1>登录</h1>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+  <div class="register-container">
+    <div class="mark">
+      <h2>欢迎回来！</h2>
+      <div>
         <v-text-field
           v-model="name"
           :rules="nameRules"
@@ -12,37 +10,33 @@
           label="昵称"
           required
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+      </div>
+
+      <div class="pwd-bar">
         <v-text-field
           v-model="password"
-          type="password"
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text': 'password'"
           :rules="passwordRules"
           label="密码"
           required
+          @click:append="showPassword = !showPassword"
         />
-      </v-col>
-    </v-row>
+        <router-link class="forgot-link" to="/forgot-password">
+          忘记密码？
+        </router-link>
+      </div>
 
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
-        <v-alert v-if="alertShown" :type="alertType" :dismissible="true">
-          {{ alertContent }}
-        </v-alert>
-      </v-col>
-    </v-row>
-
-    <v-row justify="center">
-      <v-btn color="primary" class="ma-2" @click="$router.push('/register')">
-        注册
-      </v-btn>
-      <v-btn color="primary" class="ma-2" @click="login">
-        登录
-      </v-btn>
-    </v-row>
-  </v-container>
+      <div class="action-bar">
+        <v-btn color="primary" @click="$router.push('/register')">
+          注册
+        </v-btn>
+        <v-btn color="primary" @click="login">
+          登录
+        </v-btn>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import log from '../../utils/log';
@@ -69,22 +63,12 @@ export default {
       (v) => !!v || 'password is required',
       //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
-    alertType: 'success',
-    alertShown: false,
-    alertContent: '',
+    showPassword: false,
   }),
   created() {
     log.info(this.$router.currentRoute);
   },
   methods: {
-    showAlert(type, content) {
-      this.alertType = type;
-      this.alertContent = content;
-      this.alertShown = true;
-      setTimeout(() => {
-        this.alertShown = false;
-      }, 3000);
-    },
     getProfile() {
       getUserProfile()
         .then((profile) => {
@@ -148,7 +132,7 @@ export default {
       login(this.name, this.password)
         .then((resp) => {
           log.info(resp);
-          this.showAlert('success', '登录成功');
+          this.$message.success('登录成功');
           const { redirect } = this.$router.currentRoute.query;
           log.info('redirecting', redirect);
           this.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
@@ -159,9 +143,53 @@ export default {
         })
         .catch((e) => {
           log.info(e);
-          this.showAlert('warning', '登录失败');
+          this.$message.warn('登录失败');
         });
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../../scss/utils.scss';
+@import '../../scss/mark.scss';
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.mark {
+  display: flex;
+  flex-direction: column;
+  max-width: $main-width/2;
+  width: 100%;
+  @include mark;
+}
+
+.pwd-bar {
+  display: flex;
+  flex-direction: column;
+  > .forgot-link {
+    align-self: flex-end;
+    text-decoration: none;
+    color: rgba(0, 0, 0, $inactive-opacity);
+  }
+}
+
+.action-bar {
+  > * {
+    margin-right: 1rem;
+  }
+}
+
+.email-bar {
+  display: flex;
+  align-items: center;
+  > .email-divider {
+    margin: 1em 1em;
+  }
+}
+</style>
+

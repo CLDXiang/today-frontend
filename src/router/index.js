@@ -1,7 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
 import Login from '../components/common/Login.vue';
 import Register from '../components/common/Register.vue';
+import ForgotPassword from '../components/common/ForgotPassword.vue';
+
 import Profile from '../components/profile/Profile.vue';
 import UserProfile from '../components/profile/UserProfile.vue';
 import OthersProfile from '../components/profile/OthersProfile.vue';
@@ -29,6 +32,7 @@ const routes = [
   { path: '/', name: 'Timetable', component: Timetable },
   { path: '/select', component: Timetable },
   { path: '/login', name: 'Login', component: Login },
+  { path: '/forgot-password', name: 'ForgotPassword', component: ForgotPassword },
   { path: '/register', name: 'Register', component: Register },
   {
     path: '/profile',

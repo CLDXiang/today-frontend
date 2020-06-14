@@ -57,18 +57,30 @@ export function login(username, password) {
   });
 }
 
-export function register(name, email, password) {
+export function register(name, email, code, password) {
   return new Promise((resolve, reject) => {
     const payload = {
       name,
-      email,
+      code: parseInt(code, 10),
       password,
+      email,
     };
     log.info('register payload: ', payload);
     axios
       .post(`${API_URL}/auth/register`, payload)
       .then((resp) => {
         log.info('register resp', resp);
+        resolve(resp.data);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+export function requestCode(email) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${API_URL}/auth/register-mail`, { email })
+      .then((resp) => {
         resolve(resp);
       })
       .catch((err) => reject(err));

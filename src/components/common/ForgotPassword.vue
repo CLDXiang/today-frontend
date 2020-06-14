@@ -97,14 +97,41 @@ export default {
   },
   methods: {
     modifyPassword() {
+      if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
+        this.$message.warn('请输入11位学号邮箱');
+        return;
+      }
+      if (!/^\d{6}$/.test(this.code)) {
+        this.$message.warn('请输入六位数字的验证码');
+        return;
+      }
+      if (this.password !== this.password2) {
+        this.$message.warn('两次输入的密码不相等');
+        return;
+      }
+      if (this.password === '') {
+        this.$message.warn('密码不能为空');
+        return;
+      }
       modifyPassword(this.realEmail, parseInt(this.code, 10), this.password)
         .then(() => {
           this.$message.success('修改成功');
+          setTimeout(() => this.$router.push('/login'), 500);
         })
-        .catch((e) => log.info(e, e.response));
+        .catch((e) => {
+          const code = e.response.status;
+          if (code === 409) this.$message.error('验证码错误');
+          else if (code === 404) this.$message.error('邮箱不存在');
+          else if (code === 400) this.$message.error('格式不正确');
+        });
     },
     requestCode() {
       if (this.state === 'init' || this.state === 'resend') {
+        if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
+          this.$message.warn('请输入11位学号邮箱');
+          return;
+        }
+
         this.state = 'requesting';
 
         requestCodeForForgotPassword(this.realEmail)
@@ -112,6 +139,7 @@ export default {
             this.state = 'cooldown';
             const vm = this;
             vm.cooldownCnt = 5; // FIXME
+            this.$message.success('验证码发送成功');
             setTimeout(function countdown() {
               vm.cooldownCnt -= 1;
               if (vm.cooldownCnt === 0) vm.state = 'resend';

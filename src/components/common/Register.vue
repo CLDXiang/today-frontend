@@ -110,7 +110,7 @@ export default {
           if (resp.result === 'success') {
             this.$message.success('注册成功');
             setTimeout(() => {
-              this.$router.push('login');
+              this.$router.push({ name: 'UserProfile'});
             }, 500);
           } else if (resp.result === 'failed') {
             this.$message.warn('用户名已被注册');

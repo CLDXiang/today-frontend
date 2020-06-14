@@ -106,11 +106,15 @@ export default {
         return;
       }
       register(this.name, this.realEmail, this.code, this.password)
-        .then(() => {
-          this.$message.success('注册成功');
-          setTimeout(() => {
-            this.$router.push('login');
-          }, 500);
+        .then((resp) => {
+          if (resp.result === 'success') {
+            this.$message.success('注册成功');
+            setTimeout(() => {
+              this.$router.push('login');
+            }, 500);
+          } else if (resp.result === 'failed') {
+            this.$message.warn('用户名已被注册');
+          } else log.info('Error: Unexpected resp result');
         })
         .catch((e) => {
           const code = e.response.status;

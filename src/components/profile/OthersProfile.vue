@@ -15,11 +15,10 @@
           个性签名：{{ userInfo.bio||'这个人还没有个性签名哦' }}
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-row align="center" justify="end">
+      <v-row v-show="isMe === false" align="center" justify="end">
         <v-icon
           class="mr-1"
           :color="isFollowing ? 'red' : 'gray'"
-          :disabled="isMe"
           @click="followUnfollow"
         >
           mdi-heart

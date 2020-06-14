@@ -228,7 +228,7 @@
                   </div>
 
                   <my-picker
-                    v-if="!rate.openReplies && !rate.deleted"
+                    v-show="!rate.openReplies && !rate.deleted"
                     class="rate-action"
                     :items="rate.reactions"
                     :target="`rates ${rate.id}`"

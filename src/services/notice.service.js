@@ -16,9 +16,9 @@ export async function getNotifications() {
       })
       .then((resp) => {
         const re = [];
-        resp.data.forEach((element) => {
+        resp.data.forEach(async (element) => {
           if (element.type === 'reply') {
-            getRateByRateId(element.notice_about_id)
+            await getRateByRateId(element.notice_about_id)
               .then((rateInfo) => {
                 // eslint-disable-next-line no-param-reassign
                 element.notice_about_id = rateInfo.lecture_id;
@@ -27,7 +27,7 @@ export async function getNotifications() {
                 log.info(err);
               });
           }
-          getUserProfile(element.from_user_id)
+          await getUserProfile(element.from_user_id)
             .then((userProfile) => {
               re.push({ ...element, userProfile });
             })
@@ -53,8 +53,8 @@ export async function getTrends() {
       })
       .then((resp) => {
         const re = [];
-        resp.data.forEach((element) => {
-          getUserProfile(element.from_user_id)
+        resp.data.forEach(async (element) => {
+          await getUserProfile(element.from_user_id)
             .then((userProfile) => {
               re.push({ ...element, userProfile });
             })

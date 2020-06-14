@@ -1,10 +1,8 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <h1>注册</h1>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+  <div class="register-container">
+    <div class="mark">
+      <h2>欢迎加入Today!</h2>
+      <div>
         <v-text-field
           v-model="name"
           :rules="nameRules"
@@ -12,75 +10,178 @@
           label="昵称"
           required
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+      </div>
+      <div class="email-bar">
         <v-text-field
           v-model="email"
           :rules="emailRules"
-          label="E-mail"
+          label="邮箱"
+          required
+          suffix="@fudan.edu.cn"
+        />
+      </div>
+
+      <div class="email-bar">
+        <v-text-field
+          v-model="code"
+          label="验证码"
           required
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+
+        <v-divider class="email-divider" vertical />
+        <v-btn
+          class="email-btn"
+          color="primary"
+          depressed
+          :disabled="cooldownCnt !== 0"
+          :loading="state === 'requesting'"
+          @click="requestCode"
+        >
+          {{ state === 'init' || state === 'requesting'? '获取验证码'
+            : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
+        </v-btn>
+      </div>
+ 
+      <div>
         <v-text-field
           v-model="password"
-          type="password"
-          :rules="passwordRules"
           label="密码"
+          :rules="passwordRules"
+          :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="passwordShow ? 'text' : 'password'"
           required
+          @click:append="passwordShow = !passwordShow"
         />
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-btn class="ma-2" color="primary" @click="register">
-        提交
-      </v-btn>
-    </v-row>
-  </v-container>
+      </div>
+      <div>
+        <v-btn color="primary" @click="register">
+          注册
+        </v-btn>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import { register } from '../../services/auth.service';
+import { register, requestCode } from '../../services/auth.service';
+import log from '../../utils/log';
 
 export default {
   data: () => ({
     name: '',
-    nameRules: [
-      (v) => !!v || 'Name is required',
-      (v) => v.length <= 10 || 'Name must be less than 10 characters',
-    ],
+    nameRules: [(v) => !!v || '名称不能为空', (v) => v.length <= 10 || '名称过长'],
     email: '',
-    emailRules: [
-      (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
+    emailRules: [(v) => !!v || '邮箱不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号'],
+    code: '',
     password: '',
-    passwordRules: [
-      (v) => !!v || 'password is required',
-      //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
+    passwordShow: false,
+    passwordRules: [(v) => !!v || '密码不能为空'],
     alertType: 'success',
     alertShown: false,
     alertContent: '',
+
+    cooldownCnt: 0,
+    state: 'init',
   }),
+  computed: {
+    realEmail() {
+      return `${this.email}@fudan.edu.cn`;
+    },
+  },
   methods: {
     register() {
-      register(this.name, this.email, this.password).then((resp) => {
-        if (resp.data.result === 'success') {
-          this.$message.success('注册成功，跳转登录页面……');
-          setTimeout(() => {
-            this.$router.push('login');
-          }, 1000);
+      if (this.name === '') {
+        this.$message.warn('名称不能为空哦');
+        return;
+      }
+      if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
+        this.$message.warn('请输入11位学号邮箱');
+        return;
+      }
+      if (!/^\d{6}$/.test(this.code)) {
+        this.$message.warn('请输入6位验证码');
+        return;
+      }
+      if (this.password === '') {
+        this.$message.warn('密码不能为空哦');
+        return;
+      }
+      register(this.name, this.realEmail, this.code, this.password)
+        .then((resp) => {
+          if (resp.result === 'success') {
+            this.$message.success('注册成功');
+            setTimeout(() => {
+              this.$router.push('login');
+            }, 500);
+          } else if (resp.result === 'failed') {
+            this.$message.warn('用户名已被注册');
+          } else log.info('Error: Unexpected resp result');
+        })
+        .catch((e) => {
+          const code = e.response.status;
+          if (code === 400) this.$message.warn('姓名或邮箱格式错误');
+          else if (code === 404) this.$message.error(e.response.data.message);
+          else if (code === 409) this.$message.error(e.response.data.message);
+          else log.info('Error: Unexpected reponse', e.response);
+        });
+    },
+    requestCode() {
+      if (this.state === 'init' || this.state === 'resend') {
+        if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
+          this.$message.error('请输入11位学号邮箱');
+          return;
         }
-        if (resp.data.result === 'failed') {
-          this.result = 'already_exist';
-          this.$message.warn('注册失败，该邮箱已经被使用，请直接登录或者更改注册邮箱');
-        }
-      });
+        this.state = 'requesting';
+        requestCode(this.realEmail)
+          .then(() => {
+            this.state = 'cooldown';
+            const vm = this;
+            vm.cooldownCnt = 5; // FIXME
+            setTimeout(function countdown() {
+              vm.cooldownCnt -= 1;
+              if (vm.cooldownCnt === 0) vm.state = 'resend';
+              else if (vm.state === 'cooldown') setTimeout(countdown, 1000);
+            }, 1000);
+          })
+          .catch((e) => {
+            this.state = 'init';
+            const code = e.response.status;
+            if (code === 400) this.$message.error(e.response.data.message);
+            else if (code === 409) this.$message.error('该邮箱已被注册');
+            else log.info('Error: unexpected code');
+          });
+      } else if (this.state === 'cooldown' || this.state === 'requesting') {
+        log.info('Warning: cooldown-ing or requesting');
+      } else {
+        log.info('Error: Unexpected state');
+      }
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../../scss/utils.scss';
+@import '../../scss/mark.scss';
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.mark {
+  display: flex;
+  flex-direction: column;
+  max-width: $main-width/2;
+  width: 100%;
+  @include mark;
+}
+
+.email-bar {
+  display: flex;
+  align-items: center;
+  > .email-divider {
+    margin: 1em 1em;
+  }
+}
+</style>

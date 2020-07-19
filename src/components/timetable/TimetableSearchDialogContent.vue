@@ -134,6 +134,10 @@
             :key="item.courseId"
             class="search-bar__result"
             @click.stop="handleClickSearchResult(item.courseId)"
+            @mouseenter="setHoveredCourseId(item.courseId)"
+            @mouseleave="resetHoveredCourseId"
+            @touchstart="setHoveredCourseId(item.courseId)"
+            @touchend="resetHoveredCourseId"
           >
             <div class="result-line">
               {{ `${item.codeId} ${item.name}` }}
@@ -202,6 +206,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   props: {
     searchIndex: Array,
@@ -233,6 +239,7 @@ export default {
     };
   },
   computed: {
+    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
     sectionLabels() {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
       return res.map((item, index) => {

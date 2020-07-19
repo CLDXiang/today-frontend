@@ -53,6 +53,7 @@ const store = new Vuex.Store({
     selectedCoursesIds: {},
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
     selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
+    hoveredCourseId: -1,
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -175,6 +176,12 @@ const store = new Vuex.Store({
     setSelectedCourses(state, payload) {
       state.selectedCoursesByDay = payload.selectedCoursesByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
+    },
+    setHoveredCourseId(state, courseId) {
+      state.hoveredCourseId = courseId;
+    },
+    resetHoveredCourseId(state) {
+      state.hoveredCourseId = -1;
     },
   },
   getters: {

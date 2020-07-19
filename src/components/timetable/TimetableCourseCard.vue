@@ -4,6 +4,10 @@
     :class="classCourseCard"
     :style="styleCourseCard"
     @click="handleClickCourseCard"
+    @mouseenter="setHoveredCourseId(course.id)"
+    @mouseleave="resetHoveredCourseId"
+    @touchstart="setHoveredCourseId(course.id)"
+    @touchend="resetHoveredCourseId"
   >
     <span class="course-name">{{ course.name }}</span>
     <span class="course-code">{{ `(${course.code_id})` }}</span>
@@ -15,6 +19,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   props: {
     course: Object,
@@ -25,11 +31,14 @@ export default {
     };
   },
   computed: {
+    ...mapState(['hoveredCourseId']),
+
     classCourseCard() {
       return [
         `color-${(this.course.code &&
           parseInt(this.course.code.slice(this.course.code.length - 3), 10) % 96) ||
           0}`,
+        this.hoveredCourseId === this.course.id ? 'hover' : '',
       ];
     },
     styleCourseCard() {
@@ -41,6 +50,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
     handleClickCourseCard() {
       // only work on mobile mode
       this.$store.commit('changeDetailPageContent', this.course);
@@ -71,8 +81,7 @@ export default {
   padding: 0.3rem;
   transition: background-color 0.195s cubic-bezier(0, 0, 0.2, 1);
 
-  &:hover,
-  &.hover {
+  &:hover {
     cursor: pointer;
   }
 }

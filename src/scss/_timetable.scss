@@ -122,7 +122,7 @@ $colors: (
   color: darken($color, 40%);
   background-color: $color;
 
-  &.hoverable:hover,
+  // &.hoverable:hover,
   &.hoverable.hover {
     background-color: darken($color, 10%);
   }

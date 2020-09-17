@@ -1,11 +1,11 @@
 <template>
-  <div class="timetable__day" :style="{ flexGrow: coursesByColumns.length }">
+  <div class="timetable__day" :style="{ flexGrow: sectionsByColumns.length }">
     <div class="day__title background-one">
       {{ title }}
     </div>
     <div class="day__column-box">
       <timetable-day-column
-        v-for="(column, index) in coursesByColumns"
+        v-for="(column, index) in sectionsByColumns"
         :key="index"
         :column="column"
       />
@@ -22,20 +22,20 @@ export default {
   },
   props: {
     title: String,
-    courses: Object,
+    sections: Object,
   },
   data() {
     return {};
   },
   computed: {
     // 计算列数，并将课程放到各个列中
-    coursesByColumns() {
+    sectionsByColumns() {
       // 占位：未被占用的位置记 0，某门课程从这里开始就将它整个放到这个位置，并将其他占的位置置 1
       const columns = [new Array(14).fill(0)];
 
       // this.courses.forEach((course) => {
-      Object.values(this.courses).forEach((course) => {
-        const sectionsArray = this.parseSections(course.currentSlot.section);
+      Object.values(this.sections).forEach((section) => {
+        const sectionsArray = this.parseSections(section.currentSlot.section);
 
         // 插入完成
         let insertOK = false;
@@ -52,18 +52,18 @@ export default {
           // 可以插入在当前列
           let canBeInsertedHere = true;
           // eslint-disable-next-line no-loop-func
-          sectionsArray.forEach((section) => {
-            if (columns[currentColumnIndex][section] !== 0) {
+          sectionsArray.forEach((sec) => {
+            if (columns[currentColumnIndex][sec] !== 0) {
               canBeInsertedHere = false;
             }
           });
           if (canBeInsertedHere) {
             // 若可以插入，则将课程信息插入第一格，并将剩余格置 1
-            const courseInserted = { ...course, sectionsArray };
-            columns[currentColumnIndex][sectionsArray[0]] = courseInserted;
+            const sectionInserted = { ...section, sectionsArray };
+            columns[currentColumnIndex][sectionsArray[0]] = sectionInserted;
             // eslint-disable-next-line no-loop-func
-            sectionsArray.slice(1).forEach((section) => {
-              columns[currentColumnIndex][section] = 1;
+            sectionsArray.slice(1).forEach((sec) => {
+              columns[currentColumnIndex][sec] = 1;
             });
             insertOK = true;
           } else {

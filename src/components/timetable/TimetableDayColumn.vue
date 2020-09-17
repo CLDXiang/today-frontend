@@ -6,9 +6,9 @@
       class="day__cell"
     />
     <timetable-course-card
-      v-for="(course, index) in courseList"
+      v-for="(section, index) in sectionList"
       :key="index"
-      :course="course"
+      :section="section"
     />
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     };
   },
   computed: {
-    courseList() {
+    sectionList() {
       return this.column.filter((item) => typeof item === 'object');
     },
   },

@@ -54,10 +54,10 @@
           </div>
         </div>
         <timetable-day
-          v-for="(courses, index) in selectedCoursesByDay"
+          v-for="(sectionsByDay, index) in selectedSectionsByDay"
           :key="index"
           :title="titles[index]"
-          :courses="courses"
+          :sections="sectionsByDay"
         />
       </div>
       <div v-if="!isMobileMode" class="timetable__search-bar-box">
@@ -145,14 +145,14 @@ export default {
        * */
       selectedCoursesIds: new Set(),
       selectedCoursesIdsFromDatabase: new Set(),
-      /** 关于 selectedCoursesByDay 的设计
+      /** 关于 selectedSectionsByDay 的设计
        * 为何不使用依赖 selectedCoursesIds 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIds 时就需要重新处理所有已选择的课程，
        * 所以我认为如此设计会更好：初始化时根据 selectedCoursesIds 的初始值计算一次，
-       * 此后每次增删仅仅针对增删的那一门课程来操作 selectedCoursesByDay
+       * 此后每次增删仅仅针对增删的那一门课程来操作 selectedSectionsByDay
        * TODO: 按需过滤字段
        * */
-      selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
+      selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
       /**
        * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
        */
@@ -190,7 +190,7 @@ export default {
     },
   },
   created() {
-    this.selectedCoursesByDay = this.$store.state.selectedCoursesByDay;
+    this.selectedSectionsByDay = this.$store.state.selectedSectionsByDay;
     this.selectedCoursesIds = new Set(this.$store.state.selectedCoursesIds[this.semester]);
     // 读取课程信息
     this.getCoursesFromJSON();
@@ -223,7 +223,7 @@ export default {
       }
       this.hideConflictionDialog();
     },
-    getCoursesFromJSON(filePath = 'lessons_325_2019-2020_spring.json') {
+    getCoursesFromJSON(filePath = 'lessons_344_2020-2021_fall.json') {
       this.isLoadingCourses = true;
       axios
         .get(filePath)
@@ -241,7 +241,7 @@ export default {
           this.allCourses = allCourses;
 
           // 初始化
-          this.initSelectedCoursesByDay();
+          this.initSelectedSectionsByDay();
           this.initSearchIndex();
           this.isLoadingCourses = false;
 
@@ -278,26 +278,26 @@ export default {
           throw err;
         });
     },
-    initSelectedCoursesByDay() {
-      const selectedCoursesByDay = [...this.selectedCoursesByDay];
+    initSelectedSectionsByDay() {
+      const selectedSectionsByDay = [...this.selectedSectionsByDay];
       this.selectedCoursesIds.forEach((courseId) => {
         const course = this.allCourses[courseId];
 
         // 对每个时间段，将该课程信息加入对应天
-        course.time_slot.forEach((ts) => {
-          const courses = { ...selectedCoursesByDay[ts.day - 1] };
-          courses[courseId] = {
+        course.time_slot.forEach((ts, i) => {
+          const sections = { ...selectedSectionsByDay[ts.day - 1] };
+          sections[`${courseId}-${i}`] = {
             ...course,
             currentSlot: ts,
           };
-          selectedCoursesByDay[ts.day - 1] = courses;
+          selectedSectionsByDay[ts.day - 1] = sections;
         });
       });
-      this.selectedCoursesByDay = selectedCoursesByDay;
+      this.selectedSectionsByDay = selectedSectionsByDay;
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
-        selectedCoursesByDay,
+        selectedSectionsByDay,
       });
     },
     initSearchIndex() {
@@ -386,23 +386,23 @@ export default {
           });
       }
 
-      const selectedCoursesByDay = [...this.selectedCoursesByDay];
+      const selectedSectionsByDay = [...this.selectedSectionsByDay];
       const course = this.allCourses[courseId];
 
       // 对每个时间段，将该课程信息加入对应天
-      course.time_slot.forEach((ts) => {
-        const courses = { ...selectedCoursesByDay[ts.day - 1] };
-        courses[courseId] = {
+      course.time_slot.forEach((ts, i) => {
+        const sections = { ...selectedSectionsByDay[ts.day - 1] };
+        sections[`${courseId}-${i}`] = {
           ...course,
           currentSlot: ts,
         };
-        selectedCoursesByDay[ts.day - 1] = courses;
+        selectedSectionsByDay[ts.day - 1] = sections;
       });
-      this.selectedCoursesByDay = selectedCoursesByDay;
+      this.selectedSectionsByDay = selectedSectionsByDay;
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
-        selectedCoursesByDay,
+        selectedSectionsByDay,
       });
     },
     removeSelectedCourse(courseId) {
@@ -423,28 +423,29 @@ export default {
           });
       }
 
-      const selectedCoursesByDay = [...this.selectedCoursesByDay];
+      const selectedSectionsByDay = [...this.selectedSectionsByDay];
       const course = this.allCourses[courseId];
 
       // 对每个时间段，将该对应天的课程信息删除
-      course.time_slot.forEach((ts) => {
-        const courses = { ...selectedCoursesByDay[ts.day - 1] };
-        delete courses[courseId];
-        selectedCoursesByDay[ts.day - 1] = courses;
+      course.time_slot.forEach((ts, i) => {
+        const sections = { ...selectedSectionsByDay[ts.day - 1] };
+
+        delete sections[`${courseId}-${i}`];
+        selectedSectionsByDay[ts.day - 1] = sections;
       });
-      this.selectedCoursesByDay = selectedCoursesByDay;
+      this.selectedSectionsByDay = selectedSectionsByDay;
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
-        selectedCoursesByDay,
+        selectedSectionsByDay,
       });
     },
     replaceSelectedCourses(courseIds) {
       this.selectedCoursesIds = new Set(courseIds);
-      this.selectedCoursesByDay = [{}, {}, {}, {}, {}, {}, {}];
+      this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
 
       // 重新加入每一门课
-      this.initSelectedCoursesByDay();
+      this.initSelectedSectionsByDay();
     },
     hideDetailDialog() {
       this.$store.commit('hideDetailDialog');

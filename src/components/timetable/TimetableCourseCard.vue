@@ -4,17 +4,17 @@
     :class="classCourseCard"
     :style="styleCourseCard"
     @click="handleClickCourseCard"
-    @mouseenter="setHoveredCourseId(course.id)"
+    @mouseenter="setHoveredCourseId(section.id)"
     @mouseleave="resetHoveredCourseId"
-    @touchstart="setHoveredCourseId(course.id)"
+    @touchstart="setHoveredCourseId(section.id)"
     @touchend="resetHoveredCourseId"
   >
-    <span class="course-name">{{ course.name }}</span>
-    <span class="course-code">{{ `(${course.code_id})` }}</span>
+    <span class="course-name">{{ section.name }}</span>
+    <span class="course-code">{{ `(${section.code_id})` }}</span>
     <span class="course-teacher">{{
-      course.currentSlot.teacher.join(',')
+      section.currentSlot.teacher.join(',')
     }}</span>
-    <span class="course-place">{{ course.currentSlot.place }}</span>
+    <span class="course-place">{{ section.currentSlot.place }}</span>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import { mapState, mapMutations } from 'vuex';
 
 export default {
   props: {
-    course: Object,
+    section: Object,
   },
   data() {
     return {
@@ -35,14 +35,14 @@ export default {
 
     classCourseCard() {
       return [
-        `color-${(this.course.code &&
-          parseInt(this.course.code.slice(this.course.code.length - 3), 10) % 96) ||
+        `color-${(this.section.code &&
+          parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96) ||
           0}`,
-        this.hoveredCourseId === this.course.id ? 'hover' : '',
+        this.hoveredCourseId === this.section.id ? 'hover' : '',
       ];
     },
     styleCourseCard() {
-      const { sectionsArray } = this.course;
+      const { sectionsArray } = this.section;
       return {
         top: `${this.cellHeight * sectionsArray[0]}px`,
         height: `${this.cellHeight * sectionsArray.length}px`,
@@ -53,7 +53,7 @@ export default {
     ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
     handleClickCourseCard() {
       // only work on mobile mode
-      this.$store.commit('changeDetailPageContent', this.course);
+      this.$store.commit('changeDetailPageContent', this.section);
       this.$store.commit('showDetailDialog');
       // if (this.$vuetify.breakpoint.name === 'xs' || this.$vuetify.breakpoint.name === 'sm') {
       //   this.$store.commit('showDetailDialog');

@@ -52,7 +52,7 @@ const store = new Vuex.Store({
 
     selectedCoursesIds: {},
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
-    selectedCoursesByDay: [{}, {}, {}, {}, {}, {}, {}],
+    selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
     hoveredCourseId: -1,
   },
   mutations: {
@@ -174,7 +174,7 @@ const store = new Vuex.Store({
     },
 
     setSelectedCourses(state, payload) {
-      state.selectedCoursesByDay = payload.selectedCoursesByDay;
+      state.selectedSectionsByDay = payload.selectedSectionsByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
     },
     setHoveredCourseId(state, courseId) {
@@ -217,7 +217,7 @@ const store = new Vuex.Store({
           editor: state.editor,
           secret: state.secret,
           selectedCoursesIds: state.selectedCoursesIds,
-          selectedCoursesByDay: state.selectedCoursesByDay,
+          selectedSectionsByDay: state.selectedSectionsByDay,
         };
       },
     }),

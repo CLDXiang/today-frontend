@@ -5,8 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 export default function renderTime(time) {
-  const formatted = dayjs(time)
-    .locale('zh-cn')
-    .fromNow();
+  const formatted = dayjs(time).locale('zh-cn').fromNow();
   return formatted;
 }

@@ -120,9 +120,7 @@ export default {
       return marked(content);
     },
     renderTime(time) {
-      const formatted = dayjs(time)
-        .locale('zh-cn')
-        .fromNow();
+      const formatted = dayjs(time).locale('zh-cn').fromNow();
       return formatted;
     },
     doneReEditing() {

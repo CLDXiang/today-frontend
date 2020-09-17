@@ -35,9 +35,11 @@ export default {
 
     classCourseCard() {
       return [
-        `color-${(this.section.code &&
-          parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96) ||
-          0}`,
+        `color-${
+          (this.section.code &&
+            parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96) ||
+          0
+        }`,
         this.hoveredCourseId === this.section.id ? 'hover' : '',
       ];
     },

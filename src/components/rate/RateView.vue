@@ -7,10 +7,10 @@
       <div style="display: flex;">
         <v-select
           v-model="selects.semester.value"
+          :items="selects.semester.choices"
           solo
           dense
           style="max-width: 10rem; width: 5rem;"
-          :items="selects.semester.choices"
         />
       </div>
 
@@ -19,28 +19,28 @@
       <div style="display: flex; align-items: center;">
         <span style="margin: 0 1rem;">作业总量</span><v-select
           v-model="selects.workload.value"
+          :items="selects.workload.choices"
           solo
           dense
           style="max-width: 10rem; width: 6rem;"
-          :items="selects.workload.choices"
         />
       </div>
       <div style="display: flex; align-items: center;">
         <span style="margin: 0 1rem;">难易程度</span><v-select
           v-model="selects.difficulty.value"
+          :items="selects.difficulty.choices"
           solo
           dense
           style="max-width: 10rem; width: 6rem;"
-          :items="selects.difficulty.choices"
         />
       </div>
       <div style="display: flex; align-items: center;">
         <span style="margin: 0 1rem;">给分情况</span><v-select
           v-model="selects.grading.value"
+          :items="selects.grading.choices"
           solo
           dense
           style="max-width: 10rem; width: 6rem;"
-          :items="selects.grading.choices"
         />
       </div>
             
@@ -59,10 +59,10 @@
       <div style="display: flex;">
         <v-select
           v-model="selects.score.value"
+          :items="selects.score.choices"
           solo
           dense
           style="max-width: 10rem; width: 5rem;"
-          :items="selects.score.choices"
         />
       </div>
 
@@ -70,10 +70,10 @@
       <div style="display: flex;">
         <v-select
           v-model="rangeRates[0].choiceValue"
+          :items="rangeRates[0].choices"
           solo
           dense
           style="max-width: 10rem; width: 7rem;"
-          :items="rangeRates[0].choices"
         />
       </div>
 

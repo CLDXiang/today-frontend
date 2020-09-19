@@ -21,11 +21,11 @@
 
         <v-divider class="email-divider" vertical />
         <v-btn
+          :disabled="cooldownCnt !== 0"
+          :loading="state === 'requesting'"
           class="email-btn"
           color="primary"
           depressed
-          :disabled="cooldownCnt !== 0"
-          :loading="state === 'requesting'"
           @click="requestCode"
         >
           {{ state === 'init' || state === 'requesting'? '获取验证码'

@@ -98,8 +98,8 @@
     </v-tabs>
 
     <v-btn
-      class="mx-2"
       :elevation="3"
+      class="mx-2"
       style="position: fixed; bottom: 10%; right: 5%;"
       fab
       dark

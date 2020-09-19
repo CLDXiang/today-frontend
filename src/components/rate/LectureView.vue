@@ -2,8 +2,8 @@
   <div>
     <v-dialog
       v-model="openDeleteDialog"
-      max-width="290"
       :persistent="deleteDialogPersistent"
+      max-width="290"
     >
       <v-card>
         <v-card-title class="headline">
@@ -88,7 +88,7 @@
               <span class="rating-score">{{ score }}</span>
               <div class="rating-fav">
                 <span class="rating-fav-cnt">{{ favorCount }}</span>
-                <svg-switch variant="heart" :value="favored" @input="syncFavor($event)" />
+                <svg-switch :value="favored" variant="heart" @input="syncFavor($event)" />
               </div>
             </div>
 
@@ -142,12 +142,12 @@
               点评<span class="comment-count">{{ getThreadCnt(rateIds) }}</span>
               <v-select
                 v-model="sort"
+                :items="sortChoices"
+                :disabled="loadingRates"
                 solo
                 dense
                 style="max-width: 10rem;"
                 class="comment-sort"
-                :items="sortChoices"
-                :disabled="loadingRates"
               />
             </h4>
 
@@ -166,8 +166,8 @@
                   <div v-else class="rate-title">
                     <div class="rate-title-span">
                       <img
-                        class="rate-title-avatar"
                         :src="rate.avatar"
+                        class="rate-title-avatar"
                         @click="$router.push(`/user/${rate.userId}`)"
                         @mouseenter="getUserInfo(rate)"
                       >
@@ -194,7 +194,7 @@
                             <!--div>{{ rate.userInfo.nreplies }}</div-->
                             <div>{{ rate.userInfo.nfollowers }}</div>
                           </div>
-                          <svg-switch class="rate-title-user-btn" variant="heart" :value="rate.userInfo.followed" @input="toggleFollow(rate, $event)" />
+                          <svg-switch :value="rate.userInfo.followed" class="rate-title-user-btn" variant="heart" @input="toggleFollow(rate, $event)" />
                         </template>
 
                         <template v-else>
@@ -208,9 +208,9 @@
                         {{ getThreadCnt(rate.replyIds) }}条回复
                       </div>
                       <svg-switch
-                        class="rate-title-reply__icon"
-                        variant="edit" 
                         :value="rate.openReplies"
+                        class="rate-title-reply__icon" 
+                        variant="edit"
                         @input="handleOpenReplies(rate, $event)"
                       />
                       <svg-switch
@@ -229,9 +229,9 @@
 
                   <my-picker
                     v-show="!rate.openReplies && !rate.deleted"
-                    class="rate-action"
                     :items="rate.reactions"
                     :target="`rates ${rate.id}`"
+                    class="rate-action"
                   />
 
                   <div
@@ -259,8 +259,8 @@
                         <div class="rate-title">
                           <div class="rate-title-span">
                             <img
-                              class="rate-title-avatar"
                               :src="reply.avatar"
+                              class="rate-title-avatar"
                               @click="$router.push(`/user/${reply.userId}`)"
                               @mouseenter="getUserInfo(reply)"
                             >
@@ -287,7 +287,7 @@
                                   <!--div>{{ reply.userInfo.nreplies }}</div-->
                                   <div>{{ reply.userInfo.nfollowers }}</div>
                                 </div>
-                                <svg-switch class="rate-title-user-btn" variant="heart" :value="reply.userInfo.followed" @input="toggleFollow(reply, $event)" />
+                                <svg-switch :value="reply.userInfo.followed" class="rate-title-user-btn" variant="heart" @input="toggleFollow(reply, $event)" />
                               </template>
 
                               <template v-else>
@@ -334,7 +334,7 @@
               </p>
               <div class="list">
                 <div v-for="p in relatedProfessors" :key="p.route">
-                  <router-link class="link" :to="p.route">
+                  <router-link :to="p.route" class="link">
                     {{ p.teacher }}
                   </router-link>
                 </div>
@@ -348,7 +348,7 @@
               </p>
               <div class="list">
                 <div v-for="c in relatedLectures" :key="c.route">
-                  <router-link class="link" :to="c.route">
+                  <router-link :to="c.route" class="link">
                     {{ c.name }}
                   </router-link>
                 </div>

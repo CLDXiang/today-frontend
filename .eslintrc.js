@@ -6,6 +6,11 @@ module.exports = {
       // Do not add `'prettier/vue'` if you don't want to use prettier for `<template>` blocks
       //   'prettier/vue',
     ],
+
+    parser: 'vue-eslint-parser',
+    parserOptions: {
+      parser: 'babel-eslint',
+    },
   
     settings: {
       'prettier-vue': {

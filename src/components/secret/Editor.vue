@@ -9,9 +9,9 @@
     <div class="editor__textarea mx-3">
       <v-textarea
         v-model="content"
-        label="内容"
         :clearable="true"
         :hint="mode === 'discussion' ? '支持 markdown 语法' : ''"
+        label="内容"
       />
     </div>
     <div class="editor__control">

@@ -1,7 +1,7 @@
 <template>
   <div class="timetable__search-bar">
-    <v-btn v-show="searchResults.length !== 0" class="results-visible-button" :color="isSearchResultsVisible ? 'primary' : ''" @click="handleChangeResultsVisible">
-      <v-icon left :style="isSearchResultsVisible ? 'color: #fff' : ''">
+    <v-btn v-show="searchResults.length !== 0" :color="isSearchResultsVisible ? 'primary' : ''" class="results-visible-button" @click="handleChangeResultsVisible">
+      <v-icon :style="isSearchResultsVisible ? 'color: #fff' : ''" left>
         {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
       </v-icon>
       {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
@@ -20,9 +20,9 @@
         重置
       </v-btn>
       <v-btn
-        color="primary" 
-        :disabled="isLoadingSearchResults || isSearchQueryEmpty"
+        :disabled="isLoadingSearchResults || isSearchQueryEmpty" 
         :loading="isLoadingSearchResults"
+        color="primary"
         @click="handleClickSearchButton"
       >
         <v-icon left>
@@ -35,14 +35,14 @@
       <v-text-field
         ref="textfield1"
         v-model="searchQuery.name"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
+        :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
         label="课程名"
         hint="模糊匹配，不区分大小写"
         outlined
         dense
         autocomplete="off"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
-        :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
         class="search-bar__text-field"
         @keydown="handleKeyDown"
       />
@@ -51,14 +51,14 @@
       <v-text-field
         ref="textfield4"
         v-model="searchQuery.codeId"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success="searchBarStatus === 'success' && searchQuery.codeId.trim() !== ''"
+        :error="searchBarStatus === 'error' && searchQuery.codeId.trim() !== ''"
         label="课程号"
         hint="模糊匹配，不区分大小写"
         outlined
         dense
         autocomplete="off"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.codeId.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.codeId.trim() !== ''"
         class="search-bar__text-field"
         @keydown="handleKeyDown"
       />
@@ -67,14 +67,14 @@
       <v-text-field
         ref="textfield2"
         v-model="searchQuery.teachers"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success="searchBarStatus === 'success' && searchQuery.teachers.trim() !== ''"
+        :error="searchBarStatus === 'error' && searchQuery.teachers.trim() !== ''"
         label="授课教师"
         hint="请输入教师全名，多名教师可用逗号分隔"
         outlined
         dense
         autocomplete="off"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.teachers.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.teachers.trim() !== ''"
         class="search-bar__text-field"
         @keydown="handleKeyDown"
       />
@@ -83,14 +83,14 @@
       <v-text-field
         ref="textfield5"
         v-model="searchQuery.place"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success="searchBarStatus === 'success' && searchQuery.place.trim() !== ''"
+        :error="searchBarStatus === 'error' && searchQuery.place.trim() !== ''"
         label="上课地点"
         hint="模糊匹配，不区分大小写"
         outlined
         dense
         autocomplete="off"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.place.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.place.trim() !== ''"
         class="search-bar__text-field"
         @keydown="handleKeyDown"
       />
@@ -99,14 +99,14 @@
       <v-text-field
         ref="textfield3"
         v-model="searchQuery.department"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success="searchBarStatus === 'success' && searchQuery.department.trim() !== ''"
+        :error="searchBarStatus === 'error' && searchQuery.department.trim() !== ''"
         label="开课院系"
         hint="模糊匹配"
         outlined
         dense
         autocomplete="off"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.department.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.department.trim() !== ''"
         class="search-bar__text-field"
         @keydown="handleKeyDown"
       />
@@ -128,20 +128,20 @@
       <v-select
         v-model="searchQuery.day"
         :items="dayLabels"
+        :disabled="isLoadingSearchResults || isLoadingCourses"
+        :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
+        :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
         label="星期"
         dense
         outlined
         autocomplete="off"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
-        :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
       />
     </div>
     <div class="search-bar__content-line">
       <v-range-slider
         v-model="searchQuery.sectionRange"
-        label="节次"
         :tick-labels="sectionLabels"
+        label="节次"
         min="0"
         max="13"
         ticks="always"

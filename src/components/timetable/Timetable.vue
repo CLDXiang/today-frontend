@@ -2,21 +2,21 @@
   <div class="timetable fluid my-3 pa-0 px-md-3">
     <v-dialog
       :fullscreen="isMobileMode"
-      scrollable
       :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
       :value="isDetailDialogVisible"
       :max-width="isMobileMode ? '' : '368px'"
+      scrollable
       @click:outside="hideDetailDialog"
     >
       <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
     </v-dialog>
     <v-dialog
       :fullscreen="isMobileMode"
-      scrollable
-      persistent
       :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
       :value="isConflictionDialogVisible"
       :max-width="isMobileMode ? '' : '368px'"
+      scrollable
+      persistent
     >
       <timetable-confliction-dialog-content
         :selected-courses-ids="selectedCoursesIds"
@@ -26,10 +26,10 @@
       />
     </v-dialog>
     <v-dialog
+      :value="isMobileMode && isSearchDialogVisible"
       fullscreen
       scrollable
       transition="dialog-bottom-transition"
-      :value="isMobileMode && isSearchDialogVisible"
     >
       <timetable-search-dialog-content
         v-if="isMobileMode"

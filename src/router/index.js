@@ -1,30 +1,45 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Login from '../components/common/Login.vue';
-import Register from '../components/common/Register.vue';
-import ForgotPassword from '../components/common/ForgotPassword.vue';
-
-import Profile from '../components/profile/Profile.vue';
-import UserProfile from '../components/profile/UserProfile.vue';
-import OthersProfile from '../components/profile/OthersProfile.vue';
-import Star from '../components/profile/Star.vue';
-import UserRate from '../components/profile/UserRate.vue';
-import Follower from '../components/profile/Follower.vue';
-import Following from '../components/profile/Following.vue';
-import History from '../components/profile/History.vue';
-import Notification from '../components/profile/Notification.vue';
-import Settings from '../components/profile/Settings.vue';
-import Hole from '../components/secret/Hole.vue';
-
-import ExploreView from '../components/rate/ExploreView.vue';
-import LectureView from '../components/rate/LectureView.vue';
-import RateView from '../components/rate/RateView.vue';
-
-import PostView from '../components/secret/PostView.vue';
-import Timetable from '../components/timetable/Timetable.vue';
-
 import store from '../store';
+
+const Login = () => import(/* webpackChunkName: "user-state" */ '../components/common/Login.vue');
+const Register = () =>
+  import(/* webpackChunkName: "user-state" */ '../components/common/Register.vue');
+const ForgotPassword = () =>
+  import(/* webpackChunkName: "user-state" */ '../components/common/ForgotPassword.vue');
+
+// TODO: reduce bundle size of profile
+const Profile = () => import(/* webpackChunkName: "profile" */ '../components/profile/Profile.vue');
+const UserProfile = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/UserProfile.vue');
+const OthersProfile = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/OthersProfile.vue');
+const Star = () => import(/* webpackChunkName: "profile" */ '../components/profile/Star.vue');
+const UserRate = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/UserRate.vue');
+const Follower = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/Follower.vue');
+const Following = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/Following.vue');
+const History = () => import(/* webpackChunkName: "profile" */ '../components/profile/History.vue');
+const Notification = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/Notification.vue');
+const Settings = () =>
+  import(/* webpackChunkName: "profile" */ '../components/profile/Settings.vue');
+
+const Hole = () => import(/* webpackChunkName: "secret" */ '../components/secret/Hole.vue');
+const PostView = () => import(/* webpackChunkName: "secret" */ '../components/secret/PostView.vue');
+
+// TODO: reduce bundle size of rate
+const ExploreView = () =>
+  import(/* webpackChunkName: "rate" */ '../components/rate/ExploreView.vue');
+const LectureView = () =>
+  import(/* webpackChunkName: "rate" */ '../components/rate/LectureView.vue');
+const RateView = () => import(/* webpackChunkName: "rate" */ '../components/rate/RateView.vue');
+
+const Timetable = () =>
+  import(/* webpackChunkName: "timetable" */ '../components/timetable/Timetable.vue');
 
 Vue.use(VueRouter);
 

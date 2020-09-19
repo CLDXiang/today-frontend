@@ -1,11 +1,11 @@
 <template>
   <div class="emoji-bar-container">
-    <div v-if="showPicker" class="picker-container" :class="{'picker-container-show': showPicker}">
+    <div v-if="showPicker" :class="{'picker-container-show': showPicker}" class="picker-container">
       <div v-click-outside="{ handler: hidePicker, isActive: showPicker }">
         <emoji-picker
-          title="Pick your Reaction"
-          set="twitter" 
           :data="index"
+          title="Pick your Reaction" 
+          set="twitter"
           class="picker" 
           @select="addEmoji"
         />
@@ -14,8 +14,8 @@
 
     <div :key="upvote.id" class="emoji-tag-container">
       <div
-        class="upvote-tag-toggle"
         :class="{'upvote-tag-toggle--active': upvote.active }"
+        class="upvote-tag-toggle"
         @click="toggleEmoji(upvote)"
       />
 
@@ -30,8 +30,8 @@
 
     <div :key="downvote.id" class="emoji-tag-container">
       <div
-        class="upvote-tag-toggle"
         :class="{'upvote-tag-toggle--active': downvote.active }"
+        class="upvote-tag-toggle"
         @click="toggleEmoji(downvote)"
       />
       <div class="upvote-tag-background" />
@@ -48,8 +48,8 @@
         class="emoji-tag-container"
       >
         <div
-          class="emoji-tag-toggle"
           :class="{'emoji-tag-toggle--active': i.active }"
+          class="emoji-tag-toggle"
           @click="toggleEmoji(i)"
         />
         <div class="emoji-tag-background" />

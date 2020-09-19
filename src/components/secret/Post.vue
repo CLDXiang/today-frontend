@@ -44,12 +44,12 @@
     </v-card-actions>
     <v-dialog
       v-model="editing"
-      max-width="800px"
       :fullscreen="$vuetify.breakpoint.xsOnly"
+      max-width="800px"
     >
       <Editor
-        mode="secret"
         :default-content="content"
+        mode="secret"
         @close="editing = false"
         @done="doneReEditing"
       >

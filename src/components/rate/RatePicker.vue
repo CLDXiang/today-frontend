@@ -1,8 +1,8 @@
 <template>
   <div>
     <span
-      class="rating"
       :class="{ 'rating-readonly': readonly }"
+      class="rating"
     >
       <div
         v-for="i in length"

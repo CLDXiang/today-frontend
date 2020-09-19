@@ -132,7 +132,7 @@
             >
             <div class="category-bar">
               <label v-for="(c, idx) in categories" :key="c.name" class="category-button">
-                <input v-model="tabIndex" type="radio" :value="idx">
+                <input v-model="tabIndex" :value="idx" type="radio">
                 <span>{{ c.name }}</span>
               </label>
             </div>

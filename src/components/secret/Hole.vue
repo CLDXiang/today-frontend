@@ -36,8 +36,8 @@
     </v-speed-dial>
     <v-dialog
       v-model="editing"
-      max-width="800px"
       :fullscreen="$vuetify.breakpoint.xsOnly"
+      max-width="800px"
     >
       <Editor mode="secret" @close="editing = false" @done="create">
         匿名分享

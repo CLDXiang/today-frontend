@@ -36,13 +36,13 @@
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-text-field
           v-model="nickName"
+          :rules="nickNameRules"
           label="昵称"
           hint="整个bling的名字~"
           placeholder=""
           clearable
           outlined
           rounded
-          :rules="nickNameRules"
           counter="30"
         />
       </v-col>
@@ -51,20 +51,20 @@
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-textarea
           v-model="bio"
+          :rules="bioRules"
           label="个性签名"
           hint="介绍一波自己"
           outlined
           rounded
           no-resize
           auto-grow
-          :rules="bioRules"
           counter="128"
         />
       </v-col>
     </v-row>
     <v-row justify="center">
       <div class="my-2">
-        <v-btn large color="primary" :disabled="isDisabled" @click="changeProfile">
+        <v-btn :disabled="isDisabled" large color="primary" @click="changeProfile">
           保存更改
         </v-btn>
       </div>

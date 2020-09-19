@@ -17,8 +17,8 @@
       </v-list-item-content>
       <v-row v-show="isMe === false" align="center" justify="end">
         <v-icon
-          class="mr-1"
           :color="isFollowing ? 'red' : 'gray'"
+          class="mr-1"
           @click="followUnfollow"
         >
           mdi-heart

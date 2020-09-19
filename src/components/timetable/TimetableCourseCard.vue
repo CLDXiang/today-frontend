@@ -1,8 +1,8 @@
 <template>
   <div
-    class="course-card hoverable"
     :class="classCourseCard"
     :style="styleCourseCard"
+    class="course-card hoverable"
     @click="handleClickCourseCard"
     @mouseenter="setHoveredCourseId(section.id)"
     @mouseleave="resetHoveredCourseId"

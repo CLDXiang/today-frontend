@@ -1,7 +1,7 @@
 <template>
   <div class="pointer" @click="handleClick">
-    <label v-if="variant === 'heart'" class="switch--heart" :class="{'non-clickable': controlled}">
-      <input type="checkbox" :checked="value" @change="handleChange"><span />
+    <label v-if="variant === 'heart'" :class="{'non-clickable': controlled}" class="switch--heart">
+      <input :checked="value" type="checkbox" @change="handleChange"><span />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 23"
@@ -31,8 +31,8 @@
       </svg>
     </label>
 
-    <label v-else-if="variant === 'edit'" class="switch--edit" :class="{'non-clickable': controlled}">
-      <input type="checkbox" :checked="value" @change="handleChange"><span />
+    <label v-else-if="variant === 'edit'" :class="{'non-clickable': controlled}" class="switch--edit">
+      <input :checked="value" type="checkbox" @change="handleChange"><span />
 
       <!-- SVGs -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23">
@@ -79,8 +79,8 @@
       </svg>
     </label>
 
-    <label v-else-if="variant === 'trash'" class="switch--trash" :class="{'non-clickable': controlled}">
-      <input type="checkbox" :checked="value" @change="handleChange">
+    <label v-else-if="variant === 'trash'" :class="{'non-clickable': controlled}" class="switch--trash">
+      <input :checked="value" type="checkbox" @change="handleChange">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 21 25" version="1.1">
         <g
           id="Page-1"

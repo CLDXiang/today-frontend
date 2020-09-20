@@ -1,7 +1,7 @@
 <template>
   <div class="head-bar">
-    <img class="avatar" :src="processAvatar(user.avatar)" alt="avatar">
-    
+    <img v-if="userLoggedIn" class="avatar" :src="processAvatar(user.avatar)" alt="avatar">
+    <div v-else />
     <div class="semester">
       2020年春季学期
     </div>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import defaultAvatar from '../../../assets/default_avatar.jpg';
 
 export default {
@@ -18,10 +18,11 @@ export default {
     ...mapState({
       user: (state) => state.user,
     }),
+    ...mapGetters(['userLoggedIn']),
   },
   methods: {
     processAvatar(originAvatar) {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
+      if (!originAvatar || originAvatar.includes('/default_avatar.jpg')) {
         return defaultAvatar;
       }
       return originAvatar;

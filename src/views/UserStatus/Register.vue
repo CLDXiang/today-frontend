@@ -140,7 +140,7 @@ export default {
           if (resp.result === 'success') {
             this.$message.success('注册成功');
             setTimeout(() => {
-              this.$router.push({ name: 'UserProfile' });
+              this.$router.push({ name: 'Login' });
             }, 500);
           } else if (resp.result === 'failed') {
             this.$message.warn('用户名已被注册');
@@ -165,7 +165,7 @@ export default {
           .then(() => {
             this.state = 'cooldown';
             const vm = this;
-            vm.cooldownCnt = 5; // FIXME
+            vm.cooldownCnt = 60;
             setTimeout(function countdown() {
               vm.cooldownCnt -= 1;
               if (vm.cooldownCnt === 0) vm.state = 'resend';

@@ -48,7 +48,7 @@ export default {
         return 'notification';
       }
       if (
-        /\/my\/?.*$/.test(path) ||
+        /\/me\/?.*$/.test(path) ||
         /\/login\/?.*$/.test(path) ||
         /\/register\/?.*$/.test(path) ||
         /\/forgot-password\/?.*$/.test(path)
@@ -63,6 +63,7 @@ export default {
   },
   methods: {
     handleClick(v) {
+      console.log(v, this.activePage);
       if (this.activePage === v) return;
       if (v === 'timetable') {
         this.$router.push({ name: 'Timetable' }).catch((e) => {
@@ -77,7 +78,7 @@ export default {
           log.info(e);
         });
       } else if (v === 'status') {
-        this.$router.push({ name: this.$store.getters.userLoggedIn ? 'My' : 'Login' }).catch((e) => {
+        this.$router.push({ name: this.$store.getters.userLoggedIn ? 'Me' : 'Login' }).catch((e) => {
           log.info(e);
         });
       }

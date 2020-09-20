@@ -34,7 +34,7 @@ const routes = [
     name: 'Register',
     component: () => import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/Register.vue'),
   },
-  { path: '/*', component: Timetable },
+  { path: '*', component: Timetable },
 ];
 
 const router = new VueRouter({

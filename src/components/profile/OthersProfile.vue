@@ -136,7 +136,7 @@ import { postFollow, deleteFollow } from '../../services/rate';
 import log from '../../utils/log';
 import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
-import defaultAvatar from '../../assets/default_avatar.png';
+import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {
   data: () => ({

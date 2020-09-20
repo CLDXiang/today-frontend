@@ -150,7 +150,7 @@ export default {
           .then(() => {
             this.state = 'cooldown';
             const vm = this;
-            vm.cooldownCnt = 5; // FIXME
+            vm.cooldownCnt = 60;
             this.$message.success('验证码发送成功');
             setTimeout(function countdown() {
               vm.cooldownCnt -= 1;

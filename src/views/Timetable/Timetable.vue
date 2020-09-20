@@ -2,27 +2,35 @@
   <div class="timetable fluid my-3 pa-0 px-md-3">
     <v-dialog
       :fullscreen="isMobileMode"
-      :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
+      :transition="
+        isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'
+      "
       :value="isDetailDialogVisible"
       :max-width="isMobileMode ? '' : '368px'"
       scrollable
       @click:outside="hideDetailDialog"
     >
-      <timetable-detail-dialog-content :course="detailPageCourse" :class="classDetailPage" @deleteCourse="removeSelectedCourse(detailPageCourse.id)" />
+      <timetable-detail-dialog-content
+        :course="detailPageCourse"
+        :class="classDetailPage"
+        @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
+      />
     </v-dialog>
     <v-dialog
       :fullscreen="isMobileMode"
-      :transition="isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'"
-      :value="isConflictionDialogVisible"
+      :transition="
+        isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'
+      "
+      :value="isConflictDialogVisible"
       :max-width="isMobileMode ? '' : '368px'"
       scrollable
       persistent
     >
-      <timetable-confliction-dialog-content
+      <timetable-conflict-dialog-content
         :selected-courses-ids="selectedCoursesIds"
         :selected-courses-ids-from-database="selectedCoursesIdsFromDatabase"
         :courses="allCourses"
-        @conflictionResolved="onConflictionResolved"
+        @conflictResolved="onConflictResolved"
       />
     </v-dialog>
     <v-dialog
@@ -71,7 +79,7 @@
       <v-btn
         v-if="isMobileMode"
         class="floating_button"
-        color="blue"
+        color="primary"
         dark
         small
         fixed
@@ -89,24 +97,26 @@
 <script>
 import axios from 'axios';
 import { mapState, mapGetters } from 'vuex';
-import TimetableDay from './TimetableDay.vue';
-import TimetableSearchBar from './TimetableSearchBar.vue';
-import TimetableDetailDialogContent from './TimetableDetailDialogContent.vue';
-import TimetableConflictionDialogContent from './TimetableConflictionDialogContent.vue';
-import TimetableSearchDialogContent from './TimetableSearchDialogContent.vue';
 import {
   getSelectedCourses as getSelectedCoursesService,
   addSelectedCourse as addSelectedCourseService,
   removeSelectedCourse as removeSelectedCourseService,
   replaceSelectedCourses as replaceSelectedCoursesService,
 } from '../../services/timetable.service';
+import {
+  TimetableDay,
+  TimetableSearchBar,
+  TimetableDetailDialogContent,
+  TimetableConflictDialogContent,
+  TimetableSearchDialogContent,
+} from './components';
 
 export default {
   components: {
     TimetableDay,
     TimetableSearchBar,
     TimetableDetailDialogContent,
-    TimetableConflictionDialogContent,
+    TimetableConflictDialogContent,
     TimetableSearchDialogContent,
   },
   props: {},
@@ -157,7 +167,7 @@ export default {
        * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
        */
       isOffline: false,
-      isConflictionDialogVisible: false,
+      isConflictDialogVisible: false,
 
       isSearchDialogVisible: false,
     };
@@ -202,7 +212,7 @@ export default {
       const intersect = [...set1].filter((item) => set2.has(item));
       return intersect.length === set1.size;
     },
-    onConflictionResolved(selectedCoursesIds, changeLocal, changeRemote) {
+    onConflictResolved(selectedCoursesIds, changeLocal, changeRemote) {
       // 得到用户选择保留的 Id 列表
       if (changeLocal) {
         this.replaceSelectedCourses(selectedCoursesIds);
@@ -221,7 +231,7 @@ export default {
             this.isOffline = true;
           });
       }
-      this.hideConflictionDialog();
+      this.hideConflictDialog();
     },
     getCoursesFromJSON(filePath = 'lessons_344_2020-2021_fall.json') {
       this.isLoadingCourses = true;
@@ -262,7 +272,7 @@ export default {
                   this.$message.success('数据同步成功！');
                 } else {
                   // 冲突解决
-                  this.isConflictionDialogVisible = true;
+                  this.isConflictDialogVisible = true;
                 }
               })
               .catch((err) => {
@@ -450,8 +460,8 @@ export default {
     hideDetailDialog() {
       this.$store.commit('hideDetailDialog');
     },
-    hideConflictionDialog() {
-      this.isConflictionDialogVisible = false;
+    hideConflictDialog() {
+      this.isConflictDialogVisible = false;
     },
     showSearchDialog() {
       this.isSearchDialogVisible = true;
@@ -467,7 +477,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/_timetable';
+@import '@/scss/_timetable';
 
 .timetable {
   position: relative;

@@ -1,66 +1,81 @@
 <template>
-  <div class="register-container">
-    <div class="mark">
-      <h2>欢迎加入Today!</h2>
-      <div>
-        <v-text-field
-          v-model="name"
-          :rules="nameRules"
-          :counter="10"
-          label="昵称"
-          required
-        />
-      </div>
-      <div class="email-bar">
-        <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          label="邮箱"
-          required
-          suffix="@fudan.edu.cn"
-        />
-      </div>
-
-      <div class="email-bar">
+  <div class="content-box">
+    <div class="title">
+      注册
+    </div>
+    <div class="input-box">
+      <v-text-field
+        v-model="email"
+        label="学邮"
+        autofocus
+        clearable
+        outlined
+        required
+        suffix="@fudan.edu.cn"
+        :rules="[(v) => !!v || '学邮不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号']"
+      />
+      <div class="email-validate-box">
         <v-text-field
           v-model="code"
           label="验证码"
+          outlined
           required
         />
-
-        <v-divider class="email-divider" vertical />
         <v-btn
+          color="primary"
           :disabled="cooldownCnt !== 0"
           :loading="state === 'requesting'"
-          class="email-btn"
-          color="primary"
-          depressed
           @click="requestCode"
         >
-          {{ state === 'init' || state === 'requesting'? '获取验证码'
+          {{ state === 'init' || state === 'requesting'? '发送验证码'
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
         </v-btn>
       </div>
- 
-      <div>
-        <v-text-field
-          v-model="password"
-          :rules="passwordRules"
-          :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="passwordShow ? 'text' : 'password'"
-          label="密码"
-          required
-          @click:append="passwordShow = !passwordShow"
-        />
-      </div>
-      <div>
-        <v-btn color="primary" @click="register">
-          注册
-        </v-btn>
-      </div>
+      <v-text-field
+        v-model="password"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword ? 'text': 'password'"
+        label="密码"
+        clearable
+        outlined
+        required
+        :rules="[
+          (v) => !!v || '密码不能为空',
+        ]"
+        @click:append="showPassword = !showPassword"
+      />
+      <v-text-field
+        v-model="confirmPassword"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword ? 'text': 'password'"
+        label="确认密码"
+        clearable
+        outlined
+        required
+        :rules="[
+          (v) => !!v || '密码不能为空',
+        ]"
+        @click:append="showPassword = !showPassword"
+      />
     </div>
+    <div class="button-box">
+      <v-btn
+        block
+        color="primary"
+        large
+        rounded
+        depressed
+        @click="register"
+      >
+        注册
+      </v-btn>
+    </div>
+    <v-btn style="margin-top: 12px" text color="primary" to="/login">
+      已有账号？前往登录
+    </v-btn>
   </div>
 </template>
+
 <script>
 import { register, requestCode } from '../../services/auth.service';
 import log from '../../utils/log';
@@ -68,13 +83,11 @@ import log from '../../utils/log';
 export default {
   data: () => ({
     name: '',
-    nameRules: [(v) => !!v || '名称不能为空', (v) => v.length <= 10 || '名称过长'],
     email: '',
-    emailRules: [(v) => !!v || '邮箱不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号'],
     code: '',
     password: '',
-    passwordShow: false,
-    passwordRules: [(v) => !!v || '密码不能为空'],
+    showPassword: false,
+    confirmPassword: '',
     alertType: 'success',
     alertShown: false,
     alertContent: '',
@@ -89,6 +102,10 @@ export default {
   },
   methods: {
     register() {
+      if (this.password !== this.confirmPassword) {
+        this.$message.warn('两次输入密码不一致');
+        return;
+      }
       if (this.name === '') {
         this.$message.warn('名称不能为空哦');
         return;
@@ -160,28 +177,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_utils.scss';
-@import '@/scss/_mark.scss';
-
-.register-container {
-  display: flex;
-  justify-content: center;
-  padding-top: 1rem;
-}
-
-.mark {
+.content-box {
+  height: 100%;
+  width: 100%;
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  max-width: $main-width/2;
-  width: 100%;
-  @include mark;
-}
-
-.email-bar {
-  display: flex;
+  justify-content: flex-start;
   align-items: center;
-  > .email-divider {
-    margin: 1em 1em;
+
+  > .title {
+    color: #333;
+    font-size: 24px;
+    padding: 4px 0 32px 0;
+  }
+
+  > .input-box {
+    > .v-input {
+      width: 80vw;
+      max-width: 340px;
+    }
+
+    > .email-validate-box {
+      display: flex;
+
+      > .v-input {
+        max-width: 226px;
+        margin-right: 12px;
+      }
+
+      > .v-btn {
+        margin-top: 10px;
+        width: 92px;
+      }
+    }
+  }
+
+  > .button-box {
+    width: 80vw;
+    max-width: 340px;
+
+    > .v-btn {
+      margin-top: 16px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>

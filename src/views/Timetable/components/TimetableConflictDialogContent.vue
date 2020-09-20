@@ -68,13 +68,13 @@ export default {
         ...this.selectedCoursesIds,
         ...this.selectedCoursesIdsFromDatabase,
       ]);
-      this.$emit('conflictionResolved', combinedSelectedCoursesIds, true, true);
+      this.$emit('conflictResolved', combinedSelectedCoursesIds, true, true);
     },
     handleChooseDatabase() {
-      this.$emit('conflictionResolved', this.selectedCoursesIdsFromDatabase, true, false);
+      this.$emit('conflictResolved', this.selectedCoursesIdsFromDatabase, true, false);
     },
     handleChooseLocal() {
-      this.$emit('conflictionResolved', this.selectedCoursesIds, false, true);
+      this.$emit('conflictResolved', this.selectedCoursesIds, false, true);
     },
   },
 };

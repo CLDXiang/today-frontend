@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import * as infiniteScroll from 'vue-infinite-scroll';
+// import * as infiniteScroll from 'vue-infinite-scroll';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
@@ -14,7 +14,7 @@ import message from './utils/message';
 
 Vue.prototype.$message = message;
 Vue.config.productionTip = false;
-Vue.use(infiniteScroll);
+// Vue.use(infiniteScroll);
 
 new Vue({
   vuetify,

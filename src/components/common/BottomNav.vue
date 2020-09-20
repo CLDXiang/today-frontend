@@ -77,7 +77,7 @@ export default {
           log.info(e);
         });
       } else if (v === 'status') {
-        this.$router.push({ name: this.$store.getters.userLoggedIn ? 'My' : 'Login' }).catch((e) => {
+        this.$router.push({ name: this.$store.getters.userLoggedIn ? 'Me' : 'Login' }).catch((e) => {
           log.info(e);
         });
       }

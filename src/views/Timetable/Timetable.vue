@@ -124,7 +124,7 @@ export default {
   props: {},
   data() {
     return {
-      semester: '2019-2020学年2学期',
+      semester: '2020-2021学年1学期',
       isLoadingCourses: false,
       allCourses: {},
       /** 搜索索引

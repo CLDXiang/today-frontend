@@ -137,7 +137,7 @@
 import { mapGetters, mapState } from 'vuex';
 import { initLecture } from '../../services/lecture';
 import renderTime from '../../utils/time';
-import defaultAvatar from '../../assets/default_avatar.png';
+import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {
   data: () => ({}),

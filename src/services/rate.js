@@ -14,7 +14,7 @@ import { API_URL } from '../utils/config';
 dayjs.extend(relativeTime);
 dayjs.locale('zh-cn');
 
-const defaultAvatar = require('../assets/default_avatar.png');
+const defaultAvatar = require('../assets/default_avatar.jpg');
 
 const defaultBio = '然鹅这位童鞋并没有留下什么话语';
 

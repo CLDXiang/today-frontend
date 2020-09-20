@@ -122,7 +122,7 @@ import {
   deleteNotice,
 } from '../../services/notice.service';
 import renderTime from '../../utils/time';
-import defaultAvatar from '../../assets/default_avatar.png';
+import defaultAvatar from '../../assets/default_avatar.jpg';
 import { initLecture } from '../../services/lecture';
 import log from '../../utils/log';
 

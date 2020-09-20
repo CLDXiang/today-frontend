@@ -75,7 +75,7 @@
 <script>
 import { mapState } from 'vuex';
 import { editProfile, uploadAvatar } from '../../services/profile.service';
-import defaultAvatar from '../../assets/default_avatar.png';
+import defaultAvatar from '../../assets/default_avatar.jpg';
 import log from '../../utils/log';
 
 export default {

@@ -11,7 +11,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import defaultAvatar from '../../../assets/default_avatar.png';
+import defaultAvatar from '../../../assets/default_avatar.jpg';
 
 export default {
   computed: {

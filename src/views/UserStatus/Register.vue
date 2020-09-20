@@ -31,6 +31,19 @@
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
         </v-btn>
       </div>
+      <div>
+        <v-text-field
+          v-model="name"
+          :rules="[
+            (v) => !!v || '用户名不能为空',
+            (v) => v.length <= 10 || '用户名不能长于 10 个字符',
+          ]"
+          :counter="10"
+          label="用户名"
+          outlined
+          required
+        />
+      </div>
       <v-text-field
         v-model="password"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"

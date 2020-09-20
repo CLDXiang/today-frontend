@@ -62,5 +62,7 @@ export default {
   &:nth-of-type(2n + 1) {
     @extend .background-two;
   }
+
+  user-select: none;
 }
 </style>

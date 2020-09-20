@@ -33,7 +33,7 @@
 </template>
 
 <script lang="js">
-import { IconMy, IconRating, IconTimetable } from '../icons/index';
+import { IconMy, IconRating, IconTimetable } from '../icons';
 import log from '../../utils/log';
 
 export default {

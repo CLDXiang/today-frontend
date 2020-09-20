@@ -1,6 +1,3 @@
-# JSON data
-public/*.json
-
 # Logs
 logs
 *.log

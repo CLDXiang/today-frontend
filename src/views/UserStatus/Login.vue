@@ -38,6 +38,7 @@
         large
         rounded
         depressed
+        @click="login"
       >
         登录
       </v-btn>

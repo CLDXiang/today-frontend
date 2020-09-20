@@ -23,7 +23,7 @@ jobs:
         persist-credentials: false
     - run: npm install
     - run: |
-        echo 'VUE_APP_API_URL=https://api.zfhu.ac.cn' > .env.production
+        echo 'VUE_APP_API_URL=https://fducslg.zfhu.ac.cn' > .env.production
         echo 'BASE_URL=https://fdxk.info' >> .env.production
     - run: npm run update-public-data
     - run: npm run build --if-present

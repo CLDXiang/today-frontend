@@ -25,14 +25,6 @@ jobs:
     - run: echo 'VUE_APP_API_URL=https://dev.fudan.today/api' > .env.production
     - run: npm run update-public-data
     - run: npm run build --if-present
-<<<<<<< Updated upstream
-    - name: deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: dist # The folder the action should deploy.
-=======
     - run: echo '{{ secrets.FDXK_SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa
     - run: |
         cd dist
@@ -41,4 +33,3 @@ jobs:
         git commit -m "CD update"
         git remote add fdxk git@github.com:ichn-hu/fdxk.info.git
         git push --set-upstream fdxk master
->>>>>>> Stashed changes

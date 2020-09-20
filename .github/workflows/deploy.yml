@@ -34,6 +34,7 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
     - run: |
         cd dist
+        echo 'fdxk.info' > CNAME
         git init . 
         git add . 
         git config --global user.email "fducslg@protonmail.com"

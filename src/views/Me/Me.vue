@@ -44,7 +44,7 @@ export default {
   data: () => ({}),
   computed: {
     ...mapState(['user', 'profile']),
-    ...mapGetters(['countHistory']),
+    ...mapGetters(['countHistory', 'userLoggedIn']),
     histories() {
       const histories = [];
       this.$store.state.profile.history.forEach((element) => {
@@ -71,6 +71,7 @@ export default {
         this.$store.commit('LOGOUT');
         this.$router.replace({ name: 'Timetable' });
       } else {
+        this.$store.commit('LOGOUT');
         this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
       }
     },

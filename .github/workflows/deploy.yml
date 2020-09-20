@@ -30,7 +30,7 @@ jobs:
     - run: |
         mkdir ~/.ssh
         chmod 700 ~/.ssh
-        echo '{{ secrets.FDXK_SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa
+        echo '${{ secrets.FDXK_SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa
         cat ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
     - run: |

@@ -32,10 +32,10 @@ export function getAccessToken() {
  ******************************
  */
 
-export function login(username, password) {
+export function login(usernameOrEmail, password) {
   return new Promise((resolve, reject) => {
     const data = {
-      username,
+      username: usernameOrEmail,
       password,
     };
     log.info('login payload: ', data);
@@ -44,10 +44,10 @@ export function login(username, password) {
       .then((resp) => {
         log.info('login resp', resp);
         const jwtToken = resp.data.access_token;
-        const { email } = resp.data;
+        const { email, name } = resp.data;
         if (jwtToken) {
           $store.commit('SET_JWT_TOKEN', jwtToken);
-          $store.commit('SET_USER', username, email);
+          $store.commit('SET_USER', name, email);
         } else {
           reject(new Error('jwtToken no contained in response'));
         }

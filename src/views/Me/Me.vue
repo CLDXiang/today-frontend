@@ -13,7 +13,7 @@
           <span><v-icon>mdi-square-edit-outline</v-icon></span>
         </div>
         <div class="info-list">
-          <div>昵称：{{ user.nickname || '-' }}</div>
+          <div>昵称：{{ user.nickname || '点编辑按钮取个昵称吧~  ↗ ' }}</div>
           <div>个性签名：{{ user.bio || '这个人还没有个性签名诶' }}</div>
         </div>
       </div>
@@ -151,7 +151,17 @@ export default {
       }
 
       > .info-list {
-        margin: 40px 0;
+        margin: 40px 8px;
+
+        > div {
+          padding: 14px 0;
+          line-height: 24px;
+          color: #828282;
+          font-size: 18px;
+          border-bottom: solid 1px #bdbdbd;
+          display: flex;
+          align-items: center;
+        }
       }
     }
   }

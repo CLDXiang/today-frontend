@@ -77,9 +77,6 @@ export default {
     password: '',
     showPassword: false,
   }),
-  created() {
-    log.info(this.$router.currentRoute);
-  },
   methods: {
     getProfile() {
       getUserProfile()
@@ -140,17 +137,15 @@ export default {
         });
     },
     login() {
-      log.info(this.$router.url);
       login(this.name, this.password)
-        .then((resp) => {
-          log.info(resp);
+        .then(() => {
           this.$message.success('登录成功');
           const { redirect } = this.$router.currentRoute.query;
-          log.info('redirecting', redirect);
           this.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
           if (redirect) {
-            log.info('redirected!');
             this.$router.push(redirect);
+          } else {
+            this.$router.push('/timetable');
           }
         })
         .catch((e) => {

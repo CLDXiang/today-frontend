@@ -44,7 +44,7 @@ export default {
   data: () => ({}),
   computed: {
     ...mapState(['user', 'profile']),
-    ...mapGetters(['countHistory']),
+    ...mapGetters(['countHistory', 'userLoggedIn']),
     histories() {
       const histories = [];
       this.$store.state.profile.history.forEach((element) => {
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     processAvatar(originAvatar) {
-      if (originAvatar && originAvatar.includes('/default_avatar.png')) {
+      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;
@@ -71,6 +71,7 @@ export default {
         this.$store.commit('LOGOUT');
         this.$router.replace({ name: 'Timetable' });
       } else {
+        this.$store.commit('LOGOUT');
         this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
       }
     },

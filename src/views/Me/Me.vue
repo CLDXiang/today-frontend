@@ -13,16 +13,24 @@
           <span><v-icon>mdi-square-edit-outline</v-icon></span>
         </div>
         <div class="info-list">
-          <div>昵称：xxx</div>
-          <div>个性签名：xxx</div>
+          <div>昵称：{{ user.nickname || '-' }}</div>
+          <div>个性签名：{{ user.bio || '这个人还没有个性签名诶' }}</div>
         </div>
       </div>
       <div>
-        button
+        <v-btn
+          block
+          color="primary"
+          large
+          rounded
+          depressed
+          @click="logout"
+        >
+          退出登录
+        </v-btn>
       </div>
-      <div class="bottom-action-bar">
-        <span>退出登录</span>
-      </div>
+      
+      <div class="bottom-action-bar" />
     </div>
   </div>
 </template>
@@ -57,6 +65,14 @@ export default {
         return defaultAvatar;
       }
       return originAvatar;
+    },
+    logout() {
+      if (this.userLoggedIn) {
+        this.$store.commit('LOGOUT');
+        this.$router.replace({ name: 'Timetable' });
+      } else {
+        this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
+      }
     },
   },
 };

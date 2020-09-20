@@ -32,6 +32,8 @@ jobs:
         cd dist
         git init . 
         git add . 
+        git config --global user.email "fducslg@protonmail.com"
+        git config --global user.name "fducslg-bot"
         git commit -m "CD update"
         git remote add fdxk git@github.com:ichn-hu/fdxk.info.git
         git push --set-upstream fdxk master

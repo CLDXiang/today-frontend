@@ -22,12 +22,23 @@ jobs:
         node-version: ${{ matrix.node-version }}
         persist-credentials: false
     - run: npm install
-    - run: echo 'VUE_APP_API_URL=https://dev.fudan.today/api' > .env.production
+    - run: |
+        echo 'VUE_APP_API_URL=https://api.zfhu.ac.cn' > .env.production
+        echo 'BASE_URL=https://fdxk.info' >> .env.production
     - run: npm run update-public-data
     - run: npm run build --if-present
-    - name: deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: dist # The folder the action should deploy.
+    - run: |
+        mkdir ~/.ssh
+        chmod 700 ~/.ssh
+        echo '${{ secrets.FDXK_SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+    - run: |
+        cd dist
+        echo 'fdxk.info' > CNAME
+        git init . 
+        git add . 
+        git config --global user.email "fducslg@protonmail.com"
+        git config --global user.name "fducslg-bot"
+        git commit -m "CD update"
+        git remote add fdxk git@github.com:ichn-hu/fdxk.info.git
+        git push --set-upstream fdxk master --force

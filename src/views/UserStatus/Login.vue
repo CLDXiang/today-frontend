@@ -11,10 +11,8 @@
         clearable
         outlined
         required
-        :counter="10"
         :rules="[
           (v) => !!v || '用户名不能为空',
-          (v) => v.length <= 10 || '用户名不能长于 10 个字符',
         ]"
       />
       <v-text-field

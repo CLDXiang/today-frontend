@@ -134,10 +134,6 @@
             :key="item.courseId"
             class="search-bar__result"
             @click.stop="handleClickSearchResult(item.courseId)"
-            @mouseenter="setHoveredCourseId(item.courseId)"
-            @mouseleave="resetHoveredCourseId"
-            @touchstart="setHoveredCourseId(item.courseId)"
-            @touchend="resetHoveredCourseId"
           >
             <div class="result-line">
               {{ `${item.codeId} ${item.name}` }}
@@ -157,7 +153,14 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn v-show="searchResults.length !== 0" :color="isSearchResultsVisible ? 'primary' : ''" @click="handleChangeResultsVisible">
+      <v-btn
+        v-show="searchResults.length !== 0"
+        :color="isSearchResultsVisible ? 'primary' : ''"
+        rounded
+        depressed
+        large
+        @click="handleChangeResultsVisible"
+      >
         <v-icon :style="isSearchResultsVisible ? 'color: #fff' : ''" left>
           {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
         </v-icon>
@@ -168,6 +171,9 @@
       <v-spacer />
       <v-btn 
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
+        rounded
+        depressed
+        large
         @click="handleClickResetButton"
       >
         <v-icon
@@ -180,6 +186,9 @@
       </v-btn>
       <v-btn 
         :disabled="isLoadingSearchResults"
+        rounded
+        depressed
+        large
         @click="handleClickCloseButton"
       >
         <v-icon
@@ -194,6 +203,9 @@
         :disabled="isLoadingSearchResults || isSearchQueryEmpty" 
         :loading="isLoadingSearchResults"
         color="primary"
+        rounded
+        depressed
+        large
         @click="handleClickSearchButton"
       >
         <v-icon left>
@@ -206,8 +218,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-
 export default {
   props: {
     searchIndex: Array,
@@ -239,7 +249,6 @@ export default {
     };
   },
   computed: {
-    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
     sectionLabels() {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
       return res.map((item, index) => {
@@ -408,6 +417,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/scss/_timetable';
+
+.headline {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
 
 .timetable__search-bar {
   display: flex;

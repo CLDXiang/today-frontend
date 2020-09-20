@@ -1,5 +1,5 @@
 <template>
-  <div class="timetable fluid my-3 pa-0 px-md-3">
+  <div class="timetable fluid my-0 pa-0 px-md-3">
     <v-dialog
       :fullscreen="isMobileMode"
       :transition="
@@ -47,7 +47,7 @@
         @hideSearchDialog="hideSearchDialog"
       />
     </v-dialog>
-
+    <timetable-head-bar />
     <div class="timetable__body">
       <div class="timetable__day-box">
         <div class="timetable__time">
@@ -109,6 +109,7 @@ import {
   TimetableDetailDialogContent,
   TimetableConflictDialogContent,
   TimetableSearchDialogContent,
+  TimetableHeadBar,
 } from './components';
 
 export default {
@@ -118,6 +119,7 @@ export default {
     TimetableDetailDialogContent,
     TimetableConflictDialogContent,
     TimetableSearchDialogContent,
+    TimetableHeadBar,
   },
   props: {},
   data() {
@@ -170,6 +172,7 @@ export default {
       isConflictDialogVisible: false,
 
       isSearchDialogVisible: false,
+      isSelectedCourseListVisible: false,
     };
   },
   computed: {
@@ -382,7 +385,6 @@ export default {
       if (this.selectedCoursesIds.has(courseId)) {
         return;
       }
-      this.selectedCoursesIds.add(courseId);
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline) {
         addSelectedCourseService(courseId)
@@ -409,17 +411,19 @@ export default {
         selectedSectionsByDay[ts.day - 1] = sections;
       });
       this.selectedSectionsByDay = selectedSectionsByDay;
+      this.selectedCoursesIds.add(courseId);
+
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
+      this.$message.success('已将课程加入课表');
     },
     removeSelectedCourse(courseId) {
       if (!this.selectedCoursesIds.has(courseId)) {
         return;
       }
-      this.selectedCoursesIds.delete(courseId);
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline) {
         removeSelectedCourseService(courseId)
@@ -444,11 +448,13 @@ export default {
         selectedSectionsByDay[ts.day - 1] = sections;
       });
       this.selectedSectionsByDay = selectedSectionsByDay;
+      this.selectedCoursesIds.delete(courseId);
       this.$store.commit('setSelectedCourses', {
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
+      this.$message.success('已将课程移出课表');
     },
     replaceSelectedCourses(courseIds) {
       this.selectedCoursesIds = new Set(courseIds);
@@ -471,6 +477,13 @@ export default {
     },
     mapDay(day) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
+    },
+    showSelectedCourseSideBar() {
+      console.log(1);
+      this.isSelectedCourseListVisible = true;
+    },
+    hideSelectedCourseSideBar() {
+      this.isSelectedCourseListVisible = false;
     },
   },
 };

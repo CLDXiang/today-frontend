@@ -1,6 +1,14 @@
 <template>
   <div class="timetable__search-bar">
-    <v-btn v-show="searchResults.length !== 0" :color="isSearchResultsVisible ? 'primary' : ''" class="results-visible-button" @click="handleChangeResultsVisible">
+    <v-btn
+      v-show="searchResults.length !== 0"
+      :color="isSearchResultsVisible ? 'primary' : ''"
+      class="results-visible-button"
+      rounded
+      depressed
+      large
+      @click="handleChangeResultsVisible"
+    >
       <v-icon :style="isSearchResultsVisible ? 'color: #fff' : ''" left>
         {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
       </v-icon>
@@ -9,6 +17,9 @@
     <div class="search-bar__content-line search-bar__actions-bar">
       <v-btn 
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
+        rounded
+        depressed
+        large
         @click="handleClickResetButton"
       >
         <v-icon
@@ -23,6 +34,9 @@
         :disabled="isLoadingSearchResults || isSearchQueryEmpty" 
         :loading="isLoadingSearchResults"
         color="primary"
+        rounded
+        depressed
+        large
         @click="handleClickSearchButton"
       >
         <v-icon left>

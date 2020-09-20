@@ -1,10 +1,5 @@
 <template>
   <v-app>
-    <TopToolbar />
-    <!-- <v-layout>
-        <div v-if="loggedIn">Hi {{ userName }}</div>
-        <div v-else>Please login first!</div>
-    </v-layout>-->
     <v-content>
       <router-view />
     </v-content>
@@ -14,18 +9,11 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import 'highlight.js/styles/github.css';
-
-import TopToolbar from './components/common/TopToolbar.vue';
 import BottomNav from './components/common/BottomNav.vue';
 import Message from './components/common/Message.vue';
 
 export default {
   components: {
-    TopToolbar,
     BottomNav,
     Message,
   },

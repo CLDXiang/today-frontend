@@ -1,43 +1,64 @@
 <template>
-  <div class="register-container">
-    <div class="mark">
-      <h2>欢迎回来！</h2>
-      <div>
-        <v-text-field
-          v-model="name"
-          :rules="nameRules"
-          :counter="10"
-          label="昵称"
-          required
-        />
-      </div>
-
-      <div class="pwd-bar">
-        <v-text-field
-          v-model="password"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="showPassword ? 'text': 'password'"
-          :rules="passwordRules"
-          label="密码"
-          required
-          @click:append="showPassword = !showPassword"
-        />
-        <router-link class="forgot-link" to="/forgot-password">
-          忘记密码？
-        </router-link>
-      </div>
-
-      <div class="action-bar">
-        <v-btn color="primary" @click="$router.push('/register')">
-          注册
-        </v-btn>
-        <v-btn color="primary" @click="login">
-          登录
-        </v-btn>
-      </div>
+  <div class="content-box">
+    <div class="title">
+      登录
     </div>
+    <div class="input-box">
+      <v-text-field
+        v-model="name"
+        label="用户名/邮箱"
+        autofocus
+        clearable
+        outlined
+        required
+        :counter="10"
+        :rules="[
+          (v) => !!v || '用户名不能为空',
+          (v) => v.length <= 10 || '用户名不能长于 10 个字符',
+        ]"
+      />
+      <v-text-field
+        v-model="password"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword ? 'text': 'password'"
+        label="密码"
+        clearable
+        outlined
+        required
+        :rules="[
+          (v) => !!v || '密码不能为空',
+        ]"
+        @click:append="showPassword = !showPassword"
+      />
+    </div>
+    <div class="button-box">
+      <v-btn
+        block
+        color="primary"
+        large
+        rounded
+        depressed
+      >
+        登录
+      </v-btn>
+      <v-btn
+        block
+        color="primary"
+        large
+        rounded
+        depressed
+        outlined
+        to="/register"
+      >
+        注册
+      </v-btn>
+    </div>
+    <v-btn style="margin-top: 12px" text color="primary" to="/forgot-password">
+      忘记密码？
+    </v-btn>
   </div>
 </template>
+
 <script>
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
@@ -54,15 +75,7 @@ import { getNotifications, getTrends } from '../../services/notice.service';
 export default {
   data: () => ({
     name: '',
-    nameRules: [
-      (v) => !!v || 'Name is required',
-      (v) => v.length <= 10 || 'Name must be less than 10 characters',
-    ],
     password: '',
-    passwordRules: [
-      (v) => !!v || 'password is required',
-      //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
     showPassword: false,
   }),
   created() {
@@ -151,45 +164,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_utils.scss';
-@import '@/scss/_mark.scss';
-
-.register-container {
-  display: flex;
-  justify-content: center;
-  padding-top: 1rem;
-}
-
-.mark {
-  display: flex;
-  flex-direction: column;
-  max-width: $main-width/2;
+.content-box {
+  height: 100%;
   width: 100%;
-  @include mark;
-}
-
-.pwd-bar {
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  > .forgot-link {
-    align-self: flex-end;
-    text-decoration: none;
-    color: rgba(0, 0, 0, $inactive-opacity);
-  }
-}
-
-.action-bar {
-  > * {
-    margin-right: 1rem;
-  }
-}
-
-.email-bar {
-  display: flex;
+  justify-content: flex-start;
   align-items: center;
-  > .email-divider {
-    margin: 1em 1em;
+
+  > .title {
+    color: #333;
+    font-size: 24px;
+    padding: 4px 0 32px 0;
+  }
+
+  > .input-box {
+    .v-input {
+      width: 80vw;
+      max-width: 340px;
+    }
+  }
+
+  > .button-box {
+    width: 80vw;
+    max-width: 340px;
+
+    > .v-btn {
+      margin-top: 16px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>
+
 

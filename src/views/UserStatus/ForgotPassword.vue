@@ -1,66 +1,78 @@
 <template>
-  <div class="register-container">
-    <div class="mark">
-      <h2>找回密码</h2>
-      <div class="email-bar">
-        <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          :suffix="emailSuffix"
-          label="邮箱"
-          required
-        />
-      </div>
-
-      <div class="email-bar">
+  <div class="content-box">
+    <div class="title">
+      找回密码
+    </div>
+    <div class="input-box">
+      <v-text-field
+        v-model="email"
+        label="学邮"
+        autofocus
+        clearable
+        outlined
+        required
+        suffix="@fudan.edu.cn"
+        :rules="[(v) => !!v || '学邮不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号']"
+      />
+      <div class="email-validate-box">
         <v-text-field
           v-model="code"
           label="验证码"
+          outlined
           required
         />
-
-        <v-divider class="email-divider" vertical />
         <v-btn
+          color="primary"
           :disabled="cooldownCnt !== 0"
           :loading="state === 'requesting'"
-          class="email-btn"
-          color="primary"
-          depressed
           @click="requestCode"
         >
-          {{ state === 'init' || state === 'requesting'? '获取验证码'
+          {{ state === 'init' || state === 'requesting'? '发送验证码'
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
         </v-btn>
       </div>
- 
-      <div>
-        <v-text-field
-          v-model="password"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="showPassword ? 'text': 'password'"
-          :rules="passwordRules"
-          label="新的密码"
-          required
-          @click:append="showPassword = !showPassword"
-        />
-      </div>
-      <div>
-        <v-text-field
-          v-model="password2"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="showPassword ? 'text': 'password'"
-          :rules="password2Rules"
-          label="再次输入新密码"
-          required
-          @click:append="showPassword = !showPassword"
-        />
-      </div>
-      <div>
-        <v-btn color="primary" @click="modifyPassword">
-          修改密码
-        </v-btn>
-      </div>
+      <v-text-field
+        v-model="password"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword ? 'text': 'password'"
+        label="新的密码"
+        clearable
+        outlined
+        required
+        :rules="[
+          (v) => !!v || '密码不能为空',
+        ]"
+        @click:append="showPassword = !showPassword"
+      />
+      <v-text-field
+        v-model="password2"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword ? 'text': 'password'"
+        label="再次输入新密码"
+        clearable
+        outlined
+        required
+        :rules="[
+          (v) => !!v || '密码不能为空',
+        ]"
+        @click:append="showPassword = !showPassword"
+      />
     </div>
+    <div class="button-box">
+      <v-btn
+        block
+        color="primary"
+        large
+        rounded
+        depressed
+        @click="modifyPassword"
+      >
+        修改密码
+      </v-btn>
+    </div>
+    <v-btn style="margin-top: 12px" text color="primary" to="/login">
+      返回登录页
+    </v-btn>
   </div>
 </template>
 <script>
@@ -161,28 +173,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_utils.scss';
-@import '@/scss/_mark.scss';
-
-.register-container {
-  display: flex;
-  justify-content: center;
-  padding-top: 1rem;
-}
-
-.mark {
+.content-box {
+  height: 100%;
+  width: 100%;
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  max-width: $main-width/2;
-  width: 100%;
-  @include mark;
-}
-
-.email-bar {
-  display: flex;
+  justify-content: flex-start;
   align-items: center;
-  > .email-divider {
-    margin: 1em 1em;
+
+  > .title {
+    color: #333;
+    font-size: 24px;
+    padding: 4px 0 32px 0;
+  }
+
+  > .input-box {
+    > .v-input {
+      width: 80vw;
+      max-width: 340px;
+    }
+
+    > .email-validate-box {
+      display: flex;
+
+      > .v-input {
+        max-width: 226px;
+        margin-right: 12px;
+      }
+
+      > .v-btn {
+        margin-top: 10px;
+        width: 92px;
+      }
+    }
+  }
+
+  > .button-box {
+    width: 80vw;
+    max-width: 340px;
+
+    > .v-btn {
+      margin-top: 16px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>

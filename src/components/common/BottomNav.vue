@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     handleClick(v) {
-      console.log(v, this.activePage);
       if (this.activePage === v) return;
       if (v === 'timetable') {
         this.$router.push({ name: 'Timetable' }).catch((e) => {

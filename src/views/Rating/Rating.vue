@@ -5,12 +5,33 @@
       <div>预计于本学期期中退课前上线</div>
     </section>
     <footer class="bottom-content">
-      如果你希望关注项目进度，在这里联系我们：
-      <br>
-      TODO: 这里放二维码
+      <div>希望关注项目进度吗？在这里联系我们：</div>
+      <div v-if="!userLoggedIn" class="hide-img" @click="$router.push('./login')">
+        <div>登录后显示 🙈</div>
+        <div style="transform: rotate(30deg)">
+          👉
+        </div>
+      </div>
+      <img v-else :src="wxGroupImg" alt="群二维码">
     </footer>
   </content>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+import wxGroupImg from '../../assets/wx_pr.jpg';
+
+export default {
+  data() {
+    return {
+      wxGroupImg,
+    };
+  },
+  computed: {
+    ...mapGetters(['userLoggedIn']),
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .content-box {
@@ -39,6 +60,26 @@
   > .bottom-content {
     justify-self: flex-end;
     padding-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > .hide-img {
+      width: 100px;
+      height: 100px;
+      background-color: #e3f1f3;
+      border-radius: 6px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    > img {
+      width: 100px;
+      height: 100px;
+    }
   }
 }
 </style>

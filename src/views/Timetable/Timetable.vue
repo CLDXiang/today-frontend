@@ -98,7 +98,7 @@
 <script>
 import axios from 'axios';
 import { mapState, mapGetters } from 'vuex';
-import { IconSearch } from '@/components/icons';
+import { IconSearch } from '../../components/icons';
 import {
   getSelectedCourses as getSelectedCoursesService,
   addSelectedCourse as addSelectedCourseService,

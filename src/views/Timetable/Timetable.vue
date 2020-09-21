@@ -382,9 +382,9 @@ export default {
       this.searchIndex = searchIndex;
     },
     addSelectedCourse(courseId) {
-      if (this.selectedCoursesIds.has(courseId)) {
-        return;
-      }
+      // if (this.selectedCoursesIds.has(courseId)) {
+      //   return;
+      // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline) {
         addSelectedCourseService(courseId)
@@ -421,9 +421,9 @@ export default {
       this.$message.success('已将课程加入课表');
     },
     removeSelectedCourse(courseId) {
-      if (!this.selectedCoursesIds.has(courseId)) {
-        return;
-      }
+      // if (!this.selectedCoursesIds.has(courseId)) {
+      //   return;
+      // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline) {
         removeSelectedCourseService(courseId)
@@ -477,13 +477,6 @@ export default {
     },
     mapDay(day) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
-    },
-    showSelectedCourseSideBar() {
-      console.log(1);
-      this.isSelectedCourseListVisible = true;
-    },
-    hideSelectedCourseSideBar() {
-      this.isSelectedCourseListVisible = false;
     },
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <div class="content-box">
     <div class="title">
-      找回密码
+      忘记密码
     </div>
     <div class="input-box">
       <v-text-field

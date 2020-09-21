@@ -19,6 +19,11 @@ const routes = [
   { path: '/notification', name: 'Notification', component: Notification },
   { path: '/me', name: 'Me', component: Me },
   {
+    path: '/me/edit',
+    name: 'MeEdit',
+    component: () => import(/* webpackChunkName: "me" */ '@/views/Me/MeEdit.vue'),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/Login.vue'),

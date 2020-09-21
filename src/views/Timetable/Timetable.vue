@@ -88,7 +88,8 @@
         fab
         @click="showSearchDialog"
       >
-        <v-icon>search</v-icon>
+        <!-- <v-icon>search</v-icon> -->
+        <icon-search /> 
       </v-btn>
     </div>
   </div>
@@ -97,6 +98,7 @@
 <script>
 import axios from 'axios';
 import { mapState, mapGetters } from 'vuex';
+import { IconSearch } from '@/components/icons';
 import {
   getSelectedCourses as getSelectedCoursesService,
   addSelectedCourse as addSelectedCourseService,
@@ -120,6 +122,7 @@ export default {
     TimetableConflictDialogContent,
     TimetableSearchDialogContent,
     TimetableHeadBar,
+    IconSearch,
   },
   props: {},
   data() {
@@ -578,5 +581,7 @@ export default {
 .floating_button {
   bottom: 76px;
   right: 20px;
+  width: 48px;
+  height: 48px;
 }
 </style>

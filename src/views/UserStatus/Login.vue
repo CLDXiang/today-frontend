@@ -63,14 +63,7 @@
 <script>
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
-import {
-  getUserProfile,
-  getUserStar,
-  getUserRate,
-  getFollowing,
-  getFollower,
-  getHistory,
-} from '../../services/profile.service';
+import { getUserProfile, getHistory } from '../../services/profile.service';
 import { getNotifications, getTrends } from '../../services/notice.service';
 
 export default {
@@ -102,34 +95,6 @@ export default {
         .catch((err) => {
           log.info(err);
         });
-      getUserStar()
-        .then((userStar) => {
-          this.$store.commit('SET_USER_STAR', userStar);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getUserRate()
-        .then((userRate) => {
-          this.$store.commit('SET_USER_RATE', userRate);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollowing()
-        .then((following) => {
-          this.$store.commit('SET_FOLLOWING', following);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getFollower()
-        .then((follower) => {
-          this.$store.commit('SET_FOLLOWER', follower);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
       getHistory()
         .then((history) => {
           this.$store.commit('SET_HISTORY', history);
@@ -139,6 +104,14 @@ export default {
         });
     },
     login() {
+      if (!this.name) {
+        this.$message.warn('用户名不能为空');
+        return;
+      }
+      if (!this.password) {
+        this.$message.warn('密码不能为空');
+        return;
+      }
       login(this.name, this.password)
         .then(() => {
           this.$message.success('登录成功');

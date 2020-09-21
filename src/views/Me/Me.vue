@@ -2,7 +2,7 @@
   <div class="content-box">
     <div class="dark-box">
       <img class="avatar" :src="processAvatar(user.avatar)" alt="avatar">
-      <div class="nickname">
+      <div class="nickName">
         {{ user.name }}
       </div>
     </div>
@@ -10,10 +10,10 @@
       <div class="info-box">
         <div class="info-box__header">
           <span>个人信息</span>
-          <span><v-icon>mdi-square-edit-outline</v-icon></span>
+          <span @click="$router.push('/me/edit')"><v-icon>mdi-square-edit-outline</v-icon></span>
         </div>
         <div class="info-list">
-          <div>昵称：{{ user.nickname || '点编辑按钮取个昵称吧~  ↗ ' }}</div>
+          <div>昵称：{{ user.nickName || '点编辑按钮取个昵称吧~  ↗ ' }}</div>
           <div>个性签名：{{ user.bio || '这个人还没有个性签名诶' }}</div>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default {
       box-sizing: border-box;
     }
 
-    > .nickname {
+    > .nickName {
       margin-top: 8px;
       font-size: 20px;
       line-height: 20px;

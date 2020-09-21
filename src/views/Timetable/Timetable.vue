@@ -1,5 +1,5 @@
 <template>
-  <div class="timetable fluid my-0 pa-0 px-md-3">
+  <div class="timetable fluid mb-0 my-1 pa-0 px-md-3">
     <v-dialog
       :fullscreen="isMobileMode"
       :transition="
@@ -359,7 +359,7 @@ export default {
         const teachersText = [...teachers].join(', ');
         // TODO: 考虑如何把 week 整进来
         const timeSlotsTexts = timeSlots.map(
-          (ts) => `周${ts.dayText} ${ts.section.join('-')} ${ts.place}`,
+          (ts) => `${ts.week}周 周${ts.dayText} ${ts.section.join('-')} ${ts.place}`,
         );
 
         /* 每个字段分别搜索

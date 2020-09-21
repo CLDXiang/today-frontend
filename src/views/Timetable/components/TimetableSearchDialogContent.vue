@@ -1,8 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>
-      <span class="headline">搜索课程</span>
-    </v-card-title>
+    <span class="title">搜索课程</span>
     <v-card-text v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
       <div class="search-bar__content-line mt-2">
         <v-text-field
@@ -126,7 +124,7 @@
         </v-range-slider>
       </div>
     </v-card-text>
-    <v-card-text>
+    <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results-box">
       <v-scroll-y-reverse-transition>
         <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results">
           <div
@@ -141,16 +139,16 @@
             <div class="result-line cut">
               {{ item.teachersText }}
             </div>
-            <div v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)" :key="tsIndex" class="result-line">
+            <div v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)" :key="tsIndex" class="result-line result-line--ts">
               {{ ts }}
             </div>
-            <div v-if="item.timeSlotsTexts.length > 3" class="result-line">
+            <div v-if="item.timeSlotsTexts.length > 3" class="result-line result-line--ts">
               ……
             </div>
           </div>
         </div>
       </v-scroll-y-reverse-transition>
-    </v-card-text>
+    </div>
     <v-card-actions>
       <v-spacer />
       <v-btn
@@ -418,10 +416,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_timetable';
 
-.headline {
+.title {
+  margin-top: 36px;
+  font-size: 20px;
+  line-height: 20px;
   flex: 1;
   display: flex;
   justify-content: center;
+  color: #333;
 }
 
 .timetable__search-bar {
@@ -463,23 +465,37 @@ export default {
   margin-top: -4px;
 }
 
+.search-bar__results-box {
+  backface-visibility: hidden;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-top: 12px;
+  background-color: #f2f2f2;
+}
+
 .search-bar__results {
   width: 100%;
 
   // max-height: 13.5rem;
   height: 100%;
-  border: 1px solid #d3d6db;
   border-radius: 0 0 0.25rem 0.25rem;
-  background-color: #fff;
 
   overflow: auto;
 }
 
 .search-bar__result {
-  box-sizing: border-box;
+  background-color: #fff;
+  margin-top: 10px;
+  // height: 120px;
+  filter: drop-shadow(0px 4px 4px rgba(141, 141, 141, 0.3));
+
   cursor: pointer;
 
-  padding: 0.6rem 0.5rem;
+  padding: 20px;
+  border-radius: 8px;
+
   font-size: 0.9rem;
   color: #69707a;
 
@@ -489,9 +505,25 @@ export default {
   }
 }
 
+.result-line {
+  line-height: 22px;
+}
+
+.result-line:first-child {
+  font-size: 18px;
+  color: #4f4f4f;
+}
+
 .result-line.cut {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
+  color: #4f4f4f;
+}
+
+.result-line--ts {
+  font-size: 12px;
+  color: #828282;
 }
 </style>

@@ -11,7 +11,7 @@
   >
     <span class="course-name" :style="{'-webkit-line-clamp': lines.name }">{{ section.name }}</span>
     <span v-if="lines.code > 0" class="course-code" :style="{'-webkit-line-clamp': lines.code }">{{ `(${section.code_id})` }}</span>
-    <span class="course-place" :style="{'-webkit-line-clamp': lines.place }">{{ section.currentSlot.place }}</span>
+    <span class="course-place" :style="{'-webkit-line-clamp': lines.place }">{{ `(${section.currentSlot.week})${section.currentSlot.place}` }}</span>
     <span v-if="lines.teacher > 0" class="course-teacher" :style="{'-webkit-line-clamp': lines.teacher }">{{
       section.currentSlot.teacher.join(',')
     }}</span>
@@ -81,7 +81,7 @@ export default {
     const linesNeed = {
       name: needLines(this.section.name || ''),
       code: needLines(`(${this.section.code_id || ''})`),
-      place: needLines(this.section.currentSlot.place || ''),
+      place: needLines(`(${this.section.currentSlot.week})${this.section.currentSlot.place}`),
       teacher: needLines(this.section.currentSlot.teacher.join(',') || ''),
     };
 
@@ -188,7 +188,8 @@ export default {
 .course-code,
 .course-teacher,
 .course-place {
-  word-wrap: break-word;
+  // word-wrap: break-word;
+  word-break: break-all;
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box;

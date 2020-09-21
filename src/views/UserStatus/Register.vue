@@ -11,6 +11,7 @@
         clearable
         outlined
         required
+        hint="仅用于验证与登录"
         suffix="@fudan.edu.cn"
         :rules="[(v) => !!v || '学邮不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号']"
       />

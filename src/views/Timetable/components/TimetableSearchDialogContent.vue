@@ -12,7 +12,7 @@
           :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
           :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
           label="课程名"
-          hint="模糊匹配，不区分大小写"
+          hint="e.g. 文学（不分大小写）"
           outlined
           dense
           autocomplete="off"
@@ -28,7 +28,7 @@
           :success="searchBarStatus === 'success' && searchQuery.codeId.trim() !== ''"
           :error="searchBarStatus === 'error' && searchQuery.codeId.trim() !== ''"
           label="课程号"
-          hint="模糊匹配，不区分大小写"
+          hint="e.g. Engl（不分大小写）"
           outlined
           dense
           autocomplete="off"
@@ -60,7 +60,7 @@
           :success="searchBarStatus === 'success' && searchQuery.place.trim() !== ''"
           :error="searchBarStatus === 'error' && searchQuery.place.trim() !== ''"
           label="上课地点"
-          hint="模糊匹配，不区分大小写"
+          hint="e.g. Hgx（不分大小写）"
           outlined
           dense
           autocomplete="off"
@@ -76,7 +76,7 @@
           :success="searchBarStatus === 'success' && searchQuery.department.trim() !== ''"
           :error="searchBarStatus === 'error' && searchQuery.department.trim() !== ''"
           label="开课院系"
-          hint="模糊匹配"
+          hint="e.g. 马克思"
           outlined
           dense
           autocomplete="off"

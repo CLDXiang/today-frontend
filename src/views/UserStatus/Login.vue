@@ -11,6 +11,7 @@
         clearable
         outlined
         required
+        hint="与学校系统无关，请使用本站注册的账号~"
         :rules="[
           (v) => !!v || '用户名不能为空',
         ]"
@@ -23,6 +24,7 @@
         clearable
         outlined
         required
+        hint="https 加密传输，后台不会存储明文密码"
         :rules="[
           (v) => !!v || '密码不能为空',
         ]"

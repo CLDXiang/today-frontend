@@ -87,7 +87,7 @@
           depressed
           disabled
         >
-          更换邮箱（暂不支持）
+          更换邮箱（开发中）
         </v-btn>
       </div>
     </div>
@@ -128,7 +128,7 @@
         depressed
         to="/forgot-password"
       >
-        修改密码（暂不支持，点击前往忘记密码）
+        修改密码（开发中，点击前往忘记密码）
       </v-btn>
     </div>
   </div>

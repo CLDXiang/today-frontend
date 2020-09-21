@@ -9,12 +9,12 @@
     @touchstart="setHoveredCourseId(section.id)"
     @touchend="resetHoveredCourseId"
   >
-    <span class="course-name">{{ section.name }}</span>
-    <span class="course-code">{{ `(${section.code_id})` }}</span>
-    <span class="course-teacher">{{
+    <span class="course-name" :style="{'-webkit-line-clamp': lines.name }">{{ section.name }}</span>
+    <span v-if="lines.code > 0" class="course-code" :style="{'-webkit-line-clamp': lines.code }">{{ `(${section.code_id})` }}</span>
+    <span class="course-place" :style="{'-webkit-line-clamp': lines.place }">{{ section.currentSlot.place }}</span>
+    <span v-if="lines.teacher > 0" class="course-teacher" :style="{'-webkit-line-clamp': lines.teacher }">{{
       section.currentSlot.teacher.join(',')
     }}</span>
-    <span class="course-place">{{ section.currentSlot.place }}</span>
   </div>
 </template>
 
@@ -28,11 +28,16 @@ export default {
   data() {
     return {
       cellHeight: 64,
+      lines: {
+        name: 0,
+        code: 0,
+        place: 0,
+        teacher: 0,
+      },
     };
   },
   computed: {
     ...mapState(['hoveredCourseId']),
-
     classCourseCard() {
       return [
         `color-${
@@ -51,6 +56,96 @@ export default {
       };
     },
   },
+  mounted() {
+    // 计算空间以动态分配行数
+    /** 计算半角宽度，半角字符算 1，全角算 2 */
+    const calcNarrowWidth = (str) => {
+      const wideCharReg = /[^\x20-\xff]/g;
+      /** 全角个数 */
+      const wideChars = str.match(wideCharReg);
+      if (wideChars) {
+        const wideCharCount = str.match(wideCharReg).length || 0;
+        return wideCharCount + str.length;
+      }
+      return str.length;
+    };
+    /** 需要几行 */
+    const needLines = (str) => Math.ceil(calcNarrowWidth(str) / 8, 10);
+
+    const lines = {
+      name: 2,
+      code: 0,
+      place: 1,
+      teacher: 0,
+    };
+    const linesNeed = {
+      name: needLines(this.section.name || ''),
+      code: needLines(`(${this.section.code_id || ''})`),
+      place: needLines(this.section.currentSlot.place || ''),
+      teacher: needLines(this.section.currentSlot.teacher.join(',') || ''),
+    };
+
+    let leftLines = this.section.sectionsArray.length * 4;
+    /** 给 field 字段再分 n 行，返回是否用完所有空间 */
+    const giveLines = (field, n) => {
+      const needMore = linesNeed[field] - lines[field]; // 还需要多少
+      if (needMore > 0) {
+        const linesToAdd = Math.min(n, leftLines, needMore);
+        lines[field] += linesToAdd;
+        leftLines -= linesToAdd;
+      }
+      if (leftLines < 1) return true;
+      return false;
+    };
+
+    // 优先给课程名最多两行
+    lines.name = Math.min(linesNeed.name, 2);
+    leftLines -= lines.name;
+    if (leftLines < 1) {
+      this.lines = lines;
+      return;
+    }
+
+    // 优先给上课地点最多一行
+    lines.place = Math.min(linesNeed.place, 1);
+    leftLines -= lines.place;
+    if (leftLines < 1) {
+      this.lines = lines;
+      return;
+    }
+
+    // 如果还有空间，继续分给上课地点
+    if (giveLines('place', linesNeed.place - lines.place)) {
+      this.lines = lines;
+      return;
+    }
+
+    while (leftLines > 0) {
+      if (
+        lines.name >= linesNeed.name &&
+        lines.place >= linesNeed.place &&
+        lines.code >= linesNeed.code &&
+        lines.teacher >= linesNeed.teacher
+      ) {
+        this.lines = lines;
+        return;
+      }
+      // 如果还有空间，依次给课程名、教师、课程号分一行
+      if (giveLines('name', 1)) {
+        this.lines = lines;
+        return;
+      }
+      if (giveLines('teacher', 1)) {
+        this.lines = lines;
+        return;
+      }
+      if (giveLines('code', 1)) {
+        this.lines = lines;
+        return;
+      }
+    }
+  },
+
   methods: {
     ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
     handleClickCourseCard() {
@@ -71,6 +166,7 @@ export default {
 .course-card {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   z-index: 1;
 
   box-sizing: border-box;
@@ -88,15 +184,28 @@ export default {
   }
 }
 
+.course-name,
+.course-code,
+.course-teacher,
+.course-place {
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  // -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .course-name {
   font-size: 12px;
   font-weight: 600;
+  line-height: 14px;
 }
 
 .course-code,
 .course-teacher,
 .course-place {
   font-size: 10px;
-  word-wrap: break-word;
+  line-height: 12px;
 }
 </style>

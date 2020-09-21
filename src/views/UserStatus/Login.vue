@@ -6,7 +6,7 @@
     <div class="input-box">
       <v-text-field
         v-model="name"
-        label="用户名/邮箱"
+        label="用户名"
         autofocus
         clearable
         outlined

@@ -11,7 +11,7 @@
         clearable
         outlined
         required
-        hint="仅用于验证与登录"
+        hint="仅用于验证"
         suffix="@fudan.edu.cn"
         :rules="[(v) => !!v || '学邮不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号']"
       />
@@ -38,6 +38,7 @@
           :rules="[
             (v) => !!v || '用户名不能为空',
             (v) => v.length <= 10 || '用户名不能长于 10 个字符',
+            (v) => /^[0-9A-Za-z]+$/.test(v) || '用户名只由字母和数字组成'
           ]"
           :counter="10"
           label="用户名"

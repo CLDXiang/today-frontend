@@ -39,9 +39,20 @@
           云端新增课程
         </div>
         <div class="card-box">
-          <div v-for="course in selectedCoursesOnlyInDataBase" :key="course.codeId">
-            <div>{{ course.name }}</div>
-            <div>{{ course.codeId }}</div>
+          <div v-for="course in selectedCoursesOnlyInDataBase" :key="course.codeId" class="course-card">
+            <div
+              :class="[
+                `color-${
+                  (course.codeId &&
+                    parseInt(course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3), 10) % 96) ||
+                  0
+                }`,
+              ]"
+            />
+            <div>
+              <div>{{ course.name }}</div>
+              <div>{{ course.codeId }}</div>
+            </div>
           </div>
         </div>
         <div class="btn-box">

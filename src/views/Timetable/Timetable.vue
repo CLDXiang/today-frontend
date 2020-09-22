@@ -76,6 +76,7 @@
         />
       </div>
 
+
       <v-btn
         v-if="isMobileMode"
         class="floating_button"
@@ -88,8 +89,15 @@
         fab
         @click="showSearchDialog"
       >
+        <v-badge
+          v-if="selectedCoursesIds.size === 0"
+          color="red"
+          dot
+        >
+          <icon-search /> 
+        </v-badge>
         <!-- <v-icon>search</v-icon> -->
-        <icon-search /> 
+        <icon-search v-else /> 
       </v-btn>
     </div>
   </div>

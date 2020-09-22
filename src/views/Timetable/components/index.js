@@ -2,7 +2,6 @@ export { default as TimetableConflictDialogContent } from './TimetableConflictDi
 export { default as TimetableCourseCard } from './TimetableCourseCard.vue';
 export { default as TimetableDay } from './TimetableDay.vue';
 export { default as TimetableDayColumn } from './TimetableDayColumn.vue';
-export { default as TimetableDetailBar } from './TimetableDetailBar.vue';
 export { default as TimetableDetailDialogContent } from './TimetableDetailDialogContent.vue';
 export { default as TimetableSearchBar } from './TimetableSearchBar.vue';
 export { default as TimetableSearchDialogContent } from './TimetableSearchDialogContent.vue';

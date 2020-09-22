@@ -244,6 +244,7 @@ export default {
       display: flex;
       flex-direction: column;
       margin-top: 20px;
+      flex: 1 0 auto;
 
       > div:first-child {
         font-weight: bold;

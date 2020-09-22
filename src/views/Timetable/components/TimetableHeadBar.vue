@@ -5,15 +5,27 @@
     <div class="semester">
       2020年秋季学期
     </div>
-    <div />
+    <div class="action-group" @click="handleClickCloud">
+      <icon-cloud />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import defaultAvatar from '../../../assets/default_avatar.jpg';
+import { IconCloud } from '../../../components/icons';
 
 export default {
+  components: {
+    IconCloud,
+  },
+  data() {
+    return {
+      /** 同步冷却 */
+      cooldownCnt: 0,
+    };
+  },
   computed: {
     ...mapState({
       user: (state) => state.user,
@@ -26,6 +38,24 @@ export default {
         return defaultAvatar;
       }
       return originAvatar;
+    },
+    handleClickCloud() {
+      if (this.cooldownCnt > 0) {
+        this.$message.warn(`请等待${this.cooldownCnt}秒再进行下一次云同步~`);
+        return;
+      }
+      const cooldown = () => {
+        setTimeout(() => {
+          this.cooldownCnt -= 1;
+          if (this.cooldownCnt > 0) {
+            cooldown();
+          }
+        }, 1000);
+      };
+
+      this.cooldownCnt = 60;
+      cooldown();
+      this.$emit('click-cloud');
     },
   },
 };
@@ -53,6 +83,12 @@ export default {
     height: 36px;
     border-radius: 18px;
     border: solid 2px #60bdca;
+  }
+
+  > .action-group {
+    display: flex;
+    align-items: center;
+    color: #60bdca;
   }
 }
 </style>

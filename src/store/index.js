@@ -40,6 +40,8 @@ const store = new Vuex.Store({
       postsMapping: [],
     },
     lectures: [],
+    /** 是否自动云同步过 */
+    hasFetchedSelectedCourses: false,
     isDetailPageCourseDeleted: false,
     isDetailDialogVisible: false,
 
@@ -182,6 +184,9 @@ const store = new Vuex.Store({
     },
     resetHoveredCourseId(state) {
       state.hoveredCourseId = -1;
+    },
+    setHasFetchedSelectedCourses(state) {
+      state.hasFetchedSelectedCourses = true;
     },
   },
   getters: {

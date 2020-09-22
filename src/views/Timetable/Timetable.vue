@@ -47,7 +47,7 @@
         @hideSearchDialog="hideSearchDialog"
       />
     </v-dialog>
-    <timetable-head-bar />
+    <timetable-head-bar @click-cloud="fetchSelectedCourses" />
     <div class="timetable__body">
       <div class="timetable__day-box">
         <div class="timetable__time">
@@ -105,7 +105,7 @@
 
 <script>
 import axios from 'axios';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import { IconSearch } from '../../components/icons';
 import {
   getSelectedCourses as getSelectedCoursesService,
@@ -176,9 +176,9 @@ export default {
        * TODO: 按需过滤字段
        * */
       selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
-      /**
-       * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
-       */
+      // /**
+      //  * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
+      //  */
       isOffline: false,
       isConflictDialogVisible: false,
 
@@ -187,7 +187,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['detailPageCourse', 'isDetailDialogVisible']),
+    ...mapState(['detailPageCourse', 'isDetailDialogVisible', 'hasFetchedSelectedCourses']),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     classDetailPage() {
       // if (!this.detailPageCourse.id) return [];
@@ -221,6 +221,7 @@ export default {
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
+    ...mapMutations(['setHasFetchedSelectedCourses']),
     areSetsSame(set1, set2) {
       if (set1.size !== set2.size) return false;
       const intersect = [...set1].filter((item) => set2.has(item));
@@ -270,34 +271,41 @@ export default {
           this.isLoadingCourses = false;
 
           // 若用户已登录，从后端同步所选课程 Id 列表
-          if (this.isUserLoggedIn && !this.isOffline) {
-            this.$message.loading('正在与服务器同步数据');
-            getSelectedCoursesService(this.semester)
-              .then((res) => {
-                this.$message.loaded();
-                if (!Array.isArray(res)) {
-                  this.$message.error('数据同步失败！');
-                  this.isOffline = true;
-                }
-                this.selectedCoursesIdsFromDatabase = new Set(res);
-                if (
-                  this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)
-                ) {
-                  this.$message.success('数据同步成功！');
-                } else {
-                  // 冲突解决
-                  this.isConflictDialogVisible = true;
-                }
-              })
-              .catch((err) => {
-                this.$message.error('数据同步失败！');
-                this.isOffline = true;
-                throw err;
-              });
+          if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
+            this.fetchSelectedCourses();
           }
         })
         .catch((err) => {
           this.$message.error('拉取课程数据失败，请尝试刷新页面');
+          throw err;
+        });
+    },
+    fetchSelectedCourses() {
+      this.isOffline = false; // 触发拉数据，重新上线
+      if (!this.isUserLoggedIn) {
+        this.$message.warn('需要登录才能进行云同步');
+        return;
+      }
+      this.$message.loading('正在与服务器同步数据');
+      getSelectedCoursesService(this.semester)
+        .then((res) => {
+          this.setHasFetchedSelectedCourses();
+          this.$message.loaded();
+          if (!Array.isArray(res)) {
+            this.$message.error('数据同步失败！进入离线模式');
+            this.isOffline = true;
+          }
+          this.selectedCoursesIdsFromDatabase = new Set(res);
+          if (this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)) {
+            this.$message.success('数据同步成功！');
+          } else {
+            // 冲突解决
+            this.isConflictDialogVisible = true;
+          }
+        })
+        .catch((err) => {
+          this.$message.error('数据同步失败！进入离线模式');
+          this.isOffline = true;
           throw err;
         });
     },
@@ -402,7 +410,7 @@ export default {
             // TODO: 后端应该返回有效响应
           })
           .catch((err) => {
-            this.$message.error('数据同步失败！');
+            this.$message.error('数据同步失败！进入离线模式');
             this.isOffline = true;
             throw err;
           });
@@ -441,7 +449,7 @@ export default {
             // TODO: 后端应该返回有效响应
           })
           .catch((err) => {
-            this.$message.error('数据同步失败！');
+            this.$message.error('数据同步失败！进入离线模式');
             this.isOffline = true;
             throw err;
           });

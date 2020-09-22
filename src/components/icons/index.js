@@ -4,3 +4,4 @@ export { default as IconRating } from './IconRating.vue';
 export { default as IconTimetable } from './IconTimetable.vue';
 export { default as IconSearch } from './IconSearch.vue';
 export { default as IconBack } from './IconBack.vue';
+export { default as IconCloud } from './IconCloud.vue';

@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
 import { getUserProfile, getHistory } from '../../services/profile.service';
@@ -72,6 +73,15 @@ export default {
     password: '',
     showPassword: false,
   }),
+  computed: {
+    ...mapGetters(['userLoggedIn']),
+  },
+  mounted() {
+    // 若用户已登录，跳转至个人首页
+    if (this.userLoggedIn) {
+      this.$router.push('/me');
+    }
+  },
   methods: {
     getProfile() {
       getUserProfile()

@@ -119,8 +119,6 @@
           disabled
         />
       </div>
-    </div>
-    <div>
       <v-btn
         block
         color="primary"
@@ -157,7 +155,7 @@ export default {
       return this.bio !== (this.user.bio || '') || this.nickName !== (this.user.nickName || '');
     },
   },
-  created() {
+  mounted() {
     this.fetchData();
   },
   methods: {
@@ -256,6 +254,9 @@ export default {
   }
 
   > .avatar-box {
+    width: 100%;
+    max-width: 375px;
+    align-self: center;
     display: flex;
     align-items: flex-end;
     margin-bottom: 18px;
@@ -274,10 +275,16 @@ export default {
   }
 
   > .info-box {
+    width: 100%;
+    max-width: 375px;
+    align-self: center;
     margin-bottom: 18px;
   }
 
   > .email-box {
+    width: 100%;
+    max-width: 375px;
+    align-self: center;
     margin-bottom: 18px;
     > .email-validate-box {
       display: flex;
@@ -292,6 +299,12 @@ export default {
         width: 92px;
       }
     }
+  }
+
+  > .pw-box {
+    width: 100%;
+    max-width: 375px;
+    align-self: center;
   }
 }
 </style>

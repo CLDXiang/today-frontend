@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { register, requestCode } from '../../services/auth.service';
 import log from '../../utils/log';
 
@@ -111,9 +112,16 @@ export default {
     state: 'init',
   }),
   computed: {
+    ...mapGetters(['userLoggedIn']),
     realEmail() {
       return `${this.email}@fudan.edu.cn`;
     },
+  },
+  mounted() {
+    // 若用户已登录，跳转至个人首页
+    if (this.userLoggedIn) {
+      this.$router.push('/me');
+    }
   },
   methods: {
     register() {

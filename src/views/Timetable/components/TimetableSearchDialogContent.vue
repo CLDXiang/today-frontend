@@ -2,7 +2,7 @@
   <v-card>
     <span class="title">搜索课程</span>
     <v-card-text v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
-      <div class="search-bar__content-line mt-2">
+      <div class="search-bar__content-line">
         <v-text-field
           ref="textfield1"
           v-model="searchQuery.name"

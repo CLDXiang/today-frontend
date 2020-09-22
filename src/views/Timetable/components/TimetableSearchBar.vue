@@ -45,88 +45,89 @@
         搜索课程
       </v-btn>
     </div>
-    <div class="search-bar__content-line">
-      <v-text-field
-        ref="textfield1"
-        v-model="searchQuery.name"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
-        :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
-        label="课程名"
-        hint="模糊匹配，不区分大小写"
-        outlined
-        dense
-        autocomplete="off"
-        class="search-bar__text-field"
-        @keydown="handleKeyDown"
-      />
-    </div>
-    <div class="search-bar__content-line">
-      <v-text-field
-        ref="textfield4"
-        v-model="searchQuery.codeId"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.codeId.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.codeId.trim() !== ''"
-        label="课程号"
-        hint="模糊匹配，不区分大小写"
-        outlined
-        dense
-        autocomplete="off"
-        class="search-bar__text-field"
-        @keydown="handleKeyDown"
-      />
-    </div>
-    <div class="search-bar__content-line">
-      <v-text-field
-        ref="textfield2"
-        v-model="searchQuery.teachers"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.teachers.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.teachers.trim() !== ''"
-        label="授课教师"
-        hint="请输入教师全名，多名教师可用逗号分隔"
-        outlined
-        dense
-        autocomplete="off"
-        class="search-bar__text-field"
-        @keydown="handleKeyDown"
-      />
-    </div>
-    <div class="search-bar__content-line">
-      <v-text-field
-        ref="textfield5"
-        v-model="searchQuery.place"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.place.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.place.trim() !== ''"
-        label="上课地点"
-        hint="模糊匹配，不区分大小写"
-        outlined
-        dense
-        autocomplete="off"
-        class="search-bar__text-field"
-        @keydown="handleKeyDown"
-      />
-    </div>
-    <div class="search-bar__content-line">
-      <v-text-field
-        ref="textfield3"
-        v-model="searchQuery.department"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.department.trim() !== ''"
-        :error="searchBarStatus === 'error' && searchQuery.department.trim() !== ''"
-        label="开课院系"
-        hint="模糊匹配"
-        outlined
-        dense
-        autocomplete="off"
-        class="search-bar__text-field"
-        @keydown="handleKeyDown"
-      />
-    </div>
-    <div class="search-bar__content-line">
-      <!-- <v-range-slider
+    <div v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
+      <div class="search-bar__content-line">
+        <v-text-field
+          ref="textfield1"
+          v-model="searchQuery.name"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
+          :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
+          label="课程名"
+          hint="e.g. 文学（不分大小写）"
+          outlined
+          dense
+          autocomplete="off"
+          class="search-bar__text-field"
+          @keydown="handleKeyDown"
+        />
+      </div>
+      <div class="search-bar__content-line">
+        <v-text-field
+          ref="textfield4"
+          v-model="searchQuery.codeId"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success="searchBarStatus === 'success' && searchQuery.codeId.trim() !== ''"
+          :error="searchBarStatus === 'error' && searchQuery.codeId.trim() !== ''"
+          label="课程号"
+          hint="e.g. Engl（不分大小写）"
+          outlined
+          dense
+          autocomplete="off"
+          class="search-bar__text-field"
+          @keydown="handleKeyDown"
+        />
+      </div>
+      <div class="search-bar__content-line">
+        <v-text-field
+          ref="textfield2"
+          v-model="searchQuery.teachers"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success="searchBarStatus === 'success' && searchQuery.teachers.trim() !== ''"
+          :error="searchBarStatus === 'error' && searchQuery.teachers.trim() !== ''"
+          label="授课教师"
+          hint="请输入教师全名，多名教师可用逗号分隔"
+          outlined
+          dense
+          autocomplete="off"
+          class="search-bar__text-field"
+          @keydown="handleKeyDown"
+        />
+      </div>
+      <div class="search-bar__content-line">
+        <v-text-field
+          ref="textfield5"
+          v-model="searchQuery.place"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success="searchBarStatus === 'success' && searchQuery.place.trim() !== ''"
+          :error="searchBarStatus === 'error' && searchQuery.place.trim() !== ''"
+          label="上课地点"
+          hint="e.g. Hgx（不分大小写）"
+          outlined
+          dense
+          autocomplete="off"
+          class="search-bar__text-field"
+          @keydown="handleKeyDown"
+        />
+      </div>
+      <div class="search-bar__content-line">
+        <v-text-field
+          ref="textfield3"
+          v-model="searchQuery.department"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success="searchBarStatus === 'success' && searchQuery.department.trim() !== ''"
+          :error="searchBarStatus === 'error' && searchQuery.department.trim() !== ''"
+          label="开课院系"
+          hint="e.g. 马克思"
+          outlined
+          dense
+          autocomplete="off"
+          class="search-bar__text-field"
+          @keydown="handleKeyDown"
+        />
+      </div>
+      <div class="search-bar__content-line">
+        <!-- <v-range-slider
         v-model="searchQuery.dayRange"
         label="星期"
         :tick-labels="dayLabels"
@@ -139,62 +140,64 @@
           {{ '周' + dayLabels[props.value] }}
         </template>
       </v-range-slider> -->
-      <v-select
-        v-model="searchQuery.day"
-        :items="dayLabels"
-        :disabled="isLoadingSearchResults || isLoadingCourses"
-        :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
-        :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
-        label="星期"
-        dense
-        outlined
-        autocomplete="off"
-      />
-    </div>
-    <div class="search-bar__content-line">
-      <v-range-slider
-        v-model="searchQuery.sectionRange"
-        :tick-labels="sectionLabels"
-        label="节次"
-        min="0"
-        max="13"
-        ticks="always"
-        tick-size="4"
-      >
-        <template v-slot:thumb-label="props">
-          {{ props.value + 1 }}
-        </template>
-      </v-range-slider>
-    </div>
-    
-    
-    <v-scroll-y-transition>
-      <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results">
-        <div
-          v-for="item in searchResults"
-          :key="item.courseId"
-          class="search-bar__result"
-          @click.stop="handleClickSearchResult(item.courseId)"
-          @mouseenter="setHoveredCourseId(item.courseId)"
-          @mouseleave="resetHoveredCourseId"
-          @touchstart="setHoveredCourseId(item.courseId)"
-          @touchend="resetHoveredCourseId"
+        <v-select
+          v-model="searchQuery.day"
+          :items="dayLabels"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
+          :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
+          label="星期"
+          dense
+          outlined
+          autocomplete="off"
+        />
+      </div>
+      <div class="search-bar__content-line">
+        <v-range-slider
+          v-model="searchQuery.sectionRange"
+          :tick-labels="sectionLabels"
+          label="节次"
+          min="0"
+          max="13"
+          ticks="always"
+          tick-size="4"
         >
-          <div class="result-line">
-            {{ `${item.codeId} ${item.name}` }}
-          </div>
-          <div class="result-line cut">
-            {{ item.teachersText }}
-          </div>
-          <div v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)" :key="tsIndex" class="result-line">
-            {{ ts }}
-          </div>
-          <div v-if="item.timeSlotsTexts.length > 3" class="result-line">
-            ……
+          <template v-slot:thumb-label="props">
+            {{ props.value + 1 }}
+          </template>
+        </v-range-slider>
+      </div>
+    </div>
+    
+    <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results-box">
+      <v-scroll-y-transition>
+        <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results">
+          <div
+            v-for="item in searchResults"
+            :key="item.courseId"
+            class="search-bar__result"
+            @click.stop="handleClickSearchResult(item.courseId)"
+            @mouseenter="setHoveredCourseId(item.courseId)"
+            @mouseleave="resetHoveredCourseId"
+            @touchstart="setHoveredCourseId(item.courseId)"
+            @touchend="resetHoveredCourseId"
+          >
+            <div class="result-line">
+              {{ `${item.codeId} ${item.name}` }}
+            </div>
+            <div class="result-line cut">
+              {{ item.teachersText }}
+            </div>
+            <div v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)" :key="tsIndex" class="result-line result-line--ts">
+              {{ ts }}
+            </div>
+            <div v-if="item.timeSlotsTexts.length > 3" class="result-line result-line--ts">
+              ……
+            </div>
           </div>
         </div>
-      </div>
-    </v-scroll-y-transition>
+      </v-scroll-y-transition>
+    </div>
   </div>
 </template>
 
@@ -399,14 +402,25 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_timetable';
 
+.title {
+  margin-top: 36px;
+  font-size: 20px;
+  line-height: 20px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  color: #333;
+}
+
 .timetable__search-bar {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 
   position: relative;
-  min-width: 320px;
-  height: $search-bar-height;
+  // min-width: 320px;
+  width: 100%;
+  height: 100%;
 
   flex: 1;
   display: flex;
@@ -426,6 +440,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 44px;
+    margin: 12px 0;
   }
 
   >>> .v-slider__tick-label {
@@ -437,28 +453,37 @@ export default {
   margin-top: -4px;
 }
 
-.search-bar__results {
-  $top-height: 36px;
+.search-bar__results-box {
+  backface-visibility: hidden;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-top: 12px;
+  background-color: #f2f2f2;
+}
 
-  position: absolute;
-  top: $top-height;
+.search-bar__results {
   width: 100%;
 
   // max-height: 13.5rem;
-  height: $search-bar-height - $top-height;
-  border: 1px solid #d3d6db;
-  border-top: 0;
+  height: 100%;
   border-radius: 0 0 0.25rem 0.25rem;
-  background-color: #fff;
 
   overflow: auto;
 }
 
 .search-bar__result {
-  box-sizing: border-box;
+  background-color: #fff;
+  margin-top: 10px;
+  // height: 120px;
+  filter: drop-shadow(0px 4px 4px rgba(141, 141, 141, 0.3));
+
   cursor: pointer;
 
-  padding: 0.6rem 0.5rem;
+  padding: 20px;
+  border-radius: 8px;
+
   font-size: 0.9rem;
   color: #69707a;
 
@@ -468,9 +493,25 @@ export default {
   }
 }
 
+.result-line {
+  line-height: 22px;
+}
+
+.result-line:first-child {
+  font-size: 18px;
+  color: #4f4f4f;
+}
+
 .result-line.cut {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
+  color: #4f4f4f;
+}
+
+.result-line--ts {
+  font-size: 12px;
+  color: #828282;
 }
 </style>

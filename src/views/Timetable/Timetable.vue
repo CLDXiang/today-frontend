@@ -205,7 +205,7 @@ export default {
       }
     },
   },
-  created() {
+  mounted() {
     this.selectedSectionsByDay = this.$store.state.selectedSectionsByDay;
     this.selectedCoursesIds = new Set(this.$store.state.selectedCoursesIds[this.semester]);
     // 读取课程信息
@@ -233,7 +233,7 @@ export default {
           })
           .catch(() => {
             this.$message.loaded();
-            this.$message.error('数据同步失败！');
+            this.$message.error('数据同步失败！进入离线模式');
             this.isOffline = true;
           });
       }
@@ -289,8 +289,7 @@ export default {
           }
         })
         .catch((err) => {
-          // TODO: 错误提示
-          this.isLoadingCourses = false;
+          this.$message.error('拉取课程数据失败，请尝试刷新页面');
           throw err;
         });
     },
@@ -389,7 +388,7 @@ export default {
       //   return;
       // }
       // 若用户已登录，向后端发送请求
-      if (this.isUserLoggedIn && !this.isOffline) {
+      if (this.isUserLoggedIn && !this.isOffline && !this.selectedCoursesIds.has(courseId)) {
         addSelectedCourseService(courseId)
           .then(() => {
             // TODO: 后端应该返回有效响应
@@ -428,7 +427,7 @@ export default {
       //   return;
       // }
       // 若用户已登录，向后端发送请求
-      if (this.isUserLoggedIn && !this.isOffline) {
+      if (this.isUserLoggedIn && !this.isOffline && this.selectedCoursesIds.has(courseId)) {
         removeSelectedCourseService(courseId)
           .then(() => {
             // TODO: 后端应该返回有效响应

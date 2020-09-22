@@ -17,7 +17,7 @@
           <div>个性签名：{{ user.bio || '这个人还没有个性签名诶' }}</div>
         </div>
       </div>
-      <div>
+      <div class="btn-box">
         <v-btn
           block
           color="primary"
@@ -132,6 +132,10 @@ export default {
       display: flex;
       flex-direction: column;
 
+      width: 100%;
+      max-width: 375px;
+      align-self: center;
+
       > .info-box__header {
         display: flex;
         justify-content: space-between;
@@ -163,6 +167,12 @@ export default {
           align-items: center;
         }
       }
+    }
+
+    .btn-box {
+      width: 100%;
+      max-width: 375px;
+      align-self: center;
     }
   }
 }

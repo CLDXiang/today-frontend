@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import log from '../utils/log';
+// import log from '../utils/log';
 import store from '../store';
 
 import { emojiIntToStr } from './react';
@@ -155,34 +155,34 @@ export function getLectureRateInfo(id) {
   });
 }
 
-export function postRate(lectureId, workload, difficulty, grading, content, semester, score) {
-  return new Promise((resolve, reject) => {
-    const header = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
+// export function postRate(lectureId, workload, difficulty, grading, content, semester, score) {
+//   return new Promise((resolve, reject) => {
+//     const header = {
+//       Authorization: `Bearer ${store.state.user.jwt_token}`,
+//     };
 
-    // FIXME: need semester, score ?
-    // log.info('rate post not include', semester, score);
+//     // FIXME: need semester, score ?
+//     // log.info('rate post not include', semester, score);
 
-    const data = {
-      // semester,
-      // score,
-      lecture_id: lectureId,
-      workload,
-      difficulty,
-      grading,
-      content,
-    };
-    // log.info('rate post payload: ', data, { headers: header });
-    axios
-      .post(`${API_URL}/rate`, data, { headers: header })
-      .then((resp) => {
-        // log.info('POST rate resp', resp);
-        return resolve(resp);
-      })
-      .catch((error) => reject(error));
-  });
-}
+//     const data = {
+//       // semester,
+//       // score,
+//       lecture_id: lectureId,
+//       workload,
+//       difficulty,
+//       grading,
+//       content,
+//     };
+//     // log.info('rate post payload: ', data, { headers: header });
+//     axios
+//       .post(`${API_URL}/rate`, data, { headers: header })
+//       .then((resp) => {
+//         // log.info('POST rate resp', resp);
+//         return resolve(resp);
+//       })
+//       .catch((error) => reject(error));
+//   });
+// }
 
 export function deleteRate(id) {
   const headers = {

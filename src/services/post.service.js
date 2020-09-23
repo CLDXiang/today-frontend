@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 import { API_URL } from '../utils/config';
-import log from '../utils/log';
+// import log from '../utils/log';
 
 async function authorizedGet(endpoint) {
   const authHeader = {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import log from '../utils/log';
+// import log from '../utils/log';
 import store from '../store';
 import { API_URL } from '../utils/config';
 

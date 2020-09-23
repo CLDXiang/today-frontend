@@ -33,5 +33,7 @@ export const ANONY_NAMES = [
   '雪莱',
 ];
 
-// eslint-disable-next-line
-console.log(NODE_ENV, API_URL, BASE_URL);
+if (NODE_ENV !== 'production') {
+  // eslint-disable-next-line no-console
+  console.log(NODE_ENV, API_URL, BASE_URL);
+}

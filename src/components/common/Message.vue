@@ -2,7 +2,7 @@
   <v-snackbar
     :value="isGlobalMessageVisible"
     :color="globalMessageColor"
-    :timeout="0"
+    :timeout="-1"
     top
   >
     <span :style="{ color: globalMessageColor === '#fff' ? '#000' : '#fff'}">{{ globalMessageText }}</span>

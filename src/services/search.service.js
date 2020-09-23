@@ -13,7 +13,7 @@ export default function searchUser(str) {
       axios
         .get(`${API_URL}/user`, { headers, params: { search: str } })
         .then((resp) => {
-          log.info('GET user search resp', resp);
+          // log.info('GET user search resp', resp);
           resolve(resp.data);
         })
         .catch((e) => reject(e));

@@ -160,7 +160,7 @@ export default {
           })
           .catch((e) => {
             this.state = 'init';
-            log.info('send code failed', e);
+            log.error('send code failed', e);
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
         log.info('cooldown-ing or requesting');

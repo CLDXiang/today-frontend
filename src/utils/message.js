@@ -21,7 +21,7 @@ const error = (text, duration = 2500) => {
   store.commit('sendGlobalMessage', { text, color: 'error', timeout: duration });
 };
 
-const loading = (text, duration = 0) => {
+const loading = (text, duration = -1) => {
   store.commit('sendGlobalMessage', { text, color: '#fff', timeout: duration });
 };
 

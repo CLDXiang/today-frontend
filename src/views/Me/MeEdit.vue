@@ -185,7 +185,7 @@ export default {
         })
         .catch((err) => {
           this.$message.error('修改头像失败');
-          log.info(err);
+          log.error(err);
         })
         .finally(() => {
           this.isAvatarUploading = false;
@@ -209,7 +209,7 @@ export default {
         })
         .catch((err) => {
           this.$message.error('修改失败！');
-          log.info(err);
+          log.error(err);
         })
         .finally(() => {
           this.isInfoModifying = false;

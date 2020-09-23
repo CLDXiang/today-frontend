@@ -14,7 +14,7 @@ export const getSelectedCourses = async (semester) => {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((err) => reject(err));
@@ -38,7 +38,7 @@ export const replaceSelectedCourses = async (semester, selectedCoursesIDs) => {
         },
       )
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((err) => reject(err));
@@ -59,7 +59,7 @@ export const addSelectedCourse = async (courseId) => {
         },
       )
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((err) => reject(err));
@@ -76,7 +76,7 @@ export const removeSelectedCourse = async (courseId) => {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((err) => reject(err));

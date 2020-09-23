@@ -121,6 +121,8 @@ import {
   TimetableSearchDialogContent,
   TimetableHeadBar,
 } from './components';
+import { getUserProfile } from '../../services/profile.service';
+import log from '../../utils/log';
 
 export default {
   components: {
@@ -273,6 +275,14 @@ export default {
           // 若用户已登录，从后端同步所选课程 Id 列表
           if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
             this.fetchSelectedCourses();
+            // 顺便更新用户信息
+            getUserProfile()
+              .then((profile) => {
+                this.$store.commit('SET_USER_PROFILE', profile);
+              })
+              .catch((err) => {
+                log.error(err);
+              });
           }
         })
         .catch((err) => {

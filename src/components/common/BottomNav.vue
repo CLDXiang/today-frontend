@@ -66,19 +66,19 @@ export default {
       if (this.activePage === v) return;
       if (v === 'timetable') {
         this.$router.push({ name: 'Timetable' }).catch((e) => {
-          log.info(e);
+          log.error(e);
         });
       } else if (v === 'rating') {
         this.$router.push({ name: 'Rating' }).catch((e) => {
-          log.info(e);
+          log.error(e);
         });
       } else if (v === 'notification') {
         this.$router.push({ name: 'Notification' }).catch((e) => {
-          log.info(e);
+          log.error(e);
         });
       } else if (v === 'status') {
         this.$router.push({ name: this.$store.getters.userLoggedIn ? 'Me' : 'Login' }).catch((e) => {
-          log.info(e);
+          log.error(e);
         });
       }
     }

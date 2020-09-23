@@ -154,14 +154,14 @@ export default {
             }, 500);
           } else if (resp.result === 'failed') {
             this.$message.warn('用户名已被注册');
-          } else log.info('Error: Unexpected resp result');
+          } else log.error('Error: Unexpected resp result');
         })
         .catch((e) => {
           const code = e.response.status;
           if (code === 400) this.$message.warn('姓名或邮箱格式错误');
           else if (code === 404) this.$message.error(e.response.data.message);
           else if (code === 409) this.$message.error(e.response.data.message);
-          else log.info('Error: Unexpected reponse', e.response);
+          else log.error('Error: Unexpected reponse', e.response);
         });
     },
     requestCode() {
@@ -187,12 +187,12 @@ export default {
             const code = e.response.status;
             if (code === 400) this.$message.error(e.response.data.message);
             else if (code === 409) this.$message.error('该邮箱已被注册');
-            else log.info('Error: unexpected code');
+            else log.error('Error: unexpected code');
           });
       } else if (this.state === 'cooldown' || this.state === 'requesting') {
-        log.info('Warning: cooldown-ing or requesting');
+        log.error('Warning: cooldown-ing or requesting');
       } else {
-        log.info('Error: Unexpected state');
+        log.error('Error: Unexpected state');
       }
     },
   },

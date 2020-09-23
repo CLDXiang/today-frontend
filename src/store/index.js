@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-import log from '../utils/log';
+// import log from '../utils/log';
 
 Vue.use(Vuex);
 
@@ -62,14 +62,14 @@ const store = new Vuex.Store({
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
       state.user.id = JSON.parse(payload).sub;
-      log.info('set jwt_token', token);
+      // log.info('set jwt_token', token);
     },
     SET_USER(state, name, email) {
       state.user.name = name;
       state.user.email = email;
     },
     LOGOUT(state) {
-      log.info('LOGOUT');
+      // log.info('LOGOUT');
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
@@ -90,58 +90,8 @@ const store = new Vuex.Store({
     SET_BAR_TITLE(state, barTitle) {
       state.app.barTitle = barTitle;
     },
-    SET_NOTIFICATIONS(state, notifications) {
-      state.profile.notifications = notifications;
-    },
-    SET_TRENDS(state, trends) {
-      state.profile.trends = trends;
-    },
-    SET_USER_STAR(state, userStar) {
-      state.profile.userStar = userStar;
-    },
-    SET_USER_RATE(state, userRate) {
-      state.profile.userRate = userRate;
-    },
-    SET_FOLLOWING(state, following) {
-      state.profile.following = following;
-    },
-    SET_FOLLOWER(state, follower) {
-      state.profile.follower = follower;
-    },
     SET_HISTORY(state, history) {
       state.profile.history = history;
-    },
-    SET_LECTURES(state, lectures) {
-      state.lectures = lectures;
-    },
-    readNotice(state, noticeId) {
-      for (let i = 0; i < Object.keys(state.profile.notifications).length; i += 1) {
-        if (state.profile.notifications[i].id === noticeId) {
-          state.profile.notifications[i].mark = 0;
-        }
-      }
-    },
-    readTrend(state, noticeId) {
-      state.profile.trends.forEach((element) => {
-        if (element.id === noticeId) {
-          // eslint-disable-next-line no-param-reassign
-          element.mark = 0;
-        }
-      });
-    },
-    deleteNotice(state, noticeId) {
-      for (let i = 0; i < Object.keys(state.profile.notifications).length; i += 1) {
-        if (state.profile.notifications[i].id === noticeId) {
-          state.profile.notifications.splice(i, 1);
-        }
-      }
-    },
-    deleteTrend(state, noticeId) {
-      for (let i = 0; i < Object.keys(state.profile.trends).length; i += 1) {
-        if (state.profile.trends[i].id === noticeId) {
-          state.profile.trends.splice(i, 1);
-        }
-      }
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
@@ -163,7 +113,7 @@ const store = new Vuex.Store({
     sendGlobalMessage(state, action) {
       state.globalMessageText = action.text || '';
       state.globalMessageColor = action.color || 'info';
-      // 0 表示不自动关闭
+      // -1 表示不自动关闭
       state.globalMessageTimeout = action.timeout || 2500;
       state.isGlobalMessageVisible = true;
       state.globalMessageTimer += 1;

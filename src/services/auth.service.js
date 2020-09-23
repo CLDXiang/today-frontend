@@ -1,5 +1,5 @@
 import axios from 'axios';
-import log from '../utils/log';
+// import log from '../utils/log';
 import $store from '../store';
 
 import { API_URL } from '../utils/config';
@@ -38,11 +38,11 @@ export function login(usernameOrEmail, password) {
       username: usernameOrEmail,
       password,
     };
-    log.info('login payload: ', data);
+    // log.info('login payload: ', data);
     axios
       .post(`${API_URL}/auth/login`, data)
       .then((resp) => {
-        log.info('login resp', resp);
+        // log.info('login resp', resp);
         const jwtToken = resp.data.access_token;
         const { email, name } = resp.data;
         if (jwtToken) {
@@ -65,11 +65,11 @@ export function register(name, email, code, password) {
       password,
       email,
     };
-    log.info('register payload: ', payload);
+    // log.info('register payload: ', payload);
     axios
       .post(`${API_URL}/auth/register`, payload)
       .then((resp) => {
-        log.info('register resp', resp);
+        // log.info('register resp', resp);
         resolve(resp.data);
       })
       .catch((err) => reject(err));
@@ -92,7 +92,7 @@ export function requestCodeForForgotPassword(email) {
     axios
       .post(`${API_URL}/auth/password`, { email })
       .then((resp) => {
-        log.info('forgot password request code resp', resp);
+        // log.info('forgot password request code resp', resp);
         resolve(resp);
       })
       .catch((err) => reject(err));
@@ -104,7 +104,7 @@ export function modifyPassword(email, code, password) {
     axios
       .put(`${API_URL}/auth/password`, { email, code, password })
       .then((resp) => {
-        log.info('modify password resp', resp);
+        // log.info('modify password resp', resp);
         resolve(resp);
       })
       .catch((err) => reject(err));

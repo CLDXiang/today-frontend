@@ -64,8 +64,7 @@
 import { mapGetters } from 'vuex';
 import log from '../../utils/log';
 import { login } from '../../services/auth.service';
-import { getUserProfile, getHistory } from '../../services/profile.service';
-import { getNotifications, getTrends } from '../../services/notice.service';
+import { getUserProfile } from '../../services/profile.service';
 
 export default {
   data: () => ({
@@ -89,28 +88,7 @@ export default {
           this.$store.commit('SET_USER_PROFILE', profile);
         })
         .catch((err) => {
-          log.info(err);
-        });
-      getNotifications()
-        .then((notifications) => {
-          this.$store.commit('SET_NOTIFICATIONS', notifications);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getTrends()
-        .then((trends) => {
-          this.$store.commit('SET_TRENDS', trends);
-        })
-        .catch((err) => {
-          log.info(err);
-        });
-      getHistory()
-        .then((history) => {
-          this.$store.commit('SET_HISTORY', history);
-        })
-        .catch((err) => {
-          log.info(err);
+          log.error(err);
         });
     },
     login() {
@@ -126,7 +104,7 @@ export default {
         .then(() => {
           this.$message.success('登录成功');
           const { redirect } = this.$router.currentRoute.query;
-          this.getProfile(); // 用户登录像后端请求profile的内容，并装入Vuex
+          this.getProfile(); // 用户登录向后端请求profile的内容，并装入Vuex
           if (redirect) {
             this.$router.push(redirect);
           } else {
@@ -134,7 +112,7 @@ export default {
           }
         })
         .catch((e) => {
-          log.info(e);
+          log.error(e);
           this.$message.warn('登录失败');
         });
     },

@@ -24,7 +24,7 @@ export async function getNotifications() {
                 element.notice_about_id = rateInfo.lecture_id;
               })
               .catch((err) => {
-                log.info(err);
+                log.error(err);
               });
           }
           await getUserProfile(element.from_user_id)
@@ -32,10 +32,9 @@ export async function getNotifications() {
               re.push({ ...element, userProfile });
             })
             .catch((err) => {
-              log.info(err);
+              log.error(err);
             });
         });
-        log.info('notification', re);
         resolve(re);
       })
       .catch((error) => reject(error));
@@ -59,10 +58,9 @@ export async function getTrends() {
               re.push({ ...element, userProfile });
             })
             .catch((err) => {
-              log.info(err);
+              log.error(err);
             });
         });
-        log.info('trends', re);
         resolve(re);
       })
       .catch((error) => reject(error));
@@ -77,7 +75,7 @@ export async function deleteNotice(noticeId) {
     axios
       .delete(`${API_URL}/notice/${noticeId}`, { headers: authHeader })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));
@@ -92,7 +90,7 @@ export async function readNotice(noticeId) {
     axios
       .post(`${API_URL}/notice/${noticeId}`, {}, { headers: authHeader })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));
@@ -107,7 +105,7 @@ export async function readAllNotifications() {
     axios
       .post(`${API_URL}/notice/notice`, { headers: authHeader })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));
@@ -122,7 +120,7 @@ export async function readAllTrends() {
     axios
       .post(`${API_URL}/notice/rate`, { headers: authHeader })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));

@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import log from '../utils/log';
+// import log from '../utils/log';
 import store from '../store';
 
 import { emojiIntToStr } from './react';
@@ -48,7 +48,7 @@ export function getRateIds(lectureId, rateBy) {
       axios
         .get(`${API_URL}/rate/lecture/auth/${lectureId}`, { headers, params })
         .then((resp) => {
-          log.info('GET rate ids resp', resp);
+          // log.info('GET rate ids resp', resp);
           resolve({ rateIds: resp.data.rates });
         })
         .catch((err) => reject(err));
@@ -59,7 +59,7 @@ export function getRateIds(lectureId, rateBy) {
     axios
       .get(`${API_URL}/rate/lecture/${lectureId}`, { params })
       .then((resp) => {
-        log.info('GET rate ids resp', resp);
+        // log.info('GET rate ids resp', resp);
         resolve({ rateIds: resp.data.rates });
       })
       .catch((err) => reject(err));
@@ -105,7 +105,7 @@ export function getRateBatch(ids) {
               })),
             };
           });
-          log.info('GET rate batch resp', resp);
+          // log.info('GET rate batch resp', resp);
           resolve(resp);
         }),
       )
@@ -119,7 +119,7 @@ export function getLectureRateInfo(id) {
   };
 
   return new Promise((resolve, reject) => {
-    log.info('...getting lecture rate info');
+    // log.info('...getting lecture rate info');
     axios
       .all([
         axios.get(`${API_URL}/course/${id}/star`, { headers }),
@@ -127,7 +127,7 @@ export function getLectureRateInfo(id) {
       ])
       .then(
         axios.spread((starInfo, rateInfo) => {
-          log.info('GET lecture rate info', starInfo, rateInfo);
+          // log.info('GET lecture rate info', starInfo, rateInfo);
 
           resolve({
             favorCount: starInfo.data.count,
@@ -155,34 +155,34 @@ export function getLectureRateInfo(id) {
   });
 }
 
-export function postRate(lectureId, workload, difficulty, grading, content, semester, score) {
-  return new Promise((resolve, reject) => {
-    const header = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
+// export function postRate(lectureId, workload, difficulty, grading, content, semester, score) {
+//   return new Promise((resolve, reject) => {
+//     const header = {
+//       Authorization: `Bearer ${store.state.user.jwt_token}`,
+//     };
 
-    // FIXME need semester, score ?
-    log.info('rate post not include', semester, score);
+//     // FIXME: need semester, score ?
+//     // log.info('rate post not include', semester, score);
 
-    const data = {
-      // semester,
-      // score,
-      lecture_id: lectureId,
-      workload,
-      difficulty,
-      grading,
-      content,
-    };
-    log.info('rate post payload: ', data, { headers: header });
-    axios
-      .post(`${API_URL}/rate`, data, { headers: header })
-      .then((resp) => {
-        log.info('POST rate resp', resp);
-        return resolve(resp);
-      })
-      .catch((error) => reject(error));
-  });
-}
+//     const data = {
+//       // semester,
+//       // score,
+//       lecture_id: lectureId,
+//       workload,
+//       difficulty,
+//       grading,
+//       content,
+//     };
+//     // log.info('rate post payload: ', data, { headers: header });
+//     axios
+//       .post(`${API_URL}/rate`, data, { headers: header })
+//       .then((resp) => {
+//         // log.info('POST rate resp', resp);
+//         return resolve(resp);
+//       })
+//       .catch((error) => reject(error));
+//   });
+// }
 
 export function deleteRate(id) {
   const headers = {
@@ -192,7 +192,7 @@ export function deleteRate(id) {
     axios
       .delete(`${API_URL}/rate/${id}`, { headers })
       .then((resp) => {
-        log.info('DELETE rate resp', resp);
+        // log.info('DELETE rate resp', resp);
         resolve(resp.data);
       })
       .catch((e) => reject(e));
@@ -212,7 +212,7 @@ export function getReplies(ids) {
     axios
       .get(`${API_URL}/rate/reply`, { params, headers })
       .then((resp) => {
-        log.info('GET replies resp', resp);
+        // log.info('GET replies resp', resp);
         resolve(
           resp.data.map((data) => ({
             id: data.id,
@@ -241,7 +241,7 @@ export function postReply(type, id, content) {
     axios
       .post(`${API_URL}/rate/${id}/reply`, data, { headers: header })
       .then((resp) => {
-        log.info('POST reply resp', resp);
+        // log.info('POST reply resp', resp);
         getReplies([resp.data.id])
           .then((d) => {
             resolve(d[0]);
@@ -260,7 +260,7 @@ export function deleteReply(replyId) {
     axios
       .delete(`${API_URL}/rate/reply/${replyId}`, { headers })
       .then((resp) => {
-        log.info('DELETE reply resp', resp);
+        // log.info('DELETE reply resp', resp);
         resolve(resp.data);
       })
       .catch((err) => reject(err));
@@ -298,7 +298,7 @@ export function getUserInfo(id) {
           info.nfollowers = followers.data.length;
           info.followed = followers.data.filter((obj) => obj.id === userId).length > 0;
 
-          log.info('GET user info RESP', info);
+          // log.info('GET user info RESP', info);
           resolve(info);
         }),
       )
@@ -314,7 +314,7 @@ export function postFollow(id) {
     axios
       .post(`${API_URL}/user/${id}/following`, {}, { headers: header })
       .then((resp) => {
-        log.info('POST following resp', resp);
+        // log.info('POST following resp', resp);
         resolve(resp.data);
       })
       .catch((e) => reject(e));
@@ -329,7 +329,7 @@ export function deleteFollow(id) {
     axios
       .delete(`${API_URL}/user/${id}/following`, { headers: header })
       .then((resp) => {
-        log.info('DELETE following resp', resp);
+        // log.info('DELETE following resp', resp);
         resolve(resp.data);
       })
       .catch((e) => reject(e));
@@ -346,7 +346,7 @@ export async function getRateByRateId(rateId) {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));

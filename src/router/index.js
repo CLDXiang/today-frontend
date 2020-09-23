@@ -13,7 +13,7 @@ const Me = () => import(/* webpackChunkName: "me" */ '@/views/Me/Me.vue');
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', name: 'Timetable', component: Timetable },
+  { path: '/', redirect: '/timetable' },
   { path: '/timetable', name: 'Timetable', component: Timetable },
   { path: '/rating', name: 'Rating', component: Rating },
   { path: '/notification', name: 'Notification', component: Notification },

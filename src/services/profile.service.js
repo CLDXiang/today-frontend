@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 import { API_URL } from '../utils/config';
-import log from '../utils/log';
+// import log from '../utils/log';
 
 export async function getUserProfile(userId = store.state.user.id) {
   return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ export async function getUserProfile(userId = store.state.user.id) {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));
@@ -29,7 +29,7 @@ export async function editProfile(UpdateUserDto) {
     axios
       .post(`${API_URL}/user/profile`, UpdateUserDto, { headers: authHeader })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));
@@ -44,7 +44,7 @@ export async function uploadAvatar(userAvatar) {
     axios
       .post(`${API_URL}/user/profile/avatar`, userAvatar, { headers: authHeader })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));
@@ -61,7 +61,7 @@ export async function getHistory() {
         headers: authHeader,
       })
       .then((resp) => {
-        log.info(resp);
+        // log.info(resp);
         resolve(resp.data);
       })
       .catch((error) => reject(error));

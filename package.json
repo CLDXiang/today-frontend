@@ -1,64 +1,44 @@
 {
   "name": "fdxk.info",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\" --no-fix",
+    "lint": "vue-cli-service lint --no-fix",
     "check": "npm run lint && npm run build && echo 'check passed!'",
-    "format": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\"",
-    "lint:fix": "vue-cli-service lint \"src/**/*.js\" \"src/**/*.vue\"",
+    "format": "vue-cli-service lint",
     "update-public-data": "cd public && wget https://github.com/fudan-today/today.backend/releases/download/public_data/public_data.tar && tar -xvf public_data.tar && rm public_data.tar && cd .."
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "core-js": "^2.6.11",
-    "dayjs": "^1.8.35",
-    "dotenv": "^8.2.0",
-    "lodash": "^4.17.20",
+    "axios": "^0.20.0",
+    "core-js": "^3.6.5",
+    "dayjs": "^1.8.36",
     "register-service-worker": "^1.7.1",
-    "vue": "^2.6.12",
-    "vue-router": "^3.4.3",
-    "vuetify": "^2.3.10",
-    "vuex": "^3.5.1",
-    "vuex-persistedstate": "^2.7.1"
+    "vue": "^3.0.0-0",
+    "vue-class-component": "^8.0.0-0",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
-    "@vue/cli": "^3.12.1",
-    "@vue/cli-plugin-babel": "^3.12.1",
-    "@vue/cli-plugin-eslint": "^4.5.6",
-    "@vue/cli-plugin-pwa": "^4.5.6",
-    "@vue/cli-plugin-unit-jest": "^3.12.1",
-    "@vue/cli-service": "^3.12.1",
-    "@vue/test-utils": "1.0.0-beta.29",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^23.6.0",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-prettier-vue": "^2.1.1",
-    "eslint-plugin-vue": "^6.2.2",
-    "jest": "^24.9.0",
-    "node-sass": "^4.14.1",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-pwa": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-vue": "^7.0.0-0",
     "prettier": "^2.1.2",
-    "sass": "^1.26.10",
-    "sass-loader": "^7.3.1",
-    "vue-cli-plugin-vuetify": "^0.6.3",
-    "vue-eslint-parser": "^7.1.0",
-    "vue-template-compiler": "^2.6.12",
-    "vuetify-loader": "^1.6.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "typescript": "~3.9.3"
+  }
 }

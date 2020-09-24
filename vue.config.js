@@ -1,4 +1,10 @@
 module.exports = {
+  chainWebpack: (config) => {
+    config.plugin('html').tap((args) => {
+      args[0].title = 'fdxk.info';
+      return args;
+    });
+  },
   pwa: {
     name: 'fdxk.info',
     themeColor: '#7BC5CF',

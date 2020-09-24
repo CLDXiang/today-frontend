@@ -1,11 +1,6 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import createPersistedState from 'vuex-persistedstate';
-// import log from '../utils/log';
+import { createStore } from 'vuex';
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+export default createStore({
   state: {
     user: {
       jwt_token: '',
@@ -24,15 +19,6 @@ const store = new Vuex.Store({
       follower: [],
       following: [],
       history: [],
-    },
-    editor: {
-      draft: {
-        content: '',
-        title: '',
-      },
-    },
-    app: {
-      barTitle: 'Fudan Today',
     },
     detailPageCourse: {},
     secret: {
@@ -163,20 +149,19 @@ const store = new Vuex.Store({
       return id2lecture;
     },
   },
-  plugins: [
-    createPersistedState({
-      reducer(state) {
-        return {
-          user: state.user,
-          profile: state.profile,
-          editor: state.editor,
-          secret: state.secret,
-          selectedCoursesIds: state.selectedCoursesIds,
-          selectedSectionsByDay: state.selectedSectionsByDay,
-        };
-      },
-    }),
-  ],
+  // FIXME: localStorage
+  // plugins: [
+  //   createPersistedState({
+  //     reducer(state) {
+  //       return {
+  //         user: state.user,
+  //         profile: state.profile,
+  //         editor: state.editor,
+  //         secret: state.secret,
+  //         selectedCoursesIds: state.selectedCoursesIds,
+  //         selectedSectionsByDay: state.selectedSectionsByDay,
+  //       };
+  //     },
+  //   }),
+  // ],
 });
-
-export default store;

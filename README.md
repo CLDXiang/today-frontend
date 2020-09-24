@@ -53,35 +53,26 @@ We would like to refer to the following boilerplate projects
 * nusmod
 * [PKU Helper](https://ckcz123.com/applications/pkuhelper/)
 
-
 update:
 
 1. Add master branch protection
 
 ## Project setup
 ```
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn run serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
+yarn run build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn run check
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

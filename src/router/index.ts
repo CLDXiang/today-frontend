@@ -1,7 +1,4 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-
-import store from '../store';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 const Timetable = () =>
   import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
@@ -10,9 +7,7 @@ const Notification = () =>
   import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
 const Me = () => import(/* webpackChunkName: "me" */ '@/views/Me/Me.vue');
 
-Vue.use(VueRouter);
-
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/timetable' },
   { path: '/timetable', name: 'Timetable', component: Timetable },
   { path: '/rating', name: 'Rating', component: Rating },
@@ -39,25 +34,12 @@ const routes = [
     name: 'Register',
     component: () => import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/Register.vue'),
   },
-  { path: '*', component: Timetable },
+  { path: '/*', component: Timetable },
 ];
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes,
-  mode: 'history',
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.getters.userLoggedIn) {
-      next();
-    } else {
-      // https://router.vuejs.org/guide/essentials/passing-props.html
-      next({ name: 'Login', query: { redirect: to.fullPath } });
-    }
-  } else {
-    next();
-  }
 });
 
 export default router;

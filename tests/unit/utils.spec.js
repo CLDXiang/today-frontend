@@ -3,18 +3,27 @@ import { spans2segments } from '../../src/components/utils';
 
 test('sort', () => {
   expect(
-    [{ d: 1, s: 0 }, { d: 0, s: 1 }].sort((a, b) => {
+    [
+      { d: 1, s: 0 },
+      { d: 0, s: 1 },
+    ].sort((a, b) => {
       const tem1 = a.d < b.d ? -1 : a.d;
       const tem2 = b.d && a.s < b.s ? -1 : 1;
       return tem1 === tem2;
       // return a.d < b.d ? -1 : a.d === b.d && a.s < b.s ? -1 : 1;
     }),
-  ).toEqual([{ d: 0, s: 1 }, { d: 1, s: 0 }]);
+  ).toEqual([
+    { d: 0, s: 1 },
+    { d: 1, s: 0 },
+  ]);
 });
 
 test('spans2slots returns sorted slots', () => {
   expect(
-    spans2slots([{ day: 0, start: 1, end: 5 }, { day: 0, start: 2, end: 6 }]),
+    spans2slots([
+      { day: 0, start: 1, end: 5 },
+      { day: 0, start: 2, end: 6 },
+    ]),
   ).toEqual([
     { d: 0, s: 1 },
     { d: 0, s: 2 },

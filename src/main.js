@@ -4,6 +4,7 @@ import vuetify from './plugins/vuetify';
 import router from './router';
 import store from './store';
 import message from './utils/message';
+import './registerServiceWorker';
 
 Vue.prototype.$message = message;
 Vue.config.productionTip = false;

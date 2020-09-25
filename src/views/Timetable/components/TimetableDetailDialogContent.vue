@@ -56,7 +56,7 @@
         disable-filtering
         hide-default-footer
       >
-        <template v-slot:default>
+        <template #default>
           <thead>
             <tr>
               <th class="text-left">
@@ -69,7 +69,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="ts in courseInfo.timeSlots" :key="ts.week+ts.day+ts.section">
+            <tr
+              v-for="ts in courseInfo.timeSlots"
+              :key="ts.week+ts.day+ts.section"
+            >
               <td>
                 {{
                   `${ts.week} 周，每周周${ts.day}第 ${
@@ -84,15 +87,29 @@
     </div>
     <div class="btn-group">
       <div class="btn-line">
-        <v-btn rounded depressed color="primary" disabled>
+        <v-btn
+          rounded
+          depressed
+          color="primary"
+          disabled
+        >
           查看课程评价（开发中）
         </v-btn>
-        <v-btn rounded depressed color="error" @click="handleClickDeleteButton">
+        <v-btn
+          rounded
+          depressed
+          color="error"
+          @click="handleClickDeleteButton"
+        >
           <v-icon>mdi-delete-forever-outline</v-icon>删除课程
         </v-btn>
       </div>
       <div class="btn-line">
-        <v-btn rounded depressed @click="handleClickCloseButton">
+        <v-btn
+          rounded
+          depressed
+          @click="handleClickCloseButton"
+        >
           <v-icon>mdi-arrow-collapse</v-icon>关闭
         </v-btn>
       </div>
@@ -105,6 +122,9 @@ export default {
   props: {
     course: Object,
   },
+  emits: [
+    'delete-course',
+  ],
   data() {
     return {};
   },
@@ -134,7 +154,9 @@ export default {
             teachersSet.add(teacher);
           }
         });
-        const { week, day, section, place } = ts;
+        const {
+          week, day, section, place,
+        } = ts;
         const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
 
         courseInfo.sectionCount += sectionEnd - sectionStart + 1;
@@ -144,12 +166,12 @@ export default {
           section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
           place,
           teachers:
-            (ts.teacher &&
-              ts.teacher
+            (ts.teacher
+              && ts.teacher
                 .map((t) => t.trim())
                 .filter((t) => !!t)
-                .join(', ')) ||
-            '',
+                .join(', '))
+            || '',
         });
       });
       courseInfo.teachers = [...teachersSet].join(', ');
@@ -162,7 +184,7 @@ export default {
     },
     handleClickDeleteButton() {
       this.$store.commit('hideDetailDialog');
-      this.$emit('deleteCourse');
+      this.$emit('delete-course');
       this.$store.commit('onDeleteDetailPageCourse');
     },
     handleClickCloseButton() {

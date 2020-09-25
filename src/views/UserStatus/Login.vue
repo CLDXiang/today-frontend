@@ -54,7 +54,12 @@
         注册
       </v-btn>
     </div>
-    <v-btn style="margin-top: 12px" text color="primary" to="/forgot-password">
+    <v-btn
+      style="margin-top: 12px"
+      text
+      color="primary"
+      to="/forgot-password"
+    >
       忘记密码？
     </v-btn>
   </div>
@@ -62,9 +67,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import log from '../../utils/log';
-import { login } from '../../services/auth.service';
-import { getUserProfile } from '../../services/profile.service';
+import { login } from '@/apis/auth.service';
+import { getUserProfile } from '@/apis/profile.service';
+import log from '@/utils/log';
 
 export default {
   data: () => ({
@@ -157,5 +162,3 @@ export default {
   }
 }
 </style>
-
-

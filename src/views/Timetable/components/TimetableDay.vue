@@ -1,5 +1,8 @@
 <template>
-  <div :style="{ flexGrow: sectionsByColumns.length }" class="timetable__day">
+  <div
+    :style="{ flexGrow: sectionsByColumns.length }"
+    class="timetable__day"
+  >
     <div class="day__title background-one">
       {{ title }}
     </div>

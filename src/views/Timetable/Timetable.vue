@@ -13,7 +13,7 @@
       <timetable-detail-dialog-content
         :course="detailPageCourse"
         :class="classDetailPage"
-        @deleteCourse="removeSelectedCourse(detailPageCourse.id)"
+        @delete-course="removeSelectedCourse(detailPageCourse.id)"
       />
     </v-dialog>
     <v-dialog
@@ -30,7 +30,7 @@
         :selected-courses-ids="selectedCoursesIds"
         :selected-courses-ids-from-database="selectedCoursesIdsFromDatabase"
         :courses="allCourses"
-        @conflictResolved="onConflictResolved"
+        @conflict-resolved="onConflictResolved"
       />
     </v-dialog>
     <v-dialog
@@ -44,7 +44,7 @@
         :search-index="searchIndex"
         :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
-        @hideSearchDialog="hideSearchDialog"
+        @hide-search-dialog="hideSearchDialog"
       />
     </v-dialog>
     <timetable-head-bar @click-cloud="fetchSelectedCourses" />
@@ -68,14 +68,16 @@
           :sections="sectionsByDay"
         />
       </div>
-      <div v-if="!isMobileMode" class="timetable__search-bar-box">
+      <div
+        v-if="!isMobileMode"
+        class="timetable__search-bar-box"
+      >
         <timetable-search-bar
           :search-index="searchIndex"
           :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
         />
       </div>
-
 
       <v-btn
         v-if="isMobileMode"
@@ -94,10 +96,10 @@
           color="red"
           dot
         >
-          <icon-search /> 
+          <icon-search />
         </v-badge>
         <!-- <v-icon>search</v-icon> -->
-        <icon-search v-else /> 
+        <icon-search v-else />
       </v-btn>
     </div>
   </div>
@@ -106,13 +108,15 @@
 <script>
 import axios from 'axios';
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import { IconSearch } from '../../components/icons';
 import {
   getSelectedCourses as getSelectedCoursesService,
   addSelectedCourse as addSelectedCourseService,
   removeSelectedCourse as removeSelectedCourseService,
   replaceSelectedCourses as replaceSelectedCoursesService,
-} from '../../services/timetable.service';
+} from '@/apis/timetable.service';
+import { getUserProfile } from '@/apis/profile.service';
+import log from '@/utils/log';
+import { IconSearch } from '../../components/icons';
 import {
   TimetableDay,
   TimetableSearchBar,
@@ -121,8 +125,6 @@ import {
   TimetableSearchDialogContent,
   TimetableHeadBar,
 } from './components';
-import { getUserProfile } from '../../services/profile.service';
-import log from '../../utils/log';
 
 export default {
   components: {
@@ -353,7 +355,9 @@ export default {
               teachers.add(teacher);
             }
           });
-          const { week, day, section, place } = ts;
+          const {
+            week, day, section, place,
+          } = ts;
           const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
           timeSlots.push({
             week,

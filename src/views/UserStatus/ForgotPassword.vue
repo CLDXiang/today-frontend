@@ -70,14 +70,19 @@
         修改密码
       </v-btn>
     </div>
-    <v-btn style="margin-top: 12px" text color="primary" to="/login">
+    <v-btn
+      style="margin-top: 12px"
+      text
+      color="primary"
+      to="/login"
+    >
       返回登录页
     </v-btn>
   </div>
 </template>
 <script>
-import { requestCodeForForgotPassword, modifyPassword } from '../../services/auth.service';
-import log from '../../utils/log';
+import { requestCodeForForgotPassword, modifyPassword } from '@/apis/auth.service';
+import log from '@/utils/log';
 
 export default {
   data: () => ({
@@ -149,14 +154,14 @@ export default {
         requestCodeForForgotPassword(this.realEmail)
           .then(() => {
             this.state = 'cooldown';
-            const vm = this;
-            vm.cooldownCnt = 60;
+            this.cooldownCnt = 60;
             this.$message.success('验证码发送成功');
-            setTimeout(function countdown() {
-              vm.cooldownCnt -= 1;
-              if (vm.cooldownCnt === 0) vm.state = 'resend';
-              else if (vm.state === 'cooldown') setTimeout(countdown, 1000);
-            }, 1000);
+            const countdown = () => {
+              this.cooldownCnt -= 1;
+              if (this.cooldownCnt === 0) this.state = 'resend';
+              else if (this.state === 'cooldown') setTimeout(countdown, 1000);
+            };
+            setTimeout(countdown(), 1000);
           })
           .catch((e) => {
             this.state = 'init';

@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     user: {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       jwt_token: '',
       id: '',
       name: '',
@@ -38,43 +39,34 @@ export default createStore({
     globalMessageTimer: -1,
     // globalMessageIcon: '',
 
-    selectedCoursesIds: {},
+    selectedCoursesIds: {} as {[key: string]: any},
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
     selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
     hoveredCourseId: -1,
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
       state.user.id = JSON.parse(payload).sub;
       // log.info('set jwt_token', token);
     },
-    SET_USER(state, name, email) {
-      state.user.name = name;
-      state.user.email = email;
+    SET_USER(state, payload: {name: string; email: string}) {
+      state.user.name = payload.name;
+      state.user.email = payload.email;
     },
     LOGOUT(state) {
       // log.info('LOGOUT');
+      // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
-    },
-    updateSecretPosts(state, posts) {
-      const postsMapping = {};
-      for (let i = 0; i < posts.length; i += 1) {
-        postsMapping[posts[i].id] = posts[i];
-      }
-      state.secret.posts = posts;
-      state.secret.postsMapping = postsMapping;
     },
     SET_USER_PROFILE(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
       state.user.nickName = profile.nickName;
-    },
-    SET_BAR_TITLE(state, barTitle) {
-      state.app.barTitle = barTitle;
     },
     SET_HISTORY(state, history) {
       state.profile.history = history;
@@ -111,7 +103,7 @@ export default createStore({
       state.globalMessageTimer = -1;
     },
 
-    setSelectedCourses(state, payload) {
+    setSelectedCourses(state, payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: any[] }) {
       state.selectedSectionsByDay = payload.selectedSectionsByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
     },
@@ -127,27 +119,6 @@ export default createStore({
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
-    countNotification: (state) => Object.keys(state.profile.notifications).length,
-    countTrend: (state) => Object.keys(state.profile.trends).length,
-    countUserStar: (state) => Object.keys(state.profile.userStar).length,
-    countUserRate: (state) => Object.keys(state.profile.userRate).length,
-    countFollower: (state) => Object.keys(state.profile.follower).length,
-    countFollowing: (state) => Object.keys(state.profile.following).length,
-    countHistory: (state) => Object.keys(state.profile.history).length,
-    code2lecture: (state) => {
-      const code2lecture = {};
-      state.lectures.forEach((data) => {
-        code2lecture[`${data.code}.${data.idx}`] = data;
-      });
-      return code2lecture;
-    },
-    id2lecture: (state) => {
-      const id2lecture = {};
-      state.lectures.forEach((data) => {
-        id2lecture[`${data.id}`] = data;
-      });
-      return id2lecture;
-    },
   },
   // FIXME: localStorage
   // plugins: [

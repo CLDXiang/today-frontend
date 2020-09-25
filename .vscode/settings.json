@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
     "fudan"
-  ]
+  ],
+  "eslint.nodePath": "../node_modules",
 }

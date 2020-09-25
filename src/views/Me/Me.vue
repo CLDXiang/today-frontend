@@ -1,7 +1,11 @@
 <template>
   <div class="content-box">
     <div class="dark-box">
-      <img class="avatar" :src="processAvatar(user.avatar)" alt="avatar">
+      <img
+        class="avatar"
+        :src="processAvatar(user.avatar)"
+        alt="avatar"
+      >
       <div class="nickName">
         {{ user.name }}
       </div>
@@ -29,7 +33,7 @@
           退出登录
         </v-btn>
       </div>
-      
+
       <div class="bottom-action-bar" />
     </div>
   </div>
@@ -37,7 +41,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import renderTime from '../../utils/time';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {
@@ -45,19 +48,6 @@ export default {
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
-    histories() {
-      const histories = [];
-      this.$store.state.profile.history.forEach((element) => {
-        if (this.id2lecture[`${element.history_about_id}`]) {
-          const time = { time: renderTime(element.created_at) };
-          histories.push({
-            ...this.id2lecture[`${element.history_about_id}`],
-            ...time,
-          });
-        }
-      });
-      return histories;
-    },
   },
   methods: {
     processAvatar(originAvatar) {

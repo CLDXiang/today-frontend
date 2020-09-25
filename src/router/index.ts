@@ -1,10 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-const Timetable = () =>
-  import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
+const Timetable = () => import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
 const Rating = () => import(/* webpackChunkName: "rating" */ '@/views/Rating/Rating.vue');
-const Notification = () =>
-  import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
+const Notification = () => import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
 const Me = () => import(/* webpackChunkName: "me" */ '@/views/Me/Me.vue');
 
 const routes: Array<RouteRecordRaw> = [
@@ -26,8 +24,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/forgot-password',
     name: 'ForgotPassword',
-    component: () =>
-      import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/ForgotPassword.vue'),
+    component: () => import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/ForgotPassword.vue'),
   },
   {
     path: '/register',

@@ -1,12 +1,24 @@
 <template>
   <div class="content-box">
     <div class="title-box">
-      <span class="back-btn" @click="$router.push('/me')"><icon-back /></span>
+      <span
+        class="back-btn"
+        @click="$router.push('/me')"
+      ><icon-back /></span>
       <span class="title">修改个人信息</span>
     </div>
     <div class="avatar-box">
-      <img class="avatar" :src="processAvatar(user.avatar)" alt="avatar">
-      <v-file-input id="upload" accept="image/png, image/jpeg, image/jpg, image/bmp" style="display: none" @change="handleAvatarUploaded" />
+      <img
+        class="avatar"
+        :src="processAvatar(user.avatar)"
+        alt="avatar"
+      >
+      <v-file-input
+        id="upload"
+        accept="image/png, image/jpeg, image/jpg, image/bmp"
+        style="display: none"
+        @change="handleAvatarUploaded"
+      />
       <v-btn
         color="primary"
         rounded
@@ -134,10 +146,10 @@
 
 <script>
 import { mapState } from 'vuex';
+import { editProfile, uploadAvatar } from '@/apis/profile.service';
+import log from '@/utils/log';
 import { IconBack } from '../../components/icons';
-import { editProfile, uploadAvatar } from '../../services/profile.service';
 import defaultAvatar from '../../assets/default_avatar.jpg';
-import log from '../../utils/log';
 
 export default {
   components: {

@@ -1,8 +1,7 @@
 import axios from 'axios';
-// import log from '../utils/log';
+// import log from '@/utils/log';
+import { API_URL } from '@/utils/config';
 import $store from '../store';
-
-import { API_URL } from '../utils/config';
 
 /**
  ******************************
@@ -47,7 +46,7 @@ export function login(usernameOrEmail, password) {
         const { email, name } = resp.data;
         if (jwtToken) {
           $store.commit('SET_JWT_TOKEN', jwtToken);
-          $store.commit('SET_USER', name, email);
+          $store.commit('SET_USER', { name, email });
         } else {
           reject(new Error('jwtToken no contained in response'));
         }

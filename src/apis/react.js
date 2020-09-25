@@ -1,9 +1,9 @@
 // import axios from 'axios';
 // import emojiData from 'emoji-mart-vue-fast/data/twitter.json';
-// import log from '../utils/log';
+// import log from '@/utils/log';
 // import store from '../store';
 
-// import { API_URL } from '../utils/config';
+// import { API_URL } from '@/utils/config';
 
 // export const emojiStrToInt = new Map();
 // export const emojiIntToStr = new Map();

@@ -6,13 +6,19 @@
     grow
     color="primary"
   >
-    <v-btn value="timetable" @click="handleClick('timetable')">
+    <v-btn
+      value="timetable"
+      @click="handleClick('timetable')"
+    >
       <span>课表</span>
       <!-- <v-icon>mdi-table</v-icon> -->
       <icon-timetable />
     </v-btn>
 
-    <v-btn value="rating" @click="handleClick('rating')">
+    <v-btn
+      value="rating"
+      @click="handleClick('rating')"
+    >
       <span>评课</span>
       <!-- <v-icon>mdi-chart-box-outline</v-icon> -->
       <icon-rating />
@@ -24,7 +30,10 @@
     <!-- <icon-notification /> -->
     <!-- </v-btn> -->
 
-    <v-btn value="status" @click="handleClick('status')">
+    <v-btn
+      value="status"
+      @click="handleClick('status')"
+    >
       <span>{{ status }}</span>
       <!-- <v-icon>mdi-emoticon-happy-outline</v-icon> -->
       <icon-my />
@@ -32,11 +41,12 @@
   </v-bottom-navigation>
 </template>
 
-<script lang="js">
+<script lang="ts">
+import log from '@/utils/log';
+import { defineComponent } from 'vue';
 import { IconMy, IconRating, IconTimetable } from '../icons';
-import log from '../../utils/log';
 
-export default {
+export default defineComponent({
   components: { IconMy, IconRating, IconTimetable },
   computed: {
     activePage() {
@@ -48,10 +58,10 @@ export default {
         return 'notification';
       }
       if (
-        /\/me\/?.*$/.test(path) ||
-        /\/login\/?.*$/.test(path) ||
-        /\/register\/?.*$/.test(path) ||
-        /\/forgot-password\/?.*$/.test(path)
+        /\/me\/?.*$/.test(path)
+        || /\/login\/?.*$/.test(path)
+        || /\/register\/?.*$/.test(path)
+        || /\/forgot-password\/?.*$/.test(path)
       ) {
         return 'status';
       }
@@ -81,9 +91,9 @@ export default {
           log.error(e);
         });
       }
-    }
+    },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

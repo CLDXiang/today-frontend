@@ -9,10 +9,24 @@
     @touchstart="setHoveredCourseId(section.id)"
     @touchend="resetHoveredCourseId"
   >
-    <span class="course-name" :style="{'-webkit-line-clamp': lines.name }">{{ section.name }}</span>
-    <span v-if="lines.code > 0" class="course-code" :style="{'-webkit-line-clamp': lines.code }">{{ `(${section.code_id})` }}</span>
-    <span class="course-place" :style="{'-webkit-line-clamp': lines.place }">{{ `(${section.currentSlot.week})${section.currentSlot.place}` }}</span>
-    <span v-if="lines.teacher > 0" class="course-teacher" :style="{'-webkit-line-clamp': lines.teacher }">{{
+    <span
+      class="course-name"
+      :style="{'-webkit-line-clamp': lines.name }"
+    >{{ section.name }}</span>
+    <span
+      v-if="lines.code > 0"
+      class="course-code"
+      :style="{'-webkit-line-clamp': lines.code }"
+    >{{ `(${section.code_id})` }}</span>
+    <span
+      class="course-place"
+      :style="{'-webkit-line-clamp': lines.place }"
+    >{{ `(${section.currentSlot.week})${section.currentSlot.place}` }}</span>
+    <span
+      v-if="lines.teacher > 0"
+      class="course-teacher"
+      :style="{'-webkit-line-clamp': lines.teacher }"
+    >{{
       section.currentSlot.teacher.join(',')
     }}</span>
   </div>
@@ -41,9 +55,9 @@ export default {
     classCourseCard() {
       return [
         `color-${
-          (this.section.code &&
-            parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96) ||
-          0
+          (this.section.code
+            && parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96)
+          || 0
         }`,
         this.hoveredCourseId === this.section.id ? 'hover' : '',
       ];
@@ -122,10 +136,10 @@ export default {
 
     while (leftLines > 0) {
       if (
-        lines.name >= linesNeed.name &&
-        lines.place >= linesNeed.place &&
-        lines.code >= linesNeed.code &&
-        lines.teacher >= linesNeed.teacher
+        lines.name >= linesNeed.name
+        && lines.place >= linesNeed.place
+        && lines.code >= linesNeed.code
+        && lines.teacher >= linesNeed.teacher
       ) {
         this.lines = lines;
         return;

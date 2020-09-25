@@ -1,11 +1,19 @@
 <template>
   <div class="head-bar">
-    <img v-if="userLoggedIn" class="avatar" :src="processAvatar(user.avatar)" alt="avatar">
+    <img
+      v-if="userLoggedIn"
+      class="avatar"
+      :src="processAvatar(user.avatar)"
+      alt="avatar"
+    >
     <div v-else />
     <div class="semester">
       2020年秋季学期
     </div>
-    <div class="action-group" @click="handleClickCloud">
+    <div
+      class="action-group"
+      @click="handleClickCloud"
+    >
       <icon-cloud />
     </div>
   </div>

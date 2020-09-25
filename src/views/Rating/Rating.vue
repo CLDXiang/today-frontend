@@ -6,13 +6,21 @@
     </section>
     <footer class="bottom-content">
       <div>希望关注项目进度吗？在这里联系我们：</div>
-      <div v-if="!userLoggedIn" class="hide-img" @click="$router.push('./login')">
+      <div
+        v-if="!userLoggedIn"
+        class="hide-img"
+        @click="$router.push('./login')"
+      >
         <div>登录后显示 🙈</div>
         <div style="transform: rotate(30deg)">
           👉
         </div>
       </div>
-      <img v-else :src="wxGroupImg" alt="群二维码">
+      <img
+        v-else
+        :src="wxGroupImg"
+        alt="群二维码"
+      >
     </footer>
   </content>
 </template>
@@ -83,4 +91,3 @@ export default {
   }
 }
 </style>
-

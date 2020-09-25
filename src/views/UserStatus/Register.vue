@@ -85,7 +85,12 @@
         注册
       </v-btn>
     </div>
-    <v-btn style="margin-top: 12px" text color="primary" to="/login">
+    <v-btn
+      style="margin-top: 12px"
+      text
+      color="primary"
+      to="/login"
+    >
       已有账号？前往登录
     </v-btn>
   </div>
@@ -93,8 +98,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { register, requestCode } from '../../services/auth.service';
-import log from '../../utils/log';
+import { register, requestCode } from '@/apis/auth.service';
+import log from '@/utils/log';
 
 export default {
   data: () => ({
@@ -174,13 +179,12 @@ export default {
         requestCode(this.realEmail)
           .then(() => {
             this.state = 'cooldown';
-            const vm = this;
-            vm.cooldownCnt = 60;
-            setTimeout(function countdown() {
-              vm.cooldownCnt -= 1;
-              if (vm.cooldownCnt === 0) vm.state = 'resend';
-              else if (vm.state === 'cooldown') setTimeout(countdown, 1000);
-            }, 1000);
+            const countdown = () => {
+              this.cooldownCnt -= 1;
+              if (this.cooldownCnt === 0) this.state = 'resend';
+              else if (this.state === 'cooldown') setTimeout(countdown, 1000);
+            };
+            setTimeout(countdown(), 1000);
           })
           .catch((e) => {
             this.state = 'init';

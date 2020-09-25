@@ -1,7 +1,7 @@
 import axios from 'axios';
-// import log from '../utils/log';
+// import log from '@/utils/log';
+import { API_URL } from '@/utils/config';
 import store from '../store';
-import { API_URL } from '../utils/config';
 
 export default function searchUser(str) {
   const headers = {

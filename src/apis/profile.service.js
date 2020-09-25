@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '@/utils/config';
 import store from '../store';
-import { API_URL } from '../utils/config';
-// import log from '../utils/log';
+// import log from '@/utils/log';
 
 export async function getUserProfile(userId = store.state.user.id) {
   return new Promise((resolve, reject) => {

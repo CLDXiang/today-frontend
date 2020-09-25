@@ -118,15 +118,21 @@
           ticks="always"
           tick-size="4"
         >
-          <template v-slot:thumb-label="props">
+          <template #thumb-label="props">
             {{ props.value + 1 }}
           </template>
         </v-range-slider>
       </div>
     </v-card-text>
-    <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results-box">
+    <div
+      v-show="isSearchResultsVisible && searchResults.length !== 0"
+      class="search-bar__results-box"
+    >
       <v-scroll-y-reverse-transition>
-        <div v-show="isSearchResultsVisible && searchResults.length !== 0" class="search-bar__results">
+        <div
+          v-show="isSearchResultsVisible && searchResults.length !== 0"
+          class="search-bar__results"
+        >
           <div
             v-for="item in searchResults"
             :key="item.courseId"
@@ -139,10 +145,17 @@
             <div class="result-line cut">
               {{ item.teachersText }}
             </div>
-            <div v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)" :key="tsIndex" class="result-line result-line--ts">
+            <div
+              v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
+              :key="tsIndex"
+              class="result-line result-line--ts"
+            >
               {{ ts }}
             </div>
-            <div v-if="item.timeSlotsTexts.length > 3" class="result-line result-line--ts">
+            <div
+              v-if="item.timeSlotsTexts.length > 3"
+              class="result-line result-line--ts"
+            >
               ……
             </div>
           </div>
@@ -159,7 +172,10 @@
         large
         @click="handleChangeResultsVisible"
       >
-        <v-icon :style="isSearchResultsVisible ? 'color: #fff' : ''" left>
+        <v-icon
+          :style="isSearchResultsVisible ? 'color: #fff' : ''"
+          left
+        >
           {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
         </v-icon>
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
@@ -167,7 +183,7 @@
     </v-card-actions>
     <v-card-actions>
       <v-spacer />
-      <v-btn 
+      <v-btn
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         rounded
         depressed
@@ -182,7 +198,7 @@
         </v-icon>
         重置
       </v-btn>
-      <v-btn 
+      <v-btn
         :disabled="isLoadingSearchResults"
         rounded
         depressed
@@ -198,7 +214,7 @@
         关闭
       </v-btn>
       <v-btn
-        :disabled="isLoadingSearchResults || isSearchQueryEmpty" 
+        :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         :loading="isLoadingSearchResults"
         color="primary"
         rounded
@@ -221,6 +237,7 @@ export default {
     searchIndex: Array,
     isLoadingCourses: Boolean,
   },
+  emits: ['hide-search-dialog'],
   data() {
     return {
       searchQuery: {
@@ -251,10 +268,10 @@ export default {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
       return res.map((item, index) => {
         if (
-          index === 0 ||
-          index === res.length - 1 ||
-          index === this.searchQuery.sectionRange[0] ||
-          index === this.searchQuery.sectionRange[1]
+          index === 0
+          || index === res.length - 1
+          || index === this.searchQuery.sectionRange[0]
+          || index === this.searchQuery.sectionRange[1]
         ) {
           return item;
         }
@@ -264,16 +281,16 @@ export default {
     isSearchQueryEmpty() {
       const sq = this.searchQuery;
       return (
-        sq.name.trim() === '' &&
-        sq.teachers.trim() === '' &&
-        sq.department.trim() === '' &&
+        sq.name.trim() === ''
+        && sq.teachers.trim() === ''
+        && sq.department.trim() === ''
         // sq.dayRange[0] === 0 &&
         // sq.dayRange[1] === 6 &&
-        sq.day === '全部' &&
-        sq.sectionRange[0] === 0 &&
-        sq.sectionRange[1] === 13 &&
-        sq.place.trim() === '' &&
-        sq.codeId.trim() === ''
+        && sq.day === '全部'
+        && sq.sectionRange[0] === 0
+        && sq.sectionRange[1] === 13
+        && sq.place.trim() === ''
+        && sq.codeId.trim() === ''
       );
     },
   },
@@ -308,7 +325,7 @@ export default {
       this.searchQuery.codeId = '';
     },
     handleClickCloseButton() {
-      this.$emit('hideSearchDialog');
+      this.$emit('hide-search-dialog');
     },
     handleClickSearchButton() {
       this.isLoadingSearchResults = true;
@@ -340,7 +357,9 @@ export default {
         const sectionRangeEnd = sq.sectionRange[1] + 1;
 
         this.searchResults = this.searchIndex.filter(
-          ({ name, teachers, department, timeSlots, codeId }) => {
+          ({
+            name, teachers, department, timeSlots, codeId,
+          }) => {
             // 外层每一个 if 中，前面的条件都代表“有有效输入”，即需要根据这个字段进行过滤
             if (nameTrimmed && !nameReg.test(name)) return false;
             if (teachersTrimmed) {
@@ -354,12 +373,12 @@ export default {
 
             // timeSlots 相关，匹配任意一个即可
             if (
-              placeTrimmed ||
+              placeTrimmed
               // dayRangeStart !== 1 ||
               // dayRangeEnd !== 7 ||
-              day !== '全部' ||
-              sectionRangeStart !== 1 ||
-              sectionRangeEnd !== 14
+              || day !== '全部'
+              || sectionRangeStart !== 1
+              || sectionRangeEnd !== 14
             ) {
               /* eslint-disable no-continue */
               // eslint-disable-next-line no-restricted-syntax

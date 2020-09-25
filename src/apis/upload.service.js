@@ -1,6 +1,6 @@
+// import message from '@/utils/message';
+import log from '@/utils/log';
 import { postImage } from './post.service';
-import message from '../utils/message';
-import log from '../utils/log';
 
 export default function uploadImage(file, cb /* , source */) {
   const pattern = /^image\//;
@@ -13,6 +13,7 @@ export default function uploadImage(file, cb /* , source */) {
         log.error(err);
       });
   } else {
-    message.error('只能选择图片文件！');
+    // FIXME: 错误提示
+    // message.error('只能选择图片文件！');
   }
 }

@@ -12,7 +12,11 @@
           本地新增课程
         </div>
         <div class="card-box">
-          <div v-for="course in selectedCoursesOnlyInLocal" :key="course.codeId" class="course-card">
+          <div
+            v-for="course in selectedCoursesOnlyInLocal"
+            :key="course.codeId"
+            class="course-card"
+          >
             <div
               :class="[
                 `color-${
@@ -29,7 +33,11 @@
           </div>
         </div>
         <div class="btn-box">
-          <v-btn rounded depressed @click="handleChooseLocal">
+          <v-btn
+            rounded
+            depressed
+            @click="handleChooseLocal"
+          >
             使用本地课表
           </v-btn>
         </div>
@@ -39,7 +47,11 @@
           云端新增课程
         </div>
         <div class="card-box">
-          <div v-for="course in selectedCoursesOnlyInDataBase" :key="course.codeId" class="course-card">
+          <div
+            v-for="course in selectedCoursesOnlyInDataBase"
+            :key="course.codeId"
+            class="course-card"
+          >
             <div
               :class="[
                 `color-${
@@ -56,14 +68,23 @@
           </div>
         </div>
         <div class="btn-box">
-          <v-btn rounded depressed @click="handleChooseDatabase">
+          <v-btn
+            rounded
+            depressed
+            @click="handleChooseDatabase"
+          >
             使用云端课表
           </v-btn>
         </div>
       </div>
     </div>
     <div class="bottom-action">
-      <v-btn rounded depressed color="primary" @click="handleChooseBoth">
+      <v-btn
+        rounded
+        depressed
+        color="primary"
+        @click="handleChooseBoth"
+      >
         合并
       </v-btn>
     </div>
@@ -77,6 +98,9 @@ export default {
     selectedCoursesIdsFromDatabase: Set,
     courses: Object,
   },
+  emits: [
+    'conflict-resolved',
+  ],
   computed: {
     selectedCoursesOnlyInLocal() {
       return [...this.selectedCoursesIds]
@@ -101,13 +125,13 @@ export default {
         ...this.selectedCoursesIds,
         ...this.selectedCoursesIdsFromDatabase,
       ]);
-      this.$emit('conflictResolved', combinedSelectedCoursesIds, true, true);
+      this.$emit('conflict-resolved', combinedSelectedCoursesIds, true, true);
     },
     handleChooseDatabase() {
-      this.$emit('conflictResolved', this.selectedCoursesIdsFromDatabase, true, false);
+      this.$emit('conflict-resolved', this.selectedCoursesIdsFromDatabase, true, false);
     },
     handleChooseLocal() {
-      this.$emit('conflictResolved', this.selectedCoursesIds, false, true);
+      this.$emit('conflict-resolved', this.selectedCoursesIds, false, true);
     },
     // getTeacherText(course) {
     //   console.log(course);

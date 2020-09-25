@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/camelcase */
 module.exports = {
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {
-      args[0].title = 'fdxk.info';
-      return args;
+      const newArgs = [...args];
+      newArgs[0].title = 'fdxk.info';
+      return newArgs;
     });
   },
   pwa: {

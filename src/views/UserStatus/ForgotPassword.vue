@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-import { requestCodeForForgotPassword, modifyPassword } from '@/apis/auth.service';
+import { requestCodeForForgotPassword, modifyPassword } from '@/apis/auth';
 import log from '@/utils/log';
 
 export default {

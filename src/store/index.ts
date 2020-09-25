@@ -1,7 +1,10 @@
 import { createStore } from 'vuex';
 
+type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 export default createStore({
   state: {
+    breakpoint: 'xs' as BreakpointType,
     user: {
       // eslint-disable-next-line @typescript-eslint/camelcase
       jwt_token: '',
@@ -62,6 +65,7 @@ export default createStore({
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
+      state.hasFetchedSelectedCourses = false;
     },
     SET_USER_PROFILE(state, profile) {
       state.user.avatar = profile.avatar;
@@ -115,6 +119,10 @@ export default createStore({
     },
     setHasFetchedSelectedCourses(state) {
       state.hasFetchedSelectedCourses = true;
+    },
+    /** 设置断点 */
+    setBreakpoint(state, newBreakpoint: BreakpointType) {
+      state.breakpoint = newBreakpoint;
     },
   },
   getters: {

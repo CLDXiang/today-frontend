@@ -146,7 +146,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { editProfile, uploadAvatar } from '@/apis/profile.service';
+import { editProfile, uploadAvatar } from '@/apis/profile';
 import log from '@/utils/log';
 import { IconBack } from '../../components/icons';
 import defaultAvatar from '../../assets/default_avatar.jpg';

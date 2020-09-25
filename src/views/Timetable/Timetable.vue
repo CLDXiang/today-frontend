@@ -107,14 +107,15 @@
 
 <script>
 import axios from 'axios';
+import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import {
   getSelectedCourses as getSelectedCoursesService,
   addSelectedCourse as addSelectedCourseService,
   removeSelectedCourse as removeSelectedCourseService,
   replaceSelectedCourses as replaceSelectedCoursesService,
-} from '@/apis/timetable.service';
-import { getUserProfile } from '@/apis/profile.service';
+} from '@/apis/timetable';
+import { getUserProfile } from '@/apis/profile';
 import log from '@/utils/log';
 import { IconSearch } from '../../components/icons';
 import {
@@ -126,7 +127,7 @@ import {
   TimetableHeadBar,
 } from './components';
 
-export default {
+export default defineComponent({
   components: {
     TimetableDay,
     TimetableSearchBar,
@@ -191,7 +192,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['detailPageCourse', 'isDetailDialogVisible', 'hasFetchedSelectedCourses']),
+    ...mapState(['detailPageCourse', 'isDetailDialogVisible', 'hasFetchedSelectedCourses', 'breakpoint']),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     classDetailPage() {
       // if (!this.detailPageCourse.id) return [];
@@ -205,7 +206,7 @@ export default {
       return [];
     },
     isMobileMode() {
-      switch (this.$vuetify.breakpoint.name) {
+      switch (this.breakpoint) {
         case 'xs':
         case 'sm':
           return true;
@@ -309,6 +310,10 @@ export default {
           }
           this.selectedCoursesIdsFromDatabase = new Set(res);
           if (this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)) {
+            this.$message.success('数据同步成功！');
+          } else if (this.selectedCoursesIds.size === 0) {
+            // 如果本地没有数据，则默认拉取服务器数据
+            this.onConflictResolved(this.selectedCoursesIdsFromDatabase, true, false);
             this.$message.success('数据同步成功！');
           } else {
             // 冲突解决
@@ -511,7 +516,7 @@ export default {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

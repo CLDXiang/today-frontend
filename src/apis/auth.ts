@@ -1,37 +1,9 @@
 import axios from 'axios';
 // import log from '@/utils/log';
 import { API_URL } from '@/utils/config';
-import $store from '../store';
+import store from '@/store';
 
-/**
- ******************************
- * @methods
- ******************************
- */
-
-export function isAccessTokenExpired() {
-  const accessTokenExpDate = $store.state.auth.accessTokenExpDate - 1;
-  const nowTime = Math.floor(new Date().getTime() / 1000);
-
-  return accessTokenExpDate <= nowTime;
-}
-
-export function getRefreshToken() {
-  return localStorage.getItem('refreshToken');
-}
-
-export function getAccessToken() {
-  return $store.state.user.token;
-  // return localStorage.getItem('accessToken');
-}
-
-/**
- ******************************
- * @API
- ******************************
- */
-
-export function login(usernameOrEmail, password) {
+export function login(usernameOrEmail: string, password: string) {
   return new Promise((resolve, reject) => {
     const data = {
       username: usernameOrEmail,
@@ -45,8 +17,8 @@ export function login(usernameOrEmail, password) {
         const jwtToken = resp.data.access_token;
         const { email, name } = resp.data;
         if (jwtToken) {
-          $store.commit('SET_JWT_TOKEN', jwtToken);
-          $store.commit('SET_USER', { name, email });
+          store.commit('SET_JWT_TOKEN', jwtToken);
+          store.commit('SET_USER', { name, email });
         } else {
           reject(new Error('jwtToken no contained in response'));
         }
@@ -56,7 +28,7 @@ export function login(usernameOrEmail, password) {
   });
 }
 
-export function register(name, email, code, password) {
+export function register(name: string, email: string, code: string, password: string) {
   return new Promise((resolve, reject) => {
     const payload = {
       name,
@@ -75,7 +47,7 @@ export function register(name, email, code, password) {
   });
 }
 
-export function requestCode(email) {
+export function requestCode(email: string) {
   return new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/register-mail`, { email })
@@ -86,7 +58,7 @@ export function requestCode(email) {
   });
 }
 
-export function requestCodeForForgotPassword(email) {
+export function requestCodeForForgotPassword(email: string) {
   return new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/password`, { email })
@@ -98,7 +70,7 @@ export function requestCodeForForgotPassword(email) {
   });
 }
 
-export function modifyPassword(email, code, password) {
+export function modifyPassword(email: string, code: string, password: string) {
   return new Promise((resolve, reject) => {
     axios
       .put(`${API_URL}/auth/password`, { email, code, password })

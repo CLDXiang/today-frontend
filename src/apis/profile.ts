@@ -21,13 +21,13 @@ export async function getUserProfile(userId = store.state.user.id) {
   });
 }
 
-export async function editProfile(UpdateUserDto) {
+export async function editProfile(newProfile: { nickName: string; bio: string }) {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .post(`${API_URL}/user/profile`, UpdateUserDto, { headers: authHeader })
+      .post(`${API_URL}/user/profile`, newProfile, { headers: authHeader })
       .then((resp) => {
         // log.info(resp);
         resolve(resp.data);
@@ -36,7 +36,7 @@ export async function editProfile(UpdateUserDto) {
   });
 }
 
-export async function uploadAvatar(userAvatar) {
+export async function uploadAvatar(userAvatar: FormData) {
   return new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,

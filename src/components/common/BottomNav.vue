@@ -34,7 +34,7 @@
       value="status"
       @click="handleClick('status')"
     >
-      <span>{{ status }}</span>
+      <span>{{ userLoggedIn ? '我的' : '登录' }}</span>
       <!-- <v-icon>mdi-emoticon-happy-outline</v-icon> -->
       <icon-my />
     </v-btn>
@@ -44,11 +44,15 @@
 <script lang="ts">
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex';
 import { IconMy, IconRating, IconTimetable } from '../icons';
+
+type ActivePageType = 'timetable' | 'rating' | 'notification' | 'status';
 
 export default defineComponent({
   components: { IconMy, IconRating, IconTimetable },
   computed: {
+    ...mapGetters(['userLoggedIn']),
     activePage() {
       const { path } = this.$route;
       if (/\/rating\/?.*$/.test(path)) {
@@ -67,12 +71,9 @@ export default defineComponent({
       }
       return 'timetable';
     },
-    status() {
-      return this.$store.getters.userLoggedIn ? '我的' : '登录';
-    },
   },
   methods: {
-    handleClick(v) {
+    handleClick(v: ActivePageType) {
       if (this.activePage === v) return;
       if (v === 'timetable') {
         this.$router.push({ name: 'Timetable' }).catch((e) => {
@@ -87,7 +88,7 @@ export default defineComponent({
           log.error(e);
         });
       } else if (v === 'status') {
-        this.$router.push({ name: this.$store.getters.userLoggedIn ? 'Me' : 'Login' }).catch((e) => {
+        this.$router.push({ name: this.userLoggedIn ? 'Me' : 'Login' }).catch((e) => {
           log.error(e);
         });
       }

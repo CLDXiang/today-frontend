@@ -166,7 +166,7 @@ export default {
       // only work on mobile mode
       this.$store.commit('changeDetailPageContent', this.section);
       this.$store.commit('showDetailDialog');
-      // if (this.$vuetify.breakpoint.name === 'xs' || this.$vuetify.breakpoint.name === 'sm') {
+      // if (this.breakpoint === 'xs' || this.breakpoint === 'sm') {
       //   this.$store.commit('showDetailDialog');
       // }
     },

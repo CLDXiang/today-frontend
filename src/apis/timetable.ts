@@ -3,7 +3,7 @@ import { API_URL } from '@/utils/config';
 import store from '../store';
 // import log from '@/utils/log';
 
-export const getSelectedCourses = async (semester) => new Promise((resolve, reject) => {
+export const getSelectedCourses = async (semester: string) => new Promise((resolve, reject) => {
   const authHeader = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
@@ -19,7 +19,7 @@ export const getSelectedCourses = async (semester) => new Promise((resolve, reje
     .catch((err) => reject(err));
 });
 
-export const replaceSelectedCourses = async (semester, selectedCoursesIDs) => new Promise((resolve, reject) => {
+export const replaceSelectedCourses = async (semester: string, selectedCoursesIDs: number[]) => new Promise((resolve, reject) => {
   const authHeader = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
@@ -41,7 +41,7 @@ export const replaceSelectedCourses = async (semester, selectedCoursesIDs) => ne
     .catch((err) => reject(err));
 });
 
-export const addSelectedCourse = async (courseId) => new Promise((resolve, reject) => {
+export const addSelectedCourse = async (courseId: number) => new Promise((resolve, reject) => {
   const authHeader = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };
@@ -60,7 +60,7 @@ export const addSelectedCourse = async (courseId) => new Promise((resolve, rejec
     .catch((err) => reject(err));
 });
 
-export const removeSelectedCourse = async (courseId) => new Promise((resolve, reject) => {
+export const removeSelectedCourse = async (courseId: number) => new Promise((resolve, reject) => {
   const authHeader = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };

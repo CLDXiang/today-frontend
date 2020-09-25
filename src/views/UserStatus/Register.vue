@@ -98,7 +98,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { register, requestCode } from '@/apis/auth.service';
+import { register, requestCode } from '@/apis/auth';
 import log from '@/utils/log';
 
 export default {

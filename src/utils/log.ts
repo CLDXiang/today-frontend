@@ -1,23 +1,21 @@
+// eslint-disable @typescript-eslint/no-explicit-any
 import { NODE_ENV } from './config';
 
 class Logger {
-  static log(...args) {
+  static log(...args: any[]) {
     if (NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
       console.log(...args);
     }
   }
 
-  static info(...args) {
+  static info(...args: any[]) {
     if (NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
       console.info(...args);
     }
   }
 
-  static error(...args) {
+  static error(...args: any[]) {
     if (NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
       console.error(...args);
     }
   }

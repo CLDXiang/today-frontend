@@ -117,10 +117,57 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { mapMutations } from 'vuex';
+
+interface CourseRaw {
+  code_id?: string;
+  name?: string;
+  credit?: number;
+  max_student?: number;
+  department?: string;
+  campus?: string;
+  remark?: string;
+  exam_time?: string;
+  exam_type?: string;
+  drop?: string;
+  time_slot: TimeSlotRaw[];
+}
+
+interface TimeSlotRaw {
+  teacher: string[];
+  week: string;
+  day: number;
+  section: string;
+  place: string;
+}
+
+interface CourseInfo {
+  codeId: string;
+  name: string;
+  credit: number;
+  sectionCount: number;
+  maxStudent: number;
+  department: string;
+  campus: string;
+  remark: string;
+  examTime: string;
+  examType: string;
+  drop: string;
+  timeSlots: {
+    week: string;
+    day: string;
+    section: [number, number];
+    place: string;
+    teachers: string;
+  }[];
+  teachers: string;
+}
+
+export default defineComponent({
   props: {
-    course: Object,
+    course: { type: Object as PropType<CourseRaw>, required: true },
   },
   emits: [
     'delete-course',
@@ -129,69 +176,71 @@ export default {
     return {};
   },
   computed: {
-    courseInfo() {
+    courseInfo(): CourseInfo {
       // 处理为便于展示的形式
-      const { course, mapDay } = this;
-      const courseInfo = {
-        codeId: course.code_id || '',
-        name: course.name || '',
-        credit: course.credit || 0,
+      const courseInfo: CourseInfo = {
+        codeId: this.course.code_id || '',
+        name: this.course.name || '',
+        credit: this.course.credit || 0,
         sectionCount: 0,
-        maxStudent: course.max_student || 0,
-        department: course.department || '',
-        campus: course.campus || '',
-        remark: course.remark || '',
-        examTime: course.exam_time || '',
-        examType: course.exam_type || '',
-        drop: course.drop || '',
+        maxStudent: this.course.max_student || 0,
+        department: this.course.department || '',
+        campus: this.course.campus || '',
+        remark: this.course.remark || '',
+        examTime: this.course.exam_time || '',
+        examType: this.course.exam_type || '',
+        drop: this.course.drop || '',
         timeSlots: [],
         teachers: '',
       };
       const teachersSet = new Set();
-      course.time_slot.forEach((ts) => {
-        ts.teacher.forEach((teacher) => {
-          if (teacher.trim() !== '') {
-            teachersSet.add(teacher);
-          }
-        });
-        const {
-          week, day, section, place,
-        } = ts;
-        const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
+      if (this.course.time_slot) {
+        this.course.time_slot.forEach((ts: TimeSlotRaw) => {
+          ts.teacher.forEach((teacher) => {
+            if (teacher.trim() !== '') {
+              teachersSet.add(teacher);
+            }
+          });
+          const {
+            week, day, section, place,
+          } = ts;
+          const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
 
-        courseInfo.sectionCount += sectionEnd - sectionStart + 1;
-        courseInfo.timeSlots.push({
-          week,
-          day: mapDay(day), // 注意此处的对应关系，day 1 对应 周一，而非索引
-          section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
-          place,
-          teachers:
+          courseInfo.sectionCount += sectionEnd - sectionStart + 1;
+          courseInfo.timeSlots.push({
+            week,
+            day: this.mapDay(day), // 注意此处的对应关系，day 1 对应 周一，而非索引
+            section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
+            place,
+            teachers:
             (ts.teacher
               && ts.teacher
                 .map((t) => t.trim())
                 .filter((t) => !!t)
                 .join(', '))
             || '',
+          });
         });
-      });
+      }
       courseInfo.teachers = [...teachersSet].join(', ');
       return courseInfo;
     },
   },
   methods: {
-    mapDay(day) {
+    ...mapMutations(['hideDetailDialog', 'onDeleteDetailPageCourse']),
+    mapDay(day: number) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
     },
     handleClickDeleteButton() {
-      this.$store.commit('hideDetailDialog');
+      this.hideDetailDialog();
       this.$emit('delete-course');
-      this.$store.commit('onDeleteDetailPageCourse');
+      this.onDeleteDetailPageCourse();
     },
     handleClickCloseButton() {
-      this.$store.commit('hideDetailDialog');
+      this.hideDetailDialog();
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

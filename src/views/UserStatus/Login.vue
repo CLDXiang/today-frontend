@@ -67,11 +67,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { login } from '@/apis/auth.service';
-import { getUserProfile } from '@/apis/profile.service';
+import { login } from '@/apis/auth';
+import { getUserProfile } from '@/apis/profile';
 import log from '@/utils/log';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   data: () => ({
     name: '',
     password: '',
@@ -122,7 +123,7 @@ export default {
         });
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

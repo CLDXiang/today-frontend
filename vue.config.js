@@ -9,8 +9,8 @@ module.exports = {
   },
   pwa: {
     name: 'fdxk.info',
-    themeColor: '#7BC5CF',
-    msTileColor: '#7BC5CF',
+    themeColor: '#60BDCA',
+    msTileColor: '#60BDCA',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
 
@@ -24,6 +24,23 @@ module.exports = {
     manifestOptions: {
       short_name: 'fdxk',
       background_color: '#E3F1F3',
+    },
+  },
+  css: {
+    loaderOptions: {
+      less: {
+        lessOptions: {
+          modifyVars: {
+            'primary-color': '#60BDCA',
+            'link-color': '#60BDCA',
+            'error-color': '#EF755A',
+          },
+          javascriptEnabled: true,
+        },
+      },
+      scss: {
+        prependData: '@import "~@/scss/global.scss";',
+      },
     },
   },
 };

@@ -1,30 +1,23 @@
 <template>
   <div class="timetable fluid mb-0 my-1 pa-0 px-md-3">
-    <v-dialog
-      :fullscreen="isMobileMode"
-      :transition="
-        isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'
-      "
-      :value="isDetailDialogVisible"
-      :max-width="isMobileMode ? '' : '368px'"
-      scrollable
-      @click:outside="hideDetailDialog"
+    <a-drawer
+      placement="bottom"
+      :closable="false"
+      :visible="isDetailDialogVisible"
+      @close="hideDetailDialog"
     >
       <timetable-detail-dialog-content
         :course="detailPageCourse"
         :class="classDetailPage"
         @delete-course="removeSelectedCourse(detailPageCourse.id)"
       />
-    </v-dialog>
-    <v-dialog
-      :fullscreen="isMobileMode"
-      :transition="
-        isMobileMode ? 'dialog-bottom-transition' : 'scale-transition'
-      "
+    </a-drawer>
+    <a-drawer
+      placement="bottom"
+      :closable="false"
+      :visible="isConflictDialogVisible"
       :value="isConflictDialogVisible"
-      :max-width="isMobileMode ? '' : '368px'"
-      scrollable
-      persistent
+      :mask-closable="false"
     >
       <timetable-conflict-dialog-content
         :selected-courses-ids="selectedCoursesIds"
@@ -32,12 +25,12 @@
         :courses="allCourses"
         @conflict-resolved="onConflictResolved"
       />
-    </v-dialog>
-    <v-dialog
-      :value="isMobileMode && isSearchDialogVisible"
-      fullscreen
-      scrollable
-      transition="dialog-bottom-transition"
+    </a-drawer>
+    <a-drawer
+      placement="bottom"
+      :closable="false"
+      :visible="isMobileMode && isSearchDialogVisible"
+      :value="isConflictDialogVisible"
     >
       <timetable-search-dialog-content
         v-if="isMobileMode"
@@ -46,7 +39,7 @@
         @addcourse="addSelectedCourse"
         @hide-search-dialog="hideSearchDialog"
       />
-    </v-dialog>
+    </a-drawer>
     <timetable-head-bar @click-cloud="fetchSelectedCourses" />
     <div class="timetable__body">
       <div class="timetable__day-box">

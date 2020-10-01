@@ -11,9 +11,12 @@
     "update-public-data": "cd public && wget https://github.com/fudan-today/today.backend/releases/download/public_data/public_data.tar && tar -xvf public_data.tar && rm public_data.tar && cd .."
   },
   "dependencies": {
+    "ant-design-vue": "^2.0.0-beta.10",
     "axios": "^0.20.0",
+    "babel-plugin-import": "^1.13.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.8.36",
+    "less-loader": "6",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
@@ -38,6 +41,7 @@
     "prettier": "^2.1.2",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "sass-resources-loader": "^2.1.1",
     "typescript": "~3.9.3"
   }
 }

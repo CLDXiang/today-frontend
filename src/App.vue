@@ -1,21 +1,33 @@
 <template>
-  <router-view />
-  <bottom-nav />
+  <div :style="{ paddingBottom: isBottomNavVisible ? '64px': '0' }">
+    <router-view />
+  </div>
+  <bottom-nav v-show="isBottomNavVisible" />
 </template>
 
-<script>
+<script lang="ts">
 import BottomNav from '@/components/common/BottomNav.vue';
+import { defineComponent } from 'vue';
 import { mapMutations } from 'vuex';
+import { HeapPagePathReges } from '@/router';
+import { BreakpointType } from '@/store';
 
-export default {
+export default defineComponent({
   components: {
     BottomNav,
   },
 
   data() {
     return {
-      currentBreakpoint: 'xs',
+      currentBreakpoint: 'xs' as BreakpointType,
     };
+  },
+
+  computed: {
+    isBottomNavVisible() {
+      const { path } = this.$route;
+      return HeapPagePathReges.reduce((pv, reg) => pv || reg.test(path), false);
+    },
   },
 
   beforeUnmount() {
@@ -31,7 +43,7 @@ export default {
 
   methods: {
     ...mapMutations(['setBreakpoint']),
-    onResize() {
+    onResize(): void {
       let newBreakpoint = this.currentBreakpoint;
       const newWidth = window.innerWidth;
 
@@ -55,15 +67,18 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, Heiti SC, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #333;
 }
+</style>
+
+<style src="@/scss/global.scss" lang="scss">
 </style>

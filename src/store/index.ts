@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 
-type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export default createStore({
   state: {

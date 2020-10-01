@@ -1,44 +1,29 @@
 <template>
-  <v-bottom-navigation
-    :value="activePage"
-    class="bottom-nav"
-    app
-    grow
-    color="primary"
-  >
-    <v-btn
-      value="timetable"
+  <div class="bottom-nav">
+    <span
+      :class="{ 'active-page': activePage === 'timetable' }"
       @click="handleClick('timetable')"
     >
-      <span>课表</span>
-      <!-- <v-icon>mdi-table</v-icon> -->
       <icon-timetable />
-    </v-btn>
+      <span>课表</span>
+    </span>
 
-    <v-btn
-      value="rating"
+    <span
+      :class="{ 'active-page': activePage === 'rating' }"
       @click="handleClick('rating')"
     >
-      <span>评课</span>
-      <!-- <v-icon>mdi-chart-box-outline</v-icon> -->
       <icon-rating />
-    </v-btn>
+      <span>评课</span>
+    </span>
 
-    <!-- <v-btn value="notification" @click="handleClick('notification')"> -->
-    <!-- <span>消息</span> -->
-    <!-- <v-icon>mdi-email-outline</v-icon> -->
-    <!-- <icon-notification /> -->
-    <!-- </v-btn> -->
-
-    <v-btn
-      value="status"
+    <span
+      :class="{ 'active-page': activePage === 'status' }"
       @click="handleClick('status')"
     >
-      <span>{{ userLoggedIn ? '我的' : '登录' }}</span>
-      <!-- <v-icon>mdi-emoticon-happy-outline</v-icon> -->
       <icon-my />
-    </v-btn>
-  </v-bottom-navigation>
+      <span>{{ userLoggedIn ? '我的' : '登录' }}</span>
+    </span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -98,11 +83,45 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.bottom-nav > .v-btn {
-  height: 100% !important;
+.bottom-nav {
+  // background-color: #f8fefc;
+  background-color: #fff;
+  height: 64px;
+  width: 100vw;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),
+              0 4px 5px 0 rgba(0,0,0,.14),
+              0 1px 10px 0 rgba(0,0,0,.12);
 
-  .v-btn__content > span:first-child {
-    padding-top: 4px;
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+
+  display: flex;
+  flex: 0 1 auto;
+  justify-content: center;
+  user-select: none;
+
+  color: #4f4f4f;
+  font-size: 14px;
+
+  > span {
+    height: 100%;
+    min-width: 64px;
+    max-width: 168px;
+    padding: 0 16px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &.active-page {
+      color: $primary-color;
+    }
+
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
   }
 }
 </style>

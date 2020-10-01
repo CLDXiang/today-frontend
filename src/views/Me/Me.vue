@@ -44,7 +44,9 @@ import { mapGetters, mapState } from 'vuex';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {
-  data: () => ({}),
+  data: () => ({
+    aaa: 1,
+  }),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
@@ -77,7 +79,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  background-color: #60bdca;
+  background-color: $primary-color;
 
   > .dark-box {
     height: 160px;

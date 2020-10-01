@@ -34,6 +34,18 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/*', component: Timetable },
 ];
 
+/** 堆叠页面路径正则，会显示 BottomNav */
+export const HeapPagePathReges = [
+  /\/$/,
+  /\/timetable$/,
+  /\/rating$/,
+  /\/notification$/,
+  /\/me$/,
+  /\/login$/,
+  /\/forgot-password$/,
+  /\/register$/,
+];
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,

@@ -90,13 +90,13 @@ export default {
     width: 36px;
     height: 36px;
     border-radius: 18px;
-    border: solid 2px #60bdca;
+    border: solid 2px $primary-color;
   }
 
   > .action-group {
     display: flex;
     align-items: center;
-    color: #60bdca;
+    color: $primary-color;
   }
 }
 </style>

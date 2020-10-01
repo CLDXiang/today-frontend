@@ -72,28 +72,22 @@
         />
       </div>
 
-      <v-btn
+      <a-button
         v-if="isMobileMode"
-        class="floating_button"
-        color="primary"
-        dark
-        small
-        fixed
-        bottom
-        right
-        fab
+        class="floating-button"
+        type="primary"
+        size="small"
+        shape="circle"
         @click="showSearchDialog"
       >
-        <v-badge
-          v-if="selectedCoursesIds.size === 0"
-          color="red"
+        <a-badge
+          :count="selectedCoursesIds.size || 0"
           dot
+          color="volcano"
         >
           <icon-search />
-        </v-badge>
-        <!-- <v-icon>search</v-icon> -->
-        <icon-search v-else />
-      </v-btn>
+        </a-badge>
+      </a-button>
     </div>
   </div>
 </template>
@@ -605,7 +599,8 @@ export default defineComponent({
   }
 }
 
-.floating_button {
+.floating-button {
+  position: fixed;
   bottom: 76px;
   right: 20px;
   width: 48px;

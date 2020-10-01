@@ -19,16 +19,15 @@
         style="display: none"
         @change="handleAvatarUploaded"
       />
-      <v-btn
-        color="primary"
-        rounded
-        depressed
+      <a-button
+        type="primary"
+        shape="round"
         :disabled="isAvatarUploading"
         :loading="isAvatarUploading"
         @click="handleClickModifyAvatar"
       >
         修改头像
-      </v-btn>
+      </a-button>
     </div>
     <div class="info-box">
       <div>
@@ -52,17 +51,16 @@
         />
       </div>
       <div>
-        <v-btn
+        <a-button
           block
-          color="primary"
-          rounded
-          depressed
+          type="primary"
+          shape="round"
           :disabled="!isInfoModified || isInfoModifying"
           :loading="isInfoModifying"
           @click="handleClickModifyInfo"
         >
           保存修改
-        </v-btn>
+        </a-button>
       </div>
     </div>
     <div class="email-box">
@@ -83,24 +81,23 @@
           outlined
           disabled
         />
-        <v-btn
-          color="primary"
-          rounded
+        <a-button
+          type="primary"
+          shape="round"
           disabled
         >
           发送验证码
-        </v-btn>
+        </a-button>
       </div>
       <div>
-        <v-btn
+        <a-button
           block
-          color="primary"
-          rounded
-          depressed
+          type="primary"
+          shape="round"
           disabled
         >
           更换邮箱（开发中）
-        </v-btn>
+        </a-button>
       </div>
     </div>
     <div class="pw-box">
@@ -131,15 +128,14 @@
           disabled
         />
       </div>
-      <v-btn
+      <a-button
         block
-        color="primary"
-        rounded
-        depressed
-        to="/forgot-password"
+        type="primary"
+        shape="round"
+        @click="$router.push('/forgot-password')"
       >
         修改密码（开发中，点击前往忘记密码）
-      </v-btn>
+      </a-button>
     </div>
   </div>
 </template>

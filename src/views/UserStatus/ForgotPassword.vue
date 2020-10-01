@@ -21,15 +21,15 @@
           outlined
           required
         />
-        <v-btn
-          color="primary"
+        <a-button
+          type="primary"
           :disabled="cooldownCnt !== 0"
           :loading="state === 'requesting'"
           @click="requestCode"
         >
           {{ state === 'init' || state === 'requesting'? '发送验证码'
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
-        </v-btn>
+        </a-button>
       </div>
       <v-text-field
         v-model="password"
@@ -59,25 +59,23 @@
       />
     </div>
     <div class="button-box">
-      <v-btn
+      <a-button
         block
-        color="primary"
-        large
-        rounded
-        depressed
+        type="primary"
+        size="large"
+        shape="round"
         @click="modifyPassword"
       >
         修改密码
-      </v-btn>
+      </a-button>
     </div>
-    <v-btn
+    <a-button
       style="margin-top: 12px"
-      text
-      color="primary"
-      to="/login"
+      type="link"
+      @click="$router.push('/login')"
     >
       返回登录页
-    </v-btn>
+    </a-button>
   </div>
 </template>
 <script>

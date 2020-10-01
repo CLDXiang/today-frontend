@@ -33,13 +33,12 @@
           </div>
         </div>
         <div class="btn-box">
-          <v-btn
-            rounded
-            depressed
+          <a-button
+            shape="round"
             @click="handleChooseLocal"
           >
             使用本地课表
-          </v-btn>
+          </a-button>
         </div>
       </div>
       <div>
@@ -68,25 +67,24 @@
           </div>
         </div>
         <div class="btn-box">
-          <v-btn
-            rounded
+          <a-button
+            shape="round"
             depressed
             @click="handleChooseDatabase"
           >
             使用云端课表
-          </v-btn>
+          </a-button>
         </div>
       </div>
     </div>
     <div class="bottom-action">
-      <v-btn
-        rounded
-        depressed
-        color="primary"
+      <a-button
+        shaple="round"
+        type="primary"
         @click="handleChooseBoth"
       >
         合并
-      </v-btn>
+      </a-button>
     </div>
   </div>
 </template>

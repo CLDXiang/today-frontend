@@ -164,12 +164,11 @@
     </div>
     <v-card-actions>
       <v-spacer />
-      <v-btn
+      <a-button
         v-show="searchResults.length !== 0"
-        :color="isSearchResultsVisible ? 'primary' : ''"
-        rounded
-        depressed
-        large
+        :type="isSearchResultsVisible ? 'primary' : undefined"
+        shape="round"
+        size="large"
         @click="handleChangeResultsVisible"
       >
         <v-icon
@@ -179,15 +178,14 @@
           {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
         </v-icon>
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
-      </v-btn>
+      </a-button>
     </v-card-actions>
     <v-card-actions>
       <v-spacer />
-      <v-btn
+      <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
-        rounded
-        depressed
-        large
+        shape="round"
+        size="large"
         @click="handleClickResetButton"
       >
         <v-icon
@@ -197,12 +195,11 @@
           settings_backup_restore
         </v-icon>
         重置
-      </v-btn>
-      <v-btn
+      </a-button>
+      <a-button
         :disabled="isLoadingSearchResults"
-        rounded
-        depressed
-        large
+        shape="round"
+        size="large"
         @click="handleClickCloseButton"
       >
         <v-icon
@@ -212,21 +209,20 @@
           mdi-arrow-collapse
         </v-icon>
         关闭
-      </v-btn>
-      <v-btn
+      </a-button>
+      <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         :loading="isLoadingSearchResults"
-        color="primary"
-        rounded
-        depressed
-        large
+        type="primary"
+        shape="round"
+        size="large"
         @click="handleClickSearchButton"
       >
         <v-icon left>
           search
         </v-icon>
         搜索课程
-      </v-btn>
+      </a-button>
     </v-card-actions>
   </v-card>
 </template>

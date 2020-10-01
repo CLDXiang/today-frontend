@@ -87,31 +87,28 @@
     </div>
     <div class="btn-group">
       <div class="btn-line">
-        <v-btn
-          rounded
-          depressed
-          color="primary"
+        <a-button
+          shape="round"
+          type="primary"
           disabled
         >
           查看课程评价（开发中）
-        </v-btn>
-        <v-btn
-          rounded
-          depressed
-          color="error"
+        </a-button>
+        <a-button
+          shape="round"
+          type="danger"
           @click="handleClickDeleteButton"
         >
           <v-icon>mdi-delete-forever-outline</v-icon>删除课程
-        </v-btn>
+        </a-button>
       </div>
       <div class="btn-line">
-        <v-btn
-          rounded
-          depressed
+        <a-button
+          shape="round"
           @click="handleClickCloseButton"
         >
           <v-icon>mdi-arrow-collapse</v-icon>关闭
-        </v-btn>
+        </a-button>
       </div>
     </div>
   </div>

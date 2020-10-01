@@ -22,15 +22,15 @@
           outlined
           required
         />
-        <v-btn
-          color="primary"
+        <a-button
+          type="primary"
           :disabled="cooldownCnt !== 0"
           :loading="state === 'requesting'"
           @click="requestCode"
         >
           {{ state === 'init' || state === 'requesting'? '发送验证码'
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
-        </v-btn>
+        </a-button>
       </div>
       <div>
         <v-text-field
@@ -74,25 +74,23 @@
       />
     </div>
     <div class="button-box">
-      <v-btn
+      <a-button
         block
-        color="primary"
-        large
-        rounded
-        depressed
+        type="primary"
+        size="large"
+        shape="round"
         @click="register"
       >
         注册
-      </v-btn>
+      </a-button>
     </div>
-    <v-btn
+    <a-button
       style="margin-top: 12px"
-      text
-      color="primary"
-      to="/login"
+      type="link"
+      @click="$router.push('/login')"
     >
       已有账号？前往登录
-    </v-btn>
+    </a-button>
   </div>
 </template>
 

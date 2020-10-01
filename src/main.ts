@@ -4,6 +4,7 @@ import {
   Button,
   Modal,
   Drawer,
+  Badge,
 } from 'ant-design-vue';
 
 import App from './App.vue';
@@ -17,7 +18,7 @@ const app = createApp(App);
 app.use(store).use(router);
 
 // AntD
-app.use(Button).use(Modal).use(Drawer);
+app.use(Button).use(Modal).use(Drawer).use(Badge);
 app.config.globalProperties.$message = message;
 
 app.mount('#app');

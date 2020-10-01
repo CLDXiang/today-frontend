@@ -22,16 +22,15 @@
         </div>
       </div>
       <div class="btn-box">
-        <v-btn
+        <a-button
           block
-          color="primary"
-          large
-          rounded
-          depressed
+          type="primary"
+          size="large"
+          shape="round"
           @click="logout"
         >
           退出登录
-        </v-btn>
+        </a-button>
       </div>
 
       <div class="bottom-action-bar" />

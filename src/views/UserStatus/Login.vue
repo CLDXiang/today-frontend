@@ -32,36 +32,33 @@
       />
     </div>
     <div class="button-box">
-      <v-btn
+      <a-button
         block
-        color="primary"
-        large
-        rounded
-        depressed
+        type="primary"
+        size="large"
+        shape="round"
         @click="login"
       >
         登录
-      </v-btn>
-      <v-btn
+      </a-button>
+      <a-button
         block
-        color="primary"
-        large
-        rounded
-        depressed
-        outlined
-        to="/register"
+        type="primary"
+        size="large"
+        shape="round"
+        ghost
+        @click="$router.push('/register')"
       >
         注册
-      </v-btn>
+      </a-button>
     </div>
-    <v-btn
+    <a-button
       style="margin-top: 12px"
-      text
-      color="primary"
-      to="/forgot-password"
+      type="link"
+      @click="$router.push('/forgot-password')"
     >
       忘记密码？
-    </v-btn>
+    </a-button>
   </div>
 </template>
 

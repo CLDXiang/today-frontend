@@ -1,8 +1,12 @@
 import { createStore } from 'vuex';
+import storage from '@/utils/localStorage';
 
 export type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-export default createStore({
+/** 需要持久化保存的 state */
+const persistedState = ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'];
+
+const store = createStore({
   state: {
     breakpoint: 'xs' as BreakpointType,
     user: {
@@ -42,10 +46,13 @@ export default createStore({
     globalMessageTimer: -1,
     // globalMessageIcon: '',
 
-    selectedCoursesIds: {} as {[key: string]: any},
+    selectedCoursesIds: {} as { [key: string]: any },
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
     selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
     hoveredCourseId: -1,
+
+    // localStorage 中保存的 state
+    ...storage.getVuexStates(),
   },
   mutations: {
     SET_JWT_TOKEN(state, token) {
@@ -55,7 +62,7 @@ export default createStore({
       state.user.id = JSON.parse(payload).sub;
       // log.info('set jwt_token', token);
     },
-    SET_USER(state, payload: {name: string; email: string}) {
+    SET_USER(state, payload: { name: string; email: string }) {
       state.user.name = payload.name;
       state.user.email = payload.email;
     },
@@ -107,7 +114,10 @@ export default createStore({
       state.globalMessageTimer = -1;
     },
 
-    setSelectedCourses(state, payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: any[] }) {
+    setSelectedCourses(
+      state,
+      payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: any[] },
+    ) {
       state.selectedSectionsByDay = payload.selectedSectionsByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
     },
@@ -128,19 +138,19 @@ export default createStore({
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
   },
-  // FIXME: localStorage
-  // plugins: [
-  //   createPersistedState({
-  //     reducer(state) {
-  //       return {
-  //         user: state.user,
-  //         profile: state.profile,
-  //         editor: state.editor,
-  //         secret: state.secret,
-  //         selectedCoursesIds: state.selectedCoursesIds,
-  //         selectedSectionsByDay: state.selectedSectionsByDay,
-  //       };
-  //     },
-  //   }),
-  // ],
 });
+
+// 监听需要持久化保存的 state，在变化时存入 localStorage
+persistedState.forEach((stateKey) => {
+  store.watch(
+    (state) => state[stateKey],
+    (newValue) => {
+      storage.setVuexState(stateKey, newValue);
+    },
+    {
+      deep: true,
+    },
+  );
+});
+
+export default store;

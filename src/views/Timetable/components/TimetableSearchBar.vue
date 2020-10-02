@@ -9,12 +9,11 @@
       large
       @click="handleChangeResultsVisible"
     >
-      <v-icon
-        :style="isSearchResultsVisible ? 'color: #fff' : ''"
-        left
-      >
-        {{ isSearchResultsVisible ? 'unfold_less' : 'unfold_more' }}
-      </v-icon>
+      <f-icon
+        :style="isSearchResultsVisible ? 'color: #fff' : undefined"
+        :name="isSearchResultsVisible ? 'contract' : 'expand'"
+        size="20"
+      />
       {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
     </a-button>
     <div class="search-bar__content-line search-bar__actions-bar">
@@ -24,12 +23,10 @@
         size="large"
         @click="handleClickResetButton"
       >
-        <v-icon
-          left
-          style="color: #000"
-        >
-          settings_backup_restore
-        </v-icon>
+        <f-icon
+          name="undo"
+          size="20"
+        />
         重置
       </a-button>
       <a-button
@@ -40,9 +37,10 @@
         size="large"
         @click="handleClickSearchButton"
       >
-        <v-icon left>
-          search
-        </v-icon>
+        <f-icon
+          name="search"
+          size="20"
+        />
         搜索课程
       </a-button>
     </div>
@@ -217,8 +215,12 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import FIcon from '@/components/common/FIcon.vue';
 
 export default {
+  components: {
+    FIcon,
+  },
   props: {
     searchIndex: Array,
     isLoadingCourses: Boolean,

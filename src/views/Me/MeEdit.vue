@@ -4,7 +4,9 @@
       <span
         class="back-btn"
         @click="$router.push('/me')"
-      ><icon-back /></span>
+      >
+        <f-icon name="back" />
+      </span>
       <span class="title">修改个人信息</span>
     </div>
     <div class="avatar-box">
@@ -144,12 +146,12 @@
 import { mapState } from 'vuex';
 import { editProfile, uploadAvatar } from '@/apis/profile';
 import log from '@/utils/log';
-import { IconBack } from '../../components/icons';
+import FIcon from '@/components/common/FIcon.vue';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {
   components: {
-    IconBack,
+    FIcon,
   },
   data: () => ({
     isAvatarUploading: false,

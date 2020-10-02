@@ -99,7 +99,8 @@
           type="danger"
           @click="handleClickDeleteButton"
         >
-          <v-icon>mdi-delete-forever-outline</v-icon>删除课程
+          <f-icon name="delete" />
+          删除课程
         </a-button>
       </div>
       <div class="btn-line">
@@ -107,7 +108,9 @@
           shape="round"
           @click="handleClickCloseButton"
         >
-          <v-icon>mdi-arrow-collapse</v-icon>关闭
+          <f-icon name="shrink" />
+
+          关闭
         </a-button>
       </div>
     </div>
@@ -117,6 +120,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { mapMutations } from 'vuex';
+import FIcon from '@/components/common/FIcon.vue';
 
 interface CourseRaw {
   code_id?: string;
@@ -163,6 +167,9 @@ interface CourseInfo {
 }
 
 export default defineComponent({
+  components: {
+    FIcon,
+  },
   props: {
     course: { type: Object as PropType<CourseRaw>, required: true },
   },

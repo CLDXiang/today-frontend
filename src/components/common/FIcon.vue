@@ -4,7 +4,6 @@
     :width="parsedWidth"
     :height="parsedHeigth"
     viewBox="0 0 16 16"
-    class="bi bi-chevron-left"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -18,7 +17,6 @@
     :width="parsedWidth"
     :height="parsedHeigth"
     viewBox="0 0 16 16"
-    class="bi bi-cloud-arrow-down"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -40,7 +38,9 @@
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z" />
+    <path
+      d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"
+    />
     <path
       fill-rule="evenodd"
       d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
@@ -55,7 +55,6 @@
     :width="parsedWidth"
     :height="parsedHeigth"
     viewBox="0 0 16 16"
-    class="bi bi-chat-dots"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -63,19 +62,24 @@
       fill-rule="evenodd"
       d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"
     />
-    <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+    <path
+      d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+    />
   </svg>
   <svg
     v-else-if="name === 'rating'"
     :width="parsedWidth"
     :height="parsedHeigth"
     viewBox="0 0 16 16"
-    class="bi bi-journal-text"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z" />
-    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z" />
+    <path
+      d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"
+    />
+    <path
+      d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"
+    />
     <path
       fill-rule="evenodd"
       d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
@@ -86,7 +90,6 @@
     :width="parsedWidth"
     :height="parsedHeigth"
     viewBox="0 0 16 16"
-    class="bi bi-search"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -104,7 +107,6 @@
     :width="parsedWidth"
     :height="parsedHeigth"
     viewBox="0 0 16 16"
-    class="bi bi-table"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -113,26 +115,180 @@
       d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"
     />
   </svg>
+  <svg
+    v-else-if="name === 'edit-square'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 1024 1024"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M904 512h-56c-4.4 0-8 3.6-8 8v320H184V184h320c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V520c0-4.4-3.6-8-8-8z"
+      p-id="8853"
+    />
+    <path
+      d="M355.9 534.9L354 653.8c-0.1 8.9 7.1 16.2 16 16.2h0.4l118-2.9c2-0.1 4-0.9 5.4-2.3l415.9-415c3.1-3.1 3.1-8.2 0-11.3L785.4 114.3c-1.6-1.6-3.6-2.3-5.7-2.3s-4.1 0.8-5.7 2.3l-415.8 415c-1.4 1.5-2.3 3.5-2.3 5.6z m63.5 23.6L779.7 199l45.2 45.1-360.5 359.7-45.7 1.1 0.7-46.4z"
+      p-id="8854"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'delete'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'shrink'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 1024 1024"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  ><path
+    d="M881.7 187.4l-45.1-45.1c-3.1-3.1-8.2-3.1-11.3 0L667.8 299.9l-54.7-54.7c-4.7-4.7-12.7-1.9-13.5 4.7L576.1 439c-0.6 5.2 3.7 9.5 8.9 8.9l189.2-23.5c6.6-0.8 9.3-8.8 4.7-13.5l-54.7-54.7 157.6-157.6c3-3 3-8.1-0.1-11.2zM439 576.1l-189.2 23.5c-6.6 0.8-9.3 8.9-4.7 13.5l54.7 54.7-157.5 157.5c-3.1 3.1-3.1 8.2 0 11.3l45.1 45.1c3.1 3.1 8.2 3.1 11.3 0l157.6-157.6 54.7 54.7c4.7 4.7 12.7 1.9 13.5-4.7L447.9 585c0.7-5.2-3.7-9.6-8.9-8.9z"
+    p-id="8995"
+  /></svg>
+  <svg
+    v-else-if="name === 'arrawsalt'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 1024 1024"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  ><path
+    d="M855 160.1l-189.2 23.5c-6.6 0.8-9.3 8.8-4.7 13.5l54.7 54.7-153.5 153.5c-3.1 3.1-3.1 8.2 0 11.3l45.1 45.1c3.1 3.1 8.2 3.1 11.3 0l153.6-153.6 54.7 54.7c4.7 4.7 12.7 1.9 13.5-4.7L863.9 169c0.7-5.2-3.7-9.6-8.9-8.9zM416.6 562.3c-3.1-3.1-8.2-3.1-11.3 0L251.8 715.9l-54.7-54.7c-4.7-4.7-12.7-1.9-13.5 4.7L160.1 855c-0.6 5.2 3.7 9.5 8.9 8.9l189.2-23.5c6.6-0.8 9.3-8.8 4.7-13.5l-54.7-54.7 153.6-153.6c3.1-3.1 3.1-8.2 0-11.3l-45.2-45z"
+    p-id="9136"
+  /></svg>
+  <svg
+    v-else-if="name === 'undo'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 1024 1024"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  ><path
+    d="M511.4 124C290.5 124.3 112 303 112 523.9c0 128 60.2 242 153.8 315.2l-37.5 48c-4.1 5.3-0.3 13 6.3 12.9l167-0.8c5.2 0 9-4.9 7.7-9.9L369.8 727c-1.6-6.5-10-8.3-14.1-3L315 776.1c-10.2-8-20-16.7-29.3-26-29.4-29.4-52.5-63.6-68.6-101.7C200.4 609 192 567.1 192 523.9s8.4-85.1 25.1-124.5c16.1-38.1 39.2-72.3 68.6-101.7 29.4-29.4 63.6-52.5 101.7-68.6C426.9 212.4 468.8 204 512 204s85.1 8.4 124.5 25.1c38.1 16.1 72.3 39.2 101.7 68.6 29.4 29.4 52.5 63.6 68.6 101.7 16.7 39.4 25.1 81.3 25.1 124.5s-8.4 85.1-25.1 124.5c-16.1 38.1-39.2 72.3-68.6 101.7-7.5 7.5-15.3 14.5-23.4 21.2-3.4 2.8-3.9 7.7-1.2 11.1l39.4 50.5c2.8 3.5 7.9 4.1 11.4 1.3C854.5 760.8 912 649.1 912 523.9c0-221.1-179.4-400.2-400.6-399.9z"
+    p-id="9277"
+  /></svg>
+  <svg
+    v-else-if="name === 'contract'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M3.646 13.854a.5.5 0 0 0 .708 0L8 10.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zm0-11.708a.5.5 0 0 1 .708 0L8 5.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'expand'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'eye'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'eye-slash'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z" />
+    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z" />
+    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z" />
+    <path
+      fill-rule="evenodd"
+      d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"
+    />
+  </svg>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
 /** name 参数支持的值 */
-type NameType = 'back' | 'cloud' | 'my' | 'notification' | 'rating' | 'search' | 'timetable';
+type NameType =
+  | 'back'
+  | 'cloud'
+  | 'my'
+  | 'notification'
+  | 'rating'
+  | 'search'
+  | 'timetable'
+  | 'edit-square'
+  | 'delete'
+  | 'shrink'
+  | 'arrawsalt'
+  | 'undo'
+  | 'contract'
+  | 'expand'
+  | 'eye'
+  | 'eye-slash';
 
 export default defineComponent({
   props: {
     name: { type: String as PropType<NameType>, required: true },
-    width: { type: [String, Number], default: 24 },
-    heigth: { type: [String, Number], default: 24 },
+    width: { type: [String, Number], default: undefined },
+    heigth: { type: [String, Number], default: undefined },
+    size: { type: [String, Number], default: undefined },
   },
-  getters: {
-    parsedWidth() {
-      return typeof this.width === 'number' ? `${this.width}px` : this.width;
+  computed: {
+    parsedWidth(): string {
+      if (this.width !== undefined) {
+        return typeof this.width === 'number' ? `${this.width}px` : this.width;
+      }
+      if (this.size !== undefined) {
+        return typeof this.size === 'number' ? `${this.size}px` : this.size;
+      }
+      return '100%';
     },
-    parsedHeigth() {
-      return typeof this.heigth === 'number' ? `${this.heigth}px` : this.heigth;
+    parsedHeigth(): string {
+      if (this.heigth !== undefined) {
+        return typeof this.heigth === 'number' ? `${this.heigth}px` : this.heigth;
+      }
+      if (this.size !== undefined) {
+        return typeof this.size === 'number' ? `${this.size}px` : this.size;
+      }
+      return '100%';
     },
   },
 });

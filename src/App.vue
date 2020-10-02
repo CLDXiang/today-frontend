@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ paddingBottom: isBottomNavVisible ? '64px': '0' }">
+  <div :style="{ paddingBottom: isBottomNavVisible ? '64px': '0', height: '100vh' }">
     <router-view />
   </div>
   <bottom-nav v-show="isBottomNavVisible" />
@@ -78,7 +78,14 @@ export default defineComponent({
   text-align: center;
   color: #333;
 }
-</style>
 
-<style src="@/scss/global.scss" lang="scss">
+.ant-btn {
+  display: inline-flex;
+  align-items: center;
+
+  > svg:first-child {
+    margin-right: 4px;
+  }
+}
+
 </style>

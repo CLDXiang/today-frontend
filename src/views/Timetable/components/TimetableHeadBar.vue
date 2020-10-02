@@ -14,19 +14,22 @@
       class="action-group"
       @click="handleClickCloud"
     >
-      <icon-cloud />
+      <f-icon
+        name="cloud"
+        size="24"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import FIcon from '@/components/common/FIcon.vue';
 import defaultAvatar from '../../../assets/default_avatar.jpg';
-import { IconCloud } from '../../../components/icons';
 
 export default {
   components: {
-    IconCloud,
+    FIcon,
   },
   data() {
     return {

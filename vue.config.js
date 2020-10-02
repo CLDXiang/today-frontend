@@ -39,7 +39,7 @@ module.exports = {
         },
       },
       scss: {
-        prependData: '@import "~@/scss/global.scss";',
+        prependData: '@import "~@/scss/common.scss";',
       },
     },
   },

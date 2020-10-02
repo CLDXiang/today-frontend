@@ -4,7 +4,10 @@
       :class="{ 'active-page': activePage === 'timetable' }"
       @click="handleClick('timetable')"
     >
-      <icon-timetable />
+      <f-icon
+        name="timetable"
+        size="20"
+      />
       <span>课表</span>
     </span>
 
@@ -12,7 +15,10 @@
       :class="{ 'active-page': activePage === 'rating' }"
       @click="handleClick('rating')"
     >
-      <icon-rating />
+      <f-icon
+        name="rating"
+        size="20"
+      />
       <span>评课</span>
     </span>
 
@@ -20,7 +26,10 @@
       :class="{ 'active-page': activePage === 'status' }"
       @click="handleClick('status')"
     >
-      <icon-my />
+      <f-icon
+        name="my"
+        size="20"
+      />
       <span>{{ userLoggedIn ? '我的' : '登录' }}</span>
     </span>
   </div>
@@ -30,12 +39,12 @@
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-import { IconMy, IconRating, IconTimetable } from '../icons';
+import FIcon from '@/components/common/FIcon.vue';
 
 type ActivePageType = 'timetable' | 'rating' | 'notification' | 'status';
 
 export default defineComponent({
-  components: { IconMy, IconRating, IconTimetable },
+  components: { FIcon },
   computed: {
     ...mapGetters(['userLoggedIn']),
     activePage() {

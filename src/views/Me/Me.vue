@@ -14,7 +14,9 @@
       <div class="info-box">
         <div class="info-box__header">
           <span>个人信息</span>
-          <span @click="$router.push('/me/edit')"><v-icon>mdi-square-edit-outline</v-icon></span>
+          <span @click="$router.push('/me/edit')">
+            <f-icon name="edit-square" />
+          </span>
         </div>
         <div class="info-list">
           <div>昵称：{{ user.nickName || '点编辑按钮取个昵称吧~  ↗ ' }}</div>
@@ -40,6 +42,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import FIcon from '@/components/common/FIcon.vue';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {

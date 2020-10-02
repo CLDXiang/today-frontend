@@ -85,7 +85,10 @@
           dot
           color="volcano"
         >
-          <icon-search />
+          <f-icon
+            name="search"
+            size="24"
+          />
         </a-badge>
       </a-button>
     </div>
@@ -104,7 +107,7 @@ import {
 } from '@/apis/timetable';
 import { getUserProfile } from '@/apis/profile';
 import log from '@/utils/log';
-import { IconSearch } from '../../components/icons';
+import FIcon from '@/components/common/FIcon.vue';
 import {
   TimetableDay,
   TimetableSearchBar,
@@ -122,7 +125,7 @@ export default defineComponent({
     TimetableConflictDialogContent,
     TimetableSearchDialogContent,
     TimetableHeadBar,
-    IconSearch,
+    FIcon,
   },
   props: {},
   data() {
@@ -605,5 +608,13 @@ export default defineComponent({
   right: 20px;
   width: 48px;
   height: 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > .ant-badge {
+    height: 24px;
+  }
 }
 </style>

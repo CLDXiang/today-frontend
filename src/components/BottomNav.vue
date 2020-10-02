@@ -39,12 +39,10 @@
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-import FIcon from '@/components/common/FIcon.vue';
 
 type ActivePageType = 'timetable' | 'rating' | 'notification' | 'status';
 
 export default defineComponent({
-  components: { FIcon },
   computed: {
     ...mapGetters(['userLoggedIn']),
     activePage() {

@@ -107,7 +107,6 @@ import {
 } from '@/apis/timetable';
 import { getUserProfile } from '@/apis/profile';
 import log from '@/utils/log';
-import FIcon from '@/components/common/FIcon.vue';
 import {
   TimetableDay,
   TimetableSearchBar,
@@ -125,7 +124,6 @@ export default defineComponent({
     TimetableConflictDialogContent,
     TimetableSearchDialogContent,
     TimetableHeadBar,
-    FIcon,
   },
   props: {},
   data() {

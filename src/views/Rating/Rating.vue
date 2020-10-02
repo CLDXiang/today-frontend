@@ -1,10 +1,10 @@
 <template>
-  <content class="content-box">
-    <section class="center-content">
+  <div class="content-box">
+    <div class="center-content">
       <div>技术重构中，敬请期待 😊</div>
       <div>预计于本学期期中退课前上线</div>
-    </section>
-    <footer class="bottom-content">
+    </div>
+    <div class="bottom-content">
       <div>希望关注项目进度吗？在这里联系我们：</div>
       <div
         v-if="!userLoggedIn"
@@ -21,8 +21,8 @@
         :src="wxGroupImg"
         alt="群二维码"
       >
-    </footer>
-  </content>
+    </div>
+  </div>
 </template>
 
 <script>

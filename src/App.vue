@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import BottomNav from '@/components/common/BottomNav.vue';
+import BottomNav from '@/components/BottomNav.vue';
 import { defineComponent } from 'vue';
 import { mapMutations } from 'vuex';
 import { HeapPagePathReges } from '@/router';
@@ -81,6 +81,7 @@ export default defineComponent({
 
 .ant-btn {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
 
   > svg:first-child {

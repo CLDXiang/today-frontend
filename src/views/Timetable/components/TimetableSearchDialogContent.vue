@@ -1,7 +1,7 @@
 <template>
-  <v-card>
+  <div>
     <span class="title">搜索课程</span>
-    <v-card-text v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
+    <div v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
       <div class="search-bar__content-line mt-2">
         <v-text-field
           ref="textfield1"
@@ -123,7 +123,7 @@
           </template>
         </v-range-slider>
       </div>
-    </v-card-text>
+    </div>
     <div
       v-show="isSearchResultsVisible && searchResults.length !== 0"
       class="search-bar__results-box"
@@ -162,8 +162,7 @@
         </div>
       </v-scroll-y-reverse-transition>
     </div>
-    <v-card-actions>
-      <v-spacer />
+    <div>
       <a-button
         v-show="searchResults.length !== 0"
         :type="isSearchResultsVisible ? 'primary' : undefined"
@@ -178,9 +177,8 @@
         />
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
       </a-button>
-    </v-card-actions>
-    <v-card-actions>
-      <v-spacer />
+    </div>
+    <div>
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
@@ -219,17 +217,12 @@
         />
         搜索课程
       </a-button>
-    </v-card-actions>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <script>
-import FIcon from '@/components/common/FIcon.vue';
-
 export default {
-  components: {
-    FIcon,
-  },
   props: {
     searchIndex: Array,
     isLoadingCourses: Boolean,

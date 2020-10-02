@@ -215,12 +215,8 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import FIcon from '@/components/common/FIcon.vue';
 
 export default {
-  components: {
-    FIcon,
-  },
   props: {
     searchIndex: Array,
     isLoadingCourses: Boolean,

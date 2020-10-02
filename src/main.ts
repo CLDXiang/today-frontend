@@ -6,6 +6,7 @@ import {
   Drawer,
   Badge,
 } from 'ant-design-vue';
+import { FIcon, FInput } from '@/components/common';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -17,8 +18,11 @@ const app = createApp(App);
 
 app.use(store).use(router);
 
-// AntD
+// AntD 组件
 app.use(Button).use(Modal).use(Drawer).use(Badge);
 app.config.globalProperties.$message = message;
+
+// 自定义全局组件
+app.component('f-icon', FIcon).component('f-input', FInput);
 
 app.mount('#app');

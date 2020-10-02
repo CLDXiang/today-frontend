@@ -42,7 +42,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import FIcon from '@/components/common/FIcon.vue';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {

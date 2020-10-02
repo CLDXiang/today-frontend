@@ -120,7 +120,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { mapMutations } from 'vuex';
-import FIcon from '@/components/common/FIcon.vue';
 
 interface CourseRaw {
   code_id?: string;
@@ -167,9 +166,6 @@ interface CourseInfo {
 }
 
 export default defineComponent({
-  components: {
-    FIcon,
-  },
   props: {
     course: { type: Object as PropType<CourseRaw>, required: true },
   },

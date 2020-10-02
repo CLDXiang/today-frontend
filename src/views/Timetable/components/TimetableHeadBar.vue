@@ -24,13 +24,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import FIcon from '@/components/common/FIcon.vue';
 import defaultAvatar from '../../../assets/default_avatar.jpg';
 
 export default {
-  components: {
-    FIcon,
-  },
   data() {
     return {
       /** 同步冷却 */

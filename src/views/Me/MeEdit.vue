@@ -146,13 +146,9 @@
 import { mapState } from 'vuex';
 import { editProfile, uploadAvatar } from '@/apis/profile';
 import log from '@/utils/log';
-import FIcon from '@/components/common/FIcon.vue';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default {
-  components: {
-    FIcon,
-  },
   data: () => ({
     isAvatarUploading: false,
     isInfoModifying: false,

@@ -386,7 +386,7 @@
 
 "@babel/plugin-proposal-optional-chaining@^7.11.0":
   version "7.11.0"
-  resolved "https://registry.npm.taobao.org/@babel/plugin-proposal-optional-chaining/download/@babel/plugin-proposal-optional-chaining-7.11.0.tgz?cache=0&sync_timestamp=1596142928022&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fplugin-proposal-optional-chaining%2Fdownload%2F%40babel%2Fplugin-proposal-optional-chaining-7.11.0.tgz#de5866d0646f6afdaab8a566382fe3a221755076"
+  resolved "https://registry.npm.taobao.org/@babel/plugin-proposal-optional-chaining/download/@babel/plugin-proposal-optional-chaining-7.11.0.tgz#de5866d0646f6afdaab8a566382fe3a221755076"
   integrity sha1-3lhm0GRvav2quKVmOC/joiF1UHY=
   dependencies:
     "@babel/helper-plugin-utils" "^7.10.4"

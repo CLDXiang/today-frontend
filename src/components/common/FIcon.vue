@@ -279,7 +279,7 @@ export default defineComponent({
       if (this.size !== undefined) {
         return typeof this.size === 'number' ? `${this.size}px` : this.size;
       }
-      return '100%';
+      return '20px';
     },
     parsedHeigth(): string {
       if (this.heigth !== undefined) {
@@ -288,7 +288,7 @@ export default defineComponent({
       if (this.size !== undefined) {
         return typeof this.size === 'number' ? `${this.size}px` : this.size;
       }
-      return '100%';
+      return '20px';
     },
   },
 });

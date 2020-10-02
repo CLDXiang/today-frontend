@@ -106,10 +106,9 @@ export default defineComponent({
       login(this.name, this.password)
         .then(() => {
           this.$message.success('登录成功');
-          const { redirect } = this.$router.currentRoute.query;
           this.getProfile(); // 用户登录向后端请求profile的内容，并装入Vuex
-          if (redirect) {
-            this.$router.push(redirect);
+          if (this.$router.currentRoute?.query?.redirect) {
+            this.$router.push(this.$router.currentRoute.query.redirect);
           } else {
             this.$router.push('/timetable');
           }
@@ -140,7 +139,7 @@ export default defineComponent({
   }
 
   > .input-box {
-    .v-input {
+    .f-input {
       width: 80vw;
       max-width: 340px;
     }
@@ -150,7 +149,7 @@ export default defineComponent({
     width: 80vw;
     max-width: 340px;
 
-    > .v-btn {
+    > .ant-btn {
       margin-top: 16px;
 
       &:first-child {

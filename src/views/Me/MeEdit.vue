@@ -15,12 +15,13 @@
         :src="processAvatar(user.avatar)"
         alt="avatar"
       >
-      <v-file-input
+      <input
         id="upload"
-        accept="image/png, image/jpeg, image/jpg, image/bmp"
         style="display: none"
-        @change="handleAvatarUploaded"
-      />
+        accept="image/png, image/jpeg, image/jpg, image/bmp"
+        type="file"
+        @change="e => handleAvatarUploaded(e.target?.files?.length && e.target.files[0] || null)"
+      >
       <a-button
         type="primary"
         shape="round"
@@ -275,7 +276,7 @@ export default {
       margin-right: 20px;
     }
 
-    > .v-btn {
+    > .ant-btn {
       flex: 1;
     }
   }
@@ -295,12 +296,12 @@ export default {
     > .email-validate-box {
       display: flex;
 
-      > .v-input {
+      > .f-input {
         max-width: 226px;
         margin-right: 12px;
       }
 
-      > .v-btn {
+      > .ant-btn {
         margin-top: 2px;
         width: 92px;
       }

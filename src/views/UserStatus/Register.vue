@@ -218,7 +218,7 @@ export default {
   }
 
   > .input-box {
-    > .v-input {
+    > .f-input {
       width: 80vw;
       max-width: 340px;
     }
@@ -226,13 +226,13 @@ export default {
     > .email-validate-box {
       display: flex;
 
-      > .v-input {
+      > .f-input {
         max-width: 226px;
         margin-right: 12px;
       }
 
-      > .v-btn {
-        margin-top: 10px;
+      > .ant-btn {
+        margin-top: 4px;
         width: 92px;
       }
     }
@@ -242,7 +242,7 @@ export default {
     width: 80vw;
     max-width: 340px;
 
-    > .v-btn {
+    > .ant-btn {
       margin-top: 16px;
 
       &:first-child {

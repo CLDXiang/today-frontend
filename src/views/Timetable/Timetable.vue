@@ -228,15 +228,15 @@ export default defineComponent({
         this.replaceSelectedCourses(selectedCoursesIds);
       }
       if (changeRemote) {
-        this.$message.loading('正在向服务器同步数据...');
+        const hide = this.$message.loading('正在向服务器同步数据...', 0);
         replaceSelectedCoursesService(this.semester, [...selectedCoursesIds])
           .then(() => {
             // TODO: 根据后端响应进行处理
-            this.$message.loaded();
+            hide();
             this.$message.success('数据同步成功!');
           })
           .catch(() => {
-            this.$message.loaded();
+            hide();
             this.$message.error('数据同步失败！进入离线模式');
             this.isOffline = true;
           });
@@ -289,11 +289,11 @@ export default defineComponent({
         this.$message.warn('需要登录才能进行云同步');
         return;
       }
-      this.$message.loading('正在与服务器同步数据');
+      const hide = this.$message.loading('正在与服务器同步数据', 0);
       getSelectedCoursesService(this.semester)
         .then((res) => {
           this.setHasFetchedSelectedCourses();
-          this.$message.loaded();
+          hide();
           if (!Array.isArray(res)) {
             this.$message.error('数据同步失败！进入离线模式');
             this.isOffline = true;
@@ -311,6 +311,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
+          hide();
           this.$message.error('数据同步失败！进入离线模式');
           this.isOffline = true;
           throw err;
@@ -608,6 +609,7 @@ export default defineComponent({
   right: 20px;
   width: 48px;
   height: 48px;
+  z-index: 2;
 
   display: flex;
   justify-content: center;

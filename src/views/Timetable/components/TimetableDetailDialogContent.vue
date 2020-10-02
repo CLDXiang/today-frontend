@@ -49,41 +49,33 @@
       </div>
     </div>
     <div class="info-card-ts">
-      <v-simple-table
-        dense
-        disable-sort
-        disable-pagination
-        disable-filtering
-        hide-default-footer
-      >
-        <template #default>
-          <thead>
-            <tr>
-              <th class="text-left">
-                时间
-              </th><th class="text-left">
-                地点
-              </th><th class="text-left">
-                教师
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="ts in courseInfo.timeSlots"
-              :key="ts.week+ts.day+ts.section"
-            >
-              <td>
-                {{
-                  `${ts.week} 周，每周周${ts.day}第 ${
-                    ts.section
-                  } 节`
-                }}
-              </td><td>{{ ts.place }}</td><td>{{ ts.teachers }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              时间
+            </th><th>
+              地点
+            </th><th>
+              教师
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="ts in courseInfo.timeSlots"
+            :key="ts.week+ts.day+ts.section"
+          >
+            <td>
+              {{
+                `${ts.week} 周，每周周${ts.day}第 ${
+                  ts.section
+                } 节`
+              }}
+            </td><td>{{ ts.place }}</td><td>{{ ts.teachers }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="btn-group">
       <div class="btn-line">
@@ -246,6 +238,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .content-box {
   background-color: #fff;
+  height: 100%;
 
   display: flex;
   flex-direction: column;

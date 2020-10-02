@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ paddingBottom: isBottomNavVisible ? '64px': '0', height: '100vh' }">
+  <div :style="{ paddingBottom: isBottomNavVisible ? '64px': '0' }">
     <router-view />
   </div>
   <bottom-nav v-show="isBottomNavVisible" />
@@ -77,6 +77,13 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #333;
+
+  overflow-y: hidden;
+
+  > .main-container {
+    height: 100vh;
+    overflow-y: auto;
+  }
 }
 
 .ant-btn {

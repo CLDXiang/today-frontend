@@ -1,22 +1,29 @@
 <template>
-  <div class="timetable__search-bar">
-    <a-button
-      v-show="searchResults.length !== 0"
-      :type="isSearchResultsVisible ? 'primary' : undefined"
-      class="results-visible-button"
-      rounded
-      depressed
-      large
-      @click="handleChangeResultsVisible"
+  <div class="dialog-container">
+    <div
+      v-if="!isMobileMode"
+      class="actions-bar"
     >
-      <f-icon
-        :style="isSearchResultsVisible ? 'color: #fff' : undefined"
-        :name="isSearchResultsVisible ? 'contract' : 'expand'"
-        size="20"
-      />
-      {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
-    </a-button>
-    <div class="search-bar__content-line search-bar__actions-bar">
+      <a-button
+        v-show="searchResults.length !== 0"
+        block
+        :type="isSearchResultsVisible ? 'primary' : undefined"
+        shape="round"
+        size="large"
+        @click="handleChangeResultsVisible"
+      >
+        <f-icon
+          :style="isSearchResultsVisible ? 'color: #fff' : undefined"
+          :name="isSearchResultsVisible ? 'contract' : 'expand' "
+          size="20"
+        />
+        {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
+      </a-button>
+    </div>
+    <div
+      v-if="!isMobileMode"
+      class="actions-bar"
+    >
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
@@ -44,7 +51,14 @@
         搜索课程
       </a-button>
     </div>
-    <div v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
+    <span
+      v-if="isMobileMode"
+      class="title"
+    >搜索课程</span>
+    <div
+      v-show="!(isSearchResultsVisible && searchResults.length !== 0)"
+      class="timetable__search-bar"
+    >
       <div class="search-bar__content-line">
         <f-input
           ref="textfield1"
@@ -177,12 +191,11 @@
         </v-range-slider> -->
       </div>
     </div>
-
     <div
       v-show="isSearchResultsVisible && searchResults.length !== 0"
       class="search-bar__results-box"
     >
-      <!-- <v-scroll-y-transition> -->
+      <!-- <v-scroll-y-reverse-transition> -->
       <div
         v-show="isSearchResultsVisible && searchResults.length !== 0"
         class="search-bar__results"
@@ -192,10 +205,6 @@
           :key="item.courseId"
           class="search-bar__result"
           @click.stop="handleClickSearchResult(item.courseId)"
-          @mouseenter="setHoveredCourseId(item.courseId)"
-          @mouseleave="resetHoveredCourseId"
-          @touchstart="setHoveredCourseId(item.courseId)"
-          @touchend="resetHoveredCourseId"
         >
           <div class="result-line">
             {{ `${item.codeId} ${item.name}` }}
@@ -218,19 +227,81 @@
           </div>
         </div>
       </div>
-      <!-- </v-scroll-y-transition> -->
+      <!-- </v-scroll-y-reverse-transition> -->
+    </div>
+    <div
+      v-if="isMobileMode"
+      class="actions-bar"
+    >
+      <a-button
+        v-show="searchResults.length !== 0"
+        :type="isSearchResultsVisible ? 'primary' : undefined"
+        shape="round"
+        size="large"
+        @click="handleChangeResultsVisible"
+      >
+        <f-icon
+          :style="isSearchResultsVisible ? 'color: #fff' : undefined"
+          :name="isSearchResultsVisible ? 'contract' : 'expand' "
+          size="20"
+        />
+        {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
+      </a-button>
+    </div>
+    <div
+      v-if="isMobileMode"
+      class="actions-bar"
+    >
+      <a-button
+        :disabled="isLoadingSearchResults || isSearchQueryEmpty"
+        shape="round"
+        size="large"
+        @click="handleClickResetButton"
+      >
+        <f-icon
+          name="undo"
+          size="20"
+        />
+        重置
+      </a-button>
+      <a-button
+        :disabled="isLoadingSearchResults"
+        shape="round"
+        size="large"
+        @click="handleClickCloseButton"
+      >
+        <f-icon
+          name="arrawsalt"
+          size="20"
+        />
+        关闭
+      </a-button>
+      <a-button
+        :disabled="isLoadingSearchResults || isSearchQueryEmpty"
+        :loading="isLoadingSearchResults"
+        type="primary"
+        shape="round"
+        size="large"
+        @click="handleClickSearchButton"
+      >
+        <f-icon
+          name="search"
+          size="20"
+        />
+        搜索课程
+      </a-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-
 export default {
   props: {
     searchIndex: Array,
     isLoadingCourses: Boolean,
+    isMobileMode: Boolean,
   },
+  emits: ['hide-search-dialog'],
   data() {
     return {
       searchQuery: {
@@ -302,7 +373,6 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
     handleChangeResultsVisible() {
       this.isSearchResultsVisible = !this.isSearchResultsVisible;
     },
@@ -318,6 +388,9 @@ export default {
       this.searchQuery.sectionRange = [0, 13];
       this.searchQuery.place = '';
       this.searchQuery.codeId = '';
+    },
+    handleClickCloseButton() {
+      this.$emit('hide-search-dialog');
     },
     handleClickSearchButton() {
       this.isLoadingSearchResults = true;
@@ -399,11 +472,12 @@ export default {
           this.searchBarStatus = 'success';
           this.$message.success(`找到 ${this.searchResults.length} 门课程`);
           // 主要针对移动端，使键盘收回
-          this.$refs.textfield1.blur();
-          this.$refs.textfield2.blur();
-          this.$refs.textfield3.blur();
-          this.$refs.textfield4.blur();
-          this.$refs.textfield5.blur();
+          // FIXME: 修复下面这部分功能
+          // this.$refs.textfield1.blur();
+          // this.$refs.textfield2.blur();
+          // this.$refs.textfield3.blur();
+          // this.$refs.textfield4.blur();
+          // this.$refs.textfield5.blur();
         } else {
           this.searchBarStatus = 'error';
           this.$message.error('没有找到符合条件的课程');
@@ -427,11 +501,18 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_timetable';
 
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
 .title {
-  margin-top: 36px;
+  margin: 36px 0 20px;
   font-size: 20px;
   line-height: 20px;
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   color: #333;
@@ -474,16 +555,23 @@ export default {
 
   }
 
-  .search-bar__actions-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 44px;
-    margin: 12px 0;
-  }
-
   >>> .v-slider__tick-label {
     transform: translateX(-50%) !important;
+  }
+}
+
+.actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px;
+
+  > button {
+    margin-left: 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
   }
 }
 

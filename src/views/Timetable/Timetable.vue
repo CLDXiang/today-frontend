@@ -1,5 +1,5 @@
 <template>
-  <div class="timetable fluid mb-0 my-1 pa-0 px-md-3">
+  <div class="timetable">
     <a-drawer
       height="90vh"
       placement="bottom"
@@ -34,8 +34,9 @@
       :visible="isMobileMode && isSearchDialogVisible"
       @close="hideSearchDialog"
     >
-      <timetable-search-dialog-content
+      <timetable-search-bar
         v-if="isMobileMode"
+        :is-mobile-mode="isMobileMode"
         :search-index="searchIndex"
         :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
@@ -68,10 +69,17 @@
         class="timetable__search-bar-box"
       >
         <timetable-search-bar
+          :is-mobile-mode="isMobileMode"
           :search-index="searchIndex"
           :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
+          @hide-search-dialog="hideSearchDialog"
         />
+        <!-- <timetable-search-bar
+          :search-index="searchIndex"
+          :is-loading-courses="isLoadingCourses"
+          @addcourse="addSelectedCourse"
+        /> -->
       </div>
 
       <a-button
@@ -111,20 +119,18 @@ import { getUserProfile } from '@/apis/profile';
 import log from '@/utils/log';
 import {
   TimetableDay,
-  TimetableSearchBar,
   TimetableDetailDialogContent,
   TimetableConflictDialogContent,
-  TimetableSearchDialogContent,
+  TimetableSearchBar,
   TimetableHeadBar,
 } from './components';
 
 export default defineComponent({
   components: {
     TimetableDay,
-    TimetableSearchBar,
     TimetableDetailDialogContent,
     TimetableConflictDialogContent,
-    TimetableSearchDialogContent,
+    TimetableSearchBar,
     TimetableHeadBar,
   },
   props: {},
@@ -518,8 +524,7 @@ export default defineComponent({
 
   display: flex;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 4px auto 0 auto;
 
   max-width: 2560px;
 }
@@ -583,6 +588,7 @@ export default defineComponent({
 .timetable__search-bar-box {
   flex: 382;
   // height: 17rem;
+  max-width: 375px;
   height: $search-bar-height;
   margin: 0 10px;
   display: flex;

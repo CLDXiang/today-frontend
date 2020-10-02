@@ -4,7 +4,7 @@
       登录
     </div>
     <div class="input-box">
-      <v-text-field
+      <f-input
         v-model="name"
         label="用户名"
         autofocus
@@ -16,7 +16,7 @@
           (v) => !!v || '用户名不能为空',
         ]"
       />
-      <v-text-field
+      <f-input
         v-model="password"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
         :type="showPassword ? 'text': 'password'"

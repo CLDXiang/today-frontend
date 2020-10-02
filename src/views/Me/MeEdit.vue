@@ -33,7 +33,7 @@
     </div>
     <div class="info-box">
       <div>
-        <v-text-field
+        <f-input
           v-model="nickName"
           :rules="[(v) => v.length <= 10 || '昵称最长 10 个字哦']"
           :counter="10"
@@ -43,7 +43,7 @@
         />
       </div>
       <div>
-        <v-text-field
+        <f-input
           v-model="bio"
           :rules="[(v) => v.length <= 50 || '个性签名最长 50 个字哦']"
           :counter="50"
@@ -67,7 +67,7 @@
     </div>
     <div class="email-box">
       <div>
-        <v-text-field
+        <f-input
           dense
           label="邮箱"
           clearable
@@ -77,7 +77,7 @@
         />
       </div>
       <div class="email-validate-box">
-        <v-text-field
+        <f-input
           dense
           label="验证码"
           outlined
@@ -104,7 +104,7 @@
     </div>
     <div class="pw-box">
       <div>
-        <v-text-field
+        <f-input
           label="旧密码"
           dense
           clearable
@@ -113,7 +113,7 @@
         />
       </div>
       <div>
-        <v-text-field
+        <f-input
           label="新密码"
           dense
           clearable
@@ -122,7 +122,7 @@
         />
       </div>
       <div>
-        <v-text-field
+        <f-input
           label="确认新密码"
           dense
           clearable

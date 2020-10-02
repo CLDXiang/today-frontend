@@ -5,6 +5,8 @@ import {
   Modal,
   Drawer,
   Badge,
+  Select,
+  Slider,
 } from 'ant-design-vue';
 import { FIcon, FInput } from '@/components/common';
 
@@ -19,7 +21,13 @@ const app = createApp(App);
 app.use(store).use(router);
 
 // AntD 组件
-app.use(Button).use(Modal).use(Drawer).use(Badge);
+app
+  .use(Button)
+  .use(Modal)
+  .use(Drawer)
+  .use(Badge)
+  .use(Select)
+  .use(Slider);
 app.config.globalProperties.$message = message;
 
 // 自定义全局组件

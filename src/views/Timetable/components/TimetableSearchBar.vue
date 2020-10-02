@@ -46,7 +46,7 @@
     </div>
     <div v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield1"
           v-model="searchQuery.name"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -62,7 +62,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield4"
           v-model="searchQuery.codeId"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -78,7 +78,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield2"
           v-model="searchQuery.teachers"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -94,7 +94,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield5"
           v-model="searchQuery.place"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -110,7 +110,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield3"
           v-model="searchQuery.department"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -126,20 +126,8 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <!-- <v-range-slider
-        v-model="searchQuery.dayRange"
-        label="星期"
-        :tick-labels="dayLabels"
-        min="0"
-        max="6"
-        ticks="always"
-        tick-size="4"
-      >
-        <template v-slot:thumb-label="props">
-          {{ '周' + dayLabels[props.value] }}
-        </template>
-      </v-range-slider> -->
-        <v-select
+        <!-- TODO: 自己实现 f-select -->
+        <!-- <v-select
           v-model="searchQuery.day"
           :items="dayLabels"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -149,10 +137,32 @@
           dense
           outlined
           autocomplete="off"
-        />
+        /> -->
+        星期
+        <a-select
+          ref="select"
+          v-model:value="searchQuery.day"
+          style="width: 120px"
+        >
+          <a-select-option
+            v-for="v in dayLabels"
+            :key="v"
+          >
+            {{ v }}
+          </a-select-option>
+        </a-select>
       </div>
       <div class="search-bar__content-line">
-        <v-range-slider
+        节次
+        <a-slider
+          v-model:value="searchQuery.sectionRange"
+          range
+          dots
+          :marks="sectionLabels"
+          :min="0"
+          :max="13"
+        />
+        <!-- <v-range-slider
           v-model="searchQuery.sectionRange"
           :tick-labels="sectionLabels"
           label="节次"
@@ -164,7 +174,7 @@
           <template #thumb-label="props">
             {{ props.value + 1 }}
           </template>
-        </v-range-slider>
+        </v-range-slider> -->
       </div>
     </div>
 
@@ -172,43 +182,43 @@
       v-show="isSearchResultsVisible && searchResults.length !== 0"
       class="search-bar__results-box"
     >
-      <v-scroll-y-transition>
+      <!-- <v-scroll-y-transition> -->
+      <div
+        v-show="isSearchResultsVisible && searchResults.length !== 0"
+        class="search-bar__results"
+      >
         <div
-          v-show="isSearchResultsVisible && searchResults.length !== 0"
-          class="search-bar__results"
+          v-for="item in searchResults"
+          :key="item.courseId"
+          class="search-bar__result"
+          @click.stop="handleClickSearchResult(item.courseId)"
+          @mouseenter="setHoveredCourseId(item.courseId)"
+          @mouseleave="resetHoveredCourseId"
+          @touchstart="setHoveredCourseId(item.courseId)"
+          @touchend="resetHoveredCourseId"
         >
+          <div class="result-line">
+            {{ `${item.codeId} ${item.name}` }}
+          </div>
+          <div class="result-line cut">
+            {{ item.teachersText }}
+          </div>
           <div
-            v-for="item in searchResults"
-            :key="item.courseId"
-            class="search-bar__result"
-            @click.stop="handleClickSearchResult(item.courseId)"
-            @mouseenter="setHoveredCourseId(item.courseId)"
-            @mouseleave="resetHoveredCourseId"
-            @touchstart="setHoveredCourseId(item.courseId)"
-            @touchend="resetHoveredCourseId"
+            v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
+            :key="tsIndex"
+            class="result-line result-line--ts"
           >
-            <div class="result-line">
-              {{ `${item.codeId} ${item.name}` }}
-            </div>
-            <div class="result-line cut">
-              {{ item.teachersText }}
-            </div>
-            <div
-              v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
-              :key="tsIndex"
-              class="result-line result-line--ts"
-            >
-              {{ ts }}
-            </div>
-            <div
-              v-if="item.timeSlotsTexts.length > 3"
-              class="result-line result-line--ts"
-            >
-              ……
-            </div>
+            {{ ts }}
+          </div>
+          <div
+            v-if="item.timeSlotsTexts.length > 3"
+            class="result-line result-line--ts"
+          >
+            ……
           </div>
         </div>
-      </v-scroll-y-transition>
+      </div>
+      <!-- </v-scroll-y-transition> -->
     </div>
   </div>
 </template>
@@ -249,17 +259,18 @@ export default {
   computed: {
     sectionLabels() {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
-      return res.map((item, index) => {
+      const marks = {};
+      res.forEach((item, index) => {
         if (
           index === 0
           || index === res.length - 1
           || index === this.searchQuery.sectionRange[0]
           || index === this.searchQuery.sectionRange[1]
         ) {
-          return item;
+          marks[index] = item;
         }
-        return '';
       });
+      return marks;
     },
     isSearchQueryEmpty() {
       const sq = this.searchQuery;
@@ -448,6 +459,19 @@ export default {
     width: 100%;
     height: 66px;
     padding: 0 16px;
+    display: flex;
+    align-items: center;
+
+    > .f-input {
+      flex: 1;
+    }
+
+    > .ant-select,
+    > .ant-slider {
+      margin-left: 8px;
+      flex: 1;
+    }
+
   }
 
   .search-bar__actions-bar {

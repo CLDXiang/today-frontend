@@ -89,4 +89,16 @@ export default defineComponent({
   }
 }
 
+.ant-drawer-bottom > .ant-drawer-content-wrapper > .ant-drawer-content {
+  border-radius: 16px 16px 0 0;
+
+  > .ant-drawer-wrapper-body > .ant-drawer-body {
+    height: 100%;
+    padding: 0;
+  }
+}
+
+.ant-btn-round.ant-btn-lg {
+  padding: 0 16px;
+}
 </style>

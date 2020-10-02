@@ -1,6 +1,7 @@
 <template>
   <div class="timetable fluid mb-0 my-1 pa-0 px-md-3">
     <a-drawer
+      height="90vh"
       placement="bottom"
       :closable="false"
       :visible="isDetailDialogVisible"
@@ -13,10 +14,10 @@
       />
     </a-drawer>
     <a-drawer
+      height="90vh"
       placement="bottom"
       :closable="false"
       :visible="isConflictDialogVisible"
-      :value="isConflictDialogVisible"
       :mask-closable="false"
     >
       <timetable-conflict-dialog-content
@@ -27,10 +28,11 @@
       />
     </a-drawer>
     <a-drawer
+      height="90vh"
       placement="bottom"
       :closable="false"
       :visible="isMobileMode && isSearchDialogVisible"
-      :value="isConflictDialogVisible"
+      @close="hideSearchDialog"
     >
       <timetable-search-dialog-content
         v-if="isMobileMode"

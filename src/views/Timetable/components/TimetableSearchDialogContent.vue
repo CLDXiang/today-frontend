@@ -1,9 +1,12 @@
 <template>
-  <div>
+  <div class="dialog-container">
     <span class="title">搜索课程</span>
-    <div v-show="!(isSearchResultsVisible && searchResults.length !== 0)">
-      <div class="search-bar__content-line mt-2">
-        <v-text-field
+    <div
+      v-show="!(isSearchResultsVisible && searchResults.length !== 0)"
+      class="timetable__search-bar"
+    >
+      <div class="search-bar__content-line">
+        <f-input
           ref="textfield1"
           v-model="searchQuery.name"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -19,7 +22,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield4"
           v-model="searchQuery.codeId"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -35,7 +38,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield2"
           v-model="searchQuery.teachers"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -51,7 +54,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield5"
           v-model="searchQuery.place"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -67,7 +70,7 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <v-text-field
+        <f-input
           ref="textfield3"
           v-model="searchQuery.department"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -83,20 +86,8 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <!-- <v-range-slider
-        v-model="searchQuery.dayRange"
-        label="星期"
-        :tick-labels="dayLabels"
-        min="0"
-        max="6"
-        ticks="always"
-        tick-size="4"
-      >
-        <template v-slot:thumb-label="props">
-          {{ '周' + dayLabels[props.value] }}
-        </template>
-      </v-range-slider> -->
-        <v-select
+        <!-- TODO: 自己实现 f-select -->
+        <!-- <v-select
           v-model="searchQuery.day"
           :items="dayLabels"
           :disabled="isLoadingSearchResults || isLoadingCourses"
@@ -106,10 +97,32 @@
           dense
           outlined
           autocomplete="off"
-        />
+        /> -->
+        星期
+        <a-select
+          ref="select"
+          v-model:value="searchQuery.day"
+          style="width: 120px"
+        >
+          <a-select-option
+            v-for="v in dayLabels"
+            :key="v"
+          >
+            {{ v }}
+          </a-select-option>
+        </a-select>
       </div>
       <div class="search-bar__content-line">
-        <v-range-slider
+        节次
+        <a-slider
+          v-model:value="searchQuery.sectionRange"
+          range
+          dots
+          :marks="sectionLabels"
+          :min="0"
+          :max="13"
+        />
+        <!-- <v-range-slider
           v-model="searchQuery.sectionRange"
           :tick-labels="sectionLabels"
           label="节次"
@@ -121,48 +134,48 @@
           <template #thumb-label="props">
             {{ props.value + 1 }}
           </template>
-        </v-range-slider>
+        </v-range-slider> -->
       </div>
     </div>
     <div
       v-show="isSearchResultsVisible && searchResults.length !== 0"
       class="search-bar__results-box"
     >
-      <v-scroll-y-reverse-transition>
+      <!-- <v-scroll-y-reverse-transition> -->
+      <div
+        v-show="isSearchResultsVisible && searchResults.length !== 0"
+        class="search-bar__results"
+      >
         <div
-          v-show="isSearchResultsVisible && searchResults.length !== 0"
-          class="search-bar__results"
+          v-for="item in searchResults"
+          :key="item.courseId"
+          class="search-bar__result"
+          @click.stop="handleClickSearchResult(item.courseId)"
         >
+          <div class="result-line">
+            {{ `${item.codeId} ${item.name}` }}
+          </div>
+          <div class="result-line cut">
+            {{ item.teachersText }}
+          </div>
           <div
-            v-for="item in searchResults"
-            :key="item.courseId"
-            class="search-bar__result"
-            @click.stop="handleClickSearchResult(item.courseId)"
+            v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
+            :key="tsIndex"
+            class="result-line result-line--ts"
           >
-            <div class="result-line">
-              {{ `${item.codeId} ${item.name}` }}
-            </div>
-            <div class="result-line cut">
-              {{ item.teachersText }}
-            </div>
-            <div
-              v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
-              :key="tsIndex"
-              class="result-line result-line--ts"
-            >
-              {{ ts }}
-            </div>
-            <div
-              v-if="item.timeSlotsTexts.length > 3"
-              class="result-line result-line--ts"
-            >
-              ……
-            </div>
+            {{ ts }}
+          </div>
+          <div
+            v-if="item.timeSlotsTexts.length > 3"
+            class="result-line result-line--ts"
+          >
+            ……
           </div>
         </div>
-      </v-scroll-y-reverse-transition>
+      </div>
+      <!-- </v-scroll-y-reverse-transition> -->
     </div>
-    <div>
+    <div class="actions-bar">
       <a-button
         v-show="searchResults.length !== 0"
         :type="isSearchResultsVisible ? 'primary' : undefined"
@@ -178,7 +191,7 @@
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
       </a-button>
     </div>
-    <div>
+    <div class="actions-bar">
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
@@ -256,17 +269,18 @@ export default {
   computed: {
     sectionLabels() {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
-      return res.map((item, index) => {
+      const marks = {};
+      res.forEach((item, index) => {
         if (
           index === 0
           || index === res.length - 1
           || index === this.searchQuery.sectionRange[0]
           || index === this.searchQuery.sectionRange[1]
         ) {
-          return item;
+          marks[index] = item;
         }
-        return '';
       });
+      return marks;
     },
     isSearchQueryEmpty() {
       const sq = this.searchQuery;
@@ -397,11 +411,12 @@ export default {
           this.searchBarStatus = 'success';
           this.$message.success(`找到 ${this.searchResults.length} 门课程`);
           // 主要针对移动端，使键盘收回
-          this.$refs.textfield1.blur();
-          this.$refs.textfield2.blur();
-          this.$refs.textfield3.blur();
-          this.$refs.textfield4.blur();
-          this.$refs.textfield5.blur();
+          // FIXME: 修复下面这部分功能
+          // this.$refs.textfield1.blur();
+          // this.$refs.textfield2.blur();
+          // this.$refs.textfield3.blur();
+          // this.$refs.textfield4.blur();
+          // this.$refs.textfield5.blur();
         } else {
           this.searchBarStatus = 'error';
           this.$message.error('没有找到符合条件的课程');
@@ -425,11 +440,18 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_timetable';
 
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
 .title {
-  margin-top: 36px;
+  margin: 36px 0 20px;
   font-size: 20px;
   line-height: 20px;
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   color: #333;
@@ -457,16 +479,38 @@ export default {
     width: 100%;
     height: 66px;
     padding: 0 16px;
-  }
-
-  .search-bar__actions-bar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+
+    > .f-input {
+      flex: 1;
+    }
+
+    > .ant-select,
+    > .ant-slider {
+      margin-left: 8px;
+      flex: 1;
+    }
+
   }
 
   >>> .v-slider__tick-label {
     transform: translateX(-50%) !important;
+  }
+}
+
+.actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px;
+
+  > button {
+    margin-left: 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
   }
 }
 

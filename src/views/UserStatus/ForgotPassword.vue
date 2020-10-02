@@ -4,7 +4,7 @@
       忘记密码
     </div>
     <div class="input-box">
-      <v-text-field
+      <f-input
         v-model="email"
         label="学邮"
         autofocus
@@ -15,7 +15,7 @@
         :rules="[(v) => !!v || '学邮不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号']"
       />
       <div class="email-validate-box">
-        <v-text-field
+        <f-input
           v-model="code"
           label="验证码"
           outlined
@@ -31,7 +31,7 @@
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
         </a-button>
       </div>
-      <v-text-field
+      <f-input
         v-model="password"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
         :type="showPassword ? 'text': 'password'"
@@ -44,7 +44,7 @@
         ]"
         @click:append="showPassword = !showPassword"
       />
-      <v-text-field
+      <f-input
         v-model="password2"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
         :type="showPassword ? 'text': 'password'"

@@ -23,6 +23,7 @@ export default defineComponent({
   data() {
     return {
       currentBreakpoint: 'xs' as BreakpointType,
+      currentInnerHeight: 667,
     };
   },
 
@@ -45,10 +46,11 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapMutations(['setBreakpoint']),
+    ...mapMutations(['setBreakpoint', 'setInnerHeight']),
     onResize(): void {
       let newBreakpoint = this.currentBreakpoint;
       const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
 
       if (newWidth < 600) {
         newBreakpoint = 'xs';
@@ -67,6 +69,10 @@ export default defineComponent({
       if (newBreakpoint !== this.currentBreakpoint) {
         this.currentBreakpoint = newBreakpoint;
         this.setBreakpoint(newBreakpoint);
+      }
+      if (newHeight !== this.currentInnerHeight) {
+        this.currentInnerHeight = newHeight;
+        this.setInnerHeight(newHeight);
       }
     },
   },
@@ -111,5 +117,10 @@ export default defineComponent({
 
 .ant-btn-round.ant-btn-lg {
   padding: 0 16px;
+}
+
+.ant-btn-danger {
+  background-color: $danger-color;
+  border-color: $danger-color;
 }
 </style>

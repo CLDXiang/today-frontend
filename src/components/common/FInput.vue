@@ -27,6 +27,12 @@
           @blur="handleInputBlured"
         >
       </div>
+        <span
+          v-if="suffix !== undefined"
+          class="f-input__suffix"
+        >
+          {{ suffix }}
+        </span>
     </div>
     <div class="f-input__details">
       <transition name="hint">
@@ -56,6 +62,8 @@ export default defineComponent({
     persistentHint: { type: Boolean, default: false },
     /** 字段名 */
     label: { type: String, default: undefined },
+    /** 后缀 */
+    suffix: { type: String, default: undefined },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -148,6 +156,12 @@ $height: 40px;
       outline: none;
       color: $black;
       width: 100%;
+    }
+
+    > .f-input__suffix{
+      color: $black;
+      position: float;
+      right: 0;
     }
   }
 }

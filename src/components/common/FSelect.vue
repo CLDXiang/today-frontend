@@ -4,6 +4,7 @@
     :class="{ 'f-select--focus': isFocused, 'f-select--disable': disabled }"
   >
     <a-dropdown
+      :disabled="disabled"
       :trigger="['click']"
       @visibleChange="handleVisibleChange"
     >

@@ -81,10 +81,11 @@ export default defineComponent({
   text-align: center;
   color: #333;
 
+  height: 100%;
   overflow-y: hidden;
 
   > .main-container {
-    height: 100vh;
+    height: 100%;
     overflow-y: auto;
   }
 }

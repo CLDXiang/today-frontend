@@ -211,6 +211,10 @@ export default {
   justify-content: flex-start;
   align-items: center;
 
+  .f-input {
+    margin-bottom: 8px;
+  }
+
   > .title {
     color: #333;
     font-size: 24px;

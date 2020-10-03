@@ -5,10 +5,10 @@ import {
   Modal,
   Drawer,
   Badge,
-  Select,
+  Dropdown,
   Slider,
 } from 'ant-design-vue';
-import { FIcon, FInput } from '@/components/common';
+import { FIcon, FInput, FSelect } from '@/components/common';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -26,11 +26,14 @@ app
   .use(Modal)
   .use(Drawer)
   .use(Badge)
-  .use(Select)
+  .use(Dropdown)
   .use(Slider);
 app.config.globalProperties.$message = message;
 
 // 自定义全局组件
-app.component('f-icon', FIcon).component('f-input', FInput);
+app
+  .component('f-icon', FIcon)
+  .component('f-input', FInput)
+  .component('f-select', FSelect);
 
 app.mount('#app');

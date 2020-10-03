@@ -152,19 +152,15 @@
           outlined
           autocomplete="off"
         /> -->
-        星期
-        <a-select
-          ref="select"
-          v-model:value="searchQuery.day"
-          style="width: 120px"
-        >
-          <a-select-option
-            v-for="v in dayLabels"
-            :key="v"
-          >
-            {{ v }}
-          </a-select-option>
-        </a-select>
+        <f-select
+          v-model="searchQuery.day"
+          :options="dayLabels"
+          :disabled="isLoadingSearchResults || isLoadingCourses"
+          :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
+          :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
+          label="星期"
+          autocomplete="off"
+        />
       </div>
       <div class="search-bar__content-line">
         节次
@@ -543,7 +539,8 @@ export default {
     display: flex;
     align-items: center;
 
-    > .f-input {
+    > .f-input,
+    > .f-select {
       flex: 1;
     }
 

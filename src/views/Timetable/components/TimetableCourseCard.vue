@@ -193,9 +193,8 @@ export default {
   padding: 0.3rem;
   transition: background-color 0.195s cubic-bezier(0, 0, 0.2, 1);
 
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
+  user-select: none;
 }
 
 .course-name,

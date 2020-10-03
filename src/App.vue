@@ -1,5 +1,8 @@
 <template>
-  <div :style="{ paddingBottom: isBottomNavVisible ? '64px': '0' }">
+  <div
+    class="main-container"
+    :style="{ paddingBottom: isBottomNavVisible ? '64px': '0' }"
+  >
     <router-view />
   </div>
   <bottom-nav v-show="isBottomNavVisible" />

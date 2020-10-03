@@ -1,7 +1,7 @@
 <template>
   <div
     class="f-input"
-    :class="{ 'f-input--focus': isFocused }"
+    :class="{ 'f-input--focus': isFocused, 'f-input--disable': disabled }"
   >
     <div
       class="f-input__container"
@@ -105,16 +105,16 @@ $height: 40px;
 
 .f-input__container {
   box-sizing: border-box;
-    cursor: text;
-    border-radius: 4px;
-    color: $gray;
-    border: solid 1px currentColor;
-    padding: 1px 9px;
-    margin-bottom: 4px;
-    font-size: 16px;
-    line-height: 20px;
-    height: $height;
-    transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: text;
+  border-radius: 4px;
+  color: $gray;
+  border: solid 1px currentColor;
+  padding: 1px 9px;
+  margin-bottom: 4px;
+  font-size: 16px;
+  line-height: 20px;
+  height: $height;
+  transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
 
   > .f-input__text-field {
     height: 100%;
@@ -138,7 +138,7 @@ $height: 40px;
       padding: 0 4px;
 
       &.f-input__label--floating {
-        transform: translateY(-$height/2 + 4px) scale(.75);
+        transform: translateY(-$height/2 + 4px) scale(0.75);
         background-color: #fff;
       }
     }
@@ -147,22 +147,34 @@ $height: 40px;
       border: none;
       outline: none;
       color: $black;
+      width: 100%;
     }
   }
 }
 
+// focus 态
 .f-input--focus {
   > .f-input__container {
     color: $primary-color;
     border: solid 2px currentColor;
     padding: 0 8px;
     > .f-input__text-field {
-
-    > .f-input__label {
-      color: $primary-color;
+      > .f-input__label {
+        color: $primary-color;
+      }
     }
-  }}
+  }
 }
+
+// disable 态
+.f-input.f-input--disable > .f-input__container {
+  cursor: not-allowed;
+  > .f-input__text-field > input {
+    cursor: not-allowed;
+  }
+}
+
+.f-input:not(.f-input__disabled)
 
 .f-input__details {
   display: flex;

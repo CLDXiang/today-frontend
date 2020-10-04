@@ -26,13 +26,13 @@
           @focus="handleInputFocused"
           @blur="handleInputBlured"
         >
-      </div>
         <span
           v-if="suffix !== undefined"
           class="f-input__suffix"
         >
           {{ suffix }}
         </span>
+      </div>
     </div>
     <div class="f-input__details">
       <transition name="hint">
@@ -160,8 +160,8 @@ $height: 40px;
 
     > .f-input__suffix{
       color: $black;
-      position: float;
-      right: 0;
+      position: relative;
+      left: 0;
     }
   }
 }

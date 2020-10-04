@@ -20,7 +20,12 @@
         style="display: none"
         accept="image/png, image/jpeg, image/jpg, image/bmp"
         type="file"
-        @change="e => handleAvatarUploaded(e.target?.files?.length && e.target.files[0] || null)"
+        @change="
+          (e) =>
+            handleAvatarUploaded(
+              (e.target.files && e.target.files.length && e.target.files[0]) || null,
+            )
+        "
       >
       <a-button
         type="primary"
@@ -143,13 +148,14 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
-import { editProfile, uploadAvatar } from '@/apis/profile';
+<script lang="ts">
+import { mapMutations, mapState } from 'vuex';
+import { profileClient } from '@/apis';
 import log from '@/utils/log';
+import { defineComponent } from 'vue';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
-export default {
+export default defineComponent({
   data: () => ({
     isAvatarUploading: false,
     isInfoModifying: false,
@@ -158,7 +164,7 @@ export default {
   }),
   computed: {
     ...mapState(['user']),
-    isInfoModified() {
+    isInfoModified(): boolean {
       return this.bio !== (this.user.bio || '') || this.nickName !== (this.user.nickName || '');
     },
   },
@@ -166,6 +172,7 @@ export default {
     this.fetchData();
   },
   methods: {
+    ...mapMutations(['setUserProfile']),
     fetchData() {
       this.bio = this.user.bio || '';
       this.nickName = this.user.nickName || '';
@@ -173,7 +180,7 @@ export default {
     handleClickModifyAvatar() {
       this.$el.querySelector('#upload').click();
     },
-    handleAvatarUploaded(f) {
+    handleAvatarUploaded(f: File) {
       if (!f) {
         this.$message.warn('文件上传失败');
         return;
@@ -185,9 +192,9 @@ export default {
       this.isAvatarUploading = true;
       const data = new FormData();
       data.append('file', f);
-      uploadAvatar(data)
+      profileClient.uploadAvatar({ userAvatar: data })
         .then((resp) => {
-          this.$store.commit('setUserProfile', resp);
+          this.setUserProfile(resp);
           this.$message.success('修改头像成功！');
         })
         .catch((err) => {
@@ -208,10 +215,9 @@ export default {
         return;
       }
       this.isInfoModifying = true;
-      const data = { nickName: this.nickName, bio: this.bio };
-      editProfile(data)
+      profileClient.editProfile({ nickName: this.nickName, bio: this.bio })
         .then((resp) => {
-          this.$store.commit('setUserProfile', resp);
+          this.setUserProfile(resp);
           this.$message.success('修改成功！');
         })
         .catch((err) => {
@@ -222,14 +228,14 @@ export default {
           this.isInfoModifying = false;
         });
     },
-    processAvatar(originAvatar) {
+    processAvatar(originAvatar: string) {
       if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -109,13 +109,7 @@
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import {
-  getSelectedCourses as getSelectedCoursesService,
-  addSelectedCourse as addSelectedCourseService,
-  removeSelectedCourse as removeSelectedCourseService,
-  replaceSelectedCourses as replaceSelectedCoursesService,
-} from '@/apis/timetable';
-import { getUserProfile } from '@/apis/profile';
+import { timetableClient, profileClient } from '@/apis';
 import log from '@/utils/log';
 import {
   TimetableDay,
@@ -125,7 +119,11 @@ import {
   TimetableHeadBar,
 } from './components';
 import {
-  RawCourse, AllCourses, SearchIndexItem, SearchIndexItemTimeSlot, Section, Sections,
+  RawCourse,
+  AllCourses,
+  SearchIndexItem,
+  SearchIndexItemTimeSlot,
+  Sections,
 } from './types';
 
 export default defineComponent({
@@ -259,7 +257,8 @@ export default defineComponent({
       }
       if (changeRemote) {
         const hide = this.$message.loading('正在向服务器同步数据...', 0);
-        replaceSelectedCoursesService(this.semester, [...selectedCoursesIds])
+        timetableClient
+          .replaceSelectedCourses(this.semester, [...selectedCoursesIds])
           .then(() => {
             // TODO: 根据后端响应进行处理
             hide();
@@ -299,7 +298,8 @@ export default defineComponent({
           if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
             this.fetchSelectedCourses();
             // 顺便更新用户信息
-            getUserProfile()
+            profileClient
+              .getUserProfile({})
               .then((profile) => {
                 this.setUserProfile(profile);
               })
@@ -320,7 +320,8 @@ export default defineComponent({
         return;
       }
       const hide = this.$message.loading('正在与服务器同步数据', 0);
-      getSelectedCoursesService(this.semester)
+      timetableClient
+        .getSelectedCourses(this.semester)
         .then((res: number[]) => {
           this.setHasFetchedSelectedCourses();
           hide();
@@ -445,7 +446,8 @@ export default defineComponent({
       // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline && !this.selectedCoursesIds.has(courseId)) {
-        addSelectedCourseService(courseId)
+        timetableClient
+          .addSelectedCourse(courseId)
           .then(() => {
             // TODO: 后端应该返回有效响应
           })
@@ -484,7 +486,8 @@ export default defineComponent({
       // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline && this.selectedCoursesIds.has(courseId)) {
-        removeSelectedCourseService(courseId)
+        timetableClient
+          .removeSelectedCourse(courseId)
           .then(() => {
             // TODO: 后端应该返回有效响应
           })

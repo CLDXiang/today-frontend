@@ -58,10 +58,9 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
-import { login } from '@/apis/auth';
-import { getUserProfile } from '@/apis/profile';
+<script lang="ts">
+import { mapGetters, mapMutations } from 'vuex';
+import { authClient, profileClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 
@@ -81,10 +80,11 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapMutations(['setUserProfile']),
     getProfile() {
-      getUserProfile()
+      profileClient.getUserProfile({})
         .then((profile) => {
-          this.$store.commit('setUserProfile', profile);
+          this.setUserProfile(profile);
         })
         .catch((err) => {
           log.error(err);
@@ -99,15 +99,11 @@ export default defineComponent({
         this.$message.warn('密码不能为空');
         return;
       }
-      login(this.name, this.password)
+      authClient.login({ username: this.name, password: this.password })
         .then(() => {
           this.$message.success('登录成功');
           this.getProfile(); // 用户登录向后端请求profile的内容，并装入Vuex
-          if (this.$router.currentRoute?.query?.redirect) {
-            this.$router.push(this.$router.currentRoute.query.redirect);
-          } else {
-            this.$router.push('/timetable');
-          }
+          this.$router.push('/timetable');
         })
         .catch((e) => {
           log.error(e);

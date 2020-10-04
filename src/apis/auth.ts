@@ -1,83 +1,122 @@
 import axios from 'axios';
-// import log from '@/utils/log';
 import { API_URL } from '@/utils/config';
 import store from '@/store';
 
-export function login(usernameOrEmail: string, password: string) {
-  return new Promise((resolve, reject) => {
-    const data = {
-      username: usernameOrEmail,
-      password,
+interface RespErr {
+  response: {
+    status: number;
+    data: {
+      message: string;
     };
-    // log.info('login payload: ', data);
+  };
+}
+
+interface LoginReq {
+  /** 用户名 */
+  username: string;
+  /** 密码 */
+  password: string;
+}
+
+interface LoginResp {
+  access_token: string;
+  email: string;
+  name: string;
+}
+
+const login: (req: LoginReq) => Promise<LoginResp> = (req) =>
+  new Promise<LoginResp>((resolve, reject) => {
     axios
-      .post(`${API_URL}/auth/login`, data)
+      .post(`${API_URL}/auth/login`, req)
       .then((resp) => {
-        // log.info('login resp', resp);
-        const jwtToken = resp.data.access_token;
-        const { email, name } = resp.data;
+        const { access_token: jwtToken, email, name } = resp.data;
         if (jwtToken) {
           store.commit('setJwtToken', jwtToken);
           store.commit('setUser', { name, email });
         } else {
           reject(new Error('jwtToken no contained in response'));
         }
-        return resolve(resp);
+        return resolve(resp.data);
       })
-      .catch((error) => reject(error));
+      .catch((err) => reject(err));
   });
+
+interface RegisterReq {
+  /** 用户名 */
+  name: string;
+  /** 验证码 */
+  code: number;
+  /** 密码 */
+  password: string;
+  /** 邮箱 */
+  email: string;
 }
 
-export function register(name: string, email: string, code: string, password: string) {
-  return new Promise((resolve, reject) => {
-    const payload = {
-      name,
-      code: parseInt(code, 10),
-      password,
-      email,
-    };
-    // log.info('register payload: ', payload);
+interface RegisterResp {
+  result: 'success' | 'failed';
+}
+
+const register: (req: RegisterReq) => Promise<RegisterResp> = (req) =>
+  new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/auth/register`, payload)
+      .post(`${API_URL}/auth/register`, req)
       .then((resp) => {
-        // log.info('register resp', resp);
         resolve(resp.data);
       })
-      .catch((err) => reject(err));
+      .catch((err) => reject(err as RespErr));
   });
+
+interface RequestCodeReq {
+  email: string;
 }
 
-export function requestCode(email: string) {
-  return new Promise((resolve, reject) => {
+const requestCodeRegister: (req: RequestCodeReq) => Promise<never> = (req) =>
+  new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/auth/register-mail`, { email })
-      .then((resp) => {
-        resolve(resp);
+      .post(`${API_URL}/auth/register-mail`, req)
+      .then(() => {
+        resolve();
       })
-      .catch((err) => reject(err));
+      .catch((err) => reject(err as RespErr));
   });
+
+const requestCodeForForgotPassword: (req: RequestCodeReq) => Promise<never> = (req) =>
+  new Promise((resolve, reject) => {
+    axios
+      .post(`${API_URL}/auth/password`, req)
+      .then(() => {
+        resolve();
+      })
+      .catch((err) => reject(err as RespErr));
+  });
+
+interface ModifyPasswordReq {
+  email: string;
+  code: number;
+  password: string;
 }
 
-export function requestCodeForForgotPassword(email: string) {
-  return new Promise((resolve, reject) => {
+const modifyPassword: (req: ModifyPasswordReq) => Promise<never> = (req) =>
+  new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/auth/password`, { email })
-      .then((resp) => {
-        // log.info('forgot password request code resp', resp);
-        resolve(resp);
+      .put(`${API_URL}/auth/password`, req)
+      .then(() => {
+        resolve();
       })
-      .catch((err) => reject(err));
+      .catch((err) => reject(err as RespErr));
   });
-}
 
-export function modifyPassword(email: string, code: string, password: string) {
-  return new Promise((resolve, reject) => {
-    axios
-      .put(`${API_URL}/auth/password`, { email, code, password })
-      .then((resp) => {
-        // log.info('modify password resp', resp);
-        resolve(resp);
-      })
-      .catch((err) => reject(err));
-  });
-}
+const authClient = {
+  /** 登录 */
+  login,
+  /** 注册 */
+  register,
+  /** 获取验证码（注册） */
+  requestCodeRegister,
+  /** 获取验证码（忘记密码） */
+  requestCodeForForgotPassword,
+  /** 修改密码 */
+  modifyPassword,
+};
+
+export default authClient;

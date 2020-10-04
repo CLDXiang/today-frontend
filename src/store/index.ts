@@ -45,7 +45,7 @@ const store = createStore({
     globalMessageTimer: -1,
     // globalMessageIcon: '',
 
-    selectedCoursesIds: {} as { [key: string]: any },
+    selectedCoursesIds: {} as { [key: string]: number[] },
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
     selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
     hoveredCourseId: -1,
@@ -112,7 +112,11 @@ const store = createStore({
 
     setSelectedCourses(
       state,
-      payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: Sections[] },
+      payload: {
+        semester: string;
+        selectedCoursesIds: number[];
+        selectedSectionsByDay: Sections[];
+      },
     ) {
       state.selectedSectionsByDay = payload.selectedSectionsByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];

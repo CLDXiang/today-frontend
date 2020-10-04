@@ -40,11 +40,12 @@
   </div>
 </template>
 
-<script>
-import { mapGetters, mapState } from 'vuex';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
-export default {
+export default defineComponent({
   data: () => ({
     aaa: 1,
   }),
@@ -53,7 +54,8 @@ export default {
     ...mapGetters(['countHistory', 'userLoggedIn']),
   },
   methods: {
-    processAvatar(originAvatar) {
+    ...mapMutations({ vuexLogout: 'logout' }),
+    processAvatar(originAvatar: string) {
       if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
@@ -61,15 +63,15 @@ export default {
     },
     logout() {
       if (this.userLoggedIn) {
-        this.$store.commit('logout');
+        this.vuexLogout();
         this.$router.replace({ name: 'Timetable' });
       } else {
-        this.$store.commit('logout');
+        this.vuexLogout();
         this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

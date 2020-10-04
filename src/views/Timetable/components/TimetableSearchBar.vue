@@ -265,14 +265,17 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { SearchIndexItem } from '../types';
+
+export default defineComponent({
   props: {
-    searchIndex: Array,
+    searchIndex: { type: Array as PropType<SearchIndexItem[]>, required: true },
     isLoadingCourses: Boolean,
     isMobileMode: Boolean,
   },
-  emits: ['hide-search-dialog'],
+  emits: ['hide-search-dialog', 'addcourse'],
   data() {
     return {
       searchQuery: {
@@ -280,20 +283,18 @@ export default {
         teachers: '',
         department: '',
         day: '全部',
-        // dayRange: [0, 6],
         sectionRange: [0, 13],
         place: '',
         codeId: '',
       },
 
-      // dayLabels: ['一', '二', '三', '四', '五', '六', '日'],
       dayLabels: ['全部', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
 
       isSearchResultsVisible: false,
       /** 搜索结果
        * TODO: 后续可能还需要在 value 中加入一些状态：是否已选等
        */
-      searchResults: [],
+      searchResults: [] as SearchIndexItem[],
       isLoadingSearchResults: false,
       searchBarStatus: 'normal',
     };
@@ -301,7 +302,7 @@ export default {
   computed: {
     sectionLabels() {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
-      const marks = {};
+      const marks: Record<number, string> = {};
       res.forEach((item, index) => {
         if (
           index === 0
@@ -314,7 +315,7 @@ export default {
       });
       return marks;
     },
-    isSearchQueryEmpty() {
+    isSearchQueryEmpty(): boolean {
       const sq = this.searchQuery;
       return (
         sq.name.trim() === ''
@@ -347,7 +348,7 @@ export default {
     handleChangeResultsVisible() {
       this.isSearchResultsVisible = !this.isSearchResultsVisible;
     },
-    handleClickSearchResult(courseId) {
+    handleClickSearchResult(courseId: number) {
       this.$emit('addcourse', courseId);
     },
     handleClickResetButton() {
@@ -458,7 +459,7 @@ export default {
         this.isSearchResultsVisible = true;
       }, 0);
     },
-    handleKeyDown(e) {
+    handleKeyDown(e: KeyboardEvent) {
       // TODO: 如何在移动端监听键盘“完成”按钮？
       // 监听回车键
       if (e.which === 13) {
@@ -466,7 +467,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

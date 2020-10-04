@@ -16,25 +16,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import TimetableDayColumn from './TimetableDayColumn.vue';
+import { Sections, Column } from '../types';
 
-export default {
+export default defineComponent({
   components: {
     TimetableDayColumn,
   },
   props: {
-    title: String,
-    sections: Object,
-  },
-  data() {
-    return {};
+    title: { type: String, required: true },
+    sections: { type: Object as PropType<Sections>, required: true },
   },
   computed: {
-    // 计算列数，并将课程放到各个列中
+    /** 计算列数，并将课程放到各个列中 */
     sectionsByColumns() {
       // 占位：未被占用的位置记 0，某门课程从这里开始就将它整个放到这个位置，并将其他占的位置置 1
-      const columns = [new Array(14).fill(0)];
+      const columns: Column[] = [new Array<number>(14).fill(0)];
 
       // this.courses.forEach((course) => {
       Object.values(this.sections).forEach((section) => {
@@ -79,8 +78,8 @@ export default {
     },
   },
   methods: {
-    // 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始）
-    parseSections(sectionString) {
+    /** 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始） */
+    parseSections(sectionString: string): number[] {
       const [sectionStart, sectionEnd] = sectionString.split('-').map((i) => parseInt(i, 10));
       const sectionsArray = [];
       for (let i = sectionStart; i <= sectionEnd; i += 1) {
@@ -89,7 +88,7 @@ export default {
       return sectionsArray;
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

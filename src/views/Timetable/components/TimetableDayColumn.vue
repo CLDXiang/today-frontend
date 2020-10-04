@@ -13,15 +13,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import TimetableCourseCard from './TimetableCourseCard.vue';
+import { Column, SectionInColumn } from '../types';
 
-export default {
+export default defineComponent({
   components: {
     TimetableCourseCard,
   },
   props: {
-    column: Array,
+    column: { type: Array as PropType<Column>, required: true },
   },
   data() {
     return {
@@ -29,12 +31,12 @@ export default {
     };
   },
   computed: {
-    sectionList() {
-      return this.column.filter((item) => typeof item === 'object');
+    sectionList(): SectionInColumn[] {
+      return this.column.filter((item) => typeof item === 'object') as SectionInColumn[];
     },
   },
   methods: {},
-};
+});
 </script>
 
 <style lang="scss" scoped>

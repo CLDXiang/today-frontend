@@ -21,11 +21,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 // import { mapGetters } from 'vuex';
 import wxGroupImg from '../../assets/wx_pr.jpg';
 
-export default {
+export default defineComponent({
   data() {
     return {
       wxGroupImg,
@@ -34,7 +35,7 @@ export default {
   computed: {
     // ...mapGetters(['userLoggedIn']),
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

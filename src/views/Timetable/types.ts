@@ -75,7 +75,7 @@ export interface SearchIndexItemTimeSlot {
   place: string;
   /** 星期（汉字） */
   dayText: string;
-};
+}
 
 /** 课程搜索索引项 */
 export interface SearchIndexItem {
@@ -105,3 +105,56 @@ export interface Section extends RawCourse {
 
 /** 课时 key 到课时数据映射集 */
 export type Sections = { [key: string]: Section };
+
+/** 课程详情信息（展示用） - 上课时间段 */
+export interface CourseDetailInfoTimeSlot {
+  /** 起止周 */
+  week: string;
+  /** 星期 */
+  day: string;
+  /** 节次 */
+  section: [number, number];
+  /** 上课地点 */
+  place: string;
+  /** 授课教师 */
+  teachers: string;
+}
+
+/** 课程详情信息（展示用） */
+export interface CourseDetailInfo {
+  /** 课程序号 */
+  codeId: string;
+  /** 课程名称 */
+  name: string;
+  /** 学分 */
+  credit: number;
+  /** 周课时数 */
+  sectionCount: number;
+  /** 人数上限 */
+  maxStudent: number;
+  /** 开课院系 */
+  department: string;
+  /** 校区 */
+  campus: string;
+  /** 备注 */
+  remark: string;
+  /** 考试时间 */
+  examTime: string;
+  /** 考试类型 */
+  examType: string;
+  /** 是否允许期中退课 */
+  drop: string;
+  /** 开课时间段 */
+  timeSlots: CourseDetailInfoTimeSlot[];
+  /** 授课教师 */
+  teachers: string;
+}
+
+/** 课时数据（Column 用） */
+export interface SectionInColumn extends Section {
+  /** 节次数组 */
+  sectionsArray: number[];
+}
+
+/** 列数据 */
+export type Column = (number | SectionInColumn)[];

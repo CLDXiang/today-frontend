@@ -1,7 +1,7 @@
 <template>
   <div class="timetable">
     <a-drawer
-      height="90vh"
+      :height="drawerHeight"
       placement="bottom"
       :closable="false"
       :visible="isDetailDialogVisible"
@@ -14,7 +14,7 @@
       />
     </a-drawer>
     <a-drawer
-      height="90vh"
+      :height="drawerHeight"
       placement="bottom"
       :closable="false"
       :visible="isConflictDialogVisible"
@@ -28,7 +28,7 @@
       />
     </a-drawer>
     <a-drawer
-      height="90vh"
+      :height="drawerHeight"
       placement="bottom"
       :closable="false"
       :visible="isMobileMode && isSearchDialogVisible"
@@ -195,6 +195,7 @@ export default defineComponent({
       'isDetailDialogVisible',
       'hasFetchedSelectedCourses',
       'breakpoint',
+      'innerHeight',
     ]),
     ...mapState({
       selectedSectionsByDayVuex: 'selectedSectionsByDay',
@@ -223,6 +224,10 @@ export default defineComponent({
         default:
           return false;
       }
+    },
+    /** 底部抽屉高度 */
+    drawerHeight() {
+      return `${parseInt(this.innerHeight * 0.9, 10)}px`;
     },
   },
   mounted() {

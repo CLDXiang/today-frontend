@@ -12,22 +12,18 @@
         outlined
         required
         hint="与学校系统无关，请使用本站注册的账号~"
-        :rules="[
-          (v) => !!v || '用户名不能为空',
-        ]"
+        :rules="[(v) => !!v || '用户名不能为空']"
       />
       <f-input
         v-model="password"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text': 'password'"
+        :type="showPassword ? 'text' : 'password'"
         label="密码"
         clearable
         outlined
         required
         hint="https 加密传输，后台不会存储明文密码"
-        :rules="[
-          (v) => !!v || '密码不能为空',
-        ]"
+        :rules="[(v) => !!v || '密码不能为空']"
         @click:append="showPassword = !showPassword"
       />
     </div>
@@ -131,6 +127,10 @@ export default defineComponent({
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+
+  .f-input {
+    margin-bottom: 8px;
+  }
 
   > .title {
     color: #333;

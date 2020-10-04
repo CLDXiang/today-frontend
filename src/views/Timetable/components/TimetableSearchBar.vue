@@ -526,10 +526,6 @@ export default {
     }
 
   }
-
-  >>> .v-slider__tick-label {
-    transform: translateX(-50%) !important;
-  }
 }
 
 .actions-bar {

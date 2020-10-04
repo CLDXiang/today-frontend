@@ -65,10 +65,10 @@ export default defineComponent({
     /** 后缀 */
     suffix: { type: String, default: undefined },
     /** input 类型 */
-    type: { type: String, default: 'text' },
+    type: { type: String as PropType<'text' | 'password'>, default: 'text' },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
-    modelValue: { type: String as PropType<'text' | 'password'>, default: undefined },
+    modelValue: { type: String, default: undefined },
   },
   emits: ['update:modelValue'],
   data() {

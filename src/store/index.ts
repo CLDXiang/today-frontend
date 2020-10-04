@@ -1,7 +1,8 @@
 import { createStore } from 'vuex';
 import storage from '@/utils/localStorage';
+import { Sections } from '@/views/Timetable/types';
 
-export type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
 const persistedState = ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'];
@@ -46,7 +47,7 @@ const store = createStore({
 
     selectedCoursesIds: {} as { [key: string]: any },
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
-    selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
+    selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
     hoveredCourseId: -1,
 
     // localStorage 中保存的 state
@@ -111,7 +112,7 @@ const store = createStore({
 
     setSelectedCourses(
       state,
-      payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: any[] },
+      payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: Sections[] },
     ) {
       state.selectedSectionsByDay = payload.selectedSectionsByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];

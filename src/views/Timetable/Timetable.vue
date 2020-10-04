@@ -124,7 +124,9 @@ import {
   TimetableSearchBar,
   TimetableHeadBar,
 } from './components';
-import { RawCourse, AllCourses } from './interfaces';
+import {
+  RawCourse, AllCourses, SearchIndexItem, SearchIndexItemTimeSlot, Section, Sections,
+} from './types';
 
 export default defineComponent({
   components: {
@@ -141,11 +143,8 @@ export default defineComponent({
       isLoadingCourses: false,
       /** 课程数据 */
       allCourses: {} as AllCourses,
-      /** 搜索索引
-       * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
-       * value 为 course.id
-       */
-      searchIndex: [],
+      /** 搜索索引 */
+      searchIndex: [] as SearchIndexItem[],
       titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       sections: [
         { name: '1', clock: '08:00' },
@@ -178,7 +177,7 @@ export default defineComponent({
        * 此后每次增删仅仅针对增删的那一门课程来操作 selectedSectionsByDay
        * TODO: 按需过滤字段
        * */
-      selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
+      selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
       // /**
       //  * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
       //  */
@@ -213,7 +212,7 @@ export default defineComponent({
       // return classList;
       return [];
     },
-    isMobileMode() {
+    isMobileMode(): boolean {
       switch (this.breakpoint) {
         case 'xs':
         case 'sm':
@@ -226,8 +225,8 @@ export default defineComponent({
       }
     },
     /** 底部抽屉高度 */
-    drawerHeight() {
-      return `${parseInt(this.innerHeight * 0.9, 10)}px`;
+    drawerHeight(): string {
+      return `${Math.floor(this.innerHeight * 0.9)}px`;
     },
   },
   mounted() {
@@ -371,11 +370,11 @@ export default defineComponent({
       });
     },
     initSearchIndex() {
-      const searchIndex = [];
+      const searchIndex = [] as SearchIndexItem[];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
       Object.entries(this.allCourses).forEach(([courseId, course]) => {
-        const teachers = new Set();
-        const timeSlots = [];
+        const teachers = new Set<string>();
+        const timeSlots = [] as SearchIndexItemTimeSlot[];
         course.time_slot.forEach((ts) => {
           ts.teacher.forEach((teacher) => {
             if (teacher.trim() !== '') {
@@ -440,7 +439,7 @@ export default defineComponent({
       });
       this.searchIndex = searchIndex;
     },
-    addSelectedCourse(courseId) {
+    addSelectedCourse(courseId: number) {
       // if (this.selectedCoursesIds.has(courseId)) {
       //   return;
       // }

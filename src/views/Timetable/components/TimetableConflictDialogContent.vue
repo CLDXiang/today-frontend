@@ -97,7 +97,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { AllCourses } from '../interfaces';
+import { AllCourses } from '../types';
 
 interface SelectedCourseInfo {
   codeId: string;

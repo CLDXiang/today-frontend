@@ -62,3 +62,46 @@ export interface RawCourse {
 
 /** 课程 ID 到数据映射集 */
 export type AllCourses = { [id: number]: RawCourse };
+
+/** 课程搜索索引项 - 开课时间段 */
+export interface SearchIndexItemTimeSlot {
+  /** 起止周 */
+  week: string;
+  /** 星期 */
+  day: number;
+  /** 节次 */
+  section: [number, number];
+  /** 上课地点 */
+  place: string;
+  /** 星期（汉字） */
+  dayText: string;
+};
+
+/** 课程搜索索引项 */
+export interface SearchIndexItem {
+  /** 课程名 */
+  name: string;
+  /** 授课教师 */
+  teachers: string[];
+  /** 开课院系 */
+  department: string;
+  /** 上课时间段 */
+  timeSlots: SearchIndexItemTimeSlot[];
+  /** 课程序号 */
+  codeId: string;
+  /** 课程 Id */
+  courseId: number;
+  /** 授课教师（字符串化） */
+  teachersText: string;
+  /** 上课时间段（字符串化） */
+  timeSlotsTexts: string[];
+}
+
+/** 课时数据 */
+export interface Section extends RawCourse {
+  /** 当前课时数据 */
+  currentSlot: RawTimeSlot;
+}
+
+/** 课时 key 到课时数据映射集 */
+export type Sections = { [key: string]: Section };

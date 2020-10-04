@@ -18,7 +18,7 @@
         <input
           ref="input"
           :value="modelValue"
-          type="text"
+          :type="type"
           :autofocus="autofocus"
           :disabled="disabled"
           :placeholder="placeholder"
@@ -26,6 +26,12 @@
           @focus="handleInputFocused"
           @blur="handleInputBlured"
         >
+        <span
+          v-if="suffix !== undefined"
+          class="f-input__suffix"
+        >
+          {{ suffix }}
+        </span>
       </div>
     </div>
     <div class="f-input__details">
@@ -42,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   props: {
@@ -56,6 +62,10 @@ export default defineComponent({
     persistentHint: { type: Boolean, default: false },
     /** 字段名 */
     label: { type: String, default: undefined },
+    /** 后缀 */
+    suffix: { type: String, default: undefined },
+    /** input 类型 */
+    type: { type: String as PropType<'text' | 'password'>, default: 'text' },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -64,6 +74,7 @@ export default defineComponent({
   data() {
     return {
       isFocused: false,
+      showPassword: false,
     };
   },
   computed: {
@@ -148,6 +159,10 @@ $height: 40px;
       outline: none;
       color: $black;
       width: 100%;
+    }
+
+    > .f-input__suffix{
+      color: $black;
     }
   }
 }

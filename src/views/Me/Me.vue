@@ -61,10 +61,10 @@ export default {
     },
     logout() {
       if (this.userLoggedIn) {
-        this.$store.commit('LOGOUT');
+        this.$store.commit('logout');
         this.$router.replace({ name: 'Timetable' });
       } else {
-        this.$store.commit('LOGOUT');
+        this.$store.commit('logout');
         this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
       }
     },

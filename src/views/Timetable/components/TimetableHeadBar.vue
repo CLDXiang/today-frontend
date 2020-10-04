@@ -27,6 +27,7 @@ import { mapState, mapGetters } from 'vuex';
 import defaultAvatar from '../../../assets/default_avatar.jpg';
 
 export default {
+  emits: ['click-cloud'],
   data() {
     return {
       /** 同步冷却 */

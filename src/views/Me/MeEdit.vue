@@ -187,7 +187,7 @@ export default {
       data.append('file', f);
       uploadAvatar(data)
         .then((resp) => {
-          this.$store.commit('SET_USER_PROFILE', resp);
+          this.$store.commit('setUserProfile', resp);
           this.$message.success('修改头像成功！');
         })
         .catch((err) => {
@@ -211,7 +211,7 @@ export default {
       const data = { nickName: this.nickName, bio: this.bio };
       editProfile(data)
         .then((resp) => {
-          this.$store.commit('SET_USER_PROFILE', resp);
+          this.$store.commit('setUserProfile', resp);
           this.$message.success('修改成功！');
         })
         .catch((err) => {

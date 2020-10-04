@@ -29,10 +29,6 @@ const store = createStore({
       history: [],
     },
     detailPageCourse: {},
-    secret: {
-      posts: [],
-      postsMapping: [],
-    },
     lectures: [],
     /** 是否自动云同步过 */
     hasFetchedSelectedCourses: false,
@@ -55,32 +51,29 @@ const store = createStore({
     ...storage.getVuexStates(),
   },
   mutations: {
-    SET_JWT_TOKEN(state, token) {
+    setJwtToken(state, token) {
       // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
       state.user.id = JSON.parse(payload).sub;
       // log.info('set jwt_token', token);
     },
-    SET_USER(state, payload: { name: string; email: string }) {
+    setUser(state, payload: { name: string; email: string }) {
       state.user.name = payload.name;
       state.user.email = payload.email;
     },
-    LOGOUT(state) {
-      // log.info('LOGOUT');
+    logout(state) {
+      // log.info('logout');
       // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
       state.hasFetchedSelectedCourses = false;
     },
-    SET_USER_PROFILE(state, profile) {
+    setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
       state.user.nickName = profile.nickName;
-    },
-    SET_HISTORY(state, history) {
-      state.profile.history = history;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;

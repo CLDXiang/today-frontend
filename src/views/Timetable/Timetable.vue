@@ -105,7 +105,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
@@ -124,6 +124,7 @@ import {
   TimetableSearchBar,
   TimetableHeadBar,
 } from './components';
+import { RawCourse, AllCourses } from './interfaces';
 
 export default defineComponent({
   components: {
@@ -138,7 +139,8 @@ export default defineComponent({
     return {
       semester: '2020-2021学年1学期',
       isLoadingCourses: false,
-      allCourses: {},
+      /** 课程数据 */
+      allCourses: {} as AllCourses,
       /** 搜索索引
        * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
        * value 为 course.id
@@ -167,8 +169,8 @@ export default defineComponent({
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
        * */
-      selectedCoursesIds: new Set(),
-      selectedCoursesIdsFromDatabase: new Set(),
+      selectedCoursesIds: new Set<number>(),
+      selectedCoursesIdsFromDatabase: new Set<number>(),
       /** 关于 selectedSectionsByDay 的设计
        * 为何不使用依赖 selectedCoursesIds 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIds 时就需要重新处理所有已选择的课程，
@@ -188,7 +190,16 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(['detailPageCourse', 'isDetailDialogVisible', 'hasFetchedSelectedCourses', 'breakpoint']),
+    ...mapState([
+      'detailPageCourse',
+      'isDetailDialogVisible',
+      'hasFetchedSelectedCourses',
+      'breakpoint',
+    ]),
+    ...mapState({
+      selectedSectionsByDayVuex: 'selectedSectionsByDay',
+      selectedCoursesIdsVuex: 'selectedCoursesIds',
+    }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     classDetailPage() {
       // if (!this.detailPageCourse.id) return [];
@@ -215,20 +226,29 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.selectedSectionsByDay = this.$store.state.selectedSectionsByDay;
-    this.selectedCoursesIds = new Set(this.$store.state.selectedCoursesIds[this.semester]);
+    this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
+    this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
     // 读取课程信息
     this.getCoursesFromJSON();
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
-    ...mapMutations(['setHasFetchedSelectedCourses']),
-    areSetsSame(set1, set2) {
+    ...mapMutations([
+      'setHasFetchedSelectedCourses',
+      'setUserProfile',
+      'setSelectedCourses',
+      'hideDetailDialog',
+    ]),
+    areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;
       const intersect = [...set1].filter((item) => set2.has(item));
       return intersect.length === set1.size;
     },
-    onConflictResolved(selectedCoursesIds, changeLocal, changeRemote) {
+    onConflictResolved(
+      selectedCoursesIds: Set<number>,
+      changeLocal: boolean,
+      changeRemote: boolean,
+    ) {
       // 得到用户选择保留的 Id 列表
       if (changeLocal) {
         this.replaceSelectedCourses(selectedCoursesIds);
@@ -258,8 +278,8 @@ export default defineComponent({
            * 1. 将 teachers 从 time_slots 拉出来整合一下
            * */
 
-          const allCourses = {};
-          response.data.forEach((course) => {
+          const allCourses = {} as AllCourses;
+          response.data.forEach((course: RawCourse) => {
             if (course && course.id) {
               allCourses[course.id] = course;
             }
@@ -277,7 +297,7 @@ export default defineComponent({
             // 顺便更新用户信息
             getUserProfile()
               .then((profile) => {
-                this.$store.commit('SET_USER_PROFILE', profile);
+                this.setUserProfile(profile);
               })
               .catch((err) => {
                 log.error(err);
@@ -297,7 +317,7 @@ export default defineComponent({
       }
       const hide = this.$message.loading('正在与服务器同步数据', 0);
       getSelectedCoursesService(this.semester)
-        .then((res) => {
+        .then((res: number[]) => {
           this.setHasFetchedSelectedCourses();
           hide();
           if (!Array.isArray(res)) {
@@ -339,7 +359,7 @@ export default defineComponent({
         });
       });
       this.selectedSectionsByDay = selectedSectionsByDay;
-      this.$store.commit('setSelectedCourses', {
+      this.setSelectedCourses({
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
@@ -447,14 +467,14 @@ export default defineComponent({
       this.selectedSectionsByDay = selectedSectionsByDay;
       this.selectedCoursesIds.add(courseId);
 
-      this.$store.commit('setSelectedCourses', {
+      this.setSelectedCourses({
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
       this.$message.success('已将课程加入课表');
     },
-    removeSelectedCourse(courseId) {
+    removeSelectedCourse(courseId: number) {
       // if (!this.selectedCoursesIds.has(courseId)) {
       //   return;
       // }
@@ -483,22 +503,19 @@ export default defineComponent({
       });
       this.selectedSectionsByDay = selectedSectionsByDay;
       this.selectedCoursesIds.delete(courseId);
-      this.$store.commit('setSelectedCourses', {
+      this.setSelectedCourses({
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
       this.$message.success('已将课程移出课表');
     },
-    replaceSelectedCourses(courseIds) {
+    replaceSelectedCourses(courseIds: Set<number>) {
       this.selectedCoursesIds = new Set(courseIds);
       this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
 
       // 重新加入每一门课
       this.initSelectedSectionsByDay();
-    },
-    hideDetailDialog() {
-      this.$store.commit('hideDetailDialog');
     },
     hideConflictDialog() {
       this.isConflictDialogVisible = false;
@@ -509,7 +526,7 @@ export default defineComponent({
     hideSearchDialog() {
       this.isSearchDialogVisible = false;
     },
-    mapDay(day) {
+    mapDay(day: number) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
     },
   },

@@ -3,7 +3,7 @@ import { API_URL } from '@/utils/config';
 import store from '../store';
 // import log from '@/utils/log';
 
-export const getSelectedCourses = async (semester: string) => new Promise((resolve, reject) => {
+export const getSelectedCourses = async (semester: string) => new Promise((resolve: (value: number[]) => void, reject) => {
   const authHeader = {
     Authorization: `Bearer ${store.state.user.jwt_token}`,
   };

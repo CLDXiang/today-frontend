@@ -88,7 +88,7 @@ export default defineComponent({
     getProfile() {
       getUserProfile()
         .then((profile) => {
-          this.$store.commit('SET_USER_PROFILE', profile);
+          this.$store.commit('setUserProfile', profile);
         })
         .catch((err) => {
           log.error(err);

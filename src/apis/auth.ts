@@ -17,8 +17,8 @@ export function login(usernameOrEmail: string, password: string) {
         const jwtToken = resp.data.access_token;
         const { email, name } = resp.data;
         if (jwtToken) {
-          store.commit('SET_JWT_TOKEN', jwtToken);
-          store.commit('SET_USER', { name, email });
+          store.commit('setJwtToken', jwtToken);
+          store.commit('setUser', { name, email });
         } else {
           reject(new Error('jwtToken no contained in response'));
         }

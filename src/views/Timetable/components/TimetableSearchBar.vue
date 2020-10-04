@@ -140,18 +140,6 @@
         />
       </div>
       <div class="search-bar__content-line">
-        <!-- TODO: 自己实现 f-select -->
-        <!-- <v-select
-          v-model="searchQuery.day"
-          :items="dayLabels"
-          :disabled="isLoadingSearchResults || isLoadingCourses"
-          :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
-          :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
-          label="星期"
-          dense
-          outlined
-          autocomplete="off"
-        /> -->
         <f-select
           v-model="searchQuery.day"
           :options="dayLabels"
@@ -172,19 +160,6 @@
           :min="0"
           :max="13"
         />
-        <!-- <v-range-slider
-          v-model="searchQuery.sectionRange"
-          :tick-labels="sectionLabels"
-          label="节次"
-          min="0"
-          max="13"
-          ticks="always"
-          tick-size="4"
-        >
-          <template #thumb-label="props">
-            {{ props.value + 1 }}
-          </template>
-        </v-range-slider> -->
       </div>
     </div>
     <div

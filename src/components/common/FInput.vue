@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   props: {
@@ -68,7 +68,7 @@ export default defineComponent({
     type: { type: String, default: 'text' },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
-    modelValue: { type: String, default: undefined },
+    modelValue: { type: String as PropType<'text' | 'password'>, default: undefined },
   },
   emits: ['update:modelValue'],
   data() {
@@ -163,8 +163,6 @@ $height: 40px;
 
     > .f-input__suffix{
       color: $black;
-      position: relative;
-      left: 0;
     }
   }
 }

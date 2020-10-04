@@ -9,6 +9,7 @@ import {
   Slider,
 } from 'ant-design-vue';
 import { FIcon, FInput, FSelect } from '@/components/common';
+import { Message } from 'ant-design-vue/types/message';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -29,6 +30,11 @@ app
   .use(Dropdown)
   .use(Slider);
 app.config.globalProperties.$message = message;
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $message: Message;
+  }
+}
 
 // 自定义全局组件
 app

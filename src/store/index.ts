@@ -9,6 +9,8 @@ const persistedState = ['user', 'profile', 'selectedCoursesIds', 'selectedSectio
 const store = createStore({
   state: {
     breakpoint: 'xs' as BreakpointType,
+    /** 视窗大小，即 window.innerHeight */
+    innerHeight: 667,
     user: {
       // eslint-disable-next-line @typescript-eslint/camelcase
       jwt_token: '',
@@ -133,6 +135,10 @@ const store = createStore({
     /** 设置断点 */
     setBreakpoint(state, newBreakpoint: BreakpointType) {
       state.breakpoint = newBreakpoint;
+    },
+    /** 设置 innerHeight */
+    setInnerHeight(state, newInnerHeight: number) {
+      state.innerHeight = newInnerHeight;
     },
   },
   getters: {

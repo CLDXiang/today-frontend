@@ -18,7 +18,7 @@
         <input
           ref="input"
           :value="modelValue"
-          type="text"
+          :type="type"
           :autofocus="autofocus"
           :disabled="disabled"
           :placeholder="placeholder"
@@ -64,6 +64,8 @@ export default defineComponent({
     label: { type: String, default: undefined },
     /** 后缀 */
     suffix: { type: String, default: undefined },
+    /** input 类型 */
+    type: { type: String, default: 'text' },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -72,6 +74,7 @@ export default defineComponent({
   data() {
     return {
       isFocused: false,
+      showPassword: false,
     };
   },
   computed: {

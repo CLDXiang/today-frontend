@@ -91,7 +91,7 @@
         @click="showSearchDialog"
       >
         <a-badge
-          :count="selectedCoursesIds.size || 0"
+          v-if="!selectedCoursesIds.size"
           dot
           color="volcano"
         >
@@ -100,22 +100,25 @@
             size="24"
           />
         </a-badge>
+        <span
+          v-else
+          class="ant-badge ant-badge-status ant-badge-dot-status"
+        >
+          <f-icon
+            name="search"
+            size="24"
+          />
+        </span>
       </a-button>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import {
-  getSelectedCourses as getSelectedCoursesService,
-  addSelectedCourse as addSelectedCourseService,
-  removeSelectedCourse as removeSelectedCourseService,
-  replaceSelectedCourses as replaceSelectedCoursesService,
-} from '@/apis/timetable';
-import { getUserProfile } from '@/apis/profile';
+import { timetableClient, profileClient } from '@/apis';
 import log from '@/utils/log';
 import {
   TimetableDay,
@@ -124,6 +127,13 @@ import {
   TimetableSearchBar,
   TimetableHeadBar,
 } from './components';
+import {
+  RawCourse,
+  AllCourses,
+  SearchIndexItem,
+  SearchIndexItemTimeSlot,
+  Sections,
+} from './types';
 
 export default defineComponent({
   components: {
@@ -138,12 +148,10 @@ export default defineComponent({
     return {
       semester: '2020-2021学年1学期',
       isLoadingCourses: false,
-      allCourses: {},
-      /** 搜索索引
-       * key 为 `${ course.code_id } ${ course.name } ${ course.teachers.join(', ') }`
-       * value 为 course.id
-       */
-      searchIndex: [],
+      /** 课程数据 */
+      allCourses: {} as AllCourses,
+      /** 搜索索引 */
+      searchIndex: [] as SearchIndexItem[],
       titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       sections: [
         { name: '1', clock: '08:00' },
@@ -167,8 +175,8 @@ export default defineComponent({
        * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
        * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
        * */
-      selectedCoursesIds: new Set(),
-      selectedCoursesIdsFromDatabase: new Set(),
+      selectedCoursesIds: new Set<number>(),
+      selectedCoursesIdsFromDatabase: new Set<number>(),
       /** 关于 selectedSectionsByDay 的设计
        * 为何不使用依赖 selectedCoursesIds 的计算/侦听属性？主要是考虑到增删时的性能问题，
        * 如果使用计算/侦听属性，每次修改 selectedCoursesIds 时就需要重新处理所有已选择的课程，
@@ -176,7 +184,7 @@ export default defineComponent({
        * 此后每次增删仅仅针对增删的那一门课程来操作 selectedSectionsByDay
        * TODO: 按需过滤字段
        * */
-      selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
+      selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
       // /**
       //  * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
       //  */
@@ -195,6 +203,10 @@ export default defineComponent({
       'breakpoint',
       'innerHeight',
     ]),
+    ...mapState({
+      selectedSectionsByDayVuex: 'selectedSectionsByDay',
+      selectedCoursesIdsVuex: 'selectedCoursesIds',
+    }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     classDetailPage() {
       // if (!this.detailPageCourse.id) return [];
@@ -207,7 +219,7 @@ export default defineComponent({
       // return classList;
       return [];
     },
-    isMobileMode() {
+    isMobileMode(): boolean {
       switch (this.breakpoint) {
         case 'xs':
         case 'sm':
@@ -220,32 +232,42 @@ export default defineComponent({
       }
     },
     /** 底部抽屉高度 */
-    drawerHeight() {
-      return `${parseInt(this.innerHeight * 0.9, 10)}px`;
+    drawerHeight(): string {
+      return `${Math.floor(this.innerHeight * 0.9)}px`;
     },
   },
   mounted() {
-    this.selectedSectionsByDay = this.$store.state.selectedSectionsByDay;
-    this.selectedCoursesIds = new Set(this.$store.state.selectedCoursesIds[this.semester]);
+    this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
+    this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
     // 读取课程信息
     this.getCoursesFromJSON();
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
-    ...mapMutations(['setHasFetchedSelectedCourses']),
-    areSetsSame(set1, set2) {
+    ...mapMutations([
+      'setHasFetchedSelectedCourses',
+      'setUserProfile',
+      'setSelectedCourses',
+      'hideDetailDialog',
+    ]),
+    areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;
       const intersect = [...set1].filter((item) => set2.has(item));
       return intersect.length === set1.size;
     },
-    onConflictResolved(selectedCoursesIds, changeLocal, changeRemote) {
+    onConflictResolved(
+      selectedCoursesIds: Set<number>,
+      changeLocal: boolean,
+      changeRemote: boolean,
+    ) {
       // 得到用户选择保留的 Id 列表
       if (changeLocal) {
         this.replaceSelectedCourses(selectedCoursesIds);
       }
       if (changeRemote) {
         const hide = this.$message.loading('正在向服务器同步数据...', 0);
-        replaceSelectedCoursesService(this.semester, [...selectedCoursesIds])
+        timetableClient
+          .replaceSelectedCourses(this.semester, [...selectedCoursesIds])
           .then(() => {
             // TODO: 根据后端响应进行处理
             hide();
@@ -268,8 +290,8 @@ export default defineComponent({
            * 1. 将 teachers 从 time_slots 拉出来整合一下
            * */
 
-          const allCourses = {};
-          response.data.forEach((course) => {
+          const allCourses = {} as AllCourses;
+          response.data.forEach((course: RawCourse) => {
             if (course && course.id) {
               allCourses[course.id] = course;
             }
@@ -285,9 +307,10 @@ export default defineComponent({
           if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
             this.fetchSelectedCourses();
             // 顺便更新用户信息
-            getUserProfile()
+            profileClient
+              .getUserProfile({})
               .then((profile) => {
-                this.$store.commit('SET_USER_PROFILE', profile);
+                this.setUserProfile(profile);
               })
               .catch((err) => {
                 log.error(err);
@@ -306,8 +329,9 @@ export default defineComponent({
         return;
       }
       const hide = this.$message.loading('正在与服务器同步数据', 0);
-      getSelectedCoursesService(this.semester)
-        .then((res) => {
+      timetableClient
+        .getSelectedCourses(this.semester)
+        .then((res: number[]) => {
           this.setHasFetchedSelectedCourses();
           hide();
           if (!Array.isArray(res)) {
@@ -349,18 +373,18 @@ export default defineComponent({
         });
       });
       this.selectedSectionsByDay = selectedSectionsByDay;
-      this.$store.commit('setSelectedCourses', {
+      this.setSelectedCourses({
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
     },
     initSearchIndex() {
-      const searchIndex = [];
+      const searchIndex = [] as SearchIndexItem[];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
       Object.entries(this.allCourses).forEach(([courseId, course]) => {
-        const teachers = new Set();
-        const timeSlots = [];
+        const teachers = new Set<string>();
+        const timeSlots = [] as SearchIndexItemTimeSlot[];
         course.time_slot.forEach((ts) => {
           ts.teacher.forEach((teacher) => {
             if (teacher.trim() !== '') {
@@ -425,13 +449,14 @@ export default defineComponent({
       });
       this.searchIndex = searchIndex;
     },
-    addSelectedCourse(courseId) {
+    addSelectedCourse(courseId: number) {
       // if (this.selectedCoursesIds.has(courseId)) {
       //   return;
       // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline && !this.selectedCoursesIds.has(courseId)) {
-        addSelectedCourseService(courseId)
+        timetableClient
+          .addSelectedCourse(courseId)
           .then(() => {
             // TODO: 后端应该返回有效响应
           })
@@ -457,20 +482,21 @@ export default defineComponent({
       this.selectedSectionsByDay = selectedSectionsByDay;
       this.selectedCoursesIds.add(courseId);
 
-      this.$store.commit('setSelectedCourses', {
+      this.setSelectedCourses({
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
       this.$message.success('已将课程加入课表');
     },
-    removeSelectedCourse(courseId) {
+    removeSelectedCourse(courseId: number) {
       // if (!this.selectedCoursesIds.has(courseId)) {
       //   return;
       // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline && this.selectedCoursesIds.has(courseId)) {
-        removeSelectedCourseService(courseId)
+        timetableClient
+          .removeSelectedCourse(courseId)
           .then(() => {
             // TODO: 后端应该返回有效响应
           })
@@ -493,22 +519,19 @@ export default defineComponent({
       });
       this.selectedSectionsByDay = selectedSectionsByDay;
       this.selectedCoursesIds.delete(courseId);
-      this.$store.commit('setSelectedCourses', {
+      this.setSelectedCourses({
         semester: this.semester,
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
       this.$message.success('已将课程移出课表');
     },
-    replaceSelectedCourses(courseIds) {
+    replaceSelectedCourses(courseIds: Set<number>) {
       this.selectedCoursesIds = new Set(courseIds);
       this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
 
       // 重新加入每一门课
       this.initSelectedSectionsByDay();
-    },
-    hideDetailDialog() {
-      this.$store.commit('hideDetailDialog');
     },
     hideConflictDialog() {
       this.isConflictDialogVisible = false;
@@ -519,7 +542,7 @@ export default defineComponent({
     hideSearchDialog() {
       this.isSearchDialogVisible = false;
     },
-    mapDay(day) {
+    mapDay(day: number) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
     },
   },

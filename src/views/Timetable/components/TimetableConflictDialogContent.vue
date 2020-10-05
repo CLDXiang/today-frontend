@@ -21,7 +21,10 @@
               :class="[
                 `color-${
                   (course.codeId &&
-                    parseInt(course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3), 10) % 96) ||
+                    parseInt(
+                      course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3),
+                      10,
+                    ) % 96) ||
                   0
                 }`,
               ]"
@@ -55,7 +58,10 @@
               :class="[
                 `color-${
                   (course.codeId &&
-                    parseInt(course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3), 10) % 96) ||
+                    parseInt(
+                      course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3),
+                      10,
+                    ) % 96) ||
                   0
                 }`,
               ]"
@@ -89,18 +95,24 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { AllCourses } from '../types';
+
+interface SelectedCourseInfo {
+  codeId: string;
+  name: string;
+}
+
+export default defineComponent({
   props: {
-    selectedCoursesIds: Set,
-    selectedCoursesIdsFromDatabase: Set,
-    courses: Object,
+    selectedCoursesIds: { type: Set as PropType<Set<number>>, required: true },
+    selectedCoursesIdsFromDatabase: { type: Set as PropType<Set<number>>, required: true },
+    courses: { type: Object as PropType<AllCourses>, required: true },
   },
-  emits: [
-    'conflict-resolved',
-  ],
+  emits: ['conflict-resolved'],
   computed: {
-    selectedCoursesOnlyInLocal() {
+    selectedCoursesOnlyInLocal(): SelectedCourseInfo[] {
       return [...this.selectedCoursesIds]
         .filter((x) => !this.selectedCoursesIdsFromDatabase.has(x))
         .map((courseId) => ({
@@ -108,7 +120,7 @@ export default {
           name: this.courses[courseId].name,
         }));
     },
-    selectedCoursesOnlyInDataBase() {
+    selectedCoursesOnlyInDataBase(): SelectedCourseInfo[] {
       return [...this.selectedCoursesIdsFromDatabase]
         .filter((x) => !this.selectedCoursesIds.has(x))
         .map((courseId) => ({
@@ -131,20 +143,8 @@ export default {
     handleChooseLocal() {
       this.$emit('conflict-resolved', this.selectedCoursesIds, false, true);
     },
-    // getTeacherText(course) {
-    //   console.log(course);
-    //   const teachers = new Set();
-    //   course.time_slot.forEach((ts) => {
-    //     ts.teacher.forEach((teacher) => {
-    //       if (teacher.trim() !== '') {
-    //         teachers.add(teacher);
-    //       }
-    //     });
-    //   });
-    //   return [...teachers].join(', ');
-    // },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

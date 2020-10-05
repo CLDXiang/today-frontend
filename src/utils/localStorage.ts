@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // 封装 localStorage 的方法，使之支持对象存取，并为 vuex 操作提供一些 API
 export default {
   setItem(keyName: string, keyValue: any) {

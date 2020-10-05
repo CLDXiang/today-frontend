@@ -8,6 +8,7 @@ import {
   Dropdown,
   Slider,
 } from 'ant-design-vue';
+import { Message } from 'ant-design-vue/types/message.d';
 import { FIcon, FInput, FSelect } from '@/components/common';
 
 import App from './App.vue';
@@ -29,11 +30,16 @@ app
   .use(Dropdown)
   .use(Slider);
 app.config.globalProperties.$message = message;
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $message: Message;
+  }
+}
 
 // 自定义全局组件
 app
-  .component('f-icon', FIcon)
-  .component('f-input', FInput)
-  .component('f-select', FSelect);
+  .component('FIcon', FIcon)
+  .component('FInput', FInput)
+  .component('FSelect', FSelect);
 
 app.mount('#app');

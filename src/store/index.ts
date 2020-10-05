@@ -1,7 +1,8 @@
 import { createStore } from 'vuex';
 import storage from '@/utils/localStorage';
+import { Sections } from '@/views/Timetable/types';
 
-export type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
 const persistedState = ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'];
@@ -31,10 +32,6 @@ const store = createStore({
       history: [],
     },
     detailPageCourse: {},
-    secret: {
-      posts: [],
-      postsMapping: [],
-    },
     lectures: [],
     /** 是否自动云同步过 */
     hasFetchedSelectedCourses: false,
@@ -48,41 +45,38 @@ const store = createStore({
     globalMessageTimer: -1,
     // globalMessageIcon: '',
 
-    selectedCoursesIds: {} as { [key: string]: any },
+    selectedCoursesIds: {} as { [key: string]: number[] },
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
-    selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}],
+    selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
     hoveredCourseId: -1,
 
     // localStorage 中保存的 state
     ...storage.getVuexStates(),
   },
   mutations: {
-    SET_JWT_TOKEN(state, token) {
+    setJwtToken(state, token) {
       // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
       state.user.id = JSON.parse(payload).sub;
       // log.info('set jwt_token', token);
     },
-    SET_USER(state, payload: { name: string; email: string }) {
+    setUser(state, payload: { name: string; email: string }) {
       state.user.name = payload.name;
       state.user.email = payload.email;
     },
-    LOGOUT(state) {
-      // log.info('LOGOUT');
+    logout(state) {
+      // log.info('logout');
       // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
       state.hasFetchedSelectedCourses = false;
     },
-    SET_USER_PROFILE(state, profile) {
+    setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
       state.user.nickName = profile.nickName;
-    },
-    SET_HISTORY(state, history) {
-      state.profile.history = history;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
@@ -118,7 +112,11 @@ const store = createStore({
 
     setSelectedCourses(
       state,
-      payload: { semester: string; selectedCoursesIds: number[]; selectedSectionsByDay: any[] },
+      payload: {
+        semester: string;
+        selectedCoursesIds: number[];
+        selectedSectionsByDay: Sections[];
+      },
     ) {
       state.selectedSectionsByDay = payload.selectedSectionsByDay;
       state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];

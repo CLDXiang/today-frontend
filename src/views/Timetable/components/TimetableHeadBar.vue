@@ -22,11 +22,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { mapState, mapGetters } from 'vuex';
-import defaultAvatar from '../../../assets/default_avatar.jpg';
+import defaultAvatar from '@/assets/default_avatar.jpg';
 
-export default {
+export default defineComponent({
+  emits: ['click-cloud'],
   data() {
     return {
       /** 同步冷却 */
@@ -34,13 +36,11 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      user: (state) => state.user,
-    }),
+    ...mapState(['user']),
     ...mapGetters(['userLoggedIn']),
   },
   methods: {
-    processAvatar(originAvatar) {
+    processAvatar(originAvatar: string) {
       if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
@@ -65,7 +65,7 @@ export default {
       this.$emit('click-cloud');
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

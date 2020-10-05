@@ -32,12 +32,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import { mapState, mapMutations } from 'vuex';
+import { SectionInColumn } from '../types';
 
-export default {
+export default defineComponent({
   props: {
-    section: Object,
+    section: { type: Object as PropType<SectionInColumn>, required: true },
   },
   data() {
     return {
@@ -52,7 +54,7 @@ export default {
   },
   computed: {
     ...mapState(['hoveredCourseId']),
-    classCourseCard() {
+    classCourseCard(): string[] {
       return [
         `color-${
           (this.section.code
@@ -62,7 +64,7 @@ export default {
         this.hoveredCourseId === this.section.id ? 'hover' : '',
       ];
     },
-    styleCourseCard() {
+    styleCourseCard(): Record<string, string> {
       const { sectionsArray } = this.section;
       return {
         top: `${this.cellHeight * sectionsArray[0]}px`,
@@ -73,18 +75,18 @@ export default {
   mounted() {
     // 计算空间以动态分配行数
     /** 计算半角宽度，半角字符算 1，全角算 2 */
-    const calcNarrowWidth = (str) => {
+    const calcNarrowWidth = (str: string) => {
       const wideCharReg = /[^\x20-\xff]/g;
       /** 全角个数 */
       const wideChars = str.match(wideCharReg);
       if (wideChars) {
-        const wideCharCount = str.match(wideCharReg).length || 0;
+        const wideCharCount = str.match(wideCharReg)?.length || 0;
         return wideCharCount + str.length;
       }
       return str.length;
     };
     /** 需要几行 */
-    const needLines = (str) => Math.ceil(calcNarrowWidth(str) / 8, 10);
+    const needLines = (str: string) => Math.ceil(calcNarrowWidth(str) / 8);
 
     const lines = {
       name: 2,
@@ -101,7 +103,7 @@ export default {
 
     let leftLines = this.section.sectionsArray.length * 4;
     /** 给 field 字段再分 n 行，返回是否用完所有空间 */
-    const giveLines = (field, n) => {
+    const giveLines = (field: 'name' | 'code' | 'place' | 'teacher', n: number) => {
       const needMore = linesNeed[field] - lines[field]; // 还需要多少
       if (needMore > 0) {
         const linesToAdd = Math.min(n, leftLines, needMore);
@@ -161,17 +163,17 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId']),
+    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId', 'changeDetailPageContent', 'showDetailDialog']),
     handleClickCourseCard() {
       // only work on mobile mode
-      this.$store.commit('changeDetailPageContent', this.section);
-      this.$store.commit('showDetailDialog');
+      this.changeDetailPageContent(this.section);
+      this.showDetailDialog();
       // if (this.breakpoint === 'xs' || this.breakpoint === 'sm') {
       //   this.$store.commit('showDetailDialog');
       // }
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

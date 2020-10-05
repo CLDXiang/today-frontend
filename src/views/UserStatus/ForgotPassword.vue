@@ -27,34 +27,35 @@
           :loading="state === 'requesting'"
           @click="requestCode"
         >
-          {{ state === 'init' || state === 'requesting'? '发送验证码'
-            : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
+          {{
+            state === 'init' || state === 'requesting'
+              ? '发送验证码'
+              : state === 'cooldown'
+                ? `${cooldownCnt}s`
+                : '重新发送'
+          }}
         </a-button>
       </div>
       <f-input
         v-model="password"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text': 'password'"
+        :type="showPassword ? 'text' : 'password'"
         label="新的密码"
         clearable
         outlined
         required
-        :rules="[
-          (v) => !!v || '密码不能为空',
-        ]"
+        :rules="[(v) => !!v || '密码不能为空']"
         @click:append="showPassword = !showPassword"
       />
       <f-input
         v-model="password2"
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text': 'password'"
+        :type="showPassword ? 'text' : 'password'"
         label="再次输入新密码"
         clearable
         outlined
         required
-        :rules="[
-          (v) => !!v || '密码不能为空',
-        ]"
+        :rules="[(v) => !!v || '密码不能为空']"
         @click:append="showPassword = !showPassword"
       />
     </div>
@@ -78,21 +79,23 @@
     </a-button>
   </div>
 </template>
-<script>
-import { requestCodeForForgotPassword, modifyPassword } from '@/apis/auth';
-import log from '@/utils/log';
 
-export default {
+<script lang="ts">
+import { authClient } from '@/apis';
+import log from '@/utils/log';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   data: () => ({
     email: '',
     emailSuffix: '@fudan.edu.cn',
-    emailRules: [(v) => !!v || '邮箱不能为空', (v) => /^\d{11}$/.test(v) || '请输入11位学号'],
+    emailRules: [(v: string) => !!v || '邮箱不能为空', (v: string) => /^\d{11}$/.test(v) || '请输入11位学号'],
     code: '',
 
     showPassword: false,
 
     password: '',
-    passwordRules: [(v) => !!v || '密码不能为空'],
+    passwordRules: [(v: string) => !!v || '密码不能为空'],
     password2: '',
 
     alertType: 'success',
@@ -103,10 +106,7 @@ export default {
     state: 'init',
   }),
   computed: {
-    password2Rules() {
-      return [(v) => v === this.password || '密码不一致'];
-    },
-    realEmail() {
+    realEmail(): string {
       return this.email.trim() + this.emailSuffix;
     },
   },
@@ -128,7 +128,12 @@ export default {
         this.$message.warn('密码不能为空');
         return;
       }
-      modifyPassword(this.realEmail, parseInt(this.code, 10), this.password)
+      authClient
+        .modifyPassword({
+          email: this.realEmail,
+          code: parseInt(this.code, 10),
+          password: this.password,
+        })
         .then(() => {
           this.$message.success('修改成功');
           setTimeout(() => this.$router.push('/login'), 500);
@@ -149,7 +154,7 @@ export default {
 
         this.state = 'requesting';
 
-        requestCodeForForgotPassword(this.realEmail)
+        authClient.requestCodeForForgotPassword({ email: this.realEmail })
           .then(() => {
             this.state = 'cooldown';
             this.cooldownCnt = 60;
@@ -159,7 +164,7 @@ export default {
               if (this.cooldownCnt === 0) this.state = 'resend';
               else if (this.state === 'cooldown') setTimeout(countdown, 1000);
             };
-            setTimeout(countdown(), 1000);
+            setTimeout(() => countdown(), 1000);
           })
           .catch((e) => {
             this.state = 'init';
@@ -172,7 +177,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

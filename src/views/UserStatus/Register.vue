@@ -94,12 +94,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex';
-import { register, requestCode } from '@/apis/auth';
+import { authClient } from '@/apis';
 import log from '@/utils/log';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   data: () => ({
     name: '',
     email: '',
@@ -116,7 +117,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['userLoggedIn']),
-    realEmail() {
+    realEmail(): string {
       return `${this.email}@fudan.edu.cn`;
     },
   },
@@ -148,7 +149,12 @@ export default {
         this.$message.warn('密码不能为空哦');
         return;
       }
-      register(this.name, this.realEmail, this.code, this.password)
+      authClient.register({
+        name: this.name,
+        email: this.realEmail,
+        code: parseInt(this.code, 10),
+        password: this.password,
+      })
         .then((resp) => {
           if (resp.result === 'success') {
             this.$message.success('注册成功');
@@ -174,7 +180,7 @@ export default {
           return;
         }
         this.state = 'requesting';
-        requestCode(this.realEmail)
+        authClient.requestCodeRegister({ email: this.realEmail })
           .then(() => {
             this.state = 'cooldown';
             const countdown = () => {
@@ -182,7 +188,7 @@ export default {
               if (this.cooldownCnt === 0) this.state = 'resend';
               else if (this.state === 'cooldown') setTimeout(countdown, 1000);
             };
-            setTimeout(countdown(), 1000);
+            setTimeout(() => countdown(), 1000);
           })
           .catch((e) => {
             this.state = 'init';
@@ -198,7 +204,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -13,7 +13,7 @@ import BottomNav from '@/components/BottomNav.vue';
 import { defineComponent } from 'vue';
 import { mapMutations } from 'vuex';
 import { HeapPagePathReges } from '@/router';
-import { BreakpointType } from '@/store';
+import { BreakpointType } from '@/store/types';
 
 export default defineComponent({
   components: {

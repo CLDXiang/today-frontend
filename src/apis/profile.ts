@@ -1,10 +1,21 @@
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import store from '../store';
-// import log from '@/utils/log';
 
-export async function getUserProfile(userId = store.state.user.id) {
-  return new Promise((resolve, reject) => {
+interface GetUserProfileReq {
+  userId?: string;
+}
+
+interface GetUserProfileResp {
+  avatar: string;
+  bio: string;
+  nickName: string;
+}
+
+const getUserProfile: (req: GetUserProfileReq) => Promise<GetUserProfileResp> = ({
+  userId = store.state.user.id as string,
+}) =>
+  new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -14,56 +25,65 @@ export async function getUserProfile(userId = store.state.user.id) {
         headers: authHeader,
       })
       .then((resp) => {
-        // log.info(resp);
         resolve(resp.data);
       })
-      .catch((error) => reject(error));
+      .catch((err) => reject(err));
   });
+
+interface EditProfileReq {
+  nickName: string;
+  bio: string;
 }
 
-export async function editProfile(newProfile: { nickName: string; bio: string }) {
-  return new Promise((resolve, reject) => {
+interface EditUserProfileResp {
+  avatar: string;
+  bio: string;
+  nickName: string;
+}
+
+const editProfile: (req: EditProfileReq) => Promise<EditUserProfileResp> = (req) =>
+  new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
-      .post(`${API_URL}/user/profile`, newProfile, { headers: authHeader })
+      .post(`${API_URL}/user/profile`, req, { headers: authHeader })
       .then((resp) => {
-        // log.info(resp);
         resolve(resp.data);
       })
-      .catch((error) => reject(error));
+      .catch((err) => reject(err));
   });
+
+interface UploadAvatarReq {
+  userAvatar: FormData;
 }
 
-export async function uploadAvatar(userAvatar: FormData) {
-  return new Promise((resolve, reject) => {
+interface UploadAvatarResp {
+  avatar: string;
+  bio: string;
+  nickName: string;
+}
+
+const uploadAvatar: (req: UploadAvatarReq) => Promise<UploadAvatarResp> = ({ userAvatar }) =>
+  new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
     axios
       .post(`${API_URL}/user/profile/avatar`, userAvatar, { headers: authHeader })
       .then((resp) => {
-        // log.info(resp);
         resolve(resp.data);
       })
-      .catch((error) => reject(error));
+      .catch((err) => reject(err));
   });
-}
 
-export async function getHistory() {
-  return new Promise((resolve, reject) => {
-    const authHeader = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
-    axios
-      .get(`${API_URL}/user/history/lecture`, {
-        headers: authHeader,
-      })
-      .then((resp) => {
-        // log.info(resp);
-        resolve(resp.data);
-      })
-      .catch((error) => reject(error));
-  });
-}
+const profileClient = {
+  /** 获取用户信息 */
+  getUserProfile,
+  /** 修改用户信息 */
+  editProfile,
+  /** 上传头像 */
+  uploadAvatar,
+};
+
+export default profileClient;

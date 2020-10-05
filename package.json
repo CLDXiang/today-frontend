@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --no-fix",
-    "check": "npm run lint && npm run build && echo 'check passed!'",
+    "check": "yarn lint && yarn build && echo 'check passed!'",
     "format": "vue-cli-service lint",
     "update-public-data": "cd public && wget https://github.com/fudan-today/today.backend/releases/download/public_data/public_data.tar && tar -xvf public_data.tar && rm public_data.tar && cd .."
   },

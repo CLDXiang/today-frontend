@@ -4,4 +4,7 @@
     "fudan"
   ],
   "eslint.nodePath": "../node_modules",
+  "eslint.validate": [
+    "typescript"
+  ],
 }

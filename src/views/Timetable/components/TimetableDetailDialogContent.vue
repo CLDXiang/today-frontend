@@ -112,54 +112,11 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { mapMutations } from 'vuex';
-
-interface CourseRaw {
-  code_id?: string;
-  name?: string;
-  credit?: number;
-  max_student?: number;
-  department?: string;
-  campus?: string;
-  remark?: string;
-  exam_time?: string;
-  exam_type?: string;
-  drop?: string;
-  time_slot: TimeSlotRaw[];
-}
-
-interface TimeSlotRaw {
-  teacher: string[];
-  week: string;
-  day: number;
-  section: string;
-  place: string;
-}
-
-interface CourseInfo {
-  codeId: string;
-  name: string;
-  credit: number;
-  sectionCount: number;
-  maxStudent: number;
-  department: string;
-  campus: string;
-  remark: string;
-  examTime: string;
-  examType: string;
-  drop: string;
-  timeSlots: {
-    week: string;
-    day: string;
-    section: [number, number];
-    place: string;
-    teachers: string;
-  }[];
-  teachers: string;
-}
+import { RawCourse, RawTimeSlot, CourseDetailInfo } from '../types';
 
 export default defineComponent({
   props: {
-    course: { type: Object as PropType<CourseRaw>, required: true },
+    course: { type: Object as PropType<RawCourse>, required: true },
   },
   emits: [
     'delete-course',
@@ -168,9 +125,9 @@ export default defineComponent({
     return {};
   },
   computed: {
-    courseInfo(): CourseInfo {
+    courseInfo(): CourseDetailInfo {
       // 处理为便于展示的形式
-      const courseInfo: CourseInfo = {
+      const courseInfo: CourseDetailInfo = {
         codeId: this.course.code_id || '',
         name: this.course.name || '',
         credit: this.course.credit || 0,
@@ -187,7 +144,7 @@ export default defineComponent({
       };
       const teachersSet = new Set();
       if (this.course.time_slot) {
-        this.course.time_slot.forEach((ts: TimeSlotRaw) => {
+        this.course.time_slot.forEach((ts: RawTimeSlot) => {
           ts.teacher.forEach((teacher) => {
             if (teacher.trim() !== '') {
               teachersSet.add(teacher);

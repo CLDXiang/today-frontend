@@ -1,7 +1,7 @@
 <template>
   <div
     class="f-input"
-    :class="{ 'f-input--focus': isFocused, 'f-input--disable': disabled }"
+    :class="{ 'f-input--focus': isFocused, 'f-input--disable': disabled, 'f-input--warning': !obeyRules}"
   >
     <div
       class="f-input__container"
@@ -35,12 +35,12 @@
       </div>
     </div>
     <div class="f-input__details">
-      <transition name="hint">
+      <transition :name="obeyRules ? 'hint' : 'warning'">
         <span
-          v-show="isHintVisible"
-          class="f-input__hint"
+          v-show="isHintVisible || !obeyRules"
+          :class="obeyRules ? 'f-input__hint' : 'f-input__warning'"
         >
-          {{ hint }}
+          {{ obeyRules ? hint : warningMessage }}
         </span>
       </transition>
     </div>
@@ -66,6 +66,8 @@ export default defineComponent({
     suffix: { type: String, default: undefined },
     /** input 类型 */
     type: { type: String as PropType<'text' | 'password'>, default: 'text' },
+    /** 输入的条件判断，不满足则抛出warning message */
+    rules: { type: Array, default: undefined },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -75,6 +77,8 @@ export default defineComponent({
     return {
       isFocused: false,
       showPassword: false,
+      obeyRules: true,
+      warningMessage: '',
     };
   },
   computed: {
@@ -91,6 +95,7 @@ export default defineComponent({
     handleChangeValue(event: InputEvent) {
       const val = (event.target as HTMLInputElement)?.value || '';
       this.$emit('update:modelValue', val);
+      this.handleValidate(val);
     },
     handleClickTextField() {
       if (this.disabled) {
@@ -103,6 +108,16 @@ export default defineComponent({
     },
     handleInputBlured() {
       this.isFocused = false;
+    },
+    handleValidate(val: string) {
+      this.rules.forEach((rule: any) => {
+        if (typeof rule(val) === 'string') {
+          this.obeyRules = false;
+          this.warningMessage = rule(val);
+        } else {
+          this.obeyRules = true;
+        }
+      });
     },
   },
 });
@@ -187,6 +202,18 @@ $height: 40px;
   > .f-input__text-field > input {
     cursor: not-allowed;
   }
+}
+
+// warning 态
+.f-input.f-input--warning > .f-input__container{
+    border: solid 2px red;
+    > .f-input__text-field > span, input {
+      color: red;
+    }
+}
+
+.f-input__warning {
+  color: red;
 }
 
 .f-input:not(.f-input__disabled)

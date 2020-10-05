@@ -79,6 +79,7 @@ export default defineComponent({
       showPassword: false,
       obeyRules: true,
       warningMessage: '',
+      text: '',
     };
   },
   computed: {
@@ -95,7 +96,8 @@ export default defineComponent({
     handleChangeValue(event: InputEvent) {
       const val = (event.target as HTMLInputElement)?.value || '';
       this.$emit('update:modelValue', val);
-      this.handleValidate(val);
+      this.text = val;
+      this.handleValidate();
     },
     handleClickTextField() {
       if (this.disabled) {
@@ -108,12 +110,13 @@ export default defineComponent({
     },
     handleInputBlured() {
       this.isFocused = false;
+      this.handleValidate();
     },
-    handleValidate(val: string) {
+    handleValidate() {
       this.rules.forEach((rule: any) => {
-        if (typeof rule(val) === 'string') {
+        if (typeof rule(this.text) === 'string') {
           this.obeyRules = false;
-          this.warningMessage = rule(val);
+          this.warningMessage = rule(this.text);
         } else {
           this.obeyRules = true;
         }

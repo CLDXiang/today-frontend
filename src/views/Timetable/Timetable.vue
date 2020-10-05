@@ -91,7 +91,7 @@
         @click="showSearchDialog"
       >
         <a-badge
-          :count="selectedCoursesIds.size || 0"
+          v-if="!selectedCoursesIds.size"
           dot
           color="volcano"
         >
@@ -100,6 +100,15 @@
             size="24"
           />
         </a-badge>
+        <span
+          v-else
+          class="ant-badge ant-badge-status ant-badge-dot-status"
+        >
+          <f-icon
+            name="search"
+            size="24"
+          />
+        </span>
       </a-button>
     </div>
   </div>

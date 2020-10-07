@@ -176,7 +176,7 @@ export default defineComponent({
     requestCode() {
       if (this.state === 'init' || this.state === 'resend') {
         if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
-          this.$message.error('请输入11位学号邮箱');
+          this.$message.warn('请输入11位学号邮箱');
           return;
         }
         this.state = 'requesting';

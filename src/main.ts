@@ -9,7 +9,9 @@ import {
   Slider,
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
-import { FIcon, FInput, FSelect } from '@/components/common';
+import {
+  FIcon, FInput, FSelect, FTabs,
+} from '@/components/common';
 import axios from 'axios';
 
 import App from './App.vue';
@@ -41,7 +43,8 @@ declare module '@vue/runtime-core' {
 app
   .component('FIcon', FIcon)
   .component('FInput', FInput)
-  .component('FSelect', FSelect);
+  .component('FSelect', FSelect)
+  .component('FTabs', FTabs);
 
 // axios 拦截器
 axios.interceptors.response.use((resp) => resp, (err) => {

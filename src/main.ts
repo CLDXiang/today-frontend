@@ -10,6 +10,7 @@ import {
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import { FIcon, FInput, FSelect } from '@/components/common';
+import axios from 'axios';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -41,5 +42,16 @@ app
   .component('FIcon', FIcon)
   .component('FInput', FInput)
   .component('FSelect', FSelect);
+
+// axios 拦截器
+axios.interceptors.response.use((resp) => resp, (err) => {
+  if (err.response.status === 401 && store.getters.userLoggedIn) {
+    // 处理登录态失效
+    message.error('登录已失效，请重新登录');
+    store.commit('logout');
+    router.push('/login');
+  }
+  return Promise.reject(err);
+});
 
 app.mount('#app');

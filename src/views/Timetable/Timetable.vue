@@ -260,22 +260,25 @@ export default defineComponent({
       changeLocal: boolean,
       changeRemote: boolean,
     ) {
+      const messageKey = 'conflict-resolved';
       // 得到用户选择保留的 Id 列表
       if (changeLocal) {
         this.replaceSelectedCourses(selectedCoursesIds);
       }
       if (changeRemote) {
-        const hide = this.$message.loading('正在向服务器同步数据...', 0);
+        const hide = this.$message.loading({ content: '正在向服务器同步数据...', key: messageKey, duration: 0 });
         timetableClient
           .replaceSelectedCourses(this.semester, [...selectedCoursesIds])
           .then(() => {
             // TODO: 根据后端响应进行处理
             hide();
-            this.$message.success('数据同步成功!');
+            this.$message.success({ content: '数据同步成功!', key: messageKey });
           })
-          .catch(() => {
+          .catch((e) => {
             hide();
-            this.$message.error('数据同步失败！进入离线模式');
+            if (e.response.status !== 401) {
+              this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
+            }
             this.isOffline = true;
           });
       }
@@ -323,28 +326,29 @@ export default defineComponent({
         });
     },
     fetchSelectedCourses() {
+      const messageKey = 'fetch-selected-courses';
       this.isOffline = false; // 触发拉数据，重新上线
       if (!this.isUserLoggedIn) {
         this.$message.warn('需要登录才能进行云同步');
         return;
       }
-      const hide = this.$message.loading('正在与服务器同步数据', 0);
+      const hide = this.$message.loading({ content: '正在与服务器同步数据', key: messageKey, duration: 0 });
       timetableClient
         .getSelectedCourses(this.semester)
         .then((res: number[]) => {
           this.setHasFetchedSelectedCourses();
           hide();
           if (!Array.isArray(res)) {
-            this.$message.error('数据同步失败！进入离线模式');
+            this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
             this.isOffline = true;
           }
           this.selectedCoursesIdsFromDatabase = new Set(res);
           if (this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)) {
-            this.$message.success('数据同步成功！');
+            this.$message.success({ content: '数据同步成功！', key: messageKey });
           } else if (this.selectedCoursesIds.size === 0) {
             // 如果本地没有数据，则默认拉取服务器数据
             this.onConflictResolved(this.selectedCoursesIdsFromDatabase, true, false);
-            this.$message.success('数据同步成功！');
+            this.$message.success({ content: '数据同步成功！', key: messageKey });
           } else {
             // 冲突解决
             this.isConflictDialogVisible = true;
@@ -352,9 +356,10 @@ export default defineComponent({
         })
         .catch((err) => {
           hide();
-          this.$message.error('数据同步失败！进入离线模式');
+          if (err.response.status !== 401) {
+            this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
+          }
           this.isOffline = true;
-          throw err;
         });
     },
     initSelectedSectionsByDay() {
@@ -461,9 +466,10 @@ export default defineComponent({
             // TODO: 后端应该返回有效响应
           })
           .catch((err) => {
-            this.$message.error('数据同步失败！进入离线模式');
+            if (err.response.status !== 401) {
+              this.$message.error('数据同步失败！进入离线模式');
+            }
             this.isOffline = true;
-            throw err;
           });
       }
 
@@ -501,9 +507,10 @@ export default defineComponent({
             // TODO: 后端应该返回有效响应
           })
           .catch((err) => {
-            this.$message.error('数据同步失败！进入离线模式');
+            if (err.response.status !== 401) {
+              this.$message.error('数据同步失败！进入离线模式');
+            }
             this.isOffline = true;
-            throw err;
           });
       }
 

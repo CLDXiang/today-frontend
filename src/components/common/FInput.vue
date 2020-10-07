@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="f-input__details">
-      <transition :name="obeyRules ? 'hint' : 'warning'">
+      <transition name="hint">
         <span
           v-show="isHintVisible || !obeyRules"
           :class="obeyRules ? 'f-input__hint' : 'f-input__warning'"
@@ -66,8 +66,8 @@ export default defineComponent({
     suffix: { type: String, default: undefined },
     /** input 类型 */
     type: { type: String as PropType<'text' | 'password'>, default: 'text' },
-    /** 输入的条件判断，不满足则抛出warning message */
-    rules: { type: Array, default: undefined },
+    /** 输入的条件判断 */
+    rules: { type: Array as PropType<((value: string) => boolean | string)[]>, default: [] },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -97,7 +97,7 @@ export default defineComponent({
       const val = (event.target as HTMLInputElement)?.value || '';
       this.$emit('update:modelValue', val);
       this.text = val;
-      this.handleValidate();
+      this.validate();
     },
     handleClickTextField() {
       if (this.disabled) {
@@ -110,17 +110,20 @@ export default defineComponent({
     },
     handleInputBlured() {
       this.isFocused = false;
-      this.handleValidate();
+      this.validate();
     },
-    handleValidate() {
-      this.rules.forEach((rule: any) => {
+    validate() {
+      let allObeyed = true;
+      this.rules.forEach((rule: Function) => {
         if (typeof rule(this.text) === 'string') {
           this.obeyRules = false;
           this.warningMessage = rule(this.text);
-        } else {
-          this.obeyRules = true;
+          allObeyed = false;
         }
       });
+      if (allObeyed) {
+        this.obeyRules = true;
+      }
     },
   },
 });
@@ -209,14 +212,14 @@ $height: 40px;
 
 // warning 态
 .f-input.f-input--warning > .f-input__container{
-    border: solid 2px red;
+    border-color: $danger-color;
     > .f-input__text-field > span, input {
-      color: red;
+      color: $danger-color;
     }
 }
 
 .f-input__warning {
-  color: red;
+  color: $danger-color;
 }
 
 .f-input:not(.f-input__disabled)

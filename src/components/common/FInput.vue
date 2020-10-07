@@ -67,7 +67,7 @@ export default defineComponent({
     /** input 类型 */
     type: { type: String as PropType<'text' | 'password'>, default: 'text' },
     /** 输入的条件判断 */
-    rules: { type: Array as PropType<((value: string) => boolean | string)[]>, default: [] },
+    rules: { type: Array as PropType<((value: string) => boolean | string)[]>, default: undefined },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -114,15 +114,18 @@ export default defineComponent({
     },
     validate() {
       let allObeyed = true;
-      this.rules.forEach((rule: Function) => {
-        if (typeof rule(this.text) === 'string') {
-          this.obeyRules = false;
-          this.warningMessage = rule(this.text);
-          allObeyed = false;
+      if (this.rules !== undefined) {
+        this.rules.forEach((rule: (value: string) => string | boolean) => {
+          const ruleResult = rule(this.modelValue);
+          if (typeof ruleResult === 'string') {
+            this.obeyRules = false;
+            this.warningMessage = ruleResult;
+            allObeyed = false;
+          }
+        });
+        if (allObeyed) {
+          this.obeyRules = true;
         }
-      });
-      if (allObeyed) {
-        this.obeyRules = true;
       }
     },
   },

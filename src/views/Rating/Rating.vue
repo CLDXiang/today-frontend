@@ -1,39 +1,39 @@
 <template>
   <div class="content-box">
-    <div class="center-content">
-      <div>技术重构中，敬请期待 😊</div>
-      <div>预计于本学期期中退课前上线</div>
-    </div>
-    <div class="bottom-content">
-      <div>希望关注项目进度吗？在这里联系我们：</div>
-      <!-- <div v-if="!userLoggedIn" class="hide-img" @click="$router.push('./login')">
-        <div>登录后显示 🙈</div>
-        <div style="transform: rotate(30deg)">
-          👉
-        </div>
-      </div>
-      <img v-else :src="wxGroupImg" alt="群二维码"> -->
-      <img
-        :src="wxGroupImg"
-        alt="群二维码"
-      >
-    </div>
+    <rating-head-bar @search-lecture="handleSearch" />
+    <f-tabs
+      v-model="activeTab"
+      size="small"
+      :pages="pages"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-// import { mapGetters } from 'vuex';
-import wxGroupImg from '../../assets/wx_pr.jpg';
+import RatingHeadBar from './components/RatingHeadBar';
 
 export default defineComponent({
+  components: {
+    RatingHeadBar,
+  },
   data() {
     return {
-      wxGroupImg,
+      pages: {
+        最新: '最新',
+        通识: '通识',
+        思政: '思政',
+        外语: '外语',
+        体育: '体育',
+      },
+      activeTab: '最新',
     };
   },
-  computed: {
-    // ...mapGetters(['userLoggedIn']),
+  methods: {
+    handleSearch(query: string) {
+      // TODO: 跳转至搜索页，搜索页 mounted 时根据 query 拉搜索 API
+      return query;
+    },
   },
 });
 </script>
@@ -49,6 +49,12 @@ export default defineComponent({
 
   color: #444;
   font-size: 14px;
+
+  padding-top: 4px;
+
+  margin: 0 auto;
+
+  max-width: 2560px;
 
   > .center-content {
     flex: 1;

@@ -116,7 +116,7 @@ export default defineComponent({
       let allObeyed = true;
       if (this.rules !== undefined) {
         this.rules.forEach((rule: (value: string) => string | boolean) => {
-          const ruleResult = rule(this.modelValue);
+          const ruleResult = rule(this.text);
           if (typeof ruleResult === 'string') {
             this.obeyRules = false;
             this.warningMessage = ruleResult;

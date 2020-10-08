@@ -135,6 +135,8 @@ $height: 40px;
     display: flex;
     align-items: center;
 
+    cursor: text;
+
     &:hover {
       color: $black;
     }
@@ -188,8 +190,6 @@ $height: 40px;
     cursor: not-allowed;
   }
 }
-
-.f-input:not(.f-input__disabled)
 
 .f-input__details {
   display: flex;

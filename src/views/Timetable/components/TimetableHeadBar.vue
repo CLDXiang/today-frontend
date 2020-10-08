@@ -1,12 +1,6 @@
 <template>
   <div class="head-bar">
-    <img
-      v-if="userLoggedIn"
-      class="avatar"
-      :src="processAvatar(user.avatar)"
-      alt="avatar"
-    >
-    <div v-else />
+    <side-avatar />
     <div class="semester">
       2020年秋季学期
     </div>
@@ -24,10 +18,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState, mapGetters } from 'vuex';
-import defaultAvatar from '@/assets/default_avatar.jpg';
+import SideAvatar from '@/components/SideAvatar.vue';
 
 export default defineComponent({
+  components: {
+    SideAvatar,
+  },
   emits: ['click-cloud'],
   data() {
     return {
@@ -35,17 +31,7 @@ export default defineComponent({
       cooldownCnt: 0,
     };
   },
-  computed: {
-    ...mapState(['user']),
-    ...mapGetters(['userLoggedIn']),
-  },
   methods: {
-    processAvatar(originAvatar: string) {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
-        return defaultAvatar;
-      }
-      return originAvatar;
-    },
     handleClickCloud() {
       if (this.cooldownCnt > 0) {
         this.$message.warn(`请等待${this.cooldownCnt}秒再进行下一次云同步~`);
@@ -83,13 +69,6 @@ export default defineComponent({
 
   > .semester {
     font-size: 18px;
-  }
-
-  > .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 18px;
-    border: solid 2px $primary-color;
   }
 
   > .action-group {

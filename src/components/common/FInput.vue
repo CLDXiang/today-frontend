@@ -1,7 +1,11 @@
 <template>
   <div
     class="f-input"
-    :class="{ 'f-input--focus': isFocused, 'f-input--disable': disabled, 'f-input--warning': !obeyRules}"
+    :class="{
+      'f-input--focus': isFocused,
+      'f-input--disable': disabled,
+      'f-input--warning': !obeyRules,
+    }"
   >
     <div
       class="f-input__container"
@@ -79,7 +83,6 @@ export default defineComponent({
       showPassword: false,
       obeyRules: true,
       warningMessage: '',
-      text: '',
     };
   },
   computed: {
@@ -92,12 +95,15 @@ export default defineComponent({
       return this.hint !== undefined && (this.isFocused || this.persistentHint);
     },
   },
+  watch: {
+    modelValue() {
+      this.validate();
+    },
+  },
   methods: {
     handleChangeValue(event: InputEvent) {
       const val = (event.target as HTMLInputElement)?.value || '';
       this.$emit('update:modelValue', val);
-      this.text = val;
-      this.validate();
     },
     handleClickTextField() {
       if (this.disabled) {
@@ -116,7 +122,7 @@ export default defineComponent({
       let allObeyed = true;
       if (this.rules !== undefined) {
         this.rules.forEach((rule: (value: string) => string | boolean) => {
-          const ruleResult = rule(this.text);
+          const ruleResult = rule(this.modelValue);
           if (typeof ruleResult === 'string') {
             this.obeyRules = false;
             this.warningMessage = ruleResult;
@@ -149,7 +155,8 @@ $height: 40px;
   font-size: 16px;
   line-height: 20px;
   height: $height;
-  transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: 0.3s color cubic-bezier(0.25, 0.8, 0.25, 1),
+              0.3s border-color cubic-bezier(0.25, 0.8, 0.25, 1);
 
   > .f-input__text-field {
     height: 100%;
@@ -185,7 +192,7 @@ $height: 40px;
       width: 100%;
     }
 
-    > .f-input__suffix{
+    > .f-input__suffix {
       color: $black;
     }
   }
@@ -214,20 +221,19 @@ $height: 40px;
 }
 
 // warning 态
-.f-input.f-input--warning > .f-input__container{
-    border-color: $danger-color;
-    > .f-input__text-field > span, input {
-      color: $danger-color;
-    }
+.f-input.f-input--warning > .f-input__container {
+  border-color: $danger-color;
+  > .f-input__text-field > span,
+  input {
+    color: $danger-color;
+  }
 }
 
 .f-input__warning {
   color: $danger-color;
 }
 
-.f-input:not(.f-input__disabled)
-
-.f-input__details {
+.f-input:not(.f-input__disabled) .f-input__details {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -17,24 +17,35 @@
     </div>
     <div class="f-tabs__content">
       <span
-        v-for="pageKey in pageKeys"
-        v-show="pageKey === modelValue"
-        :key="pageKey"
         class="f-tabs__pane"
       >
-        {{ pages[pageKey] || '' }}
+        <keep-alive>
+          <component
+            :is="pages[modelValue].component"
+            :ref="modelValue"
+            v-bind="pages[modelValue].props"
+          />
+        </keep-alive>
       </span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, VNode } from 'vue';
+import { defineComponent, PropType, DefineComponent } from 'vue';
+
+interface Page {
+  /** 内容 */
+  component: DefineComponent;
+  /** 传入 component 的 props */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  props: Record<string, any>;
+}
 
 export default defineComponent({
   props: {
     /** 子页面，key 必须为全角字符串 */
-    pages: { type: Object as PropType<Record<string, VNode | string>>, required: true },
+    pages: { type: Object as PropType<Record<string, Page>>, required: true },
     /** (v-model) 激活的页面 key */
     modelValue: { type: String, required: true },
   },

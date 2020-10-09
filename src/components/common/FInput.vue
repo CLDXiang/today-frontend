@@ -1,7 +1,11 @@
 <template>
   <div
     class="f-input"
-    :class="{ 'f-input--focus': isFocused, 'f-input--disable': disabled }"
+    :class="{
+      'f-input--focus': isFocused,
+      'f-input--disable': disabled,
+      'f-input--warning': !obeyRules,
+    }"
   >
     <div
       class="f-input__container"
@@ -37,10 +41,10 @@
     <div class="f-input__details">
       <transition name="hint">
         <span
-          v-show="isHintVisible"
-          class="f-input__hint"
+          v-show="isHintVisible || !obeyRules"
+          :class="obeyRules ? 'f-input__hint' : 'f-input__warning'"
         >
-          {{ hint }}
+          {{ obeyRules ? hint : warningMessage }}
         </span>
       </transition>
     </div>
@@ -66,6 +70,8 @@ export default defineComponent({
     suffix: { type: String, default: undefined },
     /** input 类型 */
     type: { type: String as PropType<'text' | 'password'>, default: 'text' },
+    /** 输入的条件判断 */
+    rules: { type: Array as PropType<((value: string) => boolean | string)[]>, default: undefined },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
     modelValue: { type: String, default: undefined },
@@ -75,6 +81,8 @@ export default defineComponent({
     return {
       isFocused: false,
       showPassword: false,
+      obeyRules: true,
+      warningMessage: '',
     };
   },
   computed: {
@@ -85,6 +93,11 @@ export default defineComponent({
     /** hint 是否显示 */
     isHintVisible(): boolean {
       return this.hint !== undefined && (this.isFocused || this.persistentHint);
+    },
+  },
+  watch: {
+    modelValue() {
+      this.validate();
     },
   },
   methods: {
@@ -103,6 +116,23 @@ export default defineComponent({
     },
     handleInputBlured() {
       this.isFocused = false;
+      this.validate();
+    },
+    validate() {
+      let allObeyed = true;
+      if (this.rules !== undefined) {
+        this.rules.forEach((rule: (value: string) => string | boolean) => {
+          const ruleResult = rule(this.modelValue);
+          if (typeof ruleResult === 'string') {
+            this.obeyRules = false;
+            this.warningMessage = ruleResult;
+            allObeyed = false;
+          }
+        });
+        if (allObeyed) {
+          this.obeyRules = true;
+        }
+      }
     },
   },
 });
@@ -125,7 +155,8 @@ $height: 40px;
   font-size: 16px;
   line-height: 20px;
   height: $height;
-  transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: 0.3s color cubic-bezier(0.25, 0.8, 0.25, 1),
+              0.3s border-color cubic-bezier(0.25, 0.8, 0.25, 1);
 
   > .f-input__text-field {
     height: 100%;
@@ -161,7 +192,7 @@ $height: 40px;
       width: 100%;
     }
 
-    > .f-input__suffix{
+    > .f-input__suffix {
       color: $black;
     }
   }
@@ -189,9 +220,20 @@ $height: 40px;
   }
 }
 
-.f-input:not(.f-input__disabled)
+// warning 态
+.f-input.f-input--warning > .f-input__container {
+  border-color: $danger-color;
+  > .f-input__text-field > span,
+  input {
+    color: $danger-color;
+  }
+}
 
-.f-input__details {
+.f-input__warning {
+  color: $danger-color;
+}
+
+.f-input:not(.f-input__disabled) .f-input__details {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -10,8 +10,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import RatingHeadBar from './components/RatingHeadBar';
+import { defineComponent, markRaw, DefineComponent } from 'vue';
+import { RatingHeadBar, LectureList, RatingList } from './components';
+
+// FIXME: 接入 API 后删除此文件
+import { mockRatings1, mockLectures1 } from './mock';
 
 export default defineComponent({
   components: {
@@ -19,13 +22,19 @@ export default defineComponent({
   },
   data() {
     return {
+      /** 标签页
+       * 关于 pages 的设计
+       * 按照作用来说应当是作为 slot 传入的，
+       * 但是我暂时没有找到优雅的方式将每一个传入的项分别解析到 header 和 body 中。
+       * P.S. 这做法有点 React 内味儿了（逃 */
       pages: {
-        最新: '最新',
-        通识: '通识',
-        思政: '思政',
-        外语: '外语',
-        体育: '体育',
-      },
+        最新: { component: markRaw(RatingList), props: { ratings: [...mockRatings1] } },
+        通识: { component: markRaw(LectureList), props: { lectures: [...mockLectures1] } },
+        思政: { component: markRaw(LectureList), props: { lectures: [] } },
+        外语: { component: markRaw(LectureList), props: { lectures: [...mockLectures1] } },
+        体育: { component: markRaw(LectureList), props: { lectures: [] } },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as Record<string, { component: DefineComponent; props: Record<string, any> }>,
       activeTab: '最新',
     };
   },

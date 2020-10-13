@@ -1,6 +1,27 @@
 <template>
   <div class="list-card card-lecture">
-    {{ lecture.id }}
+    <div class="list-card__top-field">
+      <span class="card-lecture__top-lecture-name float-left">
+        {{ lecture.name }}
+      </span>
+      <span class="card-lecture__top-rating float-right">
+        RATINGS
+      </span>
+    </div>
+    <div class="list-card__main-field">
+      <span class="card-lecture__teacher-name float-left">
+        {{ lecture.teachers.join(' ') }}
+      </span>
+    </div>
+    <div class="list-card__bottom-field">
+      <span class="card-lecture__bottom-reaction float-left">
+        REACTIONS
+      </span>
+      <span class="card-lecture__bottom-info-icon float-right">
+        ICONS
+      </span>
+    </div>
+
   </div>
 </template>
 

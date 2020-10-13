@@ -1,11 +1,6 @@
 <template>
   <div class="list-card card-user" />
-
-
 </template>
-
-<script lang="ts">
-</script>
 
 <style lang='scss'>
 </style>

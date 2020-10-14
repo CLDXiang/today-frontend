@@ -2,5 +2,5 @@
   <div class="list-card card-user" />
 </template>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 </style>

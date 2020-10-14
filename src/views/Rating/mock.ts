@@ -11,11 +11,11 @@ export const mockRatings1: CardRatingItem[] = [
       avatar: '/default_avatar.png',
     },
     createdAt: dayjs('20200812020100'),
-    content: '点评内容点评内容',
+    content: '啊，这真是一门超级超级超级超级超级超级超级超级超级超级超级超级超级超级超级超级超级超级超级优秀的课程！',
     lecture: {
       id: '0',
-      name: '课程名称0',
-      teachers: ['教师0', '教师1'],
+      name: '创意设计前沿',
+      teachers: ['汤筠冰'],
     },
     reactionCount: 123,
     replyCount: 22,
@@ -32,8 +32,8 @@ export const mockRatings1: CardRatingItem[] = [
     content: '点评内容点评内容',
     lecture: {
       id: '0',
-      name: '课程名称0',
-      teachers: ['教师0', '教师1'],
+      name: '计算机体系结构',
+      teachers: ['韩军', '周晓方'],
     },
     reactionCount: 123,
     replyCount: 22,
@@ -50,8 +50,8 @@ export const mockRatings1: CardRatingItem[] = [
     content: '点评内容点评内容',
     lecture: {
       id: '0',
-      name: '课程名称0',
-      teachers: ['教师0', '教师1'],
+      name: '操作系统',
+      teachers: ['赵进', '张亮', '王飞'],
     },
     reactionCount: 123,
     replyCount: 22,
@@ -62,7 +62,7 @@ export const mockRatings1: CardRatingItem[] = [
 export const mockLectures1: CardLectureItem[] = [
   {
     id: '0',
-    name: '课程名称0',
+    name: '创意设计前沿',
     teachers: ['教师0', '教师1'],
     score: 4.4,
     reactionCount: 123,
@@ -71,7 +71,7 @@ export const mockLectures1: CardLectureItem[] = [
   },
   {
     id: '1',
-    name: '课程名称1',
+    name: '操作系统',
     teachers: ['教师0', '教师1'],
     score: 4.4,
     reactionCount: 123,
@@ -80,7 +80,7 @@ export const mockLectures1: CardLectureItem[] = [
   },
   {
     id: '2',
-    name: '课程名称2',
+    name: '编译原理',
     teachers: ['教师0', '教师1'],
     score: 4.4,
     reactionCount: 123,
@@ -89,7 +89,7 @@ export const mockLectures1: CardLectureItem[] = [
   },
   {
     id: '3',
-    name: '课程名称3',
+    name: '计算机体系结构',
     teachers: ['教师0', '教师1'],
     score: 4.4,
     reactionCount: 123,

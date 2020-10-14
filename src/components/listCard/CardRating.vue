@@ -1,27 +1,32 @@
 <template>
   <div class="list-card card-rating">
-    <div class="list-card__avatar-field">
-      <img src="/assets/default_avatar.png">
-    </div>
-    <div class="list-card__top-field">
-      <span class="card-rating__top-nickname float-left">
-        {{ rating.creator.nickname }}
-      </span>
-      <span class="card-rating__top-datetime float-right">
-        13 minutes ago
-      </span>
-    </div>
+
     <div class="list-card__main-field">
-      <span class="card-rating__content float-left">
-        {{ rating.content }}
-      </span>
+      <div class="list-card__avatar-field">
+        <img src="/assets/default_avatar.png">
+      </div>
+      <div class="list-card__content-field">
+        <div class="list-card__top-field">
+          <span class="card-rating__top-nickname float-left">
+            {{ rating.creator.nickname }}
+          </span>
+          <span class="card-rating__top-datetime float-right">
+            13 minutes ago
+          </span>
+        </div>
+        <div class="list-card__middle-field">
+          <span class="card-rating__content float-left">
+            {{ rating.content }}
+          </span>
+        </div>
+      </div>
     </div>
     <div class="list-card__bottom-field">
       <span class="card-rating__bottom-class-info float-left">
-        {{ `${rating.lecture.name} ${rating.lecture.id}` }}
+        {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
       <span class="card-rating__bottom-info-icon float-right">
-        ICONS
+        ICON1 ICON2 ICON3
       </span>
     </div>
   </div>
@@ -39,5 +44,19 @@ export default defineComponent({
 });
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
+.card-rating {
+  .card-rating__content {
+    color: #979797;
+  }
+  .card-rating__top-datetime {
+    color: #c4c4c4;
+  }
+  .card-rating__content {
+    text-align: left;
+  }
+  > .list-card__main-field .list-card__content-field .list-card__middle-field {
+    margin-bottom: 30px;
+  }
+}
 </style>

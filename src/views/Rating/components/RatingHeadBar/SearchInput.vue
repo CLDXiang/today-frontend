@@ -42,7 +42,6 @@ export default defineComponent({
     /** 是否禁用 */
     disabled: { type: Boolean, default: false },
   },
-  emits: ['search-lecture'],
   data() {
     return {
       value: '',
@@ -66,7 +65,12 @@ export default defineComponent({
       if (this.disabled) {
         return;
       }
-      this.$emit('search-lecture', this.value);
+      // 在搜索页面再次触发搜索，不重复堆叠页面栈
+      if (this.$route.path === '/rating/search') {
+        this.$router.replace({ path: '/rating/search', query: { q: this.value } });
+      } else {
+        this.$router.push({ path: '/rating/search', query: { q: this.value } });
+      }
     },
   },
 });
@@ -82,10 +86,10 @@ export default defineComponent({
   box-sizing: border-box;
   cursor: text;
   border-radius: 16px;
-  color: #3c3c4399;
+  color: #828282;
   background-color: #f2f2f2;
   padding: 0 10px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
   height: 32px;
   transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);

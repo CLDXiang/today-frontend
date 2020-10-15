@@ -1,9 +1,15 @@
 <template>
   <div class="head-bar">
-    <side-avatar />
+    <span
+      v-if="isBackVisible"
+      class="back-btn"
+      @click="$router.go('-1')"
+    >
+      <f-icon name="back" />
+    </span>
+    <side-avatar v-else />
     <search-input
       :disabled="searchDisabled"
-      @search-lecture="handleSearch"
     />
   </div>
 </template>
@@ -19,17 +25,14 @@ export default defineComponent({
     SearchInput,
   },
   props: {
+    /** 是否显示返回按钮 */
+    isBackVisible: { type: Boolean, default: false },
+    /** 搜索是否禁用 */
     searchDisabled: { type: Boolean, default: false },
   },
-  emits: ['search-lecture'],
   data() {
     return {
     };
-  },
-  methods: {
-    handleSearch(query: string) {
-      this.$emit('search-lecture', query);
-    },
   },
 });
 </script>
@@ -39,12 +42,15 @@ export default defineComponent({
   width: 100%;
 
   padding: 0 12px;
-  margin-bottom: 12px;
   height: 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   color: #333;
+
+  > .back-btn {
+    height: 20px;
+  }
 }
 </style>

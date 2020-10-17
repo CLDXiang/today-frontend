@@ -20,7 +20,7 @@ export interface CardRatingItem {
   content: string;
   /** 课程信息 */
   lecture: {
-    /** lecture ID */
+    /** 课程 ID */
     id: string;
     /** 课程名称 */
     name: string;
@@ -37,7 +37,7 @@ export interface CardRatingItem {
 
 /** 课程类列表项 */
 export interface CardLectureItem {
-  /** lecture ID */
+  /** 课程 ID */
   id: string;
   /** 课程名称 */
   name: string;
@@ -51,4 +51,11 @@ export interface CardLectureItem {
   ratingCount: number;
   /** 收藏数 */
   likeCount: number;
+}
+
+/** 用户类列表项 */
+export interface CardUserItem {
+  // TODO: finish this section
+  /** 用户 ID */
+  id: string;
 }

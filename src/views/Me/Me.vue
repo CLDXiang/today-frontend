@@ -20,6 +20,10 @@
           <f-icon name="back" />
         </div>
       </div>
+      <div
+        v-else
+        class="blank-box"
+      />
       <div class="info-box">
         <img
           class="avatar"
@@ -27,19 +31,19 @@
           alt="avatar"
         >
         <div class="info-section">
-          <span>
+          <div>
             <span class="user-name text-dark">
               {{ user.name }}
             </span>
-            <div
+            <span
               v-if="!isCurrentUser()"
               class="follow-btn"
             >
               <span class="text-dark">
                 ＋&nbsp;关注
               </span>
-            </div>
-          </span>
+            </span>
+          </div>
           <span class="bio text-light">
             {{ user.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
           </span>
@@ -202,7 +206,7 @@ export default defineComponent({
 
     > .btn-section {
       display: flex;
-      position: absolute;
+      position: relative;
       flex-direction: row;
       align-self: flex-end;
 
@@ -221,10 +225,14 @@ export default defineComponent({
       }
     }
 
+    > .blank-box {
+      height: 40px;
+    }
+
     > .info-box {
       display: flex;
       width: 100%;
-      padding: 30px 5% 10px 5%;
+      padding: 0 5%;
       flex-direction: row;
 
       > .avatar {
@@ -244,12 +252,12 @@ export default defineComponent({
         justify-content: flex-start;
         align-items: flex-start;
 
-        > span:first-child {
-          display: flex;
+        > div:first-child {
+          position: relative;
           width: 100%;
-          flex-direction: row;
 
           > .user-name {
+            float: left;
             display: block;
             font-weight: 700;
             font-size: 24px;
@@ -261,8 +269,7 @@ export default defineComponent({
           }
 
           > .follow-btn {
-            position: absolute;
-            right: 5%;
+            float: right;
             width: 60px;
             height: 24px;
             background-color: $primary-color;

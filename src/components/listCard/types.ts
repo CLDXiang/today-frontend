@@ -5,12 +5,14 @@ interface ReactionFieldValue {
   /** 总 Reaction 数 */
   count: number;
   /** 各 Reaction 信息 */
-  emoji: { [emojiId: string]: {
+  emoji: {
+    [emojiId: string]: {
       /** 创建者 User ID */
       id: string;
       /** 创建者昵称 */
       nickname: string;
-    }[]; };
+    }[];
+  };
 }
 
 /** 点评类列表页 */
@@ -106,11 +108,4 @@ export interface CardUserItem {
   avatar: string;
   /** 个性签名 */
   bio: string;
-}
-
-// FIXME: how to handle CommonItem?
-/** 通用类列表项 */
-export interface CardCommonItem {
-  /** 列表 ID */
-  id: string;
 }

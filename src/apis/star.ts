@@ -1,6 +1,13 @@
-import { CardCommonItem } from '@/components/listCard';
+import {
+  CardRatingItem,
+  CardCommentItem,
+  CardLectureItem,
+  CardUserItem,
+} from '@/components/listCard';
 import log from '@/utils/log';
 import dayjs from 'dayjs';
+
+type CardStarItem = CardRatingItem | CardCommentItem | CardLectureItem | CardUserItem;
 
 interface GetStarListReq {
   /** 用户名 */
@@ -13,11 +20,10 @@ interface GetStarListReq {
 
 interface GetStarListResp {
   msg: string;
-  data: CardCommonItem[];
+  data: CardStarItem[];
 }
 
-// FIXME: how to handle StarItems?
-const mockStars: CardCommonItem[] = [
+const mockStars: CardStarItem[] = [
   {
     id: '233',
     creator: {
@@ -75,9 +81,7 @@ const mockStars: CardCommonItem[] = [
 ];
 
 // FIXME: mock
-const getStarList: (req: GetStarListReq) => Promise<GetStarListResp> = (
-  req,
-) =>
+const getStarList: (req: GetStarListReq) => Promise<GetStarListResp> = (req) =>
   new Promise<GetStarListResp>((resolve) => {
     log.info('rpcClient.search', req);
     resolve({

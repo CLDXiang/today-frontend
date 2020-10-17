@@ -70,13 +70,12 @@ import defaultAvatar from '../../assets/default_avatar.jpg';
 export default defineComponent({
   data: () => ({
     pages: {
-      // TODO: all required to be replaced with CommonList
       点评: { component: markRaw(RatingList), props: { ratings: [] } },
       回复: { component: markRaw(CommentList), props: { comments: [] } },
-      课程: { component: markRaw(LectureList), props: { selects: [] } },
-      收藏: { component: markRaw(CommonList), props: { stars: [] } },
-      关注: { component: markRaw(CommonList), props: { watches: [] } },
-      足迹: { component: markRaw(CommonList), props: { histories: [] } },
+      课程: { component: markRaw(LectureList), props: { lectures: [] } },
+      收藏: { component: markRaw(CommonList), props: { contents: [] } },
+      关注: { component: markRaw(CommonList), props: { contents: [] } },
+      足迹: { component: markRaw(CommonList), props: { contents: [] } },
     } as Record<string, { component: DefineComponent; props: Record<string, unknown> }>,
     activeTab: '点评',
   }),
@@ -85,24 +84,23 @@ export default defineComponent({
     ...mapGetters(['countHistory', 'userLoggedIn']),
   },
   created() {
-    // TODO: all required to be replaced with CommonList
     ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
       this.pages.点评.props.ratings = resp.data;
     });
     commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.回复.props.ratings = resp.data;
+      this.pages.回复.props.comments = resp.data;
     });
     lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.课程.props.ratings = resp.data;
+      this.pages.课程.props.lectures = resp.data;
     });
     starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.收藏.props.ratings = resp.data;
+      this.pages.收藏.props.contents = resp.data;
     });
     watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.关注.props.ratings = resp.data;
+      this.pages.关注.props.contents = resp.data;
     });
     historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.足迹.props.ratings = resp.data;
+      this.pages.足迹.props.contents = resp.data;
     });
   },
   methods: {

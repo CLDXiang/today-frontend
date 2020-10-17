@@ -11,17 +11,20 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { CardCommonItem, CardCommon } from '@/components/listCard';
+import {
+  CardRatingItem,
+  CardCommentItem,
+  CardLectureItem,
+  CardUserItem,
+} from '@/components/listCard';
+
+type CardCommonItem = CardRatingItem | CardCommentItem | CardLectureItem | CardUserItem;
 
 export default defineComponent({
-  components: {
-    CardCommon,
-  },
   props: {
-    ratings: { type: Array as PropType<CardCommonItem[]>, required: true },
+    contents: { type: Array as PropType<CardCommonItem[]>, required: true },
   },
 });
-
 </script>
 
 <style lang="scss" scoped>

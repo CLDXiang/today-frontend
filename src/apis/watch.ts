@@ -1,5 +1,7 @@
-import { CardCommonItem } from '@/components/listCard';
+import { CardLectureItem, CardUserItem } from '@/components/listCard';
 import log from '@/utils/log';
+
+type CardWatchItem = CardLectureItem | CardUserItem;
 
 interface GetWatchListReq {
   /** 用户名 */
@@ -12,11 +14,10 @@ interface GetWatchListReq {
 
 interface GetWatchListResp {
   msg: string;
-  data: CardCommonItem[];
+  data: CardWatchItem[];
 }
 
-// FIXME: how to handle WatchItems?
-const mockWatchs: CardCommonItem[] = [
+const mockWatches: CardWatchItem[] = [
   {
     email: 'abc@def.xyz',
     name: 'xiao_ming',
@@ -34,7 +35,7 @@ const getWatchList: (req: GetWatchListReq) => Promise<GetWatchListResp> = (
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',
-      data: mockWatchs,
+      data: mockWatches,
     });
   });
 

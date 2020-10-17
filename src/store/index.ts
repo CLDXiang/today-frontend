@@ -1,11 +1,14 @@
 import { createStore } from 'vuex';
-import storage from '@/utils/localStorage';
+import { localStorage, sessionStorage } from '@/utils/storage';
 import { Sections } from '@/views/Timetable/types';
 
 import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
-const persistedState = ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'];
+const persistedState = {
+  localStorage: ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'],
+  sessionStorage: [],
+};
 
 const store = createStore({
   state: {
@@ -50,8 +53,9 @@ const store = createStore({
     selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
     hoveredCourseId: -1,
 
-    // localStorage 中保存的 state
-    ...storage.getVuexStates(),
+    // storage 中保存的 state
+    ...localStorage.getVuexStates(),
+    ...sessionStorage.getVuexStates(),
   },
   mutations: {
     setJwtToken(state, token) {
@@ -144,12 +148,23 @@ const store = createStore({
   },
 });
 
-// 监听需要持久化保存的 state，在变化时存入 localStorage
-persistedState.forEach((stateKey) => {
+// 监听需要持久化保存的 state，在变化时存入 storage
+persistedState.localStorage.forEach((stateKey) => {
   store.watch(
     (state) => state[stateKey],
     (newValue) => {
-      storage.setVuexState(stateKey, newValue);
+      localStorage.setVuexState(stateKey, newValue);
+    },
+    {
+      deep: true,
+    },
+  );
+});
+persistedState.sessionStorage.forEach((stateKey) => {
+  store.watch(
+    (state) => state[stateKey],
+    (newValue) => {
+      localStorage.setVuexState(stateKey, newValue);
     },
     {
       deep: true,

@@ -1,6 +1,18 @@
 // TODO: 根据 API 调整
 import { Dayjs } from 'dayjs';
 
+interface ReactionFieldValue {
+  /** 总 Reaction 数 */
+  count: number;
+  /** 各 Reaction 信息 */
+  emoji: { [emojiId: string]: {
+      /** 创建者 User ID */
+      id: string;
+      /** 创建者昵称 */
+      nickname: string;
+    }[]; };
+}
+
 /** 点评类列表页 */
 export interface CardRatingItem {
   /** 点评 ID */
@@ -16,7 +28,7 @@ export interface CardRatingItem {
   };
   /** 发布时间 */
   createdAt: Dayjs;
-  /** 点评内容（TODO: 概要？后端仅返回一部分？） */
+  /** 点评内容 */
   content: string;
   /** 课程信息 */
   lecture: {
@@ -27,12 +39,14 @@ export interface CardRatingItem {
     /** 授课教师 */
     teachers: string[];
   };
-  /** reaction 数（TODO: 如果 reaction 系统能够完成设计，可以返回各 reaction 数量） */
-  reactionCount: number;
   /** 回复数 */
-  replyCount: number;
-  /** 点赞数 */
-  likeCount: number;
+  commentCount: number;
+  /** 收藏数 */
+  starCount: number;
+  /** 当前用户是否收藏 */
+  starred: boolean;
+  /** Reaction 概要（此页面是否展示 Reaction 看 UI 反馈，若不展示去掉此字段） */
+  reaction: ReactionFieldValue;
 }
 
 /** 课程类列表项 */

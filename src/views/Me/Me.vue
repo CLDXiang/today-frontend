@@ -50,6 +50,7 @@
 import { defineComponent, markRaw, DefineComponent } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 import { CardRatingItem, CardLectureItem, CardUserItem } from '@/components/listCard';
+import { ratingClient } from '@/apis';
 import { LectureList, RatingList, UserList } from './components';
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
@@ -80,33 +81,23 @@ export default defineComponent({
     mockLectures: [],
     pages: {
       // TODO: need to replace some of the RatingList to ReplyList or sth. else
-      点评: { component: markRaw(RatingList), props: { ratings: [...mockRatings] } },
-      回复: { component: markRaw(RatingList), props: { ratings: [...mockRatings] } },
-      课程: { component: markRaw(LectureList), props: { lectures: [...mockLectures] } },
-      收藏: { component: markRaw(LectureList), props: { lectures: [...mockLectures] } },
+      点评: { component: markRaw(RatingList), props: { ratings: [] } },
+      回复: { component: markRaw(RatingList), props: { ratings: [] } },
+      课程: { component: markRaw(LectureList), props: { lectures: [] } },
+      收藏: { component: markRaw(LectureList), props: { lectures: [] } },
       关注: { component: markRaw(UserList), props: { users: [] } },
-      足迹: { component: markRaw(LectureList), props: { lectures: [...mockLectures] } },
+      足迹: { component: markRaw(LectureList), props: { lectures: [] } },
     } as Record<string, { component: DefineComponent; props: Record<string, unknown> }>,
     activeTab: '点评',
   }),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
-    // TODO: combine them into one common getter interface
-    mockRatings: {
-      get: () => {
-        const getRatings = (req: MeReq) =>
-          new Promise<RatingResp>((resolve) => {
-            // TODO: retrieve data using backend API
-            resolve({
-              msg: 'ok',
-              data: mockRatings,
-            });
-          });
-        getRatings({ this.username });
-        return this.mockRatings;
-      }
-    },
+  },
+  created() {
+    ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.点评.props.ratings = resp.data;
+    });
   },
   methods: {
     ...mapMutations({ vuexLogout: 'logout' }),

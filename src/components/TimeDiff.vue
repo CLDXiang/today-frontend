@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
 
 export default defineComponent({

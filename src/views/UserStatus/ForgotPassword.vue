@@ -161,7 +161,7 @@ export default defineComponent({
             this.$message.success('验证码发送成功');
             const countdown = () => {
               this.cooldownCnt -= 1;
-              if (this.cooldownCnt === 0) this.state = 'resend';
+              if (this.cooldownCnt <= 0) this.state = 'resend';
               else if (this.state === 'cooldown') setTimeout(countdown, 1000);
             };
             setTimeout(() => countdown(), 1000);

@@ -20,12 +20,6 @@ export default defineComponent({
   props: {
     ratings: { type: Array as PropType<CardCommonItem[]>, required: true },
   },
-  created() {
-    // console.log('card created');
-  },
-  mounted() {
-    // console.log('card mounted');
-  },
 });
 
 </script>

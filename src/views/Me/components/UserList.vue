@@ -19,12 +19,6 @@ export default defineComponent({
   props: {
     users: { type: Array as PropType<CardUserItem[]>, required: true },
   },
-  created() {
-    // console.log('user created');
-  },
-  mounted() {
-    // console.log('user mounted');
-  },
 });
 
 </script>

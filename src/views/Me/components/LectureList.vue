@@ -19,12 +19,6 @@ export default defineComponent({
   props: {
     lectures: { type: Array as PropType<CardLectureItem[]>, required: true },
   },
-  created() {
-    // console.log('lecture created');
-  },
-  mounted() {
-    // console.log('lecture mounted');
-  },
 });
 
 </script>

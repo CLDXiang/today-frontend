@@ -49,6 +49,33 @@ export interface CardRatingItem {
   reaction: ReactionFieldValue;
 }
 
+/** 回复类列表项 */
+export interface CardCommentItem {
+  /** 回复 ID */
+  id: string;
+  /** 回复者信息 */
+  creator: {
+    /** 回复者用户 ID */
+    id: string;
+    /** 回复者昵称 */
+    nickname: string;
+    /** 回复者头像 */
+    avatar: string;
+  };
+  /** 回复时间 */
+  createdAt: Dayjs;
+  /** 回复内容 */
+  content: string;
+  /** 点评 ID */
+  rateID: string;
+  /** 收藏数 */
+  starCount: number;
+  /** 当前用户是否收藏 */
+  starred: boolean;
+  /** Reaction 概要（此页面是否展示 Reaction 看 UI 反馈，若不展示去掉此字段） */
+  reaction: ReactionFieldValue;
+}
+
 /** 课程类列表项 */
 export interface CardLectureItem {
   /** lecture ID */
@@ -69,7 +96,21 @@ export interface CardLectureItem {
 
 /** 用户类列表项 */
 export interface CardUserItem {
-  // TODO: finish this section
-  /** 用户 ID */
+  /** 用户邮箱 */
+  email: string;
+  /** 用户名 */
+  name: string;
+  /** 用户昵称 */
+  nickname: string;
+  /** 用户头像 */
+  avatar: string;
+  /** 个性签名 */
+  bio: string;
+}
+
+// FIXME: how to handle CommonItem?
+/** 通用类列表项 */
+export interface CardCommonItem {
+  /** 列表 ID */
   id: string;
 }

@@ -49,44 +49,34 @@
 <script lang="ts">
 import { defineComponent, markRaw, DefineComponent } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
-import { CardRatingItem, CardLectureItem, CardUserItem } from '@/components/listCard';
-import { ratingClient } from '@/apis';
-import { LectureList, RatingList, UserList } from './components';
+
+import {
+  ratingClient,
+  commentClient,
+  lectureClient,
+  starClient,
+  watchClient,
+  historyClient,
+} from '@/apis';
+
+import {
+  RatingList,
+  CommentList,
+  LectureList,
+  CommonList,
+} from './components';
 import defaultAvatar from '../../assets/default_avatar.jpg';
-
-interface MeReq {
-  userId: number;
-  // type: string;
-}
-
-// TODO: combine them into one common response interface
-interface RatingResp {
-  msg: string;
-  data: CardRatingItem[];
-}
-
-interface LectureResp {
-  msg: string;
-  data: CardLectureItem[];
-}
-
-interface UserResp {
-  msg: string;
-  data: CardUserItem[];
-}
 
 export default defineComponent({
   data: () => ({
-    mockRatings: [],
-    mockLectures: [],
     pages: {
-      // TODO: need to replace some of the RatingList to ReplyList or sth. else
+      // TODO: all required to be replaced with CommonList
       点评: { component: markRaw(RatingList), props: { ratings: [] } },
-      回复: { component: markRaw(RatingList), props: { ratings: [] } },
-      课程: { component: markRaw(LectureList), props: { lectures: [] } },
-      收藏: { component: markRaw(LectureList), props: { lectures: [] } },
-      关注: { component: markRaw(UserList), props: { users: [] } },
-      足迹: { component: markRaw(LectureList), props: { lectures: [] } },
+      回复: { component: markRaw(CommentList), props: { comments: [] } },
+      课程: { component: markRaw(LectureList), props: { selects: [] } },
+      收藏: { component: markRaw(CommonList), props: { stars: [] } },
+      关注: { component: markRaw(CommonList), props: { watches: [] } },
+      足迹: { component: markRaw(CommonList), props: { histories: [] } },
     } as Record<string, { component: DefineComponent; props: Record<string, unknown> }>,
     activeTab: '点评',
   }),
@@ -95,8 +85,24 @@ export default defineComponent({
     ...mapGetters(['countHistory', 'userLoggedIn']),
   },
   created() {
-    ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {
+    // TODO: all required to be replaced with CommonList
+    ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
       this.pages.点评.props.ratings = resp.data;
+    });
+    commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.回复.props.ratings = resp.data;
+    });
+    lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.课程.props.ratings = resp.data;
+    });
+    starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.收藏.props.ratings = resp.data;
+    });
+    watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.关注.props.ratings = resp.data;
+    });
+    historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.足迹.props.ratings = resp.data;
     });
   },
   methods: {

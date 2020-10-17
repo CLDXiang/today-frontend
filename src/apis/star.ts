@@ -1,22 +1,23 @@
-import { CardRatingItem } from '@/components/listCard';
+import { CardCommonItem } from '@/components/listCard';
 import log from '@/utils/log';
 import dayjs from 'dayjs';
 
-interface GetRatingListReq {
+interface GetStarListReq {
   /** 用户名 */
   username: string;
-  /** 分页 - 最后一个 rating 的 id */
+  /** 分页 - 最后一个 star 的 id */
   last_id?: string;
   /** 拉取条数 */
   limit: number;
 }
 
-interface GetRatingListResp {
+interface GetStarListResp {
   msg: string;
-  data: CardRatingItem[];
+  data: CardCommonItem[];
 }
 
-const mockRatings: CardRatingItem[] = [
+// FIXME: how to handle StarItems?
+const mockStars: CardCommonItem[] = [
   {
     id: '233',
     creator: {
@@ -74,19 +75,19 @@ const mockRatings: CardRatingItem[] = [
 ];
 
 // FIXME: mock
-const getRatingList: (req: GetRatingListReq) => Promise<GetRatingListResp> = (
+const getStarList: (req: GetStarListReq) => Promise<GetStarListResp> = (
   req,
 ) =>
-  new Promise<GetRatingListResp>((resolve) => {
+  new Promise<GetStarListResp>((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',
-      data: mockRatings,
+      data: mockStars,
     });
   });
 
-const ratingClient = {
-  getRatingList,
+const starClient = {
+  getStarList,
 };
 
-export default ratingClient;
+export default starClient;

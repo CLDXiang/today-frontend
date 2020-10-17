@@ -1,24 +1,26 @@
-import { CardRatingItem } from '@/components/listCard';
+import { CardCommentItem } from '@/components/listCard';
 import log from '@/utils/log';
 import dayjs from 'dayjs';
 
-interface GetRatingListReq {
+interface GetCommentListReq {
   /** 用户名 */
   username: string;
-  /** 分页 - 最后一个 rating 的 id */
+  /** 点评 ID */
+  rate_id?: string;
+  /** 分页 - 最后一个 comment 的 id */
   last_id?: string;
   /** 拉取条数 */
   limit: number;
 }
 
-interface GetRatingListResp {
+interface GetCommentListResp {
   msg: string;
-  data: CardRatingItem[];
+  data: CardCommentItem[];
 }
 
-const mockRatings: CardRatingItem[] = [
+const mockComments: CardCommentItem[] = [
   {
-    id: '233',
+    id: '1',
     creator: {
       id: '234',
       nickname: '小明',
@@ -26,12 +28,7 @@ const mockRatings: CardRatingItem[] = [
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     content: '点评内容点评内容点评内容点评内容点评内容',
-    lecture: {
-      id: 'COMP233333.3',
-      name: '思修',
-      teachers: ['老师1', '老师2'],
-    },
-    commentCount: 323,
+    rateID: '233',
     starCount: 213,
     starred: true,
     reaction: {
@@ -45,7 +42,7 @@ const mockRatings: CardRatingItem[] = [
     },
   },
   {
-    id: '234',
+    id: '2',
     creator: {
       id: '234',
       nickname: '小明',
@@ -53,12 +50,7 @@ const mockRatings: CardRatingItem[] = [
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     content: '点评内容点评内容点评内容点评内容点评内容',
-    lecture: {
-      id: 'COMP233333.3',
-      name: '思修',
-      teachers: ['老师1', '老师2'],
-    },
-    commentCount: 323,
+    rateID: '233',
     starCount: 213,
     starred: true,
     reaction: {
@@ -74,19 +66,19 @@ const mockRatings: CardRatingItem[] = [
 ];
 
 // FIXME: mock
-const getRatingList: (req: GetRatingListReq) => Promise<GetRatingListResp> = (
+const getCommentList: (req: GetCommentListReq) => Promise<GetCommentListResp> = (
   req,
 ) =>
-  new Promise<GetRatingListResp>((resolve) => {
+  new Promise<GetCommentListResp>((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',
-      data: mockRatings,
+      data: mockComments,
     });
   });
 
-const ratingClient = {
-  getRatingList,
+const commentClient = {
+  getCommentList,
 };
 
-export default ratingClient;
+export default commentClient;

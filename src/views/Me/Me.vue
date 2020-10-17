@@ -65,6 +65,7 @@ import {
   LectureList,
   CommonList,
 } from './components';
+
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default defineComponent({
@@ -105,13 +106,13 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations({ vuexLogout: 'logout' }),
-    processAvatar(originAvatar: string) {
+    processAvatar(originAvatar: string): string {
       if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;
     },
-    logout() {
+    logout(): void {
       if (this.userLoggedIn) {
         this.vuexLogout();
         this.$router.replace({ name: 'Timetable' });
@@ -119,6 +120,9 @@ export default defineComponent({
         this.vuexLogout();
         this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
       }
+    },
+    isCurrentUser(): boolean {
+      return this.$route.name === 'Me';
     },
   },
 });

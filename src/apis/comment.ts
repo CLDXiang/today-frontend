@@ -21,6 +21,7 @@ interface GetCommentListResp {
 const mockComments: CardCommentItem[] = [
   {
     id: '1',
+    type: 'comment',
     creator: {
       id: '234',
       nickname: '小明',
@@ -43,6 +44,7 @@ const mockComments: CardCommentItem[] = [
   },
   {
     id: '2',
+    type: 'comment',
     creator: {
       id: '234',
       nickname: '小明',

@@ -19,6 +19,7 @@ interface GetRatingListResp {
 const mockRatings: CardRatingItem[] = [
   {
     id: '233',
+    type: 'rating',
     creator: {
       id: '234',
       nickname: '小明',
@@ -46,6 +47,7 @@ const mockRatings: CardRatingItem[] = [
   },
   {
     id: '234',
+    type: 'rating',
     creator: {
       id: '234',
       nickname: '小明',

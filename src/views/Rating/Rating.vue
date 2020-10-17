@@ -11,10 +11,9 @@
 
 <script lang="ts">
 import { defineComponent, markRaw, DefineComponent } from 'vue';
-import { RatingHeadBar, LectureList, RatingList } from './components';
-
-// FIXME: 接入 API 后删除此文件
-import { mockRatings1, mockLectures1 } from './mock';
+import { mapGetters, mapState } from 'vuex';
+import { ratingClient, lectureClient } from '@/apis';
+import { RatingHeadBar, RatingList, LectureList } from './components';
 
 export default defineComponent({
   components: {
@@ -28,15 +27,27 @@ export default defineComponent({
        * 但是我暂时没有找到优雅的方式将每一个传入的项分别解析到 header 和 body 中。
        * P.S. 这做法有点 React 内味儿了（逃 */
       pages: {
-        最新: { component: markRaw(RatingList), props: { ratings: [...mockRatings1] } },
-        通识: { component: markRaw(LectureList), props: { lectures: [...mockLectures1] } },
+        最新: { component: markRaw(RatingList), props: { ratings: [] } },
+        通识: { component: markRaw(LectureList), props: { lectures: [] } },
         思政: { component: markRaw(LectureList), props: { lectures: [] } },
-        外语: { component: markRaw(LectureList), props: { lectures: [...mockLectures1] } },
+        外语: { component: markRaw(LectureList), props: { lectures: [] } },
         体育: { component: markRaw(LectureList), props: { lectures: [] } },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as Record<string, { component: DefineComponent; props: Record<string, any> }>,
       activeTab: '最新',
     };
+  },
+  computed: {
+    ...mapState(['user', 'profile']),
+    ...mapGetters(['countHistory', 'userLoggedIn']),
+  },
+  created() {
+    ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.点评.props.ratings = resp.data;
+    });
+    lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.课程.props.lectures = resp.data;
+    });
   },
   methods: {
     handleSearch(query: string) {

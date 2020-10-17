@@ -1,7 +1,12 @@
-import { CardLectureItem, CardUserItem } from '@/components/listCard';
+import {
+  CardRatingItem,
+  CardCommentItem,
+  CardLectureItem,
+  CardUserItem,
+} from '@/components/listCard';
 import log from '@/utils/log';
 
-type CardWatchItem = CardLectureItem | CardUserItem;
+type CardCommonItem = CardRatingItem | CardCommentItem | CardLectureItem | CardUserItem;
 
 interface GetWatchListReq {
   /** 用户名 */
@@ -14,16 +19,27 @@ interface GetWatchListReq {
 
 interface GetWatchListResp {
   msg: string;
-  data: CardWatchItem[];
+  data: CardCommonItem[];
 }
 
-const mockWatches: CardWatchItem[] = [
+const mockWatches: CardCommonItem[] = [
   {
+    type: 'user',
     email: 'abc@def.xyz',
     name: 'xiao_ming',
     nickname: '小明',
     avatar: 'https://xxx.jpg',
     bio: '个性签名个性签名个性签名个性签名个性签名',
+  },
+  {
+    id: 'COMP233333.3',
+    type: 'lecture',
+    name: '思修',
+    teachers: ['老师1', '老师2'],
+    score: 85,
+    reactionCount: 5,
+    ratingCount: 100,
+    likeCount: 20,
   },
 ];
 

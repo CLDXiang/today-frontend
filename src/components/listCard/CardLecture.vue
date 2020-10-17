@@ -6,8 +6,13 @@
           <span class="card-lecture__top-lecture-name float-left">
             {{ lecture.name }}
           </span>
-          <span class="card-lecture__top-rating float-right">
-            RATINGS
+          <span class="card-lecture__top-rating-stars float-right">
+            {{ lecture.score }}
+          </span>
+          <span class="card-lecture__top-rating-number float-right">
+            <five-stars
+              :score="lecture.score"
+            />
           </span>
         </div>
         <div class="list-card__middle-field">
@@ -25,9 +30,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import FiveStars from '@/components/FiveStars.vue';
 import { CardLectureItem } from './types';
 
 export default defineComponent({
+  components: {
+    FiveStars,
+  },
   props: {
     /** 课程数据项 */
     lecture: { type: Object as PropType<CardLectureItem>, required: true },
@@ -41,8 +50,15 @@ export default defineComponent({
   padding-bottom: 6px;
 }
 .card-lecture {
+  .card-lecture__top-rating-number {
+    margin-left: 4px;
+    color: #828282;
+  }
   .card-lecture__teacher-name {
     color: #979797;
   }
+}
+five-stars {
+  display: inline;
 }
 </style>

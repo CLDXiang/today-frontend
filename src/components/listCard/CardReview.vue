@@ -8,15 +8,21 @@
         <div class="list-card__top-field">
           <span class="float-left">User1 RATINGS</span>
           <span class="float-right">13 minutes ago</span>
-          <div style="clear: both;"></div>
+          <div style="clear: both;" />
           <span class="float-left"> 善良 善良 善良</span>
         </div>
       </div>
     </div>
     <div class="list-card__bottom-field">
-      <div class="card-review__comment">点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评</div>
-      <div class="float-left">REACTIONS</div>
-      <div class="card-review__icons">ICONS</div>
+      <div class="card-review__comment">
+        点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评点评
+      </div>
+      <div class="float-left">
+        REACTIONS
+      </div>
+      <div class="card-review__icons">
+        ICONS
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +33,7 @@ import { CardLectureItem } from './types';
 
 export default defineComponent({
 
-})
+});
 </script>
 
 <style lang='scss' scoped>

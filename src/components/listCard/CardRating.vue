@@ -10,7 +10,9 @@
             {{ rating.creator.nickname }}
           </span>
           <span class="card-rating__top-datetime float-right">
-            {{ timeDiff }}
+            <time-diff
+              :time-created="rating.createdAt"
+            />
           </span>
         </div>
         <div class="list-card__middle-field">
@@ -32,36 +34,17 @@
 </template>
 
 <script lang="ts">
-import dayjs from 'dayjs';
 import { defineComponent, PropType } from 'vue';
+import TimeDiff from '@/components/TimeDiff.vue';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
+  components: {
+    TimeDiff,
+  },
   props: {
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, required: true },
-  },
-  computed: {
-    /** 多久之前创建的 */
-    minuteDiff() {
-      const res = dayjs().diff(this.rating.createdAt, 'minute');
-      return res;
-    },
-    timeDiff() {
-      const now = dayjs();
-      const minuteDiff = now.diff(this.rating.createdAt, 'minute');
-      const hourDiff = now.diff(this.rating.createdAt, 'hour');
-      const monthDiff = now.diff(this.rating.createdAt, 'month');
-      const yearDiff = now.diff(this.rating.createdAt, 'year');
-      if (minuteDiff < 60) {
-        return `${minuteDiff} 分钟前`;
-      } if (hourDiff < 24) {
-        return `${hourDiff} 小时前`;
-      } if (monthDiff < 12) {
-        return `${monthDiff} 天前`;
-      }
-      return `${yearDiff} 年前`;
-    },
   },
 });
 </script>

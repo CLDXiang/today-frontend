@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script lang="ts"> 
+<script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { CardLectureItem } from './types';
 

@@ -1,38 +1,79 @@
 <template>
   <div class="content-box">
-    <div class="banner-box">
-      <span @click="logout">
-        <!-- TODO: src/components/common/FIcon.vue: "logout" icon not implemented,
-          temporarily using "back" icon instead -->
-        <f-icon name="back" />
-      </span>
-    </div>
-    <img
-      class="avatar"
-      :src="processAvatar(user.avatar)"
-      alt="avatar"
-    >
-
-    <div class="white-box">
-      <div class="info-box">
-        <div class="info-box__header">
-          <span class="user-name">
-            {{ user.name }}
-          </span>
-          <span @click="$router.push('/me/edit')">
-            <f-icon name="edit-square" />
-          </span>
+    <div class="profile-card">
+      <div
+        v-if="isCurrentUser()"
+        class="btn-section"
+      >
+        <div
+          class="control-btn"
+          @click="$router.push('/me/edit')"
+        >
+          <f-icon name="edit-square" />
         </div>
-        <div class="info-box__content">
-          <div class="bio">
-            {{ user.bio || '这是我的个性签名' }}
-          </div>
-          <div class="info">
-            {{ '信息展示区' }}
-          </div>
+        <div
+          class="control-btn"
+          @click="logout"
+        >
+          <!-- TODO: src/components/common/FIcon.vue: "logout" icon not implemented,
+            temporarily using "back" icon instead -->
+          <f-icon name="back" />
         </div>
       </div>
+      <div class="info-box">
+        <img
+          class="avatar"
+          :src="processAvatar(user.avatar)"
+          alt="avatar"
+        >
+        <div class="info-section">
+          <span>
+            <span class="user-name text-dark">
+              {{ user.name }}
+            </span>
+            <div
+              v-if="!isCurrentUser()"
+              class="follow-btn"
+            >
+              <span class="text-dark">
+                ＋&nbsp;关注
+              </span>
+            </div>
+          </span>
+          <span class="bio text-light">
+            {{ user.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
+          </span>
+        </div>
+      </div>
+      <div class="follow-box">
+        <div class="follow-section">
+          <span class="follow-number text-dark">
+            {{ following }}
+          </span>
+          <span class="follow-text text-light">
+            关注
+          </span>
+        </div>
+        <div class="follow-section">
+          <span class="follow-number text-dark">
+            {{ follower }}
+          </span>
+          <span class="follow-text text-light">
+            粉丝
+          </span>
+        </div>
+        <div class="follow-section">
+          <span class="follow-number text-dark">
+            {{ star }}
+          </span>
+          <span class="follow-text text-light">
+            被收藏数
+          </span>
+        </div>
+      </div>
+    </div>
 
+    <div class="white-card">
       <div class="main-box">
         <f-tabs
           v-model="activeTab"
@@ -40,9 +81,9 @@
           :pages="pages"
         />
       </div>
-
-      <div class="bottom-action-bar" />
     </div>
+
+    <div class="bottom-action-bar" />
   </div>
 </template>
 
@@ -70,6 +111,10 @@ import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default defineComponent({
   data: () => ({
+    // TODO: obtain following data from backend
+    following: 90,
+    follower: 80,
+    star: 70,
     pages: {
       点评: { component: markRaw(RatingList), props: { ratings: [] } },
       回复: { component: markRaw(CommentList), props: { comments: [] } },
@@ -97,12 +142,14 @@ export default defineComponent({
     starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
       this.pages.收藏.props.contents = resp.data;
     });
-    watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.关注.props.contents = resp.data;
-    });
-    historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.足迹.props.contents = resp.data;
-    });
+    if (this.isCurrentUser()) {
+      watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
+        this.pages.关注.props.contents = resp.data;
+      });
+      historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
+        this.pages.足迹.props.contents = resp.data;
+      });
+    }
   },
   methods: {
     ...mapMutations({ vuexLogout: 'logout' }),
@@ -133,91 +180,161 @@ export default defineComponent({
   display: flex;
   width: 100%;
   height: 100%;
-  background-color: $primary-color;
+  background-color: #e3f1f3;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
 
-  > .banner-box {
-    display: flex;
-    padding: 20px 8%;
-    height: 96px;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-end;
+  .text-dark {
+    color: #4f4f4f;
   }
 
-  > .avatar {
-    position: absolute;
-    top: 48px;
-    left: 8%;
-    box-sizing: border-box;
-    width: 64px;
-    height: 64px;
-    border: 2px solid #fff;
-    border-radius: 32px;
-    background-color: #fff;
+  .text-light {
+    color: #828282;
   }
 
-  > .white-box {
+  > .profile-card {
     display: flex;
-    padding: 20px 0;
-    background-color: #fff;
-    flex: 1;
+    padding: 15px 5%;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
 
-    > .info-box {
+    > .btn-section {
       display: flex;
-      padding: 10px 8%;
-      width: 100%;
-      flex-direction: column;
+      position: absolute;
+      flex-direction: row;
+      align-self: flex-end;
 
-      > .info-box__header {
+      > .control-btn {
         display: flex;
-        padding: 6px 0;
-        justify-content: space-between;
-        align-items: center;
-
-        > .user-name {
-          color: #000;
-          font-weight: bold;
-          font-size: 20px;
-          line-height: 20px;
-        }
-
-        > span {
-          display: flex;
-        }
+        padding: 10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        transition-duration: 0.2s;
       }
 
-      > .info-box__content {
-        display: flex;
-        padding: 6px 0;
-        flex-direction: column;
+      > .control-btn:hover {
+        cursor: pointer;
+        background-color: $primary-color;
+      }
+    }
 
-        > .bio {
-          color: #aaa;
-          font-size: 12px;
-          line-height: 12px;
-          align-self: flex-start;
+    > .info-box {
+      display: flex;
+      width: 100%;
+      padding: 30px 5% 10px 5%;
+      flex-direction: row;
+
+      > .avatar {
+        width: 75px;
+        height: 75px;
+        border: 3px solid $primary-color;
+        border-radius: 50px;
+        background-color: #fff;
+        box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
+      }
+
+      > .info-section {
+        display: flex;
+        width: 80%;
+        padding: 15px 25px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        > span:first-child {
+          display: flex;
+          width: 100%;
+          flex-direction: row;
+
+          > .user-name {
+            display: block;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 24px;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          > .follow-btn {
+            position: absolute;
+            right: 5%;
+            width: 60px;
+            height: 24px;
+            background-color: $primary-color;
+            border-radius: 100px;
+
+            > span {
+              display: block;
+              padding: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 14px;
+              text-align: center;
+            }
+          }
         }
 
-        > .info {
-          margin-top: 12px;
-          padding: 42px;
+        > .bio {
+          display: block;
           width: 100%;
-          height: 100px;
-          border: 1px dashed #c4c4c4;
-          background: #fff;
-          color: #1486ff;
-          text-align: center;
+          padding: 9px 0;
+          font-weight: 400;
           font-size: 16px;
           line-height: 16px;
+          text-align: left;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
     }
+
+    > .follow-box {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+
+      > .follow-section {
+        display: flex;
+        padding: 5px 8%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+
+        > .follow-number {
+          padding: 6px;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 14px;
+        }
+
+        > .follow-text {
+          width: 60px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 14px;
+        }
+      }
+    }
+  }
+
+  > .white-card {
+    display: flex;
+    padding: 15px 0;
+    background-color: #fff;
+    box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
+    border-radius: 8px;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
   }
 }
 </style>

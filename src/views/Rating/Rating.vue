@@ -32,8 +32,7 @@ export default defineComponent({
         思政: { component: markRaw(LectureList), props: { lectures: [] } },
         外语: { component: markRaw(LectureList), props: { lectures: [] } },
         体育: { component: markRaw(LectureList), props: { lectures: [] } },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as Record<string, { component: DefineComponent; props: Record<string, any> }>,
+      } as Record<string, { component: DefineComponent; props: Record<string, unknown> }>,
       activeTab: '最新',
     };
   },

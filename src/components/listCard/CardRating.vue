@@ -67,6 +67,10 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
+.list-card {
+  padding: 16px 16px 10px 16px;
+}
+
 .card-rating {
   .card-rating__content {
     color: #979797;

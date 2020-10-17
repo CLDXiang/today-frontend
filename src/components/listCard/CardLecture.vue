@@ -36,6 +36,10 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
+.list-card__content-field {
+  padding-top: 10px;
+  padding-bottom: 6px;
+}
 .card-lecture {
   .card-lecture__teacher-name {
     color: #979797;

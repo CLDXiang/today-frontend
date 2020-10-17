@@ -6,10 +6,10 @@
           <span class="card-lecture__top-lecture-name float-left">
             {{ lecture.name }}
           </span>
-          <span class="card-lecture__top-rating-stars float-right">
+          <span class="card-lecture__top-rating-number float-right">
             {{ lecture.score }}
           </span>
-          <span class="card-lecture__top-rating-number float-right">
+          <span class="card-lecture__top-rating-stars float-right">
             <five-stars
               :score="lecture.score"
             />
@@ -51,7 +51,7 @@ export default defineComponent({
 }
 .card-lecture {
   .card-lecture__top-rating-number {
-    margin-left: 4px;
+    margin-left: 6px;
     color: #828282;
   }
   .card-lecture__teacher-name {

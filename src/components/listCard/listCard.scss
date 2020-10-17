@@ -1,16 +1,16 @@
 .list-card {
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: #fff;
   //border: 3px solid #7edfe7;
-  box-shadow: 0 4px 8px 0px rgba(0, 0, 0, 0.1);
-  margin: 1px 1px 8px 1px;
+  box-shadow: 0 4px 8px 1px rgba(0, 0, 0, 0.1);
+  margin: 8px 1px 8px 1px;
   padding: 2px 10px;
 
   > .list-card__main-field{
       display: flex;
 
       > .list-card__avatar-field{
-        position: relative;
+        max-width: 60px;
         flex: 1;
       }
 
@@ -22,7 +22,7 @@
           }
 
           > .list-card__middle-field{
-            min-height: 22px;
+            min-height: 26px;
           }
       }
   }

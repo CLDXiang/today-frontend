@@ -1,18 +1,22 @@
 <template>
   <div class="list-card card-rating">
     <div class="list-card__main-field">
-      <div class="list-card__avatar-field">
+      <div
+        class="list-card__avatar-field"
+        @click="handleClickAvatar"
+      >
         <img src="/assets/default_avatar.png">
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-rating__top-nickname float-left">
+          <span
+            class="card-rating__top-nickname float-left"
+            @click="handleClickAvatar"
+          >
             {{ rating.creator.nickname }}
           </span>
           <span class="card-rating__top-datetime float-right">
-            <time-diff
-              :time-created="rating.createdAt"
-            />
+            {{ timeDiff }}
           </span>
         </div>
         <div class="list-card__middle-field">
@@ -26,25 +30,59 @@
       <span class="card-rating__bottom-class-info float-left">
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
-      <span class="card-rating__bottom-info-icon float-right">
-        ICON1 ICON2 ICON3
-      </span>
+      <div class="card-rating__bottom-icons float-right">
+        <span>
+          <f-icon
+            name='reaction'
+            size='16'
+          />
+          <span>
+            {{ rating.reactionCount }}
+          </span>
+        </span>
+        <span>
+          <f-icon
+            name='chat'
+            size='16'
+          />
+          <span>
+            {{ rating.replyCount }}
+          </span>
+        </span>
+        <span>
+          <f-icon
+            name='heart'
+            size='16'
+          />
+          <span>
+            {{ rating.likeCount }}
+          </span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import TimeDiff from '@/components/TimeDiff.vue';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
-  components: {
-    TimeDiff,
-  },
   props: {
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, required: true },
+  },
+  emits: ['avatar-clicked'],
+  computed: {
+    timeDiff() {
+      const res: string = this.rating.createdAt.fromNow();
+      return res;
+    },
+  },
+  methods: {
+    handleClickAvatar() {
+      this.$emit('avatar-clicked', this.rating.id);
+    },
   },
 });
 </script>
@@ -66,6 +104,9 @@ export default defineComponent({
   }
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
     margin-bottom: 30px;
+  }
+  .card-rating__bottom-icons {
+    display: inline;
   }
 }
 </style>

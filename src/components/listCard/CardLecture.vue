@@ -19,9 +19,26 @@
           <span class="card-lecture__teacher-name float-left">
             {{ lecture.teachers.join(' ') }}
           </span>
-          <span class="card-lecture__bottom-info-icon float-right">
-            ICONS
+          <div class="card-lecture__bottom-icons float-right">
+        <span>
+          <f-icon
+            name='chat'
+            size='16'
+          />
+          <span>
+            {{ lecture.ratingCount }}
           </span>
+        </span>
+        <span>
+          <f-icon
+            name='heart'
+            size='16'
+          />
+          <span>
+            {{ lecture.likeCount }}
+          </span>
+        </span>
+          </div>
         </div>
       </div>
     </div>
@@ -56,6 +73,9 @@ export default defineComponent({
   }
   .card-lecture__teacher-name {
     color: #979797;
+  }
+  .card-lecture__bottom-icons {
+
   }
 }
 five-stars {

@@ -18,6 +18,7 @@ interface SearchResp {
 const mockLectures: CardLectureItem[] = [
   {
     id: '0',
+    type: 'lecture',
     name: '创意设计前沿',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -27,6 +28,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '1',
+    type: 'lecture',
     name: '操作系统',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -36,6 +38,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '2',
+    type: 'lecture',
     name: '编译原理',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -45,6 +48,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '3',
+    type: 'lecture',
     name: '计算机体系结构',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -54,6 +58,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '4',
+    type: 'lecture',
     name: '创意设计前沿',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -63,6 +68,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '5',
+    type: 'lecture',
     name: '操作系统',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -72,6 +78,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '6',
+    type: 'lecture',
     name: '编译原理',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -81,6 +88,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '7',
+    type: 'lecture',
     name: '计算机体系结构',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -90,6 +98,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '8',
+    type: 'lecture',
     name: '创意设计前沿',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -99,6 +108,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '9',
+    type: 'lecture',
     name: '操作系统',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -108,6 +118,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '10',
+    type: 'lecture',
     name: '编译原理',
     teachers: ['教师0', '教师1'],
     score: 4.4,
@@ -117,6 +128,7 @@ const mockLectures: CardLectureItem[] = [
   },
   {
     id: '11',
+    type: 'lecture',
     name: '计算机体系结构',
     teachers: ['教师0', '教师1'],
     score: 4.4,

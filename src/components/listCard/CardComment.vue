@@ -1,5 +1,5 @@
 <template>
-  <div class="list-card card-user">
+  <div class="list-card card-reply">
     <div class="list-card__main-field">
       <div class="list-card__avatar-field">
         <img src="default_avatar.png">
@@ -17,18 +17,19 @@
         </div>
       </div>
     </div>
+    <div class="list-card__bottom-field">
+      <span class="card-reply__icon float-right">
+        ICON
+      </span>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { CardLectureItem } from './types';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  props: {
-    /** 课程数据项 */
-    lecture: { type: Object as PropType<CardLectureItem>, required: true },
-  },
+
 });
 </script>
 

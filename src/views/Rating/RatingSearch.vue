@@ -4,18 +4,18 @@
   >
     <rating-head-bar is-back-visible />
     <div class="title">
-      “{{ q }}”的搜索结果
+      “{{ parsedQ }}”的搜索结果
     </div>
     <div
       ref="scroll"
-      class="test"
+      class="search-result-list"
     >
-      <div
+      <card-lecture
         v-for="searchResult in searchResults"
         :key="searchResult.id"
-      >
-        {{ searchResult.name }}
-      </div>
+        class="search-result-list__card"
+        :lecture="searchResult"
+      />
     </div>
   </div>
 </template>
@@ -25,13 +25,14 @@ import {
   defineComponent, ref, toRefs, watch,
 } from 'vue';
 import { rpcClient } from '@/apis';
-import { CardLectureItem } from '@/components/listCard';
+import { CardLectureItem, CardLecture } from '@/components/listCard';
 import { useScrollToBottom } from '@/composables';
 import { RatingHeadBar } from './components';
 
 export default defineComponent({
   components: {
     RatingHeadBar,
+    CardLecture,
   },
   props: {
     /** 传入的搜索字串 */
@@ -78,6 +79,14 @@ export default defineComponent({
       searchResults,
     };
   },
+  computed: {
+    parsedQ(): string {
+      if (this.q.length < 12) {
+        return this.q;
+      }
+      return `${this.q.slice(0, 12)}...`;
+    },
+  },
 });
 </script>
 
@@ -101,19 +110,23 @@ export default defineComponent({
 
   > .title {
     align-self: flex-start;
-    margin: 9px 0 0 15px;
+    margin: 9px 0 8px 15px;
     font-size: 16px;
     line-height: 22px;
     color: #828282;
   }
-}
 
-.test {
-  height: 100px;
-  overflow-y: auto;
+  > .search-result-list {
+    background-color: #f2f2f2;
+    overflow: auto;
+    align-self: stretch;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
-  > div {
-    height: 50px;
+    > .search-result-list__card {
+      margin: 6px 0 2px;
+    }
   }
 }
 </style>

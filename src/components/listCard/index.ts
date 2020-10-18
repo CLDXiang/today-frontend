@@ -2,8 +2,8 @@ import './listCard.scss';
 
 export { default as CardLecture } from './CardLecture.vue';
 export { default as CardRating } from './CardRating.vue';
-export { default as CardReply } from './CardReply.vue';
-export { default as CardReview } from './CardReview.vue';
 export { default as CardUser } from './CardUser.vue';
+export { default as CardReactiveRating } from './CardReactiveRating.vue';
+export { default as CardComment } from './CardComment.vue';
 
 export * from './types';

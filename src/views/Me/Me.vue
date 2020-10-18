@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, markRaw, DefineComponent } from 'vue';
+import { defineComponent, markRaw } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 
 import {
@@ -124,14 +124,18 @@ export default defineComponent({
       回复: { component: markRaw(CommentList), props: { comments: [] } },
       课程: { component: markRaw(LectureList), props: { lectures: [] } },
       收藏: { component: markRaw(CommonList), props: { contents: [] } },
-      关注: { component: markRaw(CommonList), props: { contents: [] } },
-      足迹: { component: markRaw(CommonList), props: { contents: [] } },
-    } as Record<string, { component: DefineComponent; props: Record<string, unknown> }>,
+    } as Record<string, { component: unknown; props: Record<string, unknown> }>,
     activeTab: '点评',
   }),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
+  },
+  mounted() {
+    if (this.isCurrentUser()) {
+      this.pages.关注 = { component: markRaw(CommonList), props: { contents: [] } };
+      this.pages.足迹 = { component: markRaw(CommonList), props: { contents: [] } };
+    }
   },
   created() {
     ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
@@ -274,6 +278,7 @@ export default defineComponent({
             height: 24px;
             background-color: $primary-color;
             border-radius: 100px;
+            transition-duration: 0.2s;
 
             > span {
               display: block;
@@ -283,6 +288,11 @@ export default defineComponent({
               line-height: 14px;
               text-align: center;
             }
+          }
+
+          > .follow-btn:hover {
+            cursor: pointer;
+            background-color: #ccf;
           }
         }
 

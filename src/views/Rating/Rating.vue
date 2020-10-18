@@ -12,7 +12,6 @@
 <script lang="ts">
 import { defineComponent, markRaw, DefineComponent } from 'vue';
 import { mapGetters, mapState } from 'vuex';
-import { ratingClient, lectureClient } from '@/apis';
 import { RatingHeadBar, RatingList, LectureList } from './components';
 
 export default defineComponent({
@@ -39,14 +38,6 @@ export default defineComponent({
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
-  },
-  created() {
-    ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.点评.props.ratings = resp.data;
-    });
-    lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.课程.props.lectures = resp.data;
-    });
   },
   methods: {
     handleSearch(query: string) {

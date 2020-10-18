@@ -51,6 +51,7 @@ export default defineComponent({
 
   > .back-btn {
     height: 20px;
+    color: $primary-color;
   }
 }
 </style>

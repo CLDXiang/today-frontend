@@ -4,6 +4,10 @@ import log from '@/utils/log';
 interface SearchReq {
   /** 搜索字串 */
   q: string;
+  /** 分页 - 最后一条 ID */
+  last_id?: string;
+  /** 分页 - 项数 */
+  limit: number;
 }
 
 interface SearchResp {

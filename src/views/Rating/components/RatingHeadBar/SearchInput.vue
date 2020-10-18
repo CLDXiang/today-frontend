@@ -115,6 +115,7 @@ export default defineComponent({
       outline: none;
       width: 100%;
       background-color: #f2f2f2;
+      padding-left: 10px;
     }
 
     > input::placeholder {

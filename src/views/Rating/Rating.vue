@@ -53,7 +53,7 @@ export default defineComponent({
   color: #444;
   font-size: 14px;
 
-  padding-top: 4px;
+  padding-top: $head-margin;
 
   margin: 0 auto;
 

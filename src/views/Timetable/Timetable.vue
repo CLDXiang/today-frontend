@@ -564,7 +564,7 @@ export default defineComponent({
 
   display: flex;
   flex-direction: column;
-  margin: 4px auto 0 auto;
+  margin: $head-margin auto 0 auto;
 
   max-width: 2560px;
 }

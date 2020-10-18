@@ -1,16 +1,32 @@
 <template>
-  <div class="content-box">
+  <div
+    class="content-box"
+  >
     <rating-head-bar is-back-visible />
     <div class="title">
       “{{ q }}”的搜索结果
+    </div>
+    <div
+      ref="scroll"
+      class="test"
+    >
+      <div
+        v-for="searchResult in searchResults"
+        :key="searchResult.id"
+      >
+        {{ searchResult.name }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {
+  defineComponent, ref, toRefs, watch,
+} from 'vue';
 import { rpcClient } from '@/apis';
 import { CardLectureItem } from '@/components/listCard';
+import { useScrollToBottom } from '@/composables';
 import { RatingHeadBar } from './components';
 
 export default defineComponent({
@@ -21,39 +37,46 @@ export default defineComponent({
     /** 传入的搜索字串 */
     q: { type: String, required: true },
   },
-  data() {
-    return {
-      /** 搜索结果列表 */
-      searchResults: [] as CardLectureItem[],
-    };
-  },
-  watch: {
-    q() {
-      // q 改变时重新拉数据
-      this.search();
-    },
-  },
-  created() {
-    // 首次进入该页面拉数据
-    this.search();
-  },
-  methods: {
+  setup(props) {
+    const { q } = toRefs(props);
+
+    /** 搜索结果列表 */
+    const searchResults = ref<CardLectureItem[]>([]);
+
     /** 搜索并覆盖当前列表 */
-    search() {
-      if (this.q) {
-        rpcClient.search({ q: this.q }).then((resp) => {
-          this.searchResults = resp.data;
+    const search = () => {
+      if (q.value) {
+        rpcClient.search({ q: q.value, limit: 20 }).then((resp) => {
+          searchResults.value = resp.data;
         });
       }
-    },
+    };
     /** 搜索并将结果附加在当前列表后 */
-    searchMore() {
-      if (this.q) {
-        rpcClient.search({ q: this.q }).then((resp) => {
-          this.searchResults = [...this.searchResults, ...resp.data];
+    const searchMore = () => {
+      // TODO: 传入 last_id
+      if (q.value) {
+        rpcClient.search({ q: q.value, limit: 20 }).then((resp) => {
+          searchResults.value = [...searchResults.value, ...resp.data];
         });
       }
-    },
+    };
+
+    watch(q, () => {
+      // q 改变时重新拉数据
+      search();
+    });
+
+    // 滚动到底部时拉新数据
+    const { scrollRef: scroll } = useScrollToBottom(searchMore);
+
+    // 首次进入该页面拉数据
+    search();
+
+    return {
+      scroll,
+
+      searchResults,
+    };
   },
 });
 </script>
@@ -70,7 +93,7 @@ export default defineComponent({
   color: #444;
   font-size: 14px;
 
-  padding-top: 4px;
+  padding-top: $head-margin;
 
   margin: 0 auto;
 
@@ -78,10 +101,19 @@ export default defineComponent({
 
   > .title {
     align-self: flex-start;
-    margin: 11px 0 0 10px;
+    margin: 9px 0 0 15px;
     font-size: 16px;
     line-height: 22px;
     color: #828282;
+  }
+}
+
+.test {
+  height: 100px;
+  overflow-y: auto;
+
+  > div {
+    height: 50px;
   }
 }
 </style>

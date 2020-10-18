@@ -1,4 +1,43 @@
 .list-card {
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: #fff;
+  //border: 3px solid #7edfe7;
+  box-shadow: 0 4px 8px 1px rgba(0, 0, 0, 0.1);
+  margin: 8px 1px 8px 1px;
+  padding: 3px 10px;
+
+  > .list-card__main-field {
+      display: flex;
+
+      > .list-card__avatar-field {
+        max-width: 60px;
+        flex: 1;
+      }
+
+      > .list-card__content-field {
+          flex: 6;
+          
+          > .list-card__top-field {
+            height: 26px;
+          }
+
+          > .list-card__middle-field {
+            min-height: 22px;
+          }
+      }
+  }
+
+  > .list-card__bottom-field {
+    height: 22px;
+  }
+}
+
+.float-left {
+  float: left;
+  position: relative;
+}
+
+.float-right {
+  float: right;
+  position: relative;
 }

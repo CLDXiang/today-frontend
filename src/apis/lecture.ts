@@ -2,7 +2,8 @@ import { CardLectureItem } from '@/components/listCard';
 import log from '@/utils/log';
 import { mockSelects } from './mocks/lecture';
 
-interface GetSelectListReq {
+// FIXME: mock
+const getSelectList: (req: {
   /** 用户名 */
   username: string;
   /** 当前学期，没有时返回所有学期 */
@@ -11,18 +12,13 @@ interface GetSelectListReq {
   last_id?: string;
   /** 拉取条数 */
   limit: number;
-}
-
-interface GetSelectListResp {
+}) => Promise<{
   msg: string;
   data: CardLectureItem[];
-}
-
-// FIXME: mock
-const getSelectList: (req: GetSelectListReq) => Promise<GetSelectListResp> = (
+}> = (
   req,
 ) =>
-  new Promise<GetSelectListResp>((resolve) => {
+  new Promise((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',

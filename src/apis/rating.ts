@@ -2,25 +2,21 @@ import { CardRatingItem } from '@/components/listCard';
 import log from '@/utils/log';
 import { mockRatings } from './mocks/rating';
 
-interface GetRatingListReq {
+// FIXME: mock
+const getRatingList: (req: {
   /** 用户名 */
   username: string;
   /** 分页 - 最后一个 rating 的 id */
   last_id?: string;
   /** 拉取条数 */
   limit: number;
-}
-
-interface GetRatingListResp {
+}) => Promise<{
   msg: string;
   data: CardRatingItem[];
-}
-
-// FIXME: mock
-const getRatingList: (req: GetRatingListReq) => Promise<GetRatingListResp> = (
+}> = (
   req,
 ) =>
-  new Promise<GetRatingListResp>((resolve) => {
+  new Promise((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',

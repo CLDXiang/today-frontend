@@ -4,25 +4,21 @@ import {
 import log from '@/utils/log';
 import { mockWatches } from './mocks/watch';
 
-interface GetWatchListReq {
+// FIXME: mock
+const getWatchList: (req: {
   /** 用户名 */
   username: string;
   /** 分页 - 最后一个 user 的 id */
   last_id?: string;
   /** 拉取条数 */
   limit: number;
-}
-
-interface GetWatchListResp {
+}) => Promise<{
   msg: string;
   data: CardCommonItem[];
-}
-
-// FIXME: mock
-const getWatchList: (req: GetWatchListReq) => Promise<GetWatchListResp> = (
+}> = (
   req,
 ) =>
-  new Promise<GetWatchListResp>((resolve) => {
+  new Promise((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',

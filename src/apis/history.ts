@@ -4,7 +4,8 @@ import {
 import log from '@/utils/log';
 import { mockHistories } from './mocks/history';
 
-interface GetHistoryListReq {
+// FIXME: mock
+const getHistoryList: (req: {
   /** 用户名 */
   username: string;
   /** 足迹类型 - user / lecture */
@@ -13,16 +14,11 @@ interface GetHistoryListReq {
   last_id?: string;
   /** 拉取条数 */
   limit: number;
-}
-
-interface GetHistoryListResp {
+}) => Promise<{
   msg: string;
   data: CardCommonItem[];
-}
-
-// FIXME: mock
-const getHistoryList: (req: GetHistoryListReq) => Promise<GetHistoryListResp> = (req) =>
-  new Promise<GetHistoryListResp>((resolve) => {
+}> = (req) =>
+  new Promise((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',

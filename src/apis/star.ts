@@ -4,23 +4,19 @@ import {
 import log from '@/utils/log';
 import { mockStars } from './mocks/star';
 
-interface GetStarListReq {
+// FIXME: mock
+const getStarList: (req: {
   /** 用户名 */
   username: string;
   /** 分页 - 最后一个 star 的 id */
   last_id?: string;
   /** 拉取条数 */
   limit: number;
-}
-
-interface GetStarListResp {
+}) => Promise<{
   msg: string;
   data: CardCommonItem[];
-}
-
-// FIXME: mock
-const getStarList: (req: GetStarListReq) => Promise<GetStarListResp> = (req) =>
-  new Promise<GetStarListResp>((resolve) => {
+}> = (req) =>
+  new Promise((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',

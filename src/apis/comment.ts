@@ -2,7 +2,8 @@ import { CardCommentItem } from '@/components/listCard';
 import log from '@/utils/log';
 import { mockComments } from './mocks/comment';
 
-interface GetCommentListReq {
+// FIXME: mock
+const getCommentList: (req: {
   /** 用户名 */
   username: string;
   /** 点评 ID */
@@ -11,18 +12,13 @@ interface GetCommentListReq {
   last_id?: string;
   /** 拉取条数 */
   limit: number;
-}
-
-interface GetCommentListResp {
+}) => Promise<{
   msg: string;
   data: CardCommentItem[];
-}
-
-// FIXME: mock
-const getCommentList: (req: GetCommentListReq) => Promise<GetCommentListResp> = (
+}> = (
   req,
 ) =>
-  new Promise<GetCommentListResp>((resolve) => {
+  new Promise((resolve) => {
     log.info('rpcClient.search', req);
     resolve({
       msg: 'ok',

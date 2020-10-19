@@ -1,6 +1,4 @@
-import {
-  onMounted, ref, Ref,
-} from 'vue';
+import { onMounted, ref, Ref } from 'vue';
 import debounce from 'lodash.debounce';
 
 /**
@@ -11,7 +9,10 @@ import debounce from 'lodash.debounce';
 const useScrollToBottom: (
   callback: (() => void) | (() => Promise<void>),
   delay?: number,
-) => { scrollRef: Ref<HTMLElement | undefined>; pending: Ref<boolean> } = (callback, delay = 150) => {
+) => { scrollRef: Ref<HTMLElement | undefined>; pending: Ref<boolean> } = (
+  callback,
+  delay = 150,
+) => {
   const scrollRef = ref<HTMLElement>();
   const pending = ref<boolean>(false);
 

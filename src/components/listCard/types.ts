@@ -20,7 +20,7 @@ export interface CardRatingItem {
   /** 点评 ID */
   id: string;
   /** 类型 */
-  type: string;
+  type?: string;
   /** 点评发布者信息 */
   creator: {
     /** 发布者用户 ID */
@@ -58,7 +58,7 @@ export interface CardCommentItem {
   /** 回复 ID */
   id: string;
   /** 类型 */
-  type: string;
+  type?: string;
   /** 回复者信息 */
   creator: {
     /** 回复者用户 ID */
@@ -87,7 +87,7 @@ export interface CardLectureItem {
   /** lecture ID */
   id: string;
   /** 类型 */
-  type: string;
+  type?: string;
   /** 课程名称 */
   name: string;
   /** 授课教师 */
@@ -105,7 +105,7 @@ export interface CardLectureItem {
 /** 用户类列表项 */
 export interface CardUserItem {
   /** 类型 */
-  type: string;
+  type?: string;
   /** 用户邮箱 */
   email: string;
   /** 用户名 */
@@ -117,3 +117,6 @@ export interface CardUserItem {
   /** 个性签名 */
   bio: string;
 }
+
+/** 类型不定列表项 */
+export type CardCommonItem = CardCommentItem | CardLectureItem | CardRatingItem | CardUserItem;

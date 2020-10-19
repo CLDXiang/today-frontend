@@ -1,5 +1,6 @@
 import { CardLectureItem } from '@/components/listCard';
 import log from '@/utils/log';
+import { mockSelects } from './mocks/lecture';
 
 interface GetSelectListReq {
   /** 用户名 */
@@ -16,29 +17,6 @@ interface GetSelectListResp {
   msg: string;
   data: CardLectureItem[];
 }
-
-const mockSelects: CardLectureItem[] = [
-  {
-    id: 'COMP233333.3',
-    type: 'lecture',
-    name: '思修',
-    teachers: ['老师1', '老师2'],
-    score: 85,
-    reactionCount: 5,
-    ratingCount: 100,
-    likeCount: 20,
-  },
-  {
-    id: 'COMP233333.4',
-    type: 'lecture',
-    name: '思修',
-    teachers: ['老师1', '老师2'],
-    score: 85,
-    reactionCount: 5,
-    ratingCount: 100,
-    likeCount: 20,
-  },
-];
 
 // FIXME: mock
 const getSelectList: (req: GetSelectListReq) => Promise<GetSelectListResp> = (

@@ -81,7 +81,7 @@ export default defineComponent({
 
 <style lang="scss">
 #app {
-  font-family: Roboto, Heiti SC, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Heiti SC, Roboto, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

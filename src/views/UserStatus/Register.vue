@@ -124,7 +124,7 @@ export default defineComponent({
   mounted() {
     // 若用户已登录，跳转至个人首页
     if (this.userLoggedIn) {
-      this.$router.push('/me');
+      this.$router.push('/user');
     }
   },
   methods: {

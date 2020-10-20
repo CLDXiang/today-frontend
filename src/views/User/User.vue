@@ -7,17 +7,21 @@
       >
         <div
           class="control-btn"
-          @click="$router.push('/me/edit')"
+          @click="$router.push('/user/edit')"
         >
-          <f-icon name="edit-square" />
+          <f-icon
+            class="text-light"
+            name="edit-square"
+          />
         </div>
         <div
           class="control-btn"
           @click="logout"
         >
-          <!-- TODO: src/components/common/FIcon.vue: "logout" icon not implemented,
-            temporarily using "back" icon instead -->
-          <f-icon name="back" />
+          <f-icon
+            class="text-light"
+            name="door-open"
+          />
         </div>
       </div>
       <div
@@ -114,6 +118,12 @@ import {
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default defineComponent({
+  props: {
+    userId: {
+      type: String,
+      default: '',
+    },
+  },
   data: () => ({
     // TODO: obtain following data from backend
     following: 90,
@@ -130,12 +140,6 @@ export default defineComponent({
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
-  },
-  mounted() {
-    if (this.isCurrentUser()) {
-      this.pages.关注 = { component: markRaw(CommonList), props: { contents: [] } };
-      this.pages.足迹 = { component: markRaw(CommonList), props: { contents: [] } };
-    }
   },
   created() {
     ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
@@ -159,6 +163,12 @@ export default defineComponent({
       });
     }
   },
+  mounted() {
+    if (this.isCurrentUser()) {
+      this.pages.关注 = { component: markRaw(CommonList), props: { contents: [] } };
+      this.pages.足迹 = { component: markRaw(CommonList), props: { contents: [] } };
+    }
+  },
   methods: {
     ...mapMutations({ vuexLogout: 'logout' }),
     processAvatar(originAvatar: string): string {
@@ -173,11 +183,11 @@ export default defineComponent({
         this.$router.replace({ name: 'Timetable' });
       } else {
         this.vuexLogout();
-        this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
+        this.$router.replace({ name: 'Login', query: { redirect: '/user' } });
       }
     },
     isCurrentUser(): boolean {
-      return this.$route.name === 'Me';
+      return this.userLoggedIn && (this.userId === '' || this.userId === this.user.id);
     },
   },
 });
@@ -225,7 +235,7 @@ export default defineComponent({
 
       > .control-btn:hover {
         cursor: pointer;
-        background-color: $primary-color;
+        background-color: #ccf;
       }
     }
 

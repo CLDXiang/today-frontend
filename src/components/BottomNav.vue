@@ -54,7 +54,7 @@ export default defineComponent({
         return 'notification';
       }
       if (
-        /\/me\/?.*$/.test(path)
+        /\/user\/?.*$/.test(path)
         || /\/login\/?.*$/.test(path)
         || /\/register\/?.*$/.test(path)
         || /\/forgot-password\/?.*$/.test(path)

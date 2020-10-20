@@ -33,8 +33,8 @@
       <div class="card-rating__bottom-icon-field float-right">
         <span class="card-rating__bottom-icon">
           <f-icon
-            name='reaction'
-            size='16'
+            name="reaction"
+            size="16"
           />
           <span class="card-rating__bottom-statistics">
             {{ rating.reactionCount }}
@@ -42,8 +42,8 @@
         </span>
         <span class="card-rating__bottom-icon">
           <f-icon
-            name='chat'
-            size='16'
+            name="chat"
+            size="16"
           />
           <span class="card-rating__bottom-statistics">
             {{ rating.replyCount }}
@@ -51,8 +51,8 @@
         </span>
         <span class="card-rating__bottom-icon">
           <f-icon
-            name='heart'
-            size='16'
+            name="heart"
+            size="16"
           />
           <span class="card-rating__bottom-statistics">
             {{ rating.likeCount }}

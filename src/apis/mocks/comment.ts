@@ -1,5 +1,6 @@
 import { CardCommentItem } from '@/components/listCard';
 import dayjs from 'dayjs';
+import defaultAvatar from '@/assets/default_avatar.jpg';
 
 export const mockComments: CardCommentItem[] = [
   {
@@ -8,7 +9,7 @@ export const mockComments: CardCommentItem[] = [
     creator: {
       id: '234',
       nickname: '小明',
-      avatar: 'https://xxx.jpg',
+      avatar: defaultAvatar,
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     content: '点评内容点评内容点评内容点评内容点评内容',
@@ -31,7 +32,7 @@ export const mockComments: CardCommentItem[] = [
     creator: {
       id: '234',
       nickname: '小明',
-      avatar: 'https://xxx.jpg',
+      avatar: defaultAvatar,
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     content: '点评内容点评内容点评内容点评内容点评内容',

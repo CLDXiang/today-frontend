@@ -1,6 +1,5 @@
-import {
-  CardCommonItem,
-} from '@/components/listCard';
+import { CardCommonItem } from '@/components/listCard';
+import defaultAvatar from '@/assets/default_avatar.jpg';
 
 export const mockWatches: CardCommonItem[] = [
   {
@@ -8,7 +7,7 @@ export const mockWatches: CardCommonItem[] = [
     email: 'abc@def.xyz',
     name: 'xiao_ming',
     nickname: '小明',
-    avatar: 'https://xxx.jpg',
+    avatar: defaultAvatar,
     bio: '个性签名个性签名个性签名个性签名个性签名',
   },
   {

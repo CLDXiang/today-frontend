@@ -3,7 +3,7 @@
   <svg
     v-if="name === 'back'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@
   <svg
     v-else-if="name === 'cloud'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@
   <svg
     v-else-if="name === 'my'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     class="bi bi-person-circle"
     fill="currentColor"
@@ -54,7 +54,7 @@
   <svg
     v-else-if="name === 'notification'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@
   <svg
     v-else-if="name === 'rating'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@
   <svg
     v-else-if="name === 'search'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@
   <svg
     v-else-if="name === 'timetable'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -119,24 +119,21 @@
   <svg
     v-else-if="name === 'edit-square'"
     :width="parsedWidth"
-    :height="parsedHeigth"
-    viewBox="0 0 1024 1024"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
+    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
     <path
-      d="M904 512h-56c-4.4 0-8 3.6-8 8v320H184V184h320c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V520c0-4.4-3.6-8-8-8z"
-      p-id="8853"
-    />
-    <path
-      d="M355.9 534.9L354 653.8c-0.1 8.9 7.1 16.2 16 16.2h0.4l118-2.9c2-0.1 4-0.9 5.4-2.3l415.9-415c3.1-3.1 3.1-8.2 0-11.3L785.4 114.3c-1.6-1.6-3.6-2.3-5.7-2.3s-4.1 0.8-5.7 2.3l-415.8 415c-1.4 1.5-2.3 3.5-2.3 5.6z m63.5 23.6L779.7 199l45.2 45.1-360.5 359.7-45.7 1.1 0.7-46.4z"
-      p-id="8854"
+      fill-rule="evenodd"
+      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
     />
   </svg>
   <svg
     v-else-if="name === 'delete'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +149,7 @@
   <svg
     v-else-if="name === 'shrink'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +162,7 @@
   <svg
     v-else-if="name === 'arrawsalt'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +175,7 @@
   <svg
     v-else-if="name === 'undo'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +188,7 @@
   <svg
     v-else-if="name === 'contract'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +201,7 @@
   <svg
     v-else-if="name === 'expand'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +214,7 @@
   <svg
     v-else-if="name === 'eye'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +231,7 @@
   <svg
     v-else-if="name === 'eye-slash'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +253,7 @@
   <svg
     v-else-if="name === 'star'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -269,12 +266,30 @@
   <svg
     v-else-if="name === 'star-fill'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+  </svg>
+  <svg
+    v-else-if="name === 'door-open'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M1 15.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM11.5 2H11V1h.5A1.5 1.5 0 0 1 13 2.5V15h-1V2.5a.5.5 0 0 0-.5-.5z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M10.828.122A.5.5 0 0 1 11 .5V15h-1V1.077l-6 .857V15H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117z"
+    />
+    <path d="M8 9c0 .552.224 1 .5 1s.5-.448.5-1-.224-1-.5-1-.5.448-.5 1z" />
   </svg>
 </template>
 
@@ -300,7 +315,9 @@ type NameType =
   | 'eye'
   | 'eye-slash'
   | 'star'
-  | 'star-fill';
+  | 'star-fill'
+  | 'door-open'
+;
 
 export default defineComponent({
   props: {
@@ -319,7 +336,7 @@ export default defineComponent({
       }
       return '20px';
     },
-    parsedHeigth(): string {
+    parsedHeight(): string {
       if (this.heigth !== undefined) {
         return typeof this.heigth === 'number' ? `${this.heigth}px` : this.heigth;
       }

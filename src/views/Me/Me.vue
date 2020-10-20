@@ -1,67 +1,173 @@
 <template>
   <div class="content-box">
-    <div class="dark-box">
-      <img
-        class="avatar"
-        :src="processAvatar(user.avatar)"
-        alt="avatar"
+    <div class="profile-card">
+      <div
+        v-if="isCurrentUser()"
+        class="btn-section"
       >
-      <div class="nickName">
-        {{ user.name }}
-      </div>
-    </div>
-    <div class="white-card">
-      <div class="info-box">
-        <div class="info-box__header">
-          <span>个人信息</span>
-          <span @click="$router.push('/me/edit')">
-            <f-icon name="edit-square" />
-          </span>
+        <div
+          class="control-btn"
+          @click="$router.push('/me/edit')"
+        >
+          <f-icon name="edit-square" />
         </div>
-        <div class="info-list">
-          <div>昵称：{{ user.nickName || '点编辑按钮取个昵称吧~  ↗ ' }}</div>
-          <div>个性签名：{{ user.bio || '这个人还没有个性签名诶' }}</div>
-        </div>
-      </div>
-      <div class="btn-box">
-        <a-button
-          block
-          type="primary"
-          size="large"
-          shape="round"
+        <div
+          class="control-btn"
           @click="logout"
         >
-          退出登录
-        </a-button>
+          <!-- TODO: src/components/common/FIcon.vue: "logout" icon not implemented,
+            temporarily using "back" icon instead -->
+          <f-icon name="back" />
+        </div>
       </div>
-
-      <div class="bottom-action-bar" />
+      <div
+        v-else
+        class="blank-box"
+      />
+      <div class="info-box">
+        <img
+          class="avatar"
+          :src="processAvatar(user.avatar)"
+          alt="avatar"
+        >
+        <div class="info-section">
+          <div>
+            <span class="user-name text-dark">
+              {{ user.name }}
+            </span>
+            <span
+              v-if="!isCurrentUser()"
+              class="follow-btn"
+            >
+              <span class="text-dark">
+                ＋&nbsp;关注
+              </span>
+            </span>
+          </div>
+          <span class="bio text-light">
+            {{ user.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
+          </span>
+        </div>
+      </div>
+      <div class="follow-box">
+        <div class="follow-section">
+          <span class="follow-number text-dark">
+            {{ following }}
+          </span>
+          <span class="follow-text text-light">
+            关注
+          </span>
+        </div>
+        <div class="follow-section">
+          <span class="follow-number text-dark">
+            {{ follower }}
+          </span>
+          <span class="follow-text text-light">
+            粉丝
+          </span>
+        </div>
+        <div class="follow-section">
+          <span class="follow-number text-dark">
+            {{ star }}
+          </span>
+          <span class="follow-text text-light">
+            被收藏数
+          </span>
+        </div>
+      </div>
     </div>
+
+    <div class="white-card">
+      <div class="main-box">
+        <f-tabs
+          v-model="activeTab"
+          size="small"
+          :pages="pages"
+        />
+      </div>
+    </div>
+
+    <div class="bottom-action-bar" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, markRaw } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
+
+import {
+  ratingClient,
+  commentClient,
+  lectureClient,
+  starClient,
+  watchClient,
+  historyClient,
+} from '@/apis';
+
+import {
+  RatingList,
+  CommentList,
+  LectureList,
+  CommonList,
+} from './components';
+
 import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default defineComponent({
   data: () => ({
-    aaa: 1,
+    // TODO: obtain following data from backend
+    following: 90,
+    follower: 80,
+    star: 70,
+    pages: {
+      点评: { component: markRaw(RatingList), props: { ratings: [] } },
+      回复: { component: markRaw(CommentList), props: { comments: [] } },
+      课程: { component: markRaw(LectureList), props: { lectures: [] } },
+      收藏: { component: markRaw(CommonList), props: { contents: [] } },
+    } as Record<string, { component: unknown; props: Record<string, unknown> }>,
+    activeTab: '点评',
   }),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
   },
+  mounted() {
+    if (this.isCurrentUser()) {
+      this.pages.关注 = { component: markRaw(CommonList), props: { contents: [] } };
+      this.pages.足迹 = { component: markRaw(CommonList), props: { contents: [] } };
+    }
+  },
+  created() {
+    ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.点评.props.ratings = resp.data;
+    });
+    commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.回复.props.comments = resp.data;
+    });
+    lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.课程.props.lectures = resp.data;
+    });
+    starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
+      this.pages.收藏.props.contents = resp.data;
+    });
+    if (this.isCurrentUser()) {
+      watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
+        this.pages.关注.props.contents = resp.data;
+      });
+      historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
+        this.pages.足迹.props.contents = resp.data;
+      });
+    }
+  },
   methods: {
     ...mapMutations({ vuexLogout: 'logout' }),
-    processAvatar(originAvatar: string) {
+    processAvatar(originAvatar: string): string {
       if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
         return defaultAvatar;
       }
       return originAvatar;
     },
-    logout() {
+    logout(): void {
       if (this.userLoggedIn) {
         this.vuexLogout();
         this.$router.replace({ name: 'Timetable' });
@@ -70,105 +176,182 @@ export default defineComponent({
         this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
       }
     },
+    isCurrentUser(): boolean {
+      return this.$route.name === 'Me';
+    },
   },
 });
 </script>
 
 <style lang="scss" scoped>
 .content-box {
-  height: 100%;
-  width: 100%;
   display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #e3f1f3;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  background-color: $primary-color;
 
-  > .dark-box {
-    height: 160px;
-    padding: 20px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    > .avatar {
-      background-color: #fff;
-      width: 90px;
-      height: 90px;
-      border-radius: 45px;
-      border: 2px solid #fff;
-      box-sizing: border-box;
-    }
-
-    > .nickName {
-      margin-top: 8px;
-      font-size: 20px;
-      line-height: 20px;
-      color: #fff;
-      font-weight: bold;
-    }
+  .text-dark {
+    color: #4f4f4f;
   }
 
-  > .white-card {
-    box-shadow: 0px -4px 5px 5px rgba(141, 141, 141, 0.3);
-    border-radius: 8px;
-    flex: 1;
-    background-color: #fff;
+  .text-light {
+    color: #828282;
+  }
+
+  > .profile-card {
     display: flex;
+    padding: 15px 5%;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
 
-    padding: 30px;
+    > .btn-section {
+      display: flex;
+      position: relative;
+      flex-direction: row;
+      align-self: flex-end;
+
+      > .control-btn {
+        display: flex;
+        padding: 10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        transition-duration: 0.2s;
+      }
+
+      > .control-btn:hover {
+        cursor: pointer;
+        background-color: $primary-color;
+      }
+    }
+
+    > .blank-box {
+      height: 40px;
+    }
 
     > .info-box {
       display: flex;
-      flex-direction: column;
-
       width: 100%;
-      max-width: 375px;
-      align-self: center;
+      padding: 0 5%;
+      flex-direction: row;
 
-      > .info-box__header {
+      > .avatar {
+        width: 75px;
+        height: 75px;
+        border: 3px solid $primary-color;
+        border-radius: 50px;
+        background-color: #fff;
+        box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
+      }
+
+      > .info-section {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        width: 80%;
+        padding: 15px 25px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
 
-        > span:first-child {
-          font-size: 24px;
-          line-height: 24px;
-          color: #4f4f4f;
-          font-weight: bold;
+        > div:first-child {
+          position: relative;
+          width: 100%;
+
+          > .user-name {
+            float: left;
+            display: block;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 24px;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          > .follow-btn {
+            float: right;
+            width: 60px;
+            height: 24px;
+            background-color: $primary-color;
+            border-radius: 100px;
+            transition-duration: 0.2s;
+
+            > span {
+              display: block;
+              padding: 5px;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 14px;
+              text-align: center;
+            }
+          }
+
+          > .follow-btn:hover {
+            cursor: pointer;
+            background-color: #ccf;
+          }
         }
 
-        > span:last-child > i {
-          font-size: 36px;
-          color: #6a7079;
-        }
-      }
-
-      > .info-list {
-        margin: 40px 8px;
-
-        > div {
-          padding: 14px 0;
-          line-height: 24px;
-          color: #828282;
-          font-size: 18px;
-          border-bottom: solid 1px #bdbdbd;
-          display: flex;
-          align-items: center;
+        > .bio {
+          display: block;
+          width: 100%;
+          padding: 9px 0;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 16px;
+          text-align: left;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
     }
 
-    .btn-box {
+    > .follow-box {
+      display: flex;
       width: 100%;
-      max-width: 375px;
-      align-self: center;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+
+      > .follow-section {
+        display: flex;
+        padding: 5px 8%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+
+        > .follow-number {
+          padding: 6px;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 14px;
+        }
+
+        > .follow-text {
+          width: 60px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 14px;
+        }
+      }
     }
+  }
+
+  > .white-card {
+    display: flex;
+    padding: 15px 0;
+    background-color: #fff;
+    box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
+    border-radius: 8px;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
   }
 }
 </style>

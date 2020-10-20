@@ -2,30 +2,17 @@ import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import store from '@/store';
 
-interface RespErr {
-  response: {
-    status: number;
-    data: {
-      message: string;
-    };
-  };
-}
-
-interface LoginReq {
+const login: (req: {
   /** 用户名 */
   username: string;
   /** 密码 */
   password: string;
-}
-
-interface LoginResp {
+}) => Promise<{
   access_token: string;
   email: string;
   name: string;
-}
-
-const login: (req: LoginReq) => Promise<LoginResp> = (req) =>
-  new Promise<LoginResp>((resolve, reject) => {
+}> = (req) =>
+  new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/login`, req)
       .then((resp) => {
@@ -41,7 +28,7 @@ const login: (req: LoginReq) => Promise<LoginResp> = (req) =>
       .catch((err) => reject(err));
   });
 
-interface RegisterReq {
+const register: (req: {
   /** 用户名 */
   name: string;
   /** 验证码 */
@@ -50,60 +37,54 @@ interface RegisterReq {
   password: string;
   /** 邮箱 */
   email: string;
-}
-
-interface RegisterResp {
+}) => Promise<{
   result: 'success' | 'failed';
-}
-
-const register: (req: RegisterReq) => Promise<RegisterResp> = (req) =>
+}> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/register`, req)
       .then((resp) => {
         resolve(resp.data);
       })
-      .catch((err) => reject(err as RespErr));
+      .catch((err) => reject(err));
   });
 
-interface RequestCodeReq {
+const requestCodeRegister: (req: {
   email: string;
-}
-
-const requestCodeRegister: (req: RequestCodeReq) => Promise<never> = (req) =>
+}) => Promise<never> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/register-mail`, req)
       .then(() => {
         resolve();
       })
-      .catch((err) => reject(err as RespErr));
+      .catch((err) => reject(err));
   });
 
-const requestCodeForForgotPassword: (req: RequestCodeReq) => Promise<never> = (req) =>
+const requestCodeForForgotPassword: (req: {
+  email: string;
+}) => Promise<never> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/password`, req)
       .then(() => {
         resolve();
       })
-      .catch((err) => reject(err as RespErr));
+      .catch((err) => reject(err));
   });
 
-interface ModifyPasswordReq {
+const modifyPassword: (req: {
   email: string;
   code: number;
   password: string;
-}
-
-const modifyPassword: (req: ModifyPasswordReq) => Promise<never> = (req) =>
+}) => Promise<never> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .put(`${API_URL}/auth/password`, req)
       .then(() => {
         resolve();
       })
-      .catch((err) => reject(err as RespErr));
+      .catch((err) => reject(err));
   });
 
 const authClient = {

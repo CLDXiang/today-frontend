@@ -2,17 +2,13 @@ import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import store from '../store';
 
-interface GetUserProfileReq {
+const getUserProfile: (req: {
   userId?: string;
-}
-
-interface GetUserProfileResp {
+}) => Promise<{
   avatar: string;
   bio: string;
   nickName: string;
-}
-
-const getUserProfile: (req: GetUserProfileReq) => Promise<GetUserProfileResp> = ({
+}> = ({
   userId = store.state.user.id as string,
 }) =>
   new Promise((resolve, reject) => {
@@ -30,18 +26,14 @@ const getUserProfile: (req: GetUserProfileReq) => Promise<GetUserProfileResp> = 
       .catch((err) => reject(err));
   });
 
-interface EditProfileReq {
+const editProfile: (req: {
   nickName: string;
   bio: string;
-}
-
-interface EditUserProfileResp {
+}) => Promise<{
   avatar: string;
   bio: string;
   nickName: string;
-}
-
-const editProfile: (req: EditProfileReq) => Promise<EditUserProfileResp> = (req) =>
+}> = (req) =>
   new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
@@ -54,17 +46,13 @@ const editProfile: (req: EditProfileReq) => Promise<EditUserProfileResp> = (req)
       .catch((err) => reject(err));
   });
 
-interface UploadAvatarReq {
+const uploadAvatar: (req: {
   userAvatar: FormData;
-}
-
-interface UploadAvatarResp {
+}) => Promise<{
   avatar: string;
   bio: string;
   nickName: string;
-}
-
-const uploadAvatar: (req: UploadAvatarReq) => Promise<UploadAvatarResp> = ({ userAvatar }) =>
+}> = ({ userAvatar }) =>
   new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,

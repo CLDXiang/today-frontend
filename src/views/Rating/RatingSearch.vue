@@ -74,8 +74,10 @@ export default defineComponent({
     search();
 
     return {
+      /** 列表元素 ref */
       scroll,
 
+      /** 搜索结果列表 */
       searchResults,
     };
   },
@@ -101,8 +103,6 @@ export default defineComponent({
 
   color: #444;
   font-size: 14px;
-
-  padding-top: $head-margin;
 
   margin: 0 auto;
 

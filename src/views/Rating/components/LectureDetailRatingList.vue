@@ -76,26 +76,7 @@
     </div>
     <div class="rating-bar">
       <div class="rating-bar__header">
-        <span>课程点评</span>
-        <a-button
-          type="primary"
-          size="small"
-          :style="{
-            backgroundColor: '#6a99e3',
-            color: '#fff',
-            borderColor: '#6a99e3',
-            padding: '0 8px',
-            borderRadius: '6px',
-          }"
-        >
-          <template #icon>
-            <f-icon
-              name="edit"
-              :size="14"
-            />
-          </template>
-          我要点评
-        </a-button>
+        sdasdqwd
       </div>
       <div class="rating-bar__list" />
     </div>
@@ -307,17 +288,16 @@ export default defineComponent({
     width: 100%;
 
     > .rating-bar__header {
-      padding: 8px 14px 4px 22px;
-      border-radius: 4px;
+      height: 64px;
       background: #fff;
       position: sticky;
       top: 0;
-
-      display: flex;
-      justify-content: space-between;
     }
 
     > .rating-bar__list {
+          flex-shrink: 0;
+
+      height: 1000px;
     }
   }
 }

@@ -15,6 +15,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "rating" */ '@/views/Rating/RatingSearch.vue'),
     props: (route) => ({ q: route.query.q }),
   },
+  {
+    path: '/rating/lecture/:id',
+    name: 'RatingLectureDetail',
+    component: () => import(/* webpackChunkName: "rating" */ '@/views/Rating/LectureDetail.vue'),
+    props: (route) => ({ lectureId: route.params.id }),
+  },
   { path: '/notification', name: 'Notification', component: Notification },
   { path: '/me', name: 'Me', component: Me },
   {

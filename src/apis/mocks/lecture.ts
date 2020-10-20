@@ -1,5 +1,5 @@
 import { CardLectureItem } from '@/components/listCard';
-import { LectureItem } from '../types';
+import { LectureDetail } from '../types';
 
 export const mockSelects: CardLectureItem[] = [
   {
@@ -24,38 +24,22 @@ export const mockSelects: CardLectureItem[] = [
   },
 ];
 
-export const mockLectureItem: LectureItem = {
-/** Lecture ID */
+export const mockLectureDetail: LectureDetail = {
   id: 'ididid',
-  /** 课程代码 */
-  code: 'codecode',
-  /** 教师 */
-  taughtBy: ['t1', 't2'],
-  /** 课程名 */
-  name: 'name',
-  /** 学分 */
+  code: 'COMP111232.23',
+  taughtBy: ['老王', '老李'],
+  name: '测试课程名',
   credit: 2,
-  /** 开课院系 */
-  department: 'department',
-  /** 校区 */
-  campus: 'campus',
-  /** 语言 */
-  language: 'language',
-  /** 备注 */
-  remark: 'remark',
-  /** 考试形式 */
-  examType: 'examType',
-  /** 考试时间 */
-  examTime: 'examType',
-  /** 期中是否允许退课 */
-  withdrawable: 'withdrawable',
-  /** 三轮选课是否限制 */
-  r3limit: 'r3limit',
-  /** Reaction 概要（此页面是否展示 Reaction 看 UI 反馈，若不展示去掉此字段） */
+  department: '哈哈哈学院',
+  campus: '邯郸校区',
+  language: '中文',
+  remark: '上海市精品课程',
+  examType: '论文',
+  examTime: 'XXXXXX',
+  withdrawable: '是',
+  r3limit: '无',
   reaction: {
-    /** 总 Reaction 数 */
     count: 15,
-    /** 各 Reaction 信息 */
     emoji: {
       emoji1: [{
         id: '1',
@@ -70,10 +54,11 @@ export const mockLectureItem: LectureItem = {
       }],
     },
   },
-  /** 评课数 */
   rateCount: 123,
-  /** 收藏数 */
   starCount: 321,
-  /** 当前用户是否收藏 */
   starred: true,
+  difficulty: 3.2,
+  grade: 4.5,
+  workload: 2.3,
+  overall: 4,
 };

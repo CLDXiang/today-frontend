@@ -1,7 +1,7 @@
 import { CardLectureItem } from '@/components/listCard';
 import log from '@/utils/log';
-import { mockSelects, mockLectureItem } from './mocks/lecture';
-import { LectureItem } from './types';
+import { mockSelects, mockLectureDetail } from './mocks/lecture';
+import { LectureDetail } from './types';
 
 // FIXME: mock
 const getSelectList: (req: {
@@ -33,14 +33,14 @@ const getLectureDetail: (req: {
   /** Lecture Id */
   lectureId: string;
 }) => Promise<{
-  data: LectureItem;
+  data: LectureDetail;
 }> = (
   req,
 ) => {
   log.info('lectureClient.getLectureDetail', req);
   return new Promise((resolve) => {
     resolve({
-      data: mockLectureItem,
+      data: mockLectureDetail,
     });
   });
 };

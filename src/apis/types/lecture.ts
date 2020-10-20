@@ -39,3 +39,14 @@ export interface LectureItem extends LectureType {
   /** 当前用户是否收藏 */
   starred: boolean;
 }
+
+export interface LectureDetail extends LectureItem {
+  /** 难易程度 */
+  difficulty: number;
+  /** 给分好坏 */
+  grade: number;
+  /** 工作量 */
+  workload: number;
+  /** 综合推荐指数 */
+  overall: number;
+}

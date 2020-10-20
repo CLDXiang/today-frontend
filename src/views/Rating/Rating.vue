@@ -1,6 +1,6 @@
 <template>
   <div class="content-box">
-    <rating-head-bar @search-lecture="handleSearch" />
+    <rating-head-bar />
     <f-tabs
       v-model="activeTab"
       size="small"
@@ -11,8 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, markRaw, DefineComponent } from 'vue';
-import { mapGetters, mapState } from 'vuex';
-import { RatingHeadBar, RatingList, LectureList } from './components';
+import { RatingHeadBar, LectureList, RatingList } from './components';
 
 export default defineComponent({
   components: {
@@ -35,16 +34,6 @@ export default defineComponent({
       activeTab: '最新',
     };
   },
-  computed: {
-    ...mapState(['user', 'profile']),
-    ...mapGetters(['countHistory', 'userLoggedIn']),
-  },
-  methods: {
-    handleSearch(query: string) {
-      // TODO: 跳转至搜索页，搜索页 mounted 时根据 query 拉搜索 API
-      return query;
-    },
-  },
 });
 </script>
 
@@ -60,47 +49,14 @@ export default defineComponent({
   color: #444;
   font-size: 14px;
 
-  padding-top: 4px;
+  padding-top: $head-margin;
 
   margin: 0 auto;
 
   max-width: 2560px;
 
-  > .center-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    > div:last-child {
-      color: #aaa;
-      font-size: 12px;
-    }
-  }
-  > .bottom-content {
-    justify-self: flex-end;
-    padding-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    > .hide-img {
-      width: 100px;
-      height: 100px;
-      background-color: #e3f1f3;
-      border-radius: 6px;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    > img {
-      width: 100px;
-      height: 100px;
-    }
+  > .f-tabs {
+    margin-top: 15px;
   }
 }
 </style>

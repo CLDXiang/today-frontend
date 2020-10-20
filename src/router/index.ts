@@ -9,6 +9,12 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/timetable' },
   { path: '/timetable', name: 'Timetable', component: Timetable },
   { path: '/rating', name: 'Rating', component: Rating },
+  {
+    path: '/rating/search',
+    name: 'RatingSearch',
+    component: () => import(/* webpackChunkName: "rating" */ '@/views/Rating/RatingSearch.vue'),
+    props: (route) => ({ q: route.query.q }),
+  },
   { path: '/notification', name: 'Notification', component: Notification },
   { path: '/me', name: 'Me', component: Me },
   {

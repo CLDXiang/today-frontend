@@ -16,11 +16,10 @@
             />
           </span>
         </div>
-        <div class="list-card__middle-field">
+        <div class="list-card__bottom-field">
           <span class="card-lecture__teacher-name float-left">
             {{ lecture.teachers.join(' ') }}
           </span>
-        </div>
         <div class="card-rating__bottom-icon-field float-right">
           <span class="card-rating__bottom-icon">
             <f-icon
@@ -46,6 +45,7 @@
               {{ lecture.likeCount }}
             </span>
           </span>
+        </div>
         </div>
       </div>
     </div>

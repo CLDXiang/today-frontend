@@ -1,10 +1,9 @@
 .list-card {
   border-radius: 8px;
   background-color: #fff;
-  //border: 3px solid #7edfe7;
   box-shadow: 0 4px 8px 1px rgba(0, 0, 0, 0.1);
   margin: 8px 1px 8px 1px;
-  padding: 3px 10px;
+  padding: 15px;
 
   > .list-card__main-field {
       display: flex;
@@ -18,7 +17,7 @@
           flex: 6;
           
           > .list-card__top-field {
-            height: 26px;
+            height: 28px;
           }
 
           > .list-card__middle-field {

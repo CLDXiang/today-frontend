@@ -7,12 +7,12 @@
       <div class="list-card__content-field">
         <div class="list-card__top-field">
           <span class="card-user__user-name float-left">
-            User1
+            {{ user.name }}
           </span>
         </div>
         <div class="list-card__middle-field float-left">
           <span class="card-user__user-signature">
-            To thyself be true.
+            {{ user.bio }}
           </span>
         </div>
       </div>
@@ -22,12 +22,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { CardLectureItem } from './types';
+import { CardUserItem } from './types';
 
 export default defineComponent({
   props: {
     /** 课程数据项 */
-    lecture: { type: Object as PropType<CardLectureItem>, required: true },
+    user: { type: Object as PropType<CardUserItem>, required: true },
   },
 });
 </script>

@@ -12,6 +12,7 @@
           <span class="card-lecture__top-rating-stars float-right">
             <five-stars
               :score="lecture.score"
+              :size="20"
             />
           </span>
         </div>
@@ -19,26 +20,32 @@
           <span class="card-lecture__teacher-name float-left">
             {{ lecture.teachers.join(' ') }}
           </span>
-          <div class="card-lecture__bottom-icons float-right">
-        <span>
-          <f-icon
-            name='chat'
-            size='16'
-          />
-          <span>
-            {{ lecture.ratingCount }}
+        </div>
+        <div class="card-rating__bottom-icon-field float-right">
+          <span class="card-rating__bottom-icon">
+            <f-icon
+              name='reaction'
+              size='16'
+            />
           </span>
-        </span>
-        <span>
-          <f-icon
-            name='heart'
-            size='16'
-          />
-          <span>
-            {{ lecture.likeCount }}
+          <span class="card-rating__bottom-icon">
+            <f-icon
+              name='chat'
+              size='16'
+            />
+            <span class="card-rating__bottom-statistics">
+              {{ lecture.ratingCount }}
+            </span>
           </span>
-        </span>
-          </div>
+          <span class="card-rating__bottom-icon">
+            <f-icon
+              name='heart'
+              size='16'
+            />
+            <span class="card-rating__bottom-statistics">
+              {{ lecture.likeCount }}
+            </span>
+          </span>
         </div>
       </div>
     </div>
@@ -62,17 +69,18 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
-.list-card__content-field {
-  padding-top: 10px;
-  padding-bottom: 6px;
-}
 .card-lecture {
+  .card-lecture__top-lecture-name {
+    color: #4F4F4F;
+    font-size: 18px;
+  }
   .card-lecture__top-rating-number {
     margin-left: 6px;
     color: #828282;
   }
   .card-lecture__teacher-name {
-    color: #979797;
+    color: #828282;
+    font-size: 14px;
   }
   .card-lecture__bottom-icons {
 

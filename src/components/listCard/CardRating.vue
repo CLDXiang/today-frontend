@@ -30,31 +30,31 @@
       <span class="card-rating__bottom-class-info float-left">
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
-      <div class="card-rating__bottom-icons float-right">
-        <span>
+      <div class="card-rating__bottom-icon-field float-right">
+        <span class="card-rating__bottom-icon">
           <f-icon
             name='reaction'
             size='16'
           />
-          <span>
+          <span class="card-rating__bottom-statistics">
             {{ rating.reactionCount }}
           </span>
         </span>
-        <span>
+        <span class="card-rating__bottom-icon">
           <f-icon
             name='chat'
             size='16'
           />
-          <span>
+          <span class="card-rating__bottom-statistics">
             {{ rating.replyCount }}
           </span>
         </span>
-        <span>
+        <span class="card-rating__bottom-icon">
           <f-icon
             name='heart'
             size='16'
           />
-          <span>
+          <span class="card-rating__bottom-statistics">
             {{ rating.likeCount }}
           </span>
         </span>
@@ -88,7 +88,7 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
-.list-card {
+.card-rating {
   padding: 16px 16px 10px 16px;
 }
 
@@ -105,8 +105,16 @@ export default defineComponent({
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
     margin-bottom: 30px;
   }
-  .card-rating__bottom-icons {
+  .card-rating__bottom-icon-field {
     display: inline;
+    color: #828282;
+    .card-rating__bottom-icon {
+      margin-right: 10px;
+      .card-rating__bottom-statistics {
+        margin-left: 4px;
+        font-size: 12px;
+      }
+    }
   }
 }
 </style>

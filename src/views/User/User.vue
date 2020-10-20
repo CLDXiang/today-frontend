@@ -31,13 +31,13 @@
       <div class="info-box">
         <img
           class="avatar"
-          :src="processAvatar(user.avatar)"
+          :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
         <div class="info-section">
           <div>
             <span class="user-name text-dark">
-              {{ user.name }}
+              {{ userProfile.nickName }}
             </span>
             <span
               v-if="!isCurrentUser()"
@@ -49,14 +49,14 @@
             </span>
           </div>
           <span class="bio text-light">
-            {{ user.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
+            {{ userProfile.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
           </span>
         </div>
       </div>
       <div class="follow-box">
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ following }}
+            {{ userProfile.following }}
           </span>
           <span class="follow-text text-light">
             关注
@@ -64,7 +64,7 @@
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ follower }}
+            {{ userProfile.follower }}
           </span>
           <span class="follow-text text-light">
             粉丝
@@ -72,7 +72,7 @@
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ star }}
+            {{ userProfile.star }}
           </span>
           <span class="follow-text text-light">
             被收藏数
@@ -100,6 +100,7 @@ import { defineComponent, markRaw } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 
 import {
+  profileClient,
   ratingClient,
   commentClient,
   lectureClient,
@@ -119,16 +120,23 @@ import defaultAvatar from '../../assets/default_avatar.jpg';
 
 export default defineComponent({
   props: {
+    // 访问的用户 ID
     userId: {
       type: String,
       default: '',
     },
   },
   data: () => ({
-    // TODO: obtain following data from backend
-    following: 90,
-    follower: 80,
-    star: 70,
+    // 访问的用户数据
+    userProfile: {
+      avatar: '',
+      bio: '',
+      name: '',
+      nickName: '',
+      following: 0,
+      follower: 0,
+      star: 0,
+    },
     pages: {
       点评: { component: markRaw(RatingList), props: { ratings: [] } },
       回复: { component: markRaw(CommentList), props: { comments: [] } },
@@ -138,10 +146,14 @@ export default defineComponent({
     activeTab: '点评',
   }),
   computed: {
-    ...mapState(['user', 'profile']),
+    // 自己的用户数据
+    ...mapState(['user']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
   },
   created() {
+    profileClient.getUserProfile({ userId: this.userId }).then((resp) => {
+      this.userProfile = resp;
+    });
     ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
       this.pages.点评.props.ratings = resp.data;
     });
@@ -187,7 +199,8 @@ export default defineComponent({
       }
     },
     isCurrentUser(): boolean {
-      return this.userLoggedIn && (this.userId === '' || this.userId === this.user.id);
+      // 访问的用户 ID == 自己的用户 ID
+      return this.userLoggedIn && (this.userId === (this.user.id || ''));
     },
   },
 });

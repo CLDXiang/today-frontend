@@ -19,11 +19,11 @@ const store = createStore({
       // eslint-disable-next-line @typescript-eslint/camelcase
       jwt_token: '',
       id: '',
-      name: '',
-      bio: '',
-      avatar: '',
-      nickName: '',
       email: '',
+      name: '',
+      nickName: '',
+      avatar: '',
+      bio: '',
     },
     profile: {
       notifications: [],

@@ -1,17 +1,23 @@
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import store from '../store';
+import { mockProfiles } from './mocks/profile';
 
 const getUserProfile: (req: {
   userId?: string;
 }) => Promise<{
   avatar: string;
   bio: string;
+  name: string;
   nickName: string;
-}> = ({
-  userId = store.state.user.id as string,
-}) =>
-  new Promise((resolve, reject) => {
+  // FIXME: match names according to backend API
+  following: number;
+  follower: number;
+  star: number;
+}> = ({ userId = store.state.user.id as string }) =>
+  // FIXME: fix reject and catch
+  // new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -21,9 +27,26 @@ const getUserProfile: (req: {
         headers: authHeader,
       })
       .then((resp) => {
-        resolve(resp.data);
+        const profile = resp.data;
+        if (!profile.nickName) {
+          profile.nickName = profile.name;
+        }
+        resolve(profile);
       })
-      .catch((err) => reject(err));
+      // FIXME: mock
+      // .catch((err) => reject(err));
+      .catch(() => {
+        const mockProfile = mockProfiles[0];
+        resolve(mockProfile as {
+          avatar: string;
+          bio: string;
+          name: string;
+          nickName: string;
+          following: number;
+          follower: number;
+          star: number;
+        });
+      });
   });
 
 const editProfile: (req: {

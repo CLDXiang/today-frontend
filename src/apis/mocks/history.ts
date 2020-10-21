@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 export const mockHistories: CardCommonItem[] = [
   {
+    id: 333,
     type: 'user',
     email: 'abc@def.xyz',
     name: 'xiao_ming',

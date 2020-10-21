@@ -1,5 +1,8 @@
 <template>
-  <div class="list-card card-lecture">
+  <div 
+    class="list-card card-lecture"
+    @click='handleClickCardLecture'
+  >
     <div class="list-card__main-field">
       <div class="list-card__content-field">
         <div class="list-card__top-field">
@@ -18,37 +21,40 @@
         </div>
       </div>
     </div>
-      <div class="list-card__bottom-field">
-        <span class="card-lecture__teacher-name float-left">
-          {{ lecture.teachers.join(' ') }}
+    <div class="list-card__bottom-field">
+      <span class="card-lecture__teacher-name float-left">
+        {{ lecture.teachers.join(' ') }}
+      </span>
+      <div class="card-lecture__bottom-icon-field float-right">
+        <span class="card-lecture__bottom-icon">
+          <f-icon
+            name="reaction"
+            size="16"
+          />
+          <span class="card-lecture__bottom-statistics">
+            {{ lecture.reactionCount }}
+          </span>
         </span>
-        <div class="card-rating__bottom-icon-field float-right">
-          <span class="card-rating__bottom-icon">
-            <f-icon
-              name="reaction"
-              size="16"
-            />
+        <span class="card-lecture__bottom-icon">
+          <f-icon
+            name="chat"
+            size="16"
+          />
+          <span class="card-lecture__bottom-statistics">
+            {{ lecture.ratingCount }}
           </span>
-          <span class="card-rating__bottom-icon">
-            <f-icon
-              name="chat"
-              size="16"
-            />
-            <span class="card-rating__bottom-statistics">
-              {{ lecture.ratingCount }}
-            </span>
+        </span>
+        <span class="card-lecture__bottom-icon">
+          <f-icon
+            name="heart"
+            size="16"
+          />
+          <span class="card-lecture__bottom-statistics">
+            {{ lecture.likeCount }}
           </span>
-          <span class="card-rating__bottom-icon">
-            <f-icon
-              name="heart"
-              size="16"
-            />
-            <span class="card-rating__bottom-statistics">
-              {{ lecture.likeCount }}
-            </span>
-          </span>
-        </div>
+        </span>
       </div>
+    </div>
     </div>
 </template>
 
@@ -65,25 +71,40 @@ export default defineComponent({
     /** 课程数据项 */
     lecture: { type: Object as PropType<CardLectureItem>, required: true },
   },
+  emits: ['card-lecture-clicked'],
+  methods: {
+    handleClickCardLecture() {
+      this.$emit('card-lecture-clicked', this.lecture.id);
+    },
+  },
 });
 </script>
 
 <style lang='scss' scoped>
 .card-lecture {
+  .list-card__bottom-field {
+    margin-top: 10px;
+  }
   .card-lecture__top-lecture-name {
-    color: #4F4F4F;
+    color: $gray2;
     font-size: 18px;
   }
   .card-lecture__top-rating-number {
     margin-left: 6px;
-    color: #828282;
+    color: $gray3;
   }
   .card-lecture__teacher-name {
-    color: #828282;
+    color: $gray3;
     font-size: 14px;
   }
-  .card-lecture__bottom-icons {
-
+  .card-lecture__bottom-icon-field {
+    color: $gray3;
+    .card-lecture__bottom-icon {
+      margin-right: 10px;
+      .card-lecture__bottom-statistics {
+        margin-left: 4px;
+      }
+    }
   }
 }
 five-stars {

@@ -1,25 +1,42 @@
 <template>
-  <div class="list-card card-reply">
+  <div class="list-card card-comment">
     <div class="list-card__main-field">
-      <div class="list-card__avatar-field">
-        <img src="default_avatar.png">
+      <div 
+        class="list-card__avatar-field"
+        @click="handleClickAvatar"
+      >
+        <img :src="comment.creator.avatar">
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-user__user-name float-left">
-            User1
+          <span 
+            class="card-comment__user-name float-left"
+            @click="handleClickAvatar"
+          >
+            {{ comment.creator.nickname }}
+          </span>
+          <span class="card-comment__time-diff float-right">
+            {{ timeDiff }}
           </span>
         </div>
         <div class="list-card__middle-field float-left">
-          <span class="card-user__user-signature">
-            To thyself be true.
+          <span class="card-comment__comment-content">
+            {{ comment.content }}
           </span>
         </div>
       </div>
     </div>
     <div class="list-card__bottom-field">
-      <span class="card-reply__icon float-right">
-        ICON
+      <span class="card-comment__icon-field float-right">
+        <f-icon
+          :style="{color: starColor}"
+          :name="comment.starred ? 'heart-fill' : 'heart'"
+          @click="handleClickStar"
+          size="16"
+        />
+        <span class="card-comment__statistics">
+          {{ comment.starCount }}
+        </span>
       </span>
     </div>
   </div>
@@ -33,8 +50,45 @@ export default defineComponent({
   props: {
     comment: { type: Object as PropType<CardCommentItem>, required: true },
   },
+  emits: ['avatar-clicked', 'card-comment-star-clicked'],
+  computed: {
+    starColor(): string {
+      return this.comment.starred ? '#EF755A' : '';
+    },
+    timeDiff() {
+      const res: string = this.comment.createdAt.fromNow();
+      return res;
+    }
+  },
+  methods: {
+    handleClickAvatar() {
+      this.$emit('avatar-clicked', this.comment.creator.id);
+    },
+    handleClickStar() {
+      this.$emit('card-comment-star-clicked', this.comment.id);
+    }
+  }
 });
 </script>
 
 <style lang='scss' scoped>
+.card-comment {
+  .card-comment__user-name {
+    color: $gray2;
+  }
+  .card-comment__time-diff {
+    color: $gray3;
+  }
+  .card-comment__comment-content { 
+    color: $gray2;
+  }
+  .card-comment__icon-field {
+    .card-comment__statistics {
+      margin-left: 4px;
+    }
+  }
+  .card-comment__statistics {
+    color: $gray3;
+  }
+}
 </style>

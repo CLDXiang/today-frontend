@@ -12,7 +12,7 @@
         </div>
         <div class="list-card__middle-field float-left">
           <span class="card-user__user-signature">
-            {{ user.bio }}
+             {{ user.bio }}
           </span>
         </div>
       </div>
@@ -33,4 +33,10 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
+.card-user__user-name {
+  color: $primary-color;
+}
+.card-user__user-signature {
+  color: #979797;
+}
 </style>

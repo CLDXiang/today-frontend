@@ -104,6 +104,8 @@ export interface CardLectureItem {
 
 /** 用户类列表项 */
 export interface CardUserItem {
+  /** 用户 id */
+  id: number;
   /** 类型 */
   type?: string;
   /** 用户邮箱 */

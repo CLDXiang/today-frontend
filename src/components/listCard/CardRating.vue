@@ -5,7 +5,7 @@
         class="list-card__avatar-field"
         @click="handleClickAvatar"
       >
-        <img src="/assets/default_avatar.png">
+        <img src="rating.creator.avatar">
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
@@ -19,14 +19,20 @@
             {{ timeDiff }}
           </span>
         </div>
-        <div class="list-card__middle-field">
+        <div 
+          class="list-card__middle-field"
+          @click="handleClickRatingCard"
+        >
           <span class="card-rating__content float-left">
             {{ rating.content }}
           </span>
         </div>
       </div>
     </div>
-    <div class="list-card__bottom-field">
+    <div 
+      class="list-card__bottom-field"
+      @click="handleClickRatingCard"
+    >
       <span class="card-rating__bottom-class-info float-left">
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
@@ -57,9 +63,7 @@
             :name="rating.starred ? 'heart-fill' : 'heart'"
             size="16"
           />
-          <span
-            class="card-rating__bottom-statistics"
-          >
+          <span class="card-rating__bottom-statistics">
             {{ rating.starCount }}
           </span>
         </span>
@@ -77,7 +81,7 @@ export default defineComponent({
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, required: true },
   },
-  emits: ['avatar-clicked'],
+  emits: ['avatar-clicked', 'rating-card-clicked'],
   computed: {
     timeDiff() {
       const res: string = this.rating.createdAt.fromNow();
@@ -89,8 +93,11 @@ export default defineComponent({
   },
   methods: {
     handleClickAvatar() {
-      this.$emit('avatar-clicked', this.rating.id);
+      this.$emit('avatar-clicked', this.rating.creator.id);
     },
+    handleClickRatingCard() {
+      this.$emit('rating-card-clicked', this.rating.id);
+    }
   },
 });
 </script>
@@ -104,18 +111,25 @@ export default defineComponent({
   .card-rating__content {
     color: #979797;
   }
+  .card-rating__top-nickname {
+    color: $primary-color;
+  }
   .card-rating__top-datetime {
     color: #c4c4c4;
   }
   .card-rating__content {
     text-align: left;
+    color: $gray2;
   }
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
     margin-bottom: 30px;
   }
+  .card-rating__bottom-class-info {
+    color: $gray2;
+  }
   .card-rating__bottom-icon-field {
     display: inline;
-    color: #828282;
+    color: $gray3;
     .card-rating__bottom-icon {
       margin-right: 10px;
       .card-rating__bottom-statistics {

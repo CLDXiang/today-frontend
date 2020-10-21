@@ -37,7 +37,7 @@
             size="16"
           />
           <span class="card-rating__bottom-statistics">
-            {{ rating.reactionCount }}
+            {{ rating.reaction.count }}
           </span>
         </span>
         <span class="card-rating__bottom-icon">
@@ -46,16 +46,19 @@
             size="16"
           />
           <span class="card-rating__bottom-statistics">
-            {{ rating.replyCount }}
+            {{ rating.commentCount }}
           </span>
         </span>
         <span class="card-rating__bottom-icon">
           <f-icon
-            name="heart"
+            :style="{color: starColor}"
+            :name="rating.starred ? 'heart-fill' : 'heart'"
             size="16"
           />
-          <span class="card-rating__bottom-statistics">
-            {{ rating.likeCount }}
+          <span
+            class="card-rating__bottom-statistics"
+          >
+            {{ rating.starCount }}
           </span>
         </span>
       </div>
@@ -77,6 +80,9 @@ export default defineComponent({
     timeDiff() {
       const res: string = this.rating.createdAt.fromNow();
       return res;
+    },
+    starColor(): string {
+      return this.rating.starred ? '#EF755A' : '';
     },
   },
   methods: {

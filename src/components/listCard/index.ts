@@ -12,6 +12,6 @@ export { default as CardReactiveRating } from './CardReactiveRating.vue';
 
 export * from './types';
 
-dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
+dayjs.locale('zh-cn');

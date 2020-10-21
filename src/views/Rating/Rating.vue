@@ -12,6 +12,7 @@
 <script lang="ts">
 import { defineComponent, markRaw, DefineComponent } from 'vue';
 import { mockSelects } from '@/apis/mocks/lecture';
+import { mockRatings } from '@/apis/mocks/rating';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
 export default defineComponent({
@@ -26,7 +27,7 @@ export default defineComponent({
        * 但是我暂时没有找到优雅的方式将每一个传入的项分别解析到 header 和 body 中。
        * P.S. 这做法有点 React 内味儿了（逃 */
       pages: {
-        最新: { component: markRaw(RatingList), props: { ratings: [] } },
+        最新: { component: markRaw(RatingList), props: { ratings: [...mockRatings] } },
         通识: { component: markRaw(LectureList), props: { lectures: [...mockSelects] } },
         思政: { component: markRaw(LectureList), props: { lectures: [] } },
         外语: { component: markRaw(LectureList), props: { lectures: [] } },

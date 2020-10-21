@@ -1,7 +1,7 @@
 <template>
-  <div 
+  <div
     class="list-card card-lecture"
-    @click='handleClickCardLecture'
+    @click="handleClickCardLecture"
   >
     <div class="list-card__main-field">
       <div class="list-card__content-field">
@@ -55,7 +55,7 @@
         </span>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script lang="ts">

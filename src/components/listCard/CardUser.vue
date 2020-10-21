@@ -12,7 +12,7 @@
         </div>
         <div class="list-card__middle-field float-left">
           <span class="card-user__user-signature">
-             {{ user.bio }}
+            {{ user.bio }}
           </span>
         </div>
       </div>

@@ -19,7 +19,7 @@
             {{ timeDiff }}
           </span>
         </div>
-        <div 
+        <div
           class="list-card__middle-field"
           @click="handleClickRatingCard"
         >
@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div 
+    <div
       class="list-card__bottom-field"
       @click="handleClickRatingCard"
     >
@@ -42,7 +42,7 @@
             name="reaction"
             size="16"
           />
-          <span 
+          <span
             class="card-rating__bottom-statistics"
           >
             {{ rating.reaction.count }}
@@ -97,7 +97,7 @@ export default defineComponent({
     },
     handleClickRatingCard() {
       this.$emit('rating-card-clicked', this.rating.id);
-    }
+    },
   },
 });
 </script>

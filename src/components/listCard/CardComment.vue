@@ -1,7 +1,7 @@
 <template>
   <div class="list-card card-comment">
     <div class="list-card__main-field">
-      <div 
+      <div
         class="list-card__avatar-field"
         @click="handleClickAvatar"
       >
@@ -9,7 +9,7 @@
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span 
+          <span
             class="card-comment__user-name float-left"
             @click="handleClickAvatar"
           >
@@ -31,8 +31,8 @@
         <f-icon
           :style="{color: starColor}"
           :name="comment.starred ? 'heart-fill' : 'heart'"
-          @click="handleClickStar"
           size="16"
+          @click="handleClickStar"
         />
         <span class="card-comment__statistics">
           {{ comment.starCount }}
@@ -58,7 +58,7 @@ export default defineComponent({
     timeDiff() {
       const res: string = this.comment.createdAt.fromNow();
       return res;
-    }
+    },
   },
   methods: {
     handleClickAvatar() {
@@ -66,8 +66,8 @@ export default defineComponent({
     },
     handleClickStar() {
       this.$emit('card-comment-star-clicked', this.comment.id);
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -79,7 +79,7 @@ export default defineComponent({
   .card-comment__time-diff {
     color: $gray3;
   }
-  .card-comment__comment-content { 
+  .card-comment__comment-content {
     color: $gray2;
   }
   .card-comment__icon-field {

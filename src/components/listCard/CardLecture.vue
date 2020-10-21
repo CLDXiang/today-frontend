@@ -20,32 +20,32 @@
           <span class="card-lecture__teacher-name float-left">
             {{ lecture.teachers.join(' ') }}
           </span>
-        <div class="card-rating__bottom-icon-field float-right">
-          <span class="card-rating__bottom-icon">
-            <f-icon
-              name="reaction"
-              size="16"
-            />
-          </span>
-          <span class="card-rating__bottom-icon">
-            <f-icon
-              name="chat"
-              size="16"
-            />
-            <span class="card-rating__bottom-statistics">
-              {{ lecture.ratingCount }}
+          <div class="card-rating__bottom-icon-field float-right">
+            <span class="card-rating__bottom-icon">
+              <f-icon
+                name="reaction"
+                size="16"
+              />
             </span>
-          </span>
-          <span class="card-rating__bottom-icon">
-            <f-icon
-              name="heart"
-              size="16"
-            />
-            <span class="card-rating__bottom-statistics">
-              {{ lecture.likeCount }}
+            <span class="card-rating__bottom-icon">
+              <f-icon
+                name="chat"
+                size="16"
+              />
+              <span class="card-rating__bottom-statistics">
+                {{ lecture.ratingCount }}
+              </span>
             </span>
-          </span>
-        </div>
+            <span class="card-rating__bottom-icon">
+              <f-icon
+                name="heart"
+                size="16"
+              />
+              <span class="card-rating__bottom-statistics">
+                {{ lecture.likeCount }}
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     </div>

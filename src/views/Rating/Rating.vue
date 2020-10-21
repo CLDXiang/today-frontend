@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, markRaw, DefineComponent } from 'vue';
+import { mockSelects } from '@/apis/mocks/lecture';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
 export default defineComponent({
@@ -26,7 +27,7 @@ export default defineComponent({
        * P.S. 这做法有点 React 内味儿了（逃 */
       pages: {
         最新: { component: markRaw(RatingList), props: { ratings: [] } },
-        通识: { component: markRaw(LectureList), props: { lectures: [] } },
+        通识: { component: markRaw(LectureList), props: { lectures: [...mockSelects] } },
         思政: { component: markRaw(LectureList), props: { lectures: [] } },
         外语: { component: markRaw(LectureList), props: { lectures: [] } },
         体育: { component: markRaw(LectureList), props: { lectures: [] } },

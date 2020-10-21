@@ -36,7 +36,9 @@
             name="reaction"
             size="16"
           />
-          <span class="card-rating__bottom-statistics">
+          <span 
+            class="card-rating__bottom-statistics"
+          >
             {{ rating.reaction.count }}
           </span>
         </span>

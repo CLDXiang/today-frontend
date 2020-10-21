@@ -16,40 +16,40 @@
             />
           </span>
         </div>
-        <div class="list-card__bottom-field">
-          <span class="card-lecture__teacher-name float-left">
-            {{ lecture.teachers.join(' ') }}
+      </div>
+    </div>
+      <div class="list-card__bottom-field">
+        <span class="card-lecture__teacher-name float-left">
+          {{ lecture.teachers.join(' ') }}
+        </span>
+        <div class="card-rating__bottom-icon-field float-right">
+          <span class="card-rating__bottom-icon">
+            <f-icon
+              name="reaction"
+              size="16"
+            />
           </span>
-          <div class="card-rating__bottom-icon-field float-right">
-            <span class="card-rating__bottom-icon">
-              <f-icon
-                name="reaction"
-                size="16"
-              />
+          <span class="card-rating__bottom-icon">
+            <f-icon
+              name="chat"
+              size="16"
+            />
+            <span class="card-rating__bottom-statistics">
+              {{ lecture.ratingCount }}
             </span>
-            <span class="card-rating__bottom-icon">
-              <f-icon
-                name="chat"
-                size="16"
-              />
-              <span class="card-rating__bottom-statistics">
-                {{ lecture.ratingCount }}
-              </span>
+          </span>
+          <span class="card-rating__bottom-icon">
+            <f-icon
+              name="heart"
+              size="16"
+            />
+            <span class="card-rating__bottom-statistics">
+              {{ lecture.likeCount }}
             </span>
-            <span class="card-rating__bottom-icon">
-              <f-icon
-                name="heart"
-                size="16"
-              />
-              <span class="card-rating__bottom-statistics">
-                {{ lecture.likeCount }}
-              </span>
-            </span>
-          </div>
+          </span>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">

@@ -26,10 +26,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { CardCommentItem } from './types';
 
 export default defineComponent({
-
+  props: {
+    comment: { type: Object as PropType<CardCommentItem>, required: true },
+  },
 });
 </script>
 

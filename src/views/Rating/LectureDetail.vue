@@ -11,14 +11,14 @@
           <div class="lecture-title">
             <span>{{ lectureInfo.name }}</span><span>{{ lectureInfo.taughtBy.join(' ') }}</span>
           </div>
-          <div class="lecture-overall-score">
+          <div class="lecture-recommended-score">
             <five-stars
-              :score="lectureInfo.overall"
+              :score="lectureInfo.recommended"
               :size="18"
               :spacing="3"
             />
             <span>
-              {{ lectureInfo.overall.toFixed(1) }}
+              {{ lectureInfo.recommended.toFixed(1) }}
             </span>
           </div>
         </div>
@@ -47,13 +47,16 @@
                 padding: '0 8px',
               }"
             >
-              <template #icon>
+              <template
+                v-if="!lectureInfo.watched"
+                #icon
+              >
                 <f-icon
                   name="plus"
                   :size="10"
                 />
               </template>
-              关注
+              {{ lectureInfo.watched ? '已关注' : '关注' }}
             </a-button>
           </div>
         </div>
@@ -65,7 +68,7 @@
         </div>
         <div>
           <div>给分好坏</div>
-          <div>{{ mapScoreToText('grade', lectureInfo.grade) }}</div>
+          <div>{{ mapScoreToText('nice', lectureInfo.nice) }}</div>
         </div>
         <div>
           <div>工作量</div>
@@ -94,7 +97,7 @@
               :size="14"
             />
           </template>
-          我要点评
+          {{ lectureInfo.rated ? '编辑点评' : '我要点评' }}
         </a-button>
       </div>
       <div class="rating-bar__list" />
@@ -110,7 +113,7 @@ import {
   watch,
 } from 'vue';
 import { lectureClient } from '@/apis';
-import { LectureDetail } from '@/apis/types';
+import { LectureItem } from '@/apis/types';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
 import { RatingHeadBar, LectureDetailInfo } from './components';
@@ -129,7 +132,7 @@ export default defineComponent({
     const { lectureId } = toRefs(props);
 
     /** 课程基本信息 */
-    const lectureInfo = ref<LectureDetail>({
+    const lectureInfo = ref<LectureItem>({
       id: lectureId.value,
       code: '',
       taughtBy: [],
@@ -143,17 +146,15 @@ export default defineComponent({
       examTime: '',
       withdrawable: '',
       r3limit: '',
-      reaction: {
-        count: 0,
-        emoji: {},
-      },
       rateCount: 0,
       starCount: 0,
       starred: false,
+      watched: false,
+      rated: false,
       difficulty: 0,
-      grade: 0,
+      nice: 0,
       workload: 0,
-      overall: 0,
+      recommended: 0,
     });
 
     /** 拉取课程信息 */
@@ -240,7 +241,7 @@ export default defineComponent({
           }
         }
 
-        > .lecture-overall-score {
+        > .lecture-recommended-score {
           margin-top: 16px;
           display: flex;
 
@@ -317,8 +318,7 @@ export default defineComponent({
       justify-content: space-between;
     }
 
-    > .rating-bar__list {
-    }
+    > .rating-bar__list {}
   }
 }
 </style>

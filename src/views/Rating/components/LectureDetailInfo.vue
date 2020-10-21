@@ -27,12 +27,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { LectureDetail } from '@/apis/types';
+import { LectureItem } from '@/apis/types';
 
 export default defineComponent({
   props: {
     lectureInfo: {
-      type: Object as PropType<LectureDetail>,
+      type: Object as PropType<LectureItem>,
       required: true,
     },
   },

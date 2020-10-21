@@ -1,5 +1,5 @@
 import { CardLectureItem } from '@/components/listCard';
-import { LectureDetail } from '../types';
+import { LectureItem } from '../types';
 
 export const mockSelects: CardLectureItem[] = [
   {
@@ -24,7 +24,7 @@ export const mockSelects: CardLectureItem[] = [
   },
 ];
 
-export const mockLectureDetail: LectureDetail = {
+export const mockLectureDetail: LectureItem = {
   id: 'ididid',
   code: 'COMP111232.23',
   taughtBy: ['老王', '老李'],
@@ -38,27 +38,13 @@ export const mockLectureDetail: LectureDetail = {
   examTime: 'XXXXXX',
   withdrawable: '是',
   r3limit: '无',
-  reaction: {
-    count: 15,
-    emoji: {
-      emoji1: [{
-        id: '1',
-        nickname: 'haha',
-      }, {
-        id: '2',
-        nickname: 'biubiu',
-      }],
-      emoji2: [{
-        id: '1',
-        nickname: 'haha',
-      }],
-    },
-  },
   rateCount: 123,
   starCount: 321,
   starred: true,
+  rated: false,
+  watched: true,
   difficulty: 3.2,
-  grade: 4.5,
+  nice: 4.5,
   workload: 2.3,
-  overall: 4,
+  recommended: 4,
 };

@@ -1,5 +1,3 @@
-import { ReactionFieldValue } from './reaction';
-
 export interface LectureType {
   /** Lecture ID */
   id: string;
@@ -30,23 +28,22 @@ export interface LectureType {
 }
 
 export interface LectureItem extends LectureType {
-  /** Reaction 概要（此页面是否展示 Reaction 看 UI 反馈，若不展示去掉此字段） */
-  reaction: ReactionFieldValue;
   /** 评课数 */
   rateCount: number;
   /** 收藏数 */
   starCount: number;
-  /** 当前用户是否收藏 */
-  starred: boolean;
-}
-
-export interface LectureDetail extends LectureItem {
   /** 难易程度 */
   difficulty: number;
   /** 给分好坏 */
-  grade: number;
+  nice: number;
   /** 工作量 */
   workload: number;
-  /** 综合推荐指数 */
-  overall: number;
+  /** 推荐指数 */
+  recommended: number;
+  /** 当前用户是否收藏 */
+  starred: boolean;
+  /** 当前用户是否点评 */
+  rated: boolean;
+  /** 当前用户是否关注 */
+  watched: boolean;
 }

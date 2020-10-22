@@ -90,6 +90,7 @@
             padding: '0 8px',
             borderRadius: '6px',
           }"
+          @click="$router.push(`/rating/lecture/${lectureId}/form`)"
         >
           <template #icon>
             <f-icon

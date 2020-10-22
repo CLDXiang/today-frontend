@@ -138,7 +138,7 @@ export default defineComponent({
     }
   },
   created() {
-    ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
+    ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {
       this.pages.点评.props.ratings = resp.data;
     });
     commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {

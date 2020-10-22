@@ -54,7 +54,7 @@ export default defineComponent({
     };
     /** 搜索并将结果附加在当前列表后 */
     const searchMore = () => {
-      // TODO: 传入 last_id
+      // TODO: 传入 lastId
       if (q.value) {
         rpcClient.search({ q: q.value, limit: 20 }).then((resp) => {
           searchResults.value = [...searchResults.value, ...resp.data];

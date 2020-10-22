@@ -10,7 +10,7 @@ const getSelectList: (req: {
   /** 当前学期，没有时返回所有学期 */
   semester?: string;
   /** 分页 - 最后一个 lecture 的 id */
-  last_id?: string;
+  lastId?: string;
   /** 拉取条数 */
   limit: number;
 }) => Promise<{

@@ -100,7 +100,12 @@
           {{ lectureInfo.rated ? '编辑点评' : '我要点评' }}
         </a-button>
       </div>
-      <div class="rating-bar__list" />
+      <div class="rating-bar__list">
+        <card-reactive-rating
+          v-for="rating in ratingList"
+          :key="rating.id"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -108,21 +113,20 @@
 <script lang="ts">
 import {
   defineComponent,
-  ref,
   toRefs,
-  watch,
 } from 'vue';
-import { lectureClient } from '@/apis';
-import { LectureItem } from '@/apis/types';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
+import { CardReactiveRating } from '@/components/listCard';
 import { RatingHeadBar, LectureDetailInfo } from './components';
+import { useLectureInfo, useLectureRatings } from './composables';
 
 export default defineComponent({
   components: {
     RatingHeadBar,
     FiveStars,
     LectureDetailInfo,
+    CardReactiveRating,
   },
   props: {
     /** 传入的搜索字串 */
@@ -131,52 +135,17 @@ export default defineComponent({
   setup(props) {
     const { lectureId } = toRefs(props);
 
-    /** 课程基本信息 */
-    const lectureInfo = ref<LectureItem>({
-      id: lectureId.value,
-      code: '',
-      taughtBy: [],
-      name: '',
-      credit: 0,
-      department: '',
-      campus: '',
-      language: '',
-      remark: '',
-      examType: '',
-      examTime: '',
-      withdrawable: '',
-      r3limit: '',
-      rateCount: 0,
-      starCount: 0,
-      starred: false,
-      watched: false,
-      rated: false,
-      difficulty: 0,
-      nice: 0,
-      workload: 0,
-      recommended: 0,
-    });
+    // 获取课程信息
+    const { lectureInfo } = useLectureInfo(lectureId);
 
-    /** 拉取课程信息 */
-    const fetchLectureInfo = () => {
-      if (lectureId.value) {
-        lectureClient.getLectureDetail({ lectureId: lectureId.value }).then((resp) => {
-          lectureInfo.value = resp.data;
-        });
-      }
-    };
-
-    watch(lectureId, () => {
-      // lectureId 改变时重新拉数据
-      fetchLectureInfo();
-    });
-
-    // 首次进入该页面拉数据
-    fetchLectureInfo();
+    // 获取点评列表
+    const { ratingList } = useLectureRatings(lectureId);
 
     return {
       /** 课程基本信息 */
       lectureInfo,
+      /** 点评列表 */
+      ratingList,
     };
   },
 
@@ -308,17 +277,22 @@ export default defineComponent({
     width: 100%;
 
     > .rating-bar__header {
+      background-color: #fff;
       padding: 8px 14px 4px 22px;
       border-radius: 4px;
-      background: #fff;
       position: sticky;
       top: 0;
+      z-index: 1;
 
       display: flex;
       justify-content: space-between;
     }
 
-    > .rating-bar__list {}
+    > .rating-bar__list {
+      > .list-card {
+        margin-bottom: 12px;
+      }
+    }
   }
 }
 </style>

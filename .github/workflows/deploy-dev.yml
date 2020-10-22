@@ -1,0 +1,44 @@
+name: deploy-dev
+
+on:
+  push:
+    branches: 
+      - dev
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        persist-credentials: false
+    - run: yarn install
+    - run: |
+        echo 'VUE_APP_API_URL=https://fducslg.zfhu.ac.cn' > .env.production
+        echo 'BASE_URL=https://dev.fdxk.info' >> .env.production
+    - run: yarn run update-public-data
+    - run: yarn run build --if-present
+    - run: |
+        mkdir ~/.ssh
+        chmod 700 ~/.ssh
+        echo '${{ secrets.DEV_FDXK_SSH_PRIVATE_KEY }}' > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+    - run: |
+        cd dist
+        echo 'dev.fdxk.info' > CNAME
+        git init . 
+        git add . 
+        git config --global user.email "fducslg@protonmail.com"
+        git config --global user.name "fducslg-bot"
+        git commit -m "dev CD update"
+        git remote add fdxk git@github.com:ichn-hu/dev.fdxk.info.git
+        git push --set-upstream fdxk master --force

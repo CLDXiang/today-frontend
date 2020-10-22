@@ -57,6 +57,7 @@ export default defineComponent({
   color: #333;
 
   > .back-btn {
+    cursor: pointer;
     height: 24px;
 
     &:hover {

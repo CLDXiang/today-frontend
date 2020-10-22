@@ -30,8 +30,10 @@
             }"
           >
             <f-icon
+              class="icon-star"
               :name="lectureInfo.starred ? 'heart-fill': 'heart'"
               :size="24"
+              @click="handleClickStar"
             />
             <span>{{ lectureInfo.starCount }}</span>
           </div>
@@ -46,6 +48,7 @@
                 borderColor: '#e3f1f3',
                 padding: '0 8px',
               }"
+              @click="handleClickWatch"
             >
               <template
                 v-if="!lectureInfo.watched"
@@ -152,6 +155,22 @@ export default defineComponent({
 
   methods: {
     mapScoreToText,
+    /** 处理点击关注按钮 */
+    handleClickWatch() {
+      // TODO: 接入 API
+      this.lectureInfo.watched = !this.lectureInfo.watched;
+    },
+    /** 处理点击收藏按钮 */
+    handleClickStar() {
+      // TODO: 接入 API
+      if (this.lectureInfo.starred) {
+        this.lectureInfo.starred = false;
+        this.lectureInfo.starCount -= 1;
+      } else {
+        this.lectureInfo.starred = true;
+        this.lectureInfo.starCount += 1;
+      }
+    },
   },
 });
 </script>
@@ -230,11 +249,16 @@ export default defineComponent({
         > .info-bar__star {
           display: flex;
           align-items: center;
+          user-select: none;
 
           > span {
             font-size: 16px;
             line-height: 22px;
             margin-left: 10px;
+          }
+
+          > .icon-star {
+            cursor: pointer
           }
         }
 

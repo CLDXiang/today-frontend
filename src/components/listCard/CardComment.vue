@@ -74,7 +74,7 @@ export default defineComponent({
 <style lang='scss' scoped>
 .card-comment {
   .card-comment__user-name {
-    color: $gray2;
+    color: $primary-color;
   }
   .card-comment__time-diff {
     color: $gray3;

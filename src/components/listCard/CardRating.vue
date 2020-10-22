@@ -33,7 +33,10 @@
       class="list-card__bottom-field"
       @click="handleClickRatingCard"
     >
-      <span class="card-rating__bottom-class-info float-left">
+      <span
+        class="card-rating__bottom-class-info float-left"
+        :class="courseCardColor"
+      >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
       <div class="card-rating__bottom-icon-field float-right">
@@ -90,6 +93,9 @@ export default defineComponent({
     starColor(): string {
       return this.rating.starred ? '#EF755A' : '';
     },
+    courseCardColor(): string {
+      return `color-${parseInt(this.rating.lecture.id.slice(4, 7), 10) % 96 || 0}`;
+    },
   },
   methods: {
     handleClickAvatar() {
@@ -103,6 +109,8 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
+@import '@/scss/_timetable';
+
 .card-rating {
   padding: 16px 16px 10px 16px;
 }
@@ -125,6 +133,8 @@ export default defineComponent({
     margin-bottom: 30px;
   }
   .card-rating__bottom-class-info {
+    border-radius: 20px;
+    padding: 2px 9px;
     color: $gray2;
   }
   .card-rating__bottom-icon-field {

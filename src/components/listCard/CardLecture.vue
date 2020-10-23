@@ -109,9 +109,13 @@ export default defineComponent({
     font-size: 14px;
   }
   .card-lecture__bottom-icon-field {
+    display: flex;
     color: $gray3;
     .card-lecture__bottom-icon {
       margin-right: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       .card-lecture__bottom-statistics {
         margin-left: 4px;
       }

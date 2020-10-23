@@ -84,6 +84,9 @@ export default defineComponent({
     color: $gray2;
   }
   .card-comment__icon-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     .card-comment__statistics {
       margin-left: 4px;
     }

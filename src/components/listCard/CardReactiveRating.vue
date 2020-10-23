@@ -192,19 +192,15 @@ export default defineComponent({
     color: $gray3;
     margin-left: 4px;
   }
-  > .list-card__main-field .list-card__content-field .list-card__middle-field {
-    margin-bottom: 30px;
-  }
-  .card-reactive-rating__bottom-class-info {
-    color: $gray2;
-  }
-  .card-reactive-rating__bottom-icon-field {
+  .card-reactive-rating__bottom-icons {
     display: inline;
     color: $gray3;
-    .card-reactive-rating__bottom-icon {
-      margin-right: 10px;
-      .card-reactive-rating__bottom-statistics {
-        margin-left: 4px;
+    .card-reactive-rating__icon {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      > .card-reactive-rating__statistics {
+        margin-left: 6px;
         font-size: 12px;
       }
     }
@@ -222,6 +218,7 @@ export default defineComponent({
     height: 15px;
   }
 }
+
 .five-stars {
   display: inline;
   margin-left: 5px;

@@ -34,17 +34,19 @@
       @click="handleClickRatingCard"
     >
       <span
-        class="card-rating__bottom-class-info"
         :class="courseCardColor"
+        class="card-rating__bottom-class-info"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
-      <div class="card-rating__bottom-icon-field">
+      <span class="card-rating__bottom-icon-field">
         <span class="card-rating__bottom-icon">
+          <span>
           <f-icon
             name="reaction"
             size="16"
           />
+          </span>
           <span
             class="card-rating__bottom-statistics"
           >
@@ -70,7 +72,7 @@
             {{ rating.starCount }}
           </span>
         </span>
-      </div>
+      </span>
     </div>
   </div>
 </template>
@@ -133,15 +135,19 @@ export default defineComponent({
     margin-bottom: 30px;
   }
   .card-rating__bottom-class-info {
+    font-size: 12px;
     border-radius: 20px;
     padding: 2px 9px;
     color: $gray2;
   }
   .card-rating__bottom-icon-field {
-    display: inline;
+    display: flex;
     color: $gray3;
     .card-rating__bottom-icon {
       margin-right: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
       .card-rating__bottom-statistics {
         margin-left: 4px;
         font-size: 12px;

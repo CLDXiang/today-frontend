@@ -49,6 +49,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   margin-top: 18px;
+  padding: 0 8px;
 
   > .lecture-info__title {
     color: #4f4f4f;

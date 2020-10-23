@@ -231,7 +231,7 @@ export default defineComponent({
         }
 
         > .lecture-recommended-score {
-          margin-top: 16px;
+          margin: 16px 0 0 2px;
           display: flex;
 
           > span {
@@ -271,7 +271,7 @@ export default defineComponent({
     > .info-bar__rating-outline {
       display: flex;
       justify-content: space-around;
-      margin-top: 16px;
+      margin: 16px 4px 0 4px;
       background-color: #9fd3da;
       border-radius: 8px;
       padding: 10px 0;

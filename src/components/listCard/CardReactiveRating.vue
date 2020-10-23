@@ -1,62 +1,62 @@
 <template>
-  <div class="list-card card-rating">
-    <div class="list-card__main-field">
+  <div class="list-card card-reactive-rating">
+    <div class="card-reactive-rating__top-field">
       <div
-        class="list-card__avatar-field"
+        class="card-reactive-rating__top-left"
         @click="handleClickAvatar"
       >
         <img src="rating.creator.avatar">
       </div>
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
-          <span
-            class="card-rating__top-nickname float-left"
-            @click="handleClickAvatar"
-          >
-            {{ rating.creator.nickname }}
-          </span>
-          <five-stars
-            class="float-left"
-            score="4.7"
-            size="12"
-          />
-          <span class="card-rating__five-stars-score float-left">
-            4.7
-          </span>
-          <span class="card-rating__top-datetime float-right">
-            {{ timeDiff }}
-          </span>
-          <div style="clear: both" />
-          <span class="card-rating__five-stars-hints float-left">
+      <div class="card-reactive-rating__top-right">
+        <div class="card-reactive-rating__top-right-first">
+          <div class="card-reactive-rating__top-right-first-up">
+            <span
+              class="card-reactive-rating__top-nickname"
+              @click="handleClickAvatar"
+            >
+              {{ rating.creator.nickname }}
+            </span>
+            <five-stars
+              score="4.7"
+              size="12"
+            />
+            <span class="card-reactive-rating__five-stars-score">
+              4.7
+            </span>
+          </div>
+          <span class="card-reactive-rating__five-stars-hints">
             善良善良善良
           </span>
         </div>
-        <div
-          class="list-card__middle-field"
-          @click="handleClickRatingCard"
-        >
-          <span class="card-rating__content float-left">
-            {{ rating.content }}
+        <div class="card-reactive-rating__top-right-second">
+          <span class="card-reactive-rating__top-datetime">
+            {{ timeDiff }}
           </span>
         </div>
       </div>
     </div>
-    <div class="card-rating__reactions">
+    <div
+      class="card-reactive-rating__content"
+      @click="handleClickRatingCard"
+    >
+      {{ rating.content }}
+    </div>
+    <div class="card-reactive-rating__reactions">
       REACTIONS
     </div>
-    <div class="card-rating__division-bar" />
-    <div class="card-rating__bottom-icons">
-      <span class="card-rating__icon">
+    <div class="card-reactive-rating__division-bar" />
+    <div class="card-reactive-rating__bottom-icons">
+      <span class="card-reactive-rating__icon">
         <f-icon
           name="chat"
           size="16"
         />
-        <span class="card-rating__statistics">
+        <span class="card-reactive-rating__statistics">
           {{ rating.commentCount }}
         </span>
       </span>
       <span
-        class="card-rating__icon"
+        class="card-reactive-rating__icon"
         @click="handleClickChat"
       >
         <f-icon
@@ -64,14 +64,14 @@
           size="16"
         />
         <span
-          class="card-rating__statistics"
+          class="card-reactive-rating__statistics"
           @click="handleClickLike"
         >
           {{ rating.starCount }}
         </span>
       </span>
       <span
-        class="card-rating__icon"
+        class="card-reactive-rating__icon"
         @click="handleClickEdit"
       >
         <f-icon
@@ -80,7 +80,7 @@
         />
       </span>
       <span
-        class="card-rating__icon"
+        class="card-reactive-rating__icon"
         @click="handleClickDelete"
       >
         <f-icon
@@ -148,58 +148,78 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
-.card-rating {
+.card-reactive-rating {
   padding: 16px 16px 10px 16px;
 }
 
-.card-rating {
-  .card-rating__content {
-    color: #979797;
+.card-reactive-rating {
+  .card-reactive-rating__top-field {
+    display: flex;
+    justify-content: flex-start;
+    height: 36px;
+    > .card-reactive-rating__top-left {
+      flex: 1;
+      max-width: 40px;
+    }
+    > .card-reactive-rating__top-right {
+      flex: 9;
+      display: flex;
+      justify-content: space-between;
+      > .card-reactive-rating__top-right-first {
+        display: flex;
+        flex-direction: column;
+        > .card-reactive-rating__five-stars-hints {
+          text-align: left;
+        }
+      }
+    }
   }
-  .card-rating__top-nickname {
+  .card-reactive-rating__content {
+    text-align: left;
+    color: $gray2;
+  }
+  .card-reactive-rating__top-nickname {
     color: $primary-color;
   }
-  .card-rating__top-datetime {
+  .card-reactive-rating__top-datetime {
     color: #c4c4c4;
   }
-  .card-rating__five-stars-hints {
+  .card-reactive-rating__five-stars-hints {
     font-size: 10px;
     color: $gray3
   }
-  .card-rating__five-stars-score {
+  .card-reactive-rating__five-stars-score {
     color: $gray3;
     margin-left: 4px;
-  }
-  .card-rating__content {
-    text-align: left;
-    color: $gray2;
   }
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
     margin-bottom: 30px;
   }
-  .card-rating__bottom-class-info {
+  .card-reactive-rating__bottom-class-info {
     color: $gray2;
   }
-  .card-rating__bottom-icon-field {
+  .card-reactive-rating__bottom-icon-field {
     display: inline;
     color: $gray3;
-    .card-rating__bottom-icon {
+    .card-reactive-rating__bottom-icon {
       margin-right: 10px;
-      .card-rating__bottom-statistics {
+      .card-reactive-rating__bottom-statistics {
         margin-left: 4px;
         font-size: 12px;
       }
     }
   }
-  .card-rating__division-bar {
+  .card-reactive-rating__division-bar {
     height: 2px;
-    width: 100%;
+    width: 100vw;
+    margin: 0 0 10px -16px;
     background-color: #F2F2F2;
   }
-  .card-rating__bottom-icons {
+  .card-reactive-rating__bottom-icons {
     display: flex;
     justify-content: space-around;
     color: $gray3;
+    height: 15px;
   }
 }
 .five-stars {

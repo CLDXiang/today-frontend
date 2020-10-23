@@ -10,12 +10,12 @@
       <div class="list-card__content-field">
         <div class="list-card__top-field">
           <span
-            class="card-rating__top-nickname float-left"
+            class="card-rating__top-nickname"
             @click="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
           </span>
-          <span class="card-rating__top-datetime float-right">
+          <span class="card-rating__top-datetime">
             {{ timeDiff }}
           </span>
         </div>
@@ -23,7 +23,7 @@
           class="list-card__middle-field"
           @click="handleClickRatingCard"
         >
-          <span class="card-rating__content float-left">
+          <span class="card-rating__content">
             {{ rating.content }}
           </span>
         </div>
@@ -34,12 +34,12 @@
       @click="handleClickRatingCard"
     >
       <span
-        class="card-rating__bottom-class-info float-left"
+        class="card-rating__bottom-class-info"
         :class="courseCardColor"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
-      <div class="card-rating__bottom-icon-field float-right">
+      <div class="card-rating__bottom-icon-field">
         <span class="card-rating__bottom-icon">
           <f-icon
             name="reaction"

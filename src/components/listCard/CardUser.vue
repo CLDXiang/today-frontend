@@ -6,11 +6,11 @@
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-user__user-name float-left">
+          <span class="card-user__user-name">
             {{ user.name }}
           </span>
         </div>
-        <div class="list-card__middle-field float-left">
+        <div class="list-card__middle-field">
           <span class="card-user__user-signature">
             {{ user.bio }}
           </span>

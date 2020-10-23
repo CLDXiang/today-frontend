@@ -10,16 +10,16 @@
       <div class="list-card__content-field">
         <div class="list-card__top-field">
           <span
-            class="card-comment__user-name float-left"
+            class="card-comment__user-name"
             @click="handleClickAvatar"
           >
             {{ comment.creator.nickname }}
           </span>
-          <span class="card-comment__time-diff float-right">
+          <span class="card-comment__time-diff">
             {{ timeDiff }}
           </span>
         </div>
-        <div class="list-card__middle-field float-left">
+        <div class="list-card__middle-field">
           <span class="card-comment__comment-content">
             {{ comment.content }}
           </span>
@@ -27,7 +27,8 @@
       </div>
     </div>
     <div class="list-card__bottom-field">
-      <span class="card-comment__icon-field float-right">
+      <span />
+      <span class="card-comment__icon-field">
         <f-icon
           :style="{color: starColor}"
           :name="comment.starred ? 'heart-fill' : 'heart'"

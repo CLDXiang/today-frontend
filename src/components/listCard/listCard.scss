@@ -19,25 +19,20 @@
           
           > .list-card__top-field {
             height: 28px;
+            display: flex;
+            justify-content: space-between;
           }
 
           > .list-card__middle-field {
             min-height: 22px;
+            text-align: left;
           }
       }
   }
 
   > .list-card__bottom-field {
     height: 22px;
+    display: flex;
+    justify-content: space-between;
   }
-}
-
-.float-left {
-  float: left;
-  position: relative;
-}
-
-.float-right {
-  float: right;
-  position: relative;
 }

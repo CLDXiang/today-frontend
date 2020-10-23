@@ -6,26 +6,28 @@
     <div class="list-card__main-field">
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-lecture__top-lecture-name float-left">
+          <span class="card-lecture__top-lecture-name">
             {{ lecture.name }}
           </span>
-          <span class="card-lecture__top-rating-number float-right">
-            {{ lecture.score }}
-          </span>
-          <span class="card-lecture__top-rating-stars float-right">
-            <five-stars
-              :score="lecture.score"
-              :size="20"
-            />
-          </span>
+          <div class="card-lecture__top-right">
+            <span class="card-lecture__top-rating-stars">
+              <five-stars
+                :score="lecture.score"
+                :size="20"
+              />
+            </span>
+            <span class="card-lecture__top-rating-number">
+              {{ lecture.score }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
     <div class="list-card__bottom-field">
-      <span class="card-lecture__teacher-name float-left">
+      <span class="card-lecture__teacher-name">
         {{ lecture.teachers.join(' ') }}
       </span>
-      <div class="card-lecture__bottom-icon-field float-right">
+      <div class="card-lecture__bottom-icon-field">
         <span class="card-lecture__bottom-icon">
           <f-icon
             name="reaction"
@@ -82,7 +84,16 @@ export default defineComponent({
 
 <style lang='scss' scoped>
 .card-lecture {
+  .list-card__top-field {
+    display: flex;
+    justify-content: space-between;
+    > .card-lecture__top-right {
+      display: flex;
+    }
+  }
   .list-card__bottom-field {
+    display: flex;
+    justify-content: space-between;
     margin-top: 10px;
   }
   .card-lecture__top-lecture-name {

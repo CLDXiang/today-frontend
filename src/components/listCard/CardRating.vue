@@ -42,10 +42,10 @@
       <span class="card-rating__bottom-icon-field">
         <span class="card-rating__bottom-icon">
           <span>
-          <f-icon
-            name="reaction"
-            size="16"
-          />
+            <f-icon
+              name="reaction"
+              size="16"
+            />
           </span>
           <span
             class="card-rating__bottom-statistics"

@@ -75,7 +75,7 @@
         @click="handleClickEdit"
       >
         <f-icon
-          name="edit"
+          name="edit-square"
           size="16"
         />
       </span>
@@ -84,7 +84,7 @@
         @click="handleClickDelete"
       >
         <f-icon
-          name="trash"
+          name="delete"
           size="16"
         />
       </span>

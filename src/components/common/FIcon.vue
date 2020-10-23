@@ -390,9 +390,7 @@ type NameType =
   | 'reaction'
   | 'chat'
   | 'heart'
-  | 'heart-fill'
-  | 'trash'
-  | 'edit';
+  | 'heart-fill';
 
 export default defineComponent({
   props: {

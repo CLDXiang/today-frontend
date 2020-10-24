@@ -4,7 +4,7 @@ import {
 
 export const mockWatches: CardCommonItem[] = [
   {
-    id: 3,
+    id: '3',
     type: 'user',
     email: 'abc@def.xyz',
     name: 'xiao_ming',

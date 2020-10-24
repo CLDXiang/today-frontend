@@ -1,7 +1,6 @@
 <template>
   <div
     class="list-card card-lecture"
-    @click="handleClickCardLecture"
   >
     <div class="list-card__main-field">
       <div class="list-card__content-field">
@@ -73,12 +72,6 @@ export default defineComponent({
     /** 课程数据项 */
     lecture: { type: Object as PropType<CardLectureItem>, required: true },
   },
-  emits: ['card-lecture-clicked'],
-  methods: {
-    handleClickCardLecture() {
-      this.$emit('card-lecture-clicked', this.lecture.id);
-    },
-  },
 });
 </script>
 
@@ -99,12 +92,16 @@ export default defineComponent({
   .card-lecture__top-lecture-name {
     color: $gray2;
     font-size: 18px;
+    max-width: 150px;
+    text-overflow: ellipsis;
   }
   .card-lecture__top-rating-number {
     margin-left: 6px;
     color: $gray3;
   }
   .card-lecture__teacher-name {
+    max-width: 120px;
+    text-overflow: ellipsis;
     color: $gray3;
     font-size: 14px;
   }
@@ -112,12 +109,12 @@ export default defineComponent({
     display: flex;
     color: $gray3;
     .card-lecture__bottom-icon {
-      margin-right: 10px;
+      margin-left: 10px;
       display: flex;
-      flex-direction: row;
       align-items: center;
       .card-lecture__bottom-statistics {
         margin-left: 4px;
+        font-size: 12px;
       }
     }
   }

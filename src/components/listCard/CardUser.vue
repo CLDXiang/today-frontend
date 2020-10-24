@@ -35,6 +35,8 @@ export default defineComponent({
 <style lang='scss' scoped>
 .card-user__user-name {
   color: $primary-color;
+  font-weight: bold;
+  font-size: 16px;
 }
 .card-user__user-signature {
   color: #979797;

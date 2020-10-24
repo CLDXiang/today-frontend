@@ -51,10 +51,10 @@ export default defineComponent({
   props: {
     comment: { type: Object as PropType<CardCommentItem>, required: true },
   },
-  emits: ['avatar-clicked', 'card-comment-star-clicked'],
+  emits: ['avatar-clicked', 'comment-star'],
   computed: {
     starColor(): string {
-      return this.comment.starred ? '#EF755A' : '';
+      return this.comment.starred ? '#ef755a' : '';
     },
     timeDiff() {
       const res: string = this.comment.createdAt.fromNow();
@@ -66,7 +66,7 @@ export default defineComponent({
       this.$emit('avatar-clicked', this.comment.creator.id);
     },
     handleClickStar() {
-      this.$emit('card-comment-star-clicked', this.comment.id);
+      this.$emit('comment-star', this.comment.id);
     },
   },
 });
@@ -76,23 +76,23 @@ export default defineComponent({
 .card-comment {
   .card-comment__user-name {
     color: $primary-color;
+    font-weight: bold;
   }
   .card-comment__time-diff {
     color: $gray3;
+    font-size: 12px;
   }
   .card-comment__comment-content {
     color: $gray2;
   }
   .card-comment__icon-field {
     display: flex;
-    flex-direction: row;
     align-items: center;
     .card-comment__statistics {
       margin-left: 4px;
+      color: $gray3;
+      font-size: 12px;
     }
-  }
-  .card-comment__statistics {
-    color: $gray3;
   }
 }
 </style>

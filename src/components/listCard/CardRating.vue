@@ -86,14 +86,14 @@ export default defineComponent({
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, required: true },
   },
-  emits: ['avatar-clicked', 'rating-card-clicked'],
+  emits: ['avatar-clicked', 'rating-clicked'],
   computed: {
     timeDiff() {
       const res: string = this.rating.createdAt.fromNow();
       return res;
     },
     starColor(): string {
-      return this.rating.starred ? '#EF755A' : '';
+      return this.rating.starred ? '#ef755a' : '';
     },
     courseCardColor(): string {
       return `color-${parseInt(this.rating.lecture.id.slice(4, 7), 10) % 96 || 0}`;
@@ -104,7 +104,7 @@ export default defineComponent({
       this.$emit('avatar-clicked', this.rating.creator.id);
     },
     handleClickRatingCard() {
-      this.$emit('rating-card-clicked', this.rating.id);
+      this.$emit('rating-clicked', this.rating.id);
     },
   },
 });
@@ -118,18 +118,25 @@ export default defineComponent({
 }
 
 .card-rating {
-  .card-rating__content {
-    color: #979797;
-  }
   .card-rating__top-nickname {
     color: $primary-color;
+    font-weight: bold;
+    font-size: 16px;
   }
   .card-rating__top-datetime {
     color: #c4c4c4;
+    font-size: 12px;
   }
   .card-rating__content {
+    color: #979797;
     text-align: left;
     color: $gray2;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
     margin-bottom: 30px;
@@ -139,6 +146,8 @@ export default defineComponent({
     border-radius: 20px;
     padding: 2px 9px;
     color: $gray2;
+    max-width: 200px;
+    text-overflow: ellipsis;
   }
   .card-rating__bottom-icon-field {
     display: flex;
@@ -146,7 +155,6 @@ export default defineComponent({
     .card-rating__bottom-icon {
       margin-right: 10px;
       display: flex;
-      flex-direction: row;
       align-items: flex-start;
       .card-rating__bottom-statistics {
         margin-left: 4px;

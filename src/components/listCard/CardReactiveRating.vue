@@ -17,7 +17,7 @@
               {{ rating.creator.nickname }}
             </span>
             <five-stars
-              score="4.7"
+              score="47"
               size="12"
             />
             <span class="card-reactive-rating__five-stars-score">
@@ -108,11 +108,11 @@ export default defineComponent({
   },
   emits: [
     'avatar-clicked',
-    'rating-card-clicked',
-    'rating-card-chat-clicked',
-    'rating-card-like-clicked',
-    'rating-card-edit-clicked',
-    'rating-card-delete-clicked',
+    'rating-clicked',
+    'rating-chat',
+    'rating-like',
+    'rating-edit',
+    'rating-delete',
   ],
   computed: {
     ...mapState(['user']),
@@ -121,7 +121,7 @@ export default defineComponent({
       return res;
     },
     starColor(): string {
-      return this.rating.starred ? '#EF755A' : '';
+      return this.rating.starred ? '#ef755a' : '';
     },
   },
   methods: {
@@ -129,19 +129,19 @@ export default defineComponent({
       this.$emit('avatar-clicked', this.rating.creator.id);
     },
     handleClickRatingCard() {
-      this.$emit('rating-card-clicked', this.rating.id);
+      this.$emit('rating-clicked', this.rating.id);
     },
     handleClickChat() {
-      this.$emit('rating-card-chat-clicked', this.rating.id);
+      this.$emit('rating-chat', this.rating.id);
     },
     handleClickLike() {
-      this.$emit('rating-card-like-clicked', this.rating.id);
+      this.$emit('rating-like', this.rating.id);
     },
     handleClickEdit() {
-      this.$emit('rating-card-edit-clicked', this.rating.id);
+      this.$emit('rating-edit', this.rating.id);
     },
     handleClickDelete() {
-      this.$emit('rating-card-delete-clicked', this.rating.id);
+      this.$emit('rating-delete', this.rating.id);
     },
   },
 });
@@ -180,9 +180,12 @@ export default defineComponent({
   }
   .card-reactive-rating__top-nickname {
     color: $primary-color;
+    font-weight: bold;
+    font-size: 16px;
   }
   .card-reactive-rating__top-datetime {
     color: #c4c4c4;
+    font-size: 12px;
   }
   .card-reactive-rating__five-stars-hints {
     font-size: 10px;
@@ -197,7 +200,6 @@ export default defineComponent({
     color: $gray3;
     .card-reactive-rating__icon {
       display: flex;
-      flex-direction: row;
       align-items: center;
       > .card-reactive-rating__statistics {
         margin-left: 6px;
@@ -209,7 +211,7 @@ export default defineComponent({
     height: 2px;
     width: 100vw;
     margin: 0 0 10px -16px;
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
   }
   .card-reactive-rating__bottom-icons {
     display: flex;

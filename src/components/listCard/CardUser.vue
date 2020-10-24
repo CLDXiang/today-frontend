@@ -2,7 +2,10 @@
   <div class="list-card card-user">
     <div class="list-card__main-field">
       <div class="list-card__avatar-field">
-        <img src="default_avatar.png">
+        <img
+          class="avatar"
+          :src="processAvatar(user.avatar)"
+        >
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
@@ -22,12 +25,19 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useProcessAvatar } from '@/composables';
 import { CardUserItem } from './types';
 
 export default defineComponent({
   props: {
     /** 课程数据项 */
     user: { type: Object as PropType<CardUserItem>, required: true },
+  },
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
   },
 });
 </script>

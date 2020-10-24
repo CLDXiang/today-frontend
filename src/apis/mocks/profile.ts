@@ -7,7 +7,7 @@ export const mockProfiles: CardUserItem[] = [
     email: 'abc@def.xyz',
     name: 'xiao_ming',
     nickname: '小明',
-    avatar: 'sart',
+    avatar: '/default_avatar.png',
     bio: '个性签名个性签名个性签名个性签名个性签名',
   },
   {
@@ -16,7 +16,7 @@ export const mockProfiles: CardUserItem[] = [
     email: 'abc@def.xyz',
     name: 'xiao_ming',
     nickname: '小明',
-    avatar: 'srat',
+    avatar: '/default_avatar.png',
     bio: '个性签名个性签名个性签名个性签名个性签名',
   },
 ];

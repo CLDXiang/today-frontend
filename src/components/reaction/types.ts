@@ -1,4 +1,4 @@
-/** 单次 emoji */
+/** 单条 emoji 记录 */
 export interface EmojiItem {
   /** 创建者 User ID */
   id: string;
@@ -14,4 +14,11 @@ export type EmojiTable = {
 };
 
 /** EmojiTable Entry */
-export type EmojiEntry = [string, EmojiItem[]];
+export type EmojiEntry = {
+  /** emoji Id */
+  emojiId: string;
+  /** emoji 记录列表 */
+  emojiItems: EmojiItem[];
+  /** 当前用户的 Reaction 在其中的位置 */
+  activeIndex: number;
+};

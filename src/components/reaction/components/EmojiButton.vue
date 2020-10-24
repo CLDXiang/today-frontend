@@ -1,7 +1,7 @@
 <template>
   <div
     class="emoji-button"
-    :class="{ 'emoji-button--actived': actived }"
+    :class="{ 'emoji-button--active': active }"
   >
     <span :style="emojiStyle">{{ emoji }}</span>
     <span :style="countStyle">{{ count }}</span>
@@ -19,7 +19,7 @@ export default defineComponent({
     /** 数目 */
     count: { type: Number, default: 0 },
     /** 激活态 */
-    actived: { type: Boolean, default: false },
+    active: { type: Boolean, default: false },
     /** emoji 样式 */
     emojiStyle: { type: Object as PropType<CSSProperties>, default: {} },
     /** 数目样式 */
@@ -52,7 +52,7 @@ export default defineComponent({
   }
 }
 
-.emoji-button.emoji-button--actived {
+.emoji-button.emoji-button--active {
   background-color: #9fd3da;
 }
 </style>

@@ -2,10 +2,11 @@
   <div class="reaction">
     <emoji-button
       v-for="emojiEntry in emojiEntries"
-      :key="emojiEntry[0]"
-      :emoji="emojiEntry[0]"
-      :count="emojiEntry[1].length"
+      :key="emojiEntry.emojiId"
+      :emoji="emojiEntry.emojiId"
+      :count="emojiEntry.emojiItems.length"
       :style="buttonStyle"
+      :active="emojiEntry.activeIndex !== -1"
       :emoji-style="emojiStyle"
       :count-style="countStyle"
     />
@@ -14,7 +15,7 @@
 
 <script lang="ts">
 import { CSSProperties, defineComponent, PropType } from 'vue';
-import { EmojiTable, EmojiEntry } from './types';
+import { EmojiTable, EmojiEntry, EmojiItem } from './types';
 import { compareEmojiEntryByTime, compareEmojiEntryByCount } from './utils';
 import { EmojiButton } from './components';
 
@@ -41,7 +42,12 @@ export default defineComponent({
   computed: {
     /** 处理过的 emoji 数据列表 */
     emojiEntries(): EmojiEntry[] {
-      let valueEntries = Object.entries(this.value);
+      let valueEntries: EmojiEntry[] = Object.entries(this.value).map(([emojiId, emojiItems]) => ({
+        emojiId,
+        emojiItems,
+        activeIndex: -1,
+      }));
+
       if (this.sortBy === 'time') {
         // 时间排序
         valueEntries.sort(compareEmojiEntryByTime);
@@ -52,7 +58,21 @@ export default defineComponent({
       if (this.topN > 0) {
         valueEntries = valueEntries.slice(0, this.topN);
       }
+
+      valueEntries = valueEntries.map((entry) => ({
+        ...entry,
+        activeIndex: this.isCurrentUserInEmojiItems(entry.emojiItems),
+      }));
+
       return valueEntries;
+    },
+  },
+  methods: {
+    /** 当前用户在 EmojiItem 列表中的位置 */
+    isCurrentUserInEmojiItems(emojiItems: EmojiItem[]) {
+      // FIXME: mock，应当改为当前用户真实 uid
+      const userId = 'mock_test';
+      return emojiItems.findIndex((emojiItem) => emojiItem.id === userId);
     },
   },
 });

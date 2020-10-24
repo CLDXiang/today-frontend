@@ -8,3 +8,4 @@ export { default as lectureClient } from './lecture';
 export { default as starClient } from './star';
 export { default as watchClient } from './watch';
 export { default as historyClient } from './history';
+export { default as reactionClient } from './reaction';

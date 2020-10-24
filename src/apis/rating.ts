@@ -3,13 +3,35 @@ import log from '@/utils/log';
 import { mockRatings } from './mocks/rating';
 
 // FIXME: mock
-const getRatingList: (req: {
+const getRatingListByUser: (req: {
   /** 用户名 */
   username: string;
   /** 分页 - 最后一个 rating 的 id */
-  last_id?: string;
+  lastId?: string;
   /** 拉取条数 */
-  limit: number;
+  limit?: number;
+}) => Promise<{
+  msg: string;
+  data: CardRatingItem[];
+}> = (
+  req,
+) =>
+  new Promise((resolve) => {
+    log.info('rpcClient.search', req);
+    resolve({
+      msg: 'ok',
+      data: mockRatings,
+    });
+  });
+
+// FIXME: mock
+const getRatingListByLecture: (req: {
+  /** 用户名 */
+  lectureId: string;
+  /** 分页 - 最后一个 rating 的 id */
+  lastId?: string;
+  /** 拉取条数 */
+  limit?: number;
 }) => Promise<{
   msg: string;
   data: CardRatingItem[];
@@ -25,7 +47,8 @@ const getRatingList: (req: {
   });
 
 const ratingClient = {
-  getRatingList,
+  getRatingListByUser,
+  getRatingListByLecture,
 };
 
 export default ratingClient;

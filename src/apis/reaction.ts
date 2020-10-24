@@ -18,10 +18,11 @@ const addReaction: (req: {
     log.info('reactionClient.addReaction', req);
     const { emojiId } = req;
 
-    const emojiArray = mockReaction.data.emoji[emojiId];
-    if (!emojiArray) {
+    if (!mockReaction.data.emoji[emojiId]) {
       mockReaction.data.emoji[emojiId] = [];
     }
+    const emojiArray = mockReaction.data.emoji[emojiId];
+
     if (emojiArray && emojiArray.findIndex((v) => v.id === 'mock_test') === -1) {
       emojiArray.push({
         id: 'mock_test',

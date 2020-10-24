@@ -20,3 +20,6 @@ export const compareEmojiEntryByCount: (a: EmojiEntry, b: EmojiEntry) => number 
   const totalCountB = b.emojiItems.length;
   return totalCountB - totalCountA;
 };
+
+/** 可用 emoji */
+export const emojiTable = [...new Set(['👍', '👎', '😄', '🎉', '😕', '❤️', '🚀', '👀', '🐶', '🤺'])];

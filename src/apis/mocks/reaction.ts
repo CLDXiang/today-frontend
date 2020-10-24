@@ -5,7 +5,7 @@ export const mockReaction: PostReactionsIdResp = {
     id: 'uni-1',
     count: 3,
     emoji: {
-      '😁': [
+      '😄': [
         {
           id: 'xiaoming',
           nickname: '小明',

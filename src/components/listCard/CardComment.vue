@@ -5,7 +5,10 @@
         class="list-card__avatar-field"
         @click="handleClickAvatar"
       >
-        <img :src="comment.creator.avatar">
+        <img
+          class="avatar"
+          :src="processAvatar(comment.creator.avatar)"
+        >
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
@@ -45,6 +48,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useProcessAvatar } from '@/composables';
 import { CardCommentItem } from './types';
 
 export default defineComponent({
@@ -52,6 +56,12 @@ export default defineComponent({
     comment: { type: Object as PropType<CardCommentItem>, required: true },
   },
   emits: ['avatar-clicked', 'card-comment-star-clicked'],
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   computed: {
     starColor(): string {
       return this.comment.starred ? '#EF755A' : '';

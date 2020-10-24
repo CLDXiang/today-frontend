@@ -11,6 +11,7 @@
       > .list-card__avatar-field {
         max-width: 60px;
         flex: 1;
+        margin-right: 6px;
       }
 
       > .list-card__content-field {
@@ -33,5 +34,11 @@
     height: 22px;
     display: flex;
     justify-content: space-between;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
   }
 }

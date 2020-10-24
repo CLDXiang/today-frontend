@@ -153,9 +153,15 @@ import { mapMutations, mapState } from 'vuex';
 import { profileClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
-import defaultAvatar from '../../assets/default_avatar.jpg';
+import { useProcessAvatar } from '@/composables';
 
 export default defineComponent({
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   data: () => ({
     isAvatarUploading: false,
     isInfoModifying: false,
@@ -227,12 +233,6 @@ export default defineComponent({
         .finally(() => {
           this.isInfoModifying = false;
         });
-    },
-    processAvatar(originAvatar: string) {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
-        return defaultAvatar;
-      }
-      return originAvatar;
     },
   },
 });

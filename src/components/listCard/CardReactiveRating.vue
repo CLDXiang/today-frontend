@@ -5,7 +5,10 @@
         class="card-reactive-rating__top-left"
         @click="handleClickAvatar"
       >
-        <img src="rating.creator.avatar">
+        <img
+          class="avatar"
+          :src="processAvatar(rating.creator.avatar)"
+        >
       </div>
       <div class="card-reactive-rating__top-right">
         <div class="card-reactive-rating__top-right-first">
@@ -96,6 +99,7 @@
 import { defineComponent, PropType } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapState } from 'vuex';
+import { useProcessAvatar } from '@/composables';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -114,6 +118,12 @@ export default defineComponent({
     'rating-card-edit-clicked',
     'rating-card-delete-clicked',
   ],
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   computed: {
     ...mapState(['user']),
     timeDiff() {

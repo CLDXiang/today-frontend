@@ -5,7 +5,10 @@
         class="list-card__avatar-field"
         @click="handleClickAvatar"
       >
-        <img src="rating.creator.avatar">
+        <img
+          class="avatar"
+          :src="processAvatar(rating.creator.avatar)"
+        >
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
@@ -79,6 +82,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useProcessAvatar } from '@/composables';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -87,6 +91,12 @@ export default defineComponent({
     rating: { type: Object as PropType<CardRatingItem>, required: true },
   },
   emits: ['avatar-clicked', 'rating-card-clicked'],
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   computed: {
     timeDiff() {
       const res: string = this.rating.createdAt.fromNow();

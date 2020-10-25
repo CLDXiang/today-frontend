@@ -204,6 +204,7 @@ export default defineComponent({
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  overflow-y: auto;
 
   .text-dark {
     color: #4f4f4f;
@@ -371,7 +372,12 @@ export default defineComponent({
 .content-box > .white-card > .main-box > .f-tabs {
   .f-tabs__header {
     height: 29px;
-    margin: 13px 15px;
+    padding: 13px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
   }
 
   .f-tabs__tab {

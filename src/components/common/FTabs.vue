@@ -103,6 +103,7 @@ $padding-x: 12px;
     display: flex;
     align-items: center;
     user-select: none;
+    box-sizing: content-box;
 
     height: 28px;
     font-size: $font-size;

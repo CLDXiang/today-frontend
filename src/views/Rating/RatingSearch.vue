@@ -54,7 +54,7 @@ export default defineComponent({
     };
     /** 搜索并将结果附加在当前列表后 */
     const searchMore = () => {
-      // TODO: 传入 last_id
+      // TODO: 传入 lastId
       if (q.value) {
         rpcClient.search({ q: q.value, limit: 20 }).then((resp) => {
           searchResults.value = [...searchResults.value, ...resp.data];
@@ -74,8 +74,10 @@ export default defineComponent({
     search();
 
     return {
+      /** 列表元素 ref */
       scroll,
 
+      /** 搜索结果列表 */
       searchResults,
     };
   },
@@ -101,8 +103,6 @@ export default defineComponent({
 
   color: #444;
   font-size: 14px;
-
-  padding-top: $head-margin;
 
   margin: 0 auto;
 

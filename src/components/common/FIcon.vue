@@ -134,6 +134,17 @@
     />
   </svg>
   <svg
+    v-else-if="name === 'edit'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 1024 1024"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  ><path
+    d="M257.7 752c2 0 4-0.2 6-0.5L431.9 722c2-0.4 3.9-1.3 5.3-2.8l423.9-423.9c3.9-3.9 3.9-10.2 0-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2c-1.9 11.1 1.5 21.9 9.4 29.8 6.6 6.4 14.9 9.9 23.8 9.9z m67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
+    p-id="8055"
+  /></svg>
+  <svg
     v-else-if="name === 'delete'"
     :width="parsedWidth"
     :height="parsedHeigth"
@@ -251,6 +262,45 @@
     <path
       fill-rule="evenodd"
       d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'plus'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="4 4 8 8"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'heart'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'heart-fill'"
+    :width="parsedWidth"
+    :height="parsedHeigth"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
     />
   </svg>
   <svg
@@ -377,6 +427,7 @@ type NameType =
   | 'search'
   | 'timetable'
   | 'edit-square'
+  | 'edit'
   | 'delete'
   | 'shrink'
   | 'arrawsalt'
@@ -385,6 +436,9 @@ type NameType =
   | 'expand'
   | 'eye'
   | 'eye-slash'
+  | 'plus'
+  | 'heart'
+  | 'heart-fill'
   | 'star'
   | 'star-fill'
   | 'reaction'

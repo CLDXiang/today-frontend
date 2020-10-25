@@ -9,7 +9,7 @@ const getCommentList: (req: {
   /** 点评 ID */
   rate_id?: string;
   /** 分页 - 最后一个 comment 的 id */
-  last_id?: string;
+  lastId?: string;
   /** 拉取条数 */
   limit: number;
 }) => Promise<{

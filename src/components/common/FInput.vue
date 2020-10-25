@@ -224,15 +224,15 @@ $height: 40px;
 
 // warning 态
 .f-input.f-input--warning > .f-input__container {
-  border-color: $danger-color;
+  border-color: $color-red;
   > .f-input__text-field > span,
   input {
-    color: $danger-color;
+    color: $color-red;
   }
 }
 
 .f-input__warning {
-  color: $danger-color;
+  color: $color-red;
 }
 
 .f-input:not(.f-input__disabled) .f-input__details {

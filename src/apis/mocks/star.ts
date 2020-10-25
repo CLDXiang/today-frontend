@@ -10,7 +10,7 @@ export const mockStars: CardCommonItem[] = [
     creator: {
       id: '234',
       nickname: '小明',
-      avatar: 'https://xxx.jpg',
+      avatar: '/default_avatar.png',
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     content: '点评内容点评内容点评内容点评内容点评内容',
@@ -30,6 +30,13 @@ export const mockStars: CardCommonItem[] = [
           { id: '236', nickname: '小白' },
         ],
       },
+    },
+    form: {
+      difficulty: 4,
+      nice: 4,
+      workload: 4,
+      recommended: 4,
+      content: 'hello',
     },
   },
   {

@@ -124,4 +124,15 @@ export default defineComponent({
   background-color: $color-red;
   border-color: $color-red;
 }
+
+.ant-popover-inner {
+  border-radius: 8px;
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+}
+
+:focus {
+  outline: none;
+}
 </style>

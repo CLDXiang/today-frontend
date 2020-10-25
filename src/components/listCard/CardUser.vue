@@ -2,17 +2,20 @@
   <div class="list-card card-user">
     <div class="list-card__main-field">
       <div class="list-card__avatar-field">
-        <img src="default_avatar.png">
+        <img
+          class="avatar"
+          :src="processAvatar(user.avatar)"
+        >
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-user__user-name float-left">
-            User1
+          <span class="card-user__user-name">
+            {{ user.name }}
           </span>
         </div>
-        <div class="list-card__middle-field float-left">
+        <div class="list-card__middle-field">
           <span class="card-user__user-signature">
-            To thyself be true.
+            {{ user.bio }}
           </span>
         </div>
       </div>
@@ -22,15 +25,30 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { CardLectureItem } from './types';
+import { useProcessAvatar } from '@/composables';
+import { CardUserItem } from './types';
 
 export default defineComponent({
   props: {
     /** 课程数据项 */
-    lecture: { type: Object as PropType<CardLectureItem>, required: true },
+    user: { type: Object as PropType<CardUserItem>, required: true },
+  },
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
   },
 });
 </script>
 
 <style lang='scss' scoped>
+.card-user__user-name {
+  color: $primary-color;
+  font-weight: bold;
+  font-size: 16px;
+}
+.card-user__user-signature {
+  color: #979797;
+}
 </style>

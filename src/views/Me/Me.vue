@@ -178,8 +178,8 @@ export default defineComponent({
     historyList: [] as CardCommonItem[],
   }),
   computed: {
-    ...mapState(['user', 'profile']),
-    ...mapGetters(['countHistory', 'userLoggedIn']),
+    ...mapState(['user']),
+    ...mapGetters(['userLoggedIn']),
   },
   created() {
     ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {

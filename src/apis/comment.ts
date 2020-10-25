@@ -4,10 +4,10 @@ import { mockComments } from './mocks/comment';
 
 // FIXME: mock
 const getCommentList: (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户 id */
+  userId: string;
   /** 点评 ID */
-  rate_id?: string;
+  ratingId?: string;
   /** 分页 - 最后一个 comment 的 id */
   lastId?: string;
   /** 拉取条数 */

@@ -5,8 +5,8 @@ import { LectureItem } from './types';
 
 // FIXME: mock
 const getSelectList: (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户 Id */
+  userId: string;
   /** 当前学期，没有时返回所有学期 */
   semester?: string;
   /** 分页 - 最后一个 lecture 的 id */

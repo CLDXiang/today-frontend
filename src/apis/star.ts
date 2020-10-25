@@ -6,8 +6,8 @@ import { mockStars } from './mocks/star';
 
 // FIXME: mock
 const getStarList: (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户 Id */
+  userId: string;
   /** 分页 - 最后一个 star 的 id */
   lastId?: string;
   /** 拉取条数 */

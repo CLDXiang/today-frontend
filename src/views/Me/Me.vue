@@ -104,6 +104,7 @@ import {
   historyClient,
 } from '@/apis';
 
+import { useProcessAvatar } from '@/composables';
 import {
   RatingList,
   CommentList,
@@ -111,9 +112,13 @@ import {
   CommonList,
 } from './components';
 
-import defaultAvatar from '../../assets/default_avatar.jpg';
-
 export default defineComponent({
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   data: () => ({
     // TODO: obtain following data from backend
     following: 90,
@@ -161,12 +166,6 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations({ vuexLogout: 'logout' }),
-    processAvatar(originAvatar: string): string {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
-        return defaultAvatar;
-      }
-      return originAvatar;
-    },
     logout(): void {
       if (this.userLoggedIn) {
         this.vuexLogout();

@@ -130,7 +130,7 @@ export default defineComponent({
     cursor: pointer;
   }
   .card-rating__top-datetime {
-    color: #c4c4c4;
+    color: $gray3;
     font-size: 12px;
   }
   .card-rating__content {

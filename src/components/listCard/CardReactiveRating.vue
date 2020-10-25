@@ -118,19 +118,12 @@ import { mapState } from 'vuex';
 import { useProcessAvatar } from '@/composables';
 import { mapScoreToText } from '@/utils/rating';
 import { Reaction, EmojiTable } from '@/components/reaction';
-import { reactionClient } from '@/apis';
-import { mockReaction } from '@/apis/mocks/reaction';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
   components: {
     FiveStars,
     Reaction,
-  },
-  data() {
-    return {
-      mockReaction: {} as EmojiTable,
-    }
   },
   props: {
     /** 点评数据项 */
@@ -151,6 +144,11 @@ export default defineComponent({
     const { processAvatar } = useProcessAvatar();
     return {
       processAvatar,
+    };
+  },
+  data() {
+    return {
+      mockReaction: {} as EmojiTable,
     };
   },
   computed: {
@@ -185,19 +183,6 @@ export default defineComponent({
     handleClickDelete() {
       this.$emit('click-delete', this.rating.id);
     },
-    handleAddReaction(emojiId: string) {
-      reactionClient.addReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
-        this.mockReaction = { ...data.emoji };
-      });
-    },
-    handleDeleteReaction(emojiId: string) {
-      reactionClient.deleteReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
-        this.mockReaction = { ...data.emoji };
-      });
-    },
-  },
-  created() {
-    this.mockReaction = mockReaction.data.emoji;
   },
 });
 </script>

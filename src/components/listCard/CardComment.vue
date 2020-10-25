@@ -71,6 +71,9 @@ import { Reaction, EmojiTable } from '@/components/reaction';
 import { CardCommentItem } from './types';
 
 export default defineComponent({
+  components: {
+    Reaction,
+  },
   props: {
     comment: { type: Object as PropType<CardCommentItem>, required: true },
   },

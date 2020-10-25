@@ -128,7 +128,7 @@ interface RateForm {
   /** 工作量 */
   workload?: number;
   /** 综合推荐指数 */
-  overall?: number;
+  recommended?: number;
   /** 评价内容 */
   content?: string;
 }

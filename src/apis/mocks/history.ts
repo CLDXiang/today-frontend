@@ -44,7 +44,7 @@ export const mockHistories: CardCommonItem[] = [
       difficulty: 4,
       nice: 4,
       workload: 4,
-      overall: 4,
+      recommended: 4,
       content: 'hello',
     },
   },

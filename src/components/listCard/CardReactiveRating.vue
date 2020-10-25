@@ -20,11 +20,11 @@
               {{ rating.creator.nickname }}
             </span>
             <five-stars
-              score="rating.form.overall"
+              score="rating.form.recommended"
               size="12"
             />
             <span class="card-reactive-rating__five-stars-score">
-              {{ rating.form.overall }}
+              {{ rating.form.recommended }}
             </span>
           </div>
           <span class="card-reactive-rating__five-stars-hints">
@@ -56,7 +56,11 @@
     </div>
     <div class="card-reactive-rating__division-bar" />
     <div class="card-reactive-rating__bottom-icons">
-      <span class="card-reactive-rating__icon">
+      <span
+        v-if="showChat"
+        class="card-reactive-rating__icon"
+        @click.stop="handleClickChat"
+      >
         <f-icon
           name="chat"
           size="14"
@@ -66,21 +70,20 @@
         </span>
       </span>
       <span
+        v-if="showLike"
         class="card-reactive-rating__icon"
-        @click.stop="handleClickChat"
+        @click.stop="handleClickLike"
       >
         <f-icon
           name="heart"
           size="14"
         />
-        <span
-          class="card-reactive-rating__statistics"
-          @click.stop="handleClickLike"
-        >
+        <span class="card-reactive-rating__statistics">
           {{ rating.starCount }}
         </span>
       </span>
       <span
+        v-if="showEdit"
         class="card-reactive-rating__icon"
         @click.stop="handleClickEdit"
       >
@@ -90,6 +93,7 @@
         />
       </span>
       <span
+        v-if="showDelete"
         class="card-reactive-rating__icon"
         @click.stop="handleClickDelete"
       >
@@ -117,6 +121,11 @@ export default defineComponent({
   props: {
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, required: true },
+    showChat: { type: Boolean, required: true },
+    showLike: { type: Boolean, required: true },
+    showEdit: { type: Boolean, required: false },
+    showDelete: { type: Boolean, required: false },
+
   },
   emits: [
     'click-avatar',

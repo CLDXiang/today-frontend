@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, markRaw, DefineComponent } from 'vue';
+import { defineComponent, markRaw } from 'vue';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
 export default defineComponent({
@@ -19,20 +19,31 @@ export default defineComponent({
   },
   data() {
     return {
-      /** 标签页
-       * 关于 pages 的设计
-       * 按照作用来说应当是作为 slot 传入的，
-       * 但是我暂时没有找到优雅的方式将每一个传入的项分别解析到 header 和 body 中。
-       * P.S. 这做法有点 React 内味儿了（逃 */
-      pages: {
-        最新: { component: markRaw(RatingList), props: { ratings: [] } },
-        通识: { component: markRaw(LectureList), props: { lectures: [] } },
-        思政: { component: markRaw(LectureList), props: { lectures: [] } },
-        外语: { component: markRaw(LectureList), props: { lectures: [] } },
-        体育: { component: markRaw(LectureList), props: { lectures: [] } },
-      } as Record<string, { component: DefineComponent; props: Record<string, unknown> }>,
       activeTab: '最新',
+      /** 最新点评列表 */
+      latestRatingList: [],
+      /** 通识课程列表 */
+      通识LectureList: [],
+      /** 思政课程列表 */
+      思政LectureList: [],
+      /** 外语课程列表 */
+      外语LectureList: [],
+      /** 体育课程列表 */
+      体育LectureList: [],
     };
+  },
+  computed: {
+    /** 标签页 */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    pages(): Record<string, { component: any; props: Record<string, any> }> {
+      return {
+        最新: { component: markRaw(RatingList), props: { ratings: this.latestRatingList } },
+        通识: { component: markRaw(LectureList), props: { lectures: this.通识LectureList } },
+        思政: { component: markRaw(LectureList), props: { lectures: this.思政LectureList } },
+        外语: { component: markRaw(LectureList), props: { lectures: this.外语LectureList } },
+        体育: { component: markRaw(LectureList), props: { lectures: this.体育LectureList } },
+      };
+    },
   },
 });
 </script>

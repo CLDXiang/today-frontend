@@ -8,12 +8,12 @@
         :class="{ 'f-tabs__tab--active': pageKey === modelValue }"
         @click="handleClickTab(pageKey)"
       >
-        {{ pageKey }}
+        {{ pages[pageKey].name || pageKey }}
       </span>
-      <span
+      <!-- <span
         class="f-tabs__floating-border"
         :style="floatingBorderStyle"
-      />
+      /> -->
     </div>
     <div class="f-tabs__content">
       <span
@@ -32,7 +32,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, DefineComponent } from 'vue';
+import {
+  defineComponent, PropType, DefineComponent,
+} from 'vue';
 
 interface Page {
   /** 内容 */
@@ -40,11 +42,13 @@ interface Page {
   /** 传入 component 的 props */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: Record<string, any>;
+  /** 标签名 */
+  name?: string;
 }
 
 export default defineComponent({
   props: {
-    /** 子页面，key 必须为全角字符串 */
+    /** 子页面 */
     pages: { type: Object as PropType<Record<string, Page>>, required: true },
     /** (v-model) 激活的页面 key */
     modelValue: { type: String, required: true },
@@ -54,22 +58,22 @@ export default defineComponent({
     pageKeys(): string[] {
       return Object.keys(this.pages);
     },
-    /** 计算下方悬浮 border 尺寸位置 */
-    floatingBorderStyle(): Record<string, string> {
-      // 按照全角 key 计算
-      const fontSize = 17;
-      const paddingX = 12;
-      const width = this.modelValue.length * fontSize + 6;
-      const index = this.pageKeys.indexOf(this.modelValue);
-      if (index === -1) return {};
-      const pageKeysBefore = this.pageKeys.slice(0, index);
-      const totalLength = pageKeysBefore.reduce((pv, cv) => pv + cv.length, 0);
-      const left = pageKeysBefore.length * paddingX * 2 + paddingX + totalLength * fontSize - 3;
-      return {
-        width: `${width}px`,
-        left: `${left}px`,
-      };
-    },
+    // /** 计算下方悬浮 border 尺寸位置 */
+    // floatingBorderStyle(): Record<string, string> {
+    //   // 按照全角 key 计算
+    //   const fontSize = 17;
+    //   const paddingX = 12;
+    //   const width = this.modelValue.length * fontSize + 6;
+    //   const index = this.pageKeys.indexOf(this.modelValue);
+    //   if (index === -1) return {};
+    //   const pageKeysBefore = this.pageKeys.slice(0, index);
+    //   const totalLength = pageKeysBefore.reduce((pv, cv) => pv + cv.length, 0);
+    //   const left = pageKeysBefore.length * paddingX * 2 + paddingX + totalLength * fontSize - 3;
+    //   return {
+    //     width: `${width}px`,
+    //     left: `${left}px`,
+    //   };
+    // },
   },
   methods: {
     handleClickTab(pageKey: string) {
@@ -97,39 +101,47 @@ $padding-x: 12px;
     overflow-x: auto;
     align-self: center;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     user-select: none;
 
     height: 28px;
     font-size: $font-size;
     line-height: 22px;
-    color: #aaadb3;
+    color: #828282;
 
     position: relative;
 
     > .f-tabs__tab {
       flex: 0 0 auto;
-      padding: 0 $padding-x;
+      // padding: 0 $padding-x;
+      padding: 3px 10px;
+      margin-left: 4px;
+      border-radius: 8px;
+      box-sizing: border-box;
 
       cursor: pointer;
+      transition: all 0.3s cubic-bezier(.4,0,.2,1);
 
       &.f-tabs__tab--active {
-        color: $primary-color;
+        color: #fff;
+        background: #9fd3da;
       }
 
-      transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      &:first-child {
+        margin-left: 0;
+      }
     }
 
-    > .f-tabs__floating-border {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 3px;
-      background-color: $primary-color;
-      border-radius: 1px;
+    // > .f-tabs__floating-border {
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 0;
+    //   height: 3px;
+    //   background-color: $primary-color;
+    //   border-radius: 1px;
 
-      transition: all 0.3s cubic-bezier(.4,0,.2,1);
-    }
+    //   transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    // }
   }
 
   > .f-tabs__content {

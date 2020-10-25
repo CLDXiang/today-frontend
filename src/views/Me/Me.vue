@@ -39,13 +39,14 @@
               v-if="!isCurrentUser()"
               class="follow-btn"
             >
-              <span class="text-dark">
-                ＋&nbsp;关注
-              </span>
+              <span class="text-dark"> ＋&nbsp;关注 </span>
             </span>
           </div>
           <span class="bio text-light">
-            {{ user.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
+            {{
+              user.bio ||
+                '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名'
+            }}
           </span>
         </div>
       </div>
@@ -54,25 +55,19 @@
           <span class="follow-number text-dark">
             {{ following }}
           </span>
-          <span class="follow-text text-light">
-            关注
-          </span>
+          <span class="follow-text text-light"> 关注 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
             {{ follower }}
           </span>
-          <span class="follow-text text-light">
-            粉丝
-          </span>
+          <span class="follow-text text-light"> 粉丝 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
             {{ star }}
           </span>
-          <span class="follow-text text-light">
-            被收藏数
-          </span>
+          <span class="follow-text text-light"> 被收藏数 </span>
         </div>
       </div>
     </div>
@@ -105,10 +100,10 @@ import {
 } from '@/apis';
 
 import {
-  RatingList,
-  CommentList,
-  LectureList,
-  CommonList,
+  CardCommentItem, CardRatingItem, CardLectureItem, CardCommonItem,
+} from '@/components/listCard';
+import {
+  RatingList, CommentList, LectureList, CommonList,
 } from './components';
 
 import defaultAvatar from '../../assets/default_avatar.jpg';
@@ -119,43 +114,60 @@ export default defineComponent({
     following: 90,
     follower: 80,
     star: 70,
-    pages: {
-      点评: { component: markRaw(RatingList), props: { ratings: [] } },
-      回复: { component: markRaw(CommentList), props: { comments: [] } },
-      课程: { component: markRaw(LectureList), props: { lectures: [] } },
-      收藏: { component: markRaw(CommonList), props: { contents: [] } },
-    } as Record<string, { component: unknown; props: Record<string, unknown> }>,
     activeTab: '点评',
+    /** 点评列表 */
+    ratingList: [] as CardRatingItem[],
+    /** 回复列表 */
+    commentList: [] as CardCommentItem[],
+    /** 课程列表 */
+    lectureList: [] as CardLectureItem[],
+    /** 收藏列表 */
+    starList: [] as CardCommonItem[],
+    /** 关注列表 */
+    watchList: [] as CardCommonItem[],
+    /** 足迹列表 */
+    historyList: [] as CardCommonItem[],
   }),
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
-  },
-  mounted() {
-    if (this.isCurrentUser()) {
-      this.pages.关注 = { component: markRaw(CommonList), props: { contents: [] } };
-      this.pages.足迹 = { component: markRaw(CommonList), props: { contents: [] } };
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    pages(): Record<string, { component: any; props: Record<string, any> }> {
+      const commonPages = {
+        点评: { component: markRaw(RatingList), props: { ratings: this.ratingList }, name: `点评 ${this.ratingList.length}` },
+        回复: { component: markRaw(CommentList), props: { comments: this.commentList }, name: `回复 ${this.commentList.length}` },
+        课程: { component: markRaw(LectureList), props: { lectures: this.lectureList }, name: `课程 ${this.lectureList.length}` },
+        收藏: { component: markRaw(CommonList), props: { contents: this.starList }, name: `收藏 ${this.starList.length}` },
+      };
+      if (this.isCurrentUser()) {
+        const currentUserPages = {
+          关注: { component: markRaw(CommonList), props: { contents: this.watchList }, name: `关注 ${this.watchList.length}` },
+          足迹: { component: markRaw(CommonList), props: { contents: this.historyList }, name: `足迹 ${this.historyList.length}` },
+        };
+        return { ...commonPages, ...currentUserPages };
+      }
+      return commonPages;
+    },
   },
   created() {
     ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.点评.props.ratings = resp.data;
+      this.ratingList = resp.data;
     });
     commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.回复.props.comments = resp.data;
+      this.commentList = resp.data;
     });
     lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.课程.props.lectures = resp.data;
+      this.lectureList = resp.data;
     });
     starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.收藏.props.contents = resp.data;
+      this.starList = resp.data;
     });
     if (this.isCurrentUser()) {
       watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
-        this.pages.关注.props.contents = resp.data;
+        this.watchList = resp.data;
       });
       historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
-        this.pages.足迹.props.contents = resp.data;
+        this.historyList = resp.data;
       });
     }
   },
@@ -344,7 +356,6 @@ export default defineComponent({
 
   > .white-card {
     display: flex;
-    padding: 15px 0;
     background-color: #fff;
     box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
     border-radius: 8px;
@@ -352,6 +363,26 @@ export default defineComponent({
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+  }
+}
+</style>
+
+<style lang="scss">
+.content-box > .white-card > .main-box > .f-tabs {
+  .f-tabs__header {
+    height: 29px;
+    margin: 13px 15px;
+  }
+
+  .f-tabs__tab {
+    padding: 2px 8px 3px 8px;
+    color: #aaadb3;
+    border: 1px solid #e0e0e0;
+    border-radius: 100px;
+
+    &.f-tabs__tab--active {
+      color: #fff;
+    }
   }
 }
 </style>

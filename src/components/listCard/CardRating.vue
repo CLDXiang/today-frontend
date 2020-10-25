@@ -152,8 +152,9 @@ export default defineComponent({
     border-radius: 20px;
     padding: 2px 9px;
     color: $gray2;
-    max-width: 200px;
+    overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .card-rating__bottom-icon-field {
     display: flex;

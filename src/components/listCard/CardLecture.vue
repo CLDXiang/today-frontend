@@ -92,7 +92,8 @@ export default defineComponent({
   .card-lecture__top-lecture-name {
     color: $gray2;
     font-size: 18px;
-    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
   .card-lecture__top-rating-number {
@@ -100,7 +101,8 @@ export default defineComponent({
     color: $gray3;
   }
   .card-lecture__teacher-name {
-    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
     color: $gray3;
     font-size: 14px;

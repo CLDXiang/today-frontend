@@ -37,7 +37,7 @@
         <div class="info-section">
           <div>
             <span class="user-name text-dark">
-              {{ userProfile.nickName }}
+              {{ userProfile.nickname }}
             </span>
             <span
               v-if="!isCurrentUser()"
@@ -56,7 +56,7 @@
       <div class="follow-box">
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ userProfile.following }}
+            {{ userProfile.watchers }}
           </span>
           <span class="follow-text text-light">
             关注
@@ -64,7 +64,7 @@
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ userProfile.follower }}
+            {{ userProfile.watchees }}
           </span>
           <span class="follow-text text-light">
             粉丝
@@ -72,7 +72,7 @@
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ userProfile.star }}
+            {{ userProfile.fans }}
           </span>
           <span class="follow-text text-light">
             被收藏数
@@ -132,10 +132,10 @@ export default defineComponent({
       avatar: '',
       bio: '',
       name: '',
-      nickName: '',
-      following: 0,
-      follower: 0,
-      star: 0,
+      nickname: '',
+      fans: 0,
+      watchers: 0,
+      watchees: 0,
     },
     pages: {
       点评: { component: markRaw(RatingList), props: { ratings: [] } },
@@ -151,9 +151,14 @@ export default defineComponent({
     ...mapGetters(['countHistory', 'userLoggedIn']),
   },
   created() {
-    profileClient.getUserProfile({ userId: this.userId }).then((resp) => {
-      this.userProfile = resp;
-    });
+    profileClient.getUserProfile({ userId: this.userId || this.user.id })
+      .then((resp) => {
+        this.userProfile = resp;
+      })
+      .catch(() => {
+        // 返回到上一页面
+        this.$router.go(-1);
+      });
     ratingClient.getRatingList({ username: this.user.name, limit: 20 }).then((resp) => {
       this.pages.点评.props.ratings = resp.data;
     });
@@ -200,7 +205,7 @@ export default defineComponent({
     },
     isCurrentUser(): boolean {
       // 访问的用户 ID == 自己的用户 ID
-      return this.userLoggedIn && (this.userId === (this.user.id || ''));
+      return this.userLoggedIn && (this.userId === this.user.id || this.userId === '');
     },
   },
 });

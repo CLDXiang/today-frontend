@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import store from '../store';
-import { mockProfiles } from './mocks/profile';
 
 const getUserProfile: (req: {
   userId?: string;
@@ -9,15 +8,12 @@ const getUserProfile: (req: {
   avatar: string;
   bio: string;
   name: string;
-  nickName: string;
-  // FIXME: match names according to backend API
-  following: number;
-  follower: number;
-  star: number;
+  nickname: string;
+  fans: number;
+  watchers: number;
+  watchees: number;
 }> = ({ userId = store.state.user.id as string }) =>
-  // FIXME: fix reject and catch
-  // new Promise((resolve, reject) => {
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
     };
@@ -28,34 +24,21 @@ const getUserProfile: (req: {
       })
       .then((resp) => {
         const profile = resp.data;
-        if (!profile.nickName) {
-          profile.nickName = profile.name;
+        if (!profile.nickname) {
+          profile.nickname = profile.name;
         }
         resolve(profile);
       })
-      // FIXME: mock
-      // .catch((err) => reject(err));
-      .catch(() => {
-        const mockProfile = mockProfiles[0];
-        resolve(mockProfile as {
-          avatar: string;
-          bio: string;
-          name: string;
-          nickName: string;
-          following: number;
-          follower: number;
-          star: number;
-        });
-      });
+      .catch((err) => reject(err));
   });
 
 const editProfile: (req: {
-  nickName: string;
+  nickname: string;
   bio: string;
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
     const authHeader = {
@@ -74,7 +57,7 @@ const uploadAvatar: (req: {
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = ({ userAvatar }) =>
   new Promise((resolve, reject) => {
     const authHeader = {

@@ -416,5 +416,9 @@ export default defineComponent({
       color: #fff;
     }
   }
+
+  .list-card {
+    margin-bottom: 8px;
+  }
 }
 </style>

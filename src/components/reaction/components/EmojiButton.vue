@@ -53,6 +53,7 @@ export default defineComponent({
 }
 
 .emoji-button.emoji-button--active {
-  background-color: #9fd3da;
+  background-color: #e3f1f3;
+  border: 1.5px solid #60BDCA;
 }
 </style>

@@ -161,7 +161,7 @@ export default defineComponent({
     display: flex;
     color: $gray3;
     .card-rating__bottom-icon {
-      margin-right: 10px;
+      margin-left: 10px;
       display: flex;
       align-items: flex-start;
       .card-rating__bottom-statistics {

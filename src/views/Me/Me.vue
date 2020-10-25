@@ -182,23 +182,23 @@ export default defineComponent({
     ...mapGetters(['userLoggedIn']),
   },
   created() {
-    ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {
+    ratingClient.getRatingListByUser({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.ratingList = resp.data;
     });
-    commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {
+    commentClient.getCommentList({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.commentList = resp.data;
     });
-    lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
+    lectureClient.getSelectList({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.lectureList = resp.data;
     });
-    starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
+    starClient.getStarList({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.starList = resp.data;
     });
     if (this.isCurrentUser()) {
-      watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
+      watchClient.getWatchList({ userId: this.user.id, limit: 20 }).then((resp) => {
         this.watchList = resp.data;
       });
-      historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
+      historyClient.getHistoryList({ userId: this.user.id, limit: 20 }).then((resp) => {
         this.historyList = resp.data;
       });
     }

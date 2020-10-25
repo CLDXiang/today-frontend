@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rating__lecture-list">
     <card-lecture
       v-for="lecture in lectures"
       :key="lecture.id"
@@ -22,7 +22,3 @@ export default defineComponent({
 });
 
 </script>
-
-<style lang="scss" scoped>
-
-</style>

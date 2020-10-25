@@ -92,8 +92,8 @@ $padding-x: 12px;
 
   > .f-tabs__header {
     overflow-x: auto;
-    align-self: center;
     display: flex;
+    justify-content: flex-start;
     align-items: center;
     user-select: none;
     box-sizing: content-box;

@@ -3,7 +3,7 @@ import log from '@/utils/log';
 import { mockRatings } from './mocks/rating';
 
 // FIXME: mock
-/** 拿到某用户的点评列表 */
+/** 获取某用户的点评列表 */
 const getRatingListByUser: (req: {
   /** 用户 Id */
   userId: string;
@@ -18,7 +18,7 @@ const getRatingListByUser: (req: {
   req,
 ) =>
   new Promise((resolve) => {
-    log.info('rpcClient.search', req);
+    log.info('ratingClient.getRatingListByUser', req);
     resolve({
       msg: 'ok',
       data: mockRatings,
@@ -26,7 +26,7 @@ const getRatingListByUser: (req: {
   });
 
 // FIXME: mock
-/** 拿到某门课的点评列表 */
+/** 获取某门课的点评列表 */
 const getRatingListByLecture: (req: {
   /** 课程 Id */
   lectureId: string;
@@ -41,7 +41,7 @@ const getRatingListByLecture: (req: {
   req,
 ) =>
   new Promise((resolve) => {
-    log.info('rpcClient.search', req);
+    log.info('ratingClient.getRatingListByLecture', req);
     resolve({
       msg: 'ok',
       data: mockRatings,
@@ -49,7 +49,7 @@ const getRatingListByLecture: (req: {
   });
 
 // FIXME: mock
-/** 拿到某用户对某门课的点评 */
+/** 获取某用户对某门课的点评 */
 const getRating: (req: {
   /** 用户 Id */
   userId: string;
@@ -62,10 +62,24 @@ const getRating: (req: {
   req,
 ) =>
   new Promise((resolve) => {
-    log.info('rpcClient.search', req);
+    log.info('ratingClient.getRating', req);
     resolve({
       msg: 'ok',
       data: mockRatings[0],
+    });
+  });
+
+// FIXME: mock
+/** 获取点评列表 */
+const getRatingList: () => Promise<{
+  msg: string;
+  data: CardRatingItem[];
+}> = () =>
+  new Promise((resolve) => {
+    log.info('ratingClient.getRatingList');
+    resolve({
+      msg: 'ok',
+      data: mockRatings,
     });
   });
 
@@ -73,6 +87,7 @@ const ratingClient = {
   getRatingListByUser,
   getRatingListByLecture,
   getRating,
+  getRatingList,
 };
 
 export default ratingClient;

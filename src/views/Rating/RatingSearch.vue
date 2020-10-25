@@ -96,16 +96,12 @@ export default defineComponent({
 .content-box {
   height: 100%;
   width: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   color: #444;
   font-size: 14px;
-
   margin: 0 auto;
-
   max-width: 2560px;
 
   > .title {

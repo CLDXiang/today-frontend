@@ -3,19 +3,50 @@
     <rating-head-bar />
     <f-tabs
       v-model="activeTab"
-      size="small"
-      :pages="pages"
-    />
+    >
+      <f-tab-pane
+        v-show="activeTab === '最新'"
+        tab="最新"
+      >
+        <rating-list :ratings="latestRatingList" />
+      </f-tab-pane>
+      <f-tab-pane
+        v-show="activeTab === '通识'"
+        tab="通识"
+      >
+        <lecture-list :lectures="通识LectureList" />
+      </f-tab-pane>
+      <f-tab-pane
+        v-show="activeTab === '思政'"
+        tab="思政"
+      >
+        <lecture-list :lectures="思政LectureList" />
+      </f-tab-pane>
+      <f-tab-pane
+        v-show="activeTab === '外语'"
+        tab="外语"
+      >
+        <lecture-list :lectures="外语LectureList" />
+      </f-tab-pane>
+      <f-tab-pane
+        v-show="activeTab === '体育'"
+        tab="体育"
+      >
+        <lecture-list :lectures="体育LectureList" />
+      </f-tab-pane>
+    </f-tabs>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, markRaw } from 'vue';
+import { defineComponent } from 'vue';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
 export default defineComponent({
   components: {
     RatingHeadBar,
+    LectureList,
+    RatingList,
   },
   data() {
     return {
@@ -31,19 +62,6 @@ export default defineComponent({
       /** 体育课程列表 */
       体育LectureList: [],
     };
-  },
-  computed: {
-    /** 标签页 */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    pages(): Record<string, { component: any; props: Record<string, any> }> {
-      return {
-        最新: { component: markRaw(RatingList), props: { ratings: this.latestRatingList } },
-        通识: { component: markRaw(LectureList), props: { lectures: this.通识LectureList } },
-        思政: { component: markRaw(LectureList), props: { lectures: this.思政LectureList } },
-        外语: { component: markRaw(LectureList), props: { lectures: this.外语LectureList } },
-        体育: { component: markRaw(LectureList), props: { lectures: this.体育LectureList } },
-      };
-    },
   },
 });
 </script>

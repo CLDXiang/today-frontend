@@ -22,7 +22,7 @@ const store = createStore({
       name: '',
       bio: '',
       avatar: '',
-      nickName: '',
+      nickname: '',
       email: '',
     },
     profile: {
@@ -80,7 +80,7 @@ const store = createStore({
     setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
-      state.user.nickName = profile.nickName;
+      state.user.nickname = profile.nickname;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;

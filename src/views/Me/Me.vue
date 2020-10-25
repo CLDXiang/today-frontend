@@ -74,11 +74,46 @@
 
     <div class="white-card">
       <div class="main-box">
-        <f-tabs
-          v-model="activeTab"
-          size="small"
-          :pages="pages"
-        />
+        <f-tabs v-model="activeTab">
+          <f-tab-pane
+            v-show="activeTab === '点评'"
+            tab="点评"
+          >
+            <rating-list :ratings="ratingList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-show="activeTab === '回复'"
+            tab="回复"
+          >
+            <comment-list :comments="commentList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-show="activeTab === '课程'"
+            tab="课程"
+          >
+            <lecture-list :lectures="lectureList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-show="activeTab === '收藏'"
+            tab="收藏"
+          >
+            <common-list :contents="starList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-if="isCurrentUser"
+            v-show="activeTab === '关注'"
+            tab="关注"
+          >
+            <common-list :contents="watchList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-if="isCurrentUser"
+            v-show="activeTab === '足迹'"
+            tab="足迹"
+          >
+            <common-list :contents="historyList" />
+          </f-tab-pane>
+        </f-tabs>
       </div>
     </div>
 
@@ -87,7 +122,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, markRaw } from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 
 import {
@@ -101,13 +136,22 @@ import {
 
 import { useProcessAvatar } from '@/composables';
 import {
-  CardCommentItem, CardRatingItem, CardLectureItem, CardCommonItem,
+  CardCommentItem,
+  CardRatingItem,
+  CardLectureItem,
+  CardCommonItem,
 } from '@/components/listCard';
 import {
   RatingList, CommentList, LectureList, CommonList,
 } from './components';
 
 export default defineComponent({
+  components: {
+    RatingList,
+    CommentList,
+    LectureList,
+    CommonList,
+  },
   setup() {
     const { processAvatar } = useProcessAvatar();
     return {
@@ -136,23 +180,6 @@ export default defineComponent({
   computed: {
     ...mapState(['user', 'profile']),
     ...mapGetters(['countHistory', 'userLoggedIn']),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    pages(): Record<string, { component: any; props: Record<string, any> }> {
-      const commonPages = {
-        点评: { component: markRaw(RatingList), props: { ratings: this.ratingList }, name: `点评 ${this.ratingList.length}` },
-        回复: { component: markRaw(CommentList), props: { comments: this.commentList }, name: `回复 ${this.commentList.length}` },
-        课程: { component: markRaw(LectureList), props: { lectures: this.lectureList }, name: `课程 ${this.lectureList.length}` },
-        收藏: { component: markRaw(CommonList), props: { contents: this.starList }, name: `收藏 ${this.starList.length}` },
-      };
-      if (this.isCurrentUser()) {
-        const currentUserPages = {
-          关注: { component: markRaw(CommonList), props: { contents: this.watchList }, name: `关注 ${this.watchList.length}` },
-          足迹: { component: markRaw(CommonList), props: { contents: this.historyList }, name: `足迹 ${this.historyList.length}` },
-        };
-        return { ...commonPages, ...currentUserPages };
-      }
-      return commonPages;
-    },
   },
   created() {
     ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {

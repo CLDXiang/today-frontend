@@ -7,7 +7,7 @@ const getUserProfile: (req: {
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = ({
   userId = store.state.user.id as string,
 }) =>
@@ -27,12 +27,12 @@ const getUserProfile: (req: {
   });
 
 const editProfile: (req: {
-  nickName: string;
+  nickname: string;
   bio: string;
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
     const authHeader = {
@@ -51,7 +51,7 @@ const uploadAvatar: (req: {
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = ({ userAvatar }) =>
   new Promise((resolve, reject) => {
     const authHeader = {

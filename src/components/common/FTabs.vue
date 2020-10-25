@@ -2,13 +2,13 @@
   <div class="f-tabs">
     <div class="f-tabs__header">
       <span
-        v-for="pageKey in pageKeys"
-        :key="pageKey"
+        v-for="tabPane in tabPanes"
+        :key="tabPane.tab"
         class="f-tabs__tab"
-        :class="{ 'f-tabs__tab--active': pageKey === modelValue }"
-        @click="handleClickTab(pageKey)"
+        :class="{ 'f-tabs__tab--active': tabPane.tab === modelValue }"
+        @click="handleClickTab(tabPane.tab)"
       >
-        {{ pages[pageKey].name || pageKey }}
+        {{ tabPane.name || tabPane.tab }}
       </span>
       <!-- <span
         class="f-tabs__floating-border"
@@ -16,48 +16,41 @@
       /> -->
     </div>
     <div class="f-tabs__content">
-      <span
-        class="f-tabs__pane"
-      >
-        <keep-alive>
-          <component
-            :is="pages[modelValue].component"
-            :ref="modelValue"
-            v-bind="pages[modelValue].props"
-          />
-        </keep-alive>
-      </span>
+      <slot />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import {
-  defineComponent, PropType, DefineComponent,
+  defineComponent, ref,
 } from 'vue';
 
-interface Page {
-  /** 内容 */
-  component: DefineComponent;
-  /** 传入 component 的 props */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  props: Record<string, any>;
-  /** 标签名 */
-  name?: string;
-}
+// TODO: 如何让外部 FTabPane 不必写 v-show/v-if
 
 export default defineComponent({
   props: {
-    /** 子页面 */
-    pages: { type: Object as PropType<Record<string, Page>>, required: true },
     /** (v-model) 激活的页面 key */
     modelValue: { type: String, required: true },
   },
   emits: ['update:modelValue'],
+  setup(props, ctx) {
+    const tabPanes = ref<{
+      tab: string;
+      name: string;
+    }[]>([]);
+    tabPanes.value = (ctx.slots.default?.() || []).map((vNode) => ({
+      tab: vNode.props?.tab || '',
+      name: vNode.props?.name || '',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // children: (vNode.children as any)?.default?.() || null,
+    }));
+
+    return {
+      tabPanes,
+    };
+  },
   computed: {
-    pageKeys(): string[] {
-      return Object.keys(this.pages);
-    },
     // /** 计算下方悬浮 border 尺寸位置 */
     // floatingBorderStyle(): Record<string, string> {
     //   // 按照全角 key 计算

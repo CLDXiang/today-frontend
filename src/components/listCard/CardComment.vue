@@ -3,7 +3,7 @@
     <div class="list-card__main-field">
       <div
         class="list-card__avatar-field"
-        @click="handleClickAvatar"
+        @click.stop="handleClickAvatar"
       >
         <img
           class="avatar"
@@ -14,7 +14,7 @@
         <div class="list-card__top-field">
           <span
             class="card-comment__user-name"
-            @click="handleClickAvatar"
+            @click.stop="handleClickAvatar"
           >
             {{ comment.creator.nickname }}
           </span>
@@ -35,8 +35,8 @@
         <f-icon
           :style="{color: starColor}"
           :name="comment.starred ? 'heart-fill' : 'heart'"
-          size="16"
-          @click="handleClickStar"
+          size="14"
+          @click.stop="handleClickStar"
         />
         <span class="card-comment__statistics">
           {{ comment.starCount }}
@@ -55,7 +55,7 @@ export default defineComponent({
   props: {
     comment: { type: Object as PropType<CardCommentItem>, required: true },
   },
-  emits: ['avatar-clicked', 'comment-star'],
+  emits: ['click-avatar', 'click-star'],
   setup() {
     const { processAvatar } = useProcessAvatar();
     return {
@@ -73,10 +73,10 @@ export default defineComponent({
   },
   methods: {
     handleClickAvatar() {
-      this.$emit('avatar-clicked', this.comment.creator.id);
+      this.$emit('click-avatar', this.comment.creator.id);
     },
     handleClickStar() {
-      this.$emit('comment-star', this.comment.id);
+      this.$emit('click-star', this.comment.id);
     },
   },
 });
@@ -87,6 +87,7 @@ export default defineComponent({
   .card-comment__user-name {
     color: $primary-color;
     font-weight: bold;
+    cursor: pointer;
   }
   .card-comment__time-diff {
     color: $gray3;
@@ -104,5 +105,8 @@ export default defineComponent({
       font-size: 12px;
     }
   }
+}
+f-icon {
+  cursor: pointer;
 }
 </style>

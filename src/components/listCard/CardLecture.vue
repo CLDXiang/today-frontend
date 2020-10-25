@@ -30,7 +30,7 @@
         <span class="card-lecture__bottom-icon">
           <f-icon
             name="reaction"
-            size="16"
+            size="14"
           />
           <span class="card-lecture__bottom-statistics">
             {{ lecture.reactionCount }}
@@ -39,7 +39,7 @@
         <span class="card-lecture__bottom-icon">
           <f-icon
             name="chat"
-            size="16"
+            size="14"
           />
           <span class="card-lecture__bottom-statistics">
             {{ lecture.ratingCount }}
@@ -48,7 +48,7 @@
         <span class="card-lecture__bottom-icon">
           <f-icon
             name="heart"
-            size="16"
+            size="14"
           />
           <span class="card-lecture__bottom-statistics">
             {{ lecture.likeCount }}

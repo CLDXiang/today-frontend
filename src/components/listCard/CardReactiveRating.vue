@@ -3,7 +3,7 @@
     <div class="card-reactive-rating__top-field">
       <div
         class="card-reactive-rating__top-left"
-        @click="handleClickAvatar"
+        @click.stop="handleClickAvatar"
       >
         <img
           class="avatar"
@@ -15,7 +15,7 @@
           <div class="card-reactive-rating__top-right-first-up">
             <span
               class="card-reactive-rating__top-nickname"
-              @click="handleClickAvatar"
+              @click.stop="handleClickAvatar"
             >
               {{ rating.creator.nickname }}
             </span>
@@ -40,7 +40,6 @@
     </div>
     <div
       class="card-reactive-rating__content"
-      @click="handleClickRatingCard"
     >
       {{ rating.content }}
     </div>
@@ -52,7 +51,7 @@
       <span class="card-reactive-rating__icon">
         <f-icon
           name="chat"
-          size="16"
+          size="14"
         />
         <span class="card-reactive-rating__statistics">
           {{ rating.commentCount }}
@@ -60,35 +59,35 @@
       </span>
       <span
         class="card-reactive-rating__icon"
-        @click="handleClickChat"
+        @click.stop="handleClickChat"
       >
         <f-icon
           name="heart"
-          size="16"
+          size="14"
         />
         <span
           class="card-reactive-rating__statistics"
-          @click="handleClickLike"
+          @click.stop="handleClickLike"
         >
           {{ rating.starCount }}
         </span>
       </span>
       <span
         class="card-reactive-rating__icon"
-        @click="handleClickEdit"
+        @click.stop="handleClickEdit"
       >
         <f-icon
           name="edit-square"
-          size="16"
+          size="14"
         />
       </span>
       <span
         class="card-reactive-rating__icon"
-        @click="handleClickDelete"
+        @click.stop="handleClickDelete"
       >
         <f-icon
           name="delete"
-          size="16"
+          size="14"
         />
       </span>
     </div>
@@ -111,12 +110,11 @@ export default defineComponent({
     rating: { type: Object as PropType<CardRatingItem>, required: true },
   },
   emits: [
-    'avatar-clicked',
-    'rating-clicked',
-    'rating-chat',
-    'rating-like',
-    'rating-edit',
-    'rating-delete',
+    'click-avatar',
+    'click-chat',
+    'click-like',
+    'click-edit',
+    'click-delete',
   ],
   setup() {
     const { processAvatar } = useProcessAvatar();
@@ -136,22 +134,19 @@ export default defineComponent({
   },
   methods: {
     handleClickAvatar() {
-      this.$emit('avatar-clicked', this.rating.creator.id);
-    },
-    handleClickRatingCard() {
-      this.$emit('rating-clicked', this.rating.id);
+      this.$emit('click-avatar', this.rating.creator.id);
     },
     handleClickChat() {
-      this.$emit('rating-chat', this.rating.id);
+      this.$emit('click-chat', this.rating.id);
     },
     handleClickLike() {
-      this.$emit('rating-like', this.rating.id);
+      this.$emit('click-like', this.rating.id);
     },
     handleClickEdit() {
-      this.$emit('rating-edit', this.rating.id);
+      this.$emit('click-edit', this.rating.id);
     },
     handleClickDelete() {
-      this.$emit('rating-delete', this.rating.id);
+      this.$emit('click-delete', this.rating.id);
     },
   },
 });
@@ -192,6 +187,7 @@ export default defineComponent({
     color: $primary-color;
     font-weight: bold;
     font-size: 16px;
+    cursor: pointer;
   }
   .card-reactive-rating__top-datetime {
     color: #c4c4c4;

@@ -3,7 +3,7 @@
     <div class="list-card__main-field">
       <div
         class="list-card__avatar-field"
-        @click="handleClickAvatar"
+        @click.stop="handleClickAvatar"
       >
         <img
           class="avatar"
@@ -14,7 +14,7 @@
         <div class="list-card__top-field">
           <span
             class="card-rating__top-nickname"
-            @click="handleClickAvatar"
+            @click.stop="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
           </span>
@@ -24,7 +24,6 @@
         </div>
         <div
           class="list-card__middle-field"
-          @click="handleClickRatingCard"
         >
           <span class="card-rating__content">
             {{ rating.content }}
@@ -34,7 +33,6 @@
     </div>
     <div
       class="list-card__bottom-field"
-      @click="handleClickRatingCard"
     >
       <span
         :class="courseCardColor"
@@ -47,7 +45,7 @@
           <span>
             <f-icon
               name="reaction"
-              size="16"
+              size="14"
             />
           </span>
           <span
@@ -59,7 +57,7 @@
         <span class="card-rating__bottom-icon">
           <f-icon
             name="chat"
-            size="16"
+            size="14"
           />
           <span class="card-rating__bottom-statistics">
             {{ rating.commentCount }}
@@ -69,7 +67,7 @@
           <f-icon
             :style="{color: starColor}"
             :name="rating.starred ? 'heart-fill' : 'heart'"
-            size="16"
+            size="14"
           />
           <span class="card-rating__bottom-statistics">
             {{ rating.starCount }}
@@ -90,7 +88,7 @@ export default defineComponent({
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, required: true },
   },
-  emits: ['avatar-clicked', 'rating-clicked'],
+  emits: ['click-avatar'],
   setup() {
     const { processAvatar } = useProcessAvatar();
     return {
@@ -111,10 +109,7 @@ export default defineComponent({
   },
   methods: {
     handleClickAvatar() {
-      this.$emit('avatar-clicked', this.rating.creator.id);
-    },
-    handleClickRatingCard() {
-      this.$emit('rating-clicked', this.rating.id);
+      this.$emit('click-avatar', this.rating.creator.id);
     },
   },
 });
@@ -132,6 +127,7 @@ export default defineComponent({
     color: $primary-color;
     font-weight: bold;
     font-size: 16px;
+    cursor: pointer;
   }
   .card-rating__top-datetime {
     color: #c4c4c4;

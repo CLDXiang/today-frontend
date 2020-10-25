@@ -11,7 +11,6 @@ export const mockRatings: CardRatingItem[] = [
       avatar: '/default_avatar.png',
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
-    content: '点评内容点评内容点评内容点评内容点评内容',
     lecture: {
       id: 'COMP233333.3',
       name: '思修',
@@ -28,6 +27,13 @@ export const mockRatings: CardRatingItem[] = [
           { id: '236', nickname: '小白' },
         ],
       },
+    },
+    form: {
+      difficulty: 4,
+      nice: 4,
+      workload: 4,
+      overall: 4,
+      content: '点点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容评内容点评内容点评内容点评内容点评内容',
     },
   },
   {
@@ -39,7 +45,6 @@ export const mockRatings: CardRatingItem[] = [
       avatar: '/default_avatar.png',
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
-    content: '点评内容点评内容点评内容点评内容点评内容',
     lecture: {
       id: 'COMP233333.3',
       name: '思修',
@@ -56,6 +61,13 @@ export const mockRatings: CardRatingItem[] = [
           { id: '236', nickname: '小白' },
         ],
       },
+    },
+    form: {
+      difficulty: 4,
+      nice: 4,
+      workload: 4,
+      overall: 4,
+      content: '点评点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内arsteniarsteanrsitnariotneioatnioantieornitnaritnioarntinairtsniroani容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容点评内容内容点评内容点评内容点评内容点评内容',
     },
   },
   {
@@ -67,7 +79,6 @@ export const mockRatings: CardRatingItem[] = [
       avatar: '/default_avatar.png',
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
-    content: '点评内容点评内容点评内容点评内容点评内容',
     lecture: {
       id: 'COMP233333.3',
       name: '思修',
@@ -84,6 +95,13 @@ export const mockRatings: CardRatingItem[] = [
           { id: '236', nickname: '小白' },
         ],
       },
+    },
+    form: {
+      difficulty: 4,
+      nice: 4,
+      workload: 4,
+      overall: 4,
+      content: '点评内容点评内容点评内容点评内容点评内容',
     },
   },
   {
@@ -95,7 +113,6 @@ export const mockRatings: CardRatingItem[] = [
       avatar: '/default_avatar.png',
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
-    content: '点评内容点评内容点评内容点评内容点评内容',
     lecture: {
       id: 'COMP233333.3',
       name: '思修',
@@ -112,6 +129,13 @@ export const mockRatings: CardRatingItem[] = [
           { id: '236', nickname: '小白' },
         ],
       },
+    },
+    form: {
+      difficulty: 4,
+      nice: 4,
+      workload: 4,
+      overall: 4,
+      content: '点评内容点评内容点评内容点评内容点评内容',
     },
   },
 ];

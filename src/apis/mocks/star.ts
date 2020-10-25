@@ -31,6 +31,13 @@ export const mockStars: CardCommonItem[] = [
         ],
       },
     },
+    form: {
+      difficulty: 4,
+      nice: 4,
+      workload: 4,
+      overall: 4,
+      content: 'hello',
+    },
   },
   {
     id: 'COMP233333.3',

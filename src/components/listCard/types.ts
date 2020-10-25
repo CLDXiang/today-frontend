@@ -32,8 +32,6 @@ export interface CardRatingItem {
   };
   /** 发布时间 */
   createdAt: Dayjs;
-  /** 点评内容 */
-  content: string;
   /** 课程信息 */
   lecture: {
     /** lecture ID */
@@ -51,6 +49,8 @@ export interface CardRatingItem {
   starred: boolean;
   /** Reaction 概要（此页面是否展示 Reaction 看 UI 反馈，若不展示去掉此字段） */
   reaction: ReactionFieldValue;
+  /** 点评表单 */
+  form: RateForm;
 }
 
 /** 回复类列表项 */
@@ -118,6 +118,19 @@ export interface CardUserItem {
   avatar: string;
   /** 个性签名 */
   bio: string;
+}
+
+interface RateForm {
+  /** 难易程度 */
+  difficulty?: number;
+  /** 给分好坏 */
+  nice?: number;
+  /** 工作量 */
+  workload?: number;
+  /** 综合推荐指数 */
+  overall?: number;
+  /** 评价内容 */
+  content?: string;
 }
 
 /** 类型不定列表项 */

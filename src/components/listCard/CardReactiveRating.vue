@@ -20,15 +20,23 @@
               {{ rating.creator.nickname }}
             </span>
             <five-stars
-              score="47"
+              score="rating.form.overall"
               size="12"
             />
             <span class="card-reactive-rating__five-stars-score">
-              4.7
+              {{ rating.form.overall }}
             </span>
           </div>
           <span class="card-reactive-rating__five-stars-hints">
-            善良善良善良
+            <span class="card-reactive-rating__hints-contents">
+              {{ mapScoreToText('difficulty', rating.form.difficulty) }}
+            </span>
+            <span class="card-reactive-rating__hints-contents">
+              {{ mapScoreToText('nice', rating.form.nice) }}
+            </span>
+            <span class="card-reactive-rating__hints-contents">
+              {{ mapScoreToText('workload', rating.form.workload) }}
+            </span>
           </span>
         </div>
         <div class="card-reactive-rating__top-right-second">
@@ -41,7 +49,7 @@
     <div
       class="card-reactive-rating__content"
     >
-      {{ rating.content }}
+      {{ rating.form.content }}
     </div>
     <div class="card-reactive-rating__reactions">
       REACTIONS
@@ -99,6 +107,7 @@ import { defineComponent, PropType } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapState } from 'vuex';
 import { useProcessAvatar } from '@/composables';
+import { mapScoreToText } from '@/utils/rating';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -133,18 +142,24 @@ export default defineComponent({
     },
   },
   methods: {
+    mapScoreToText,
+    /** 点击头像 */
     handleClickAvatar() {
       this.$emit('click-avatar', this.rating.creator.id);
     },
+    /** 点击讨论 */
     handleClickChat() {
       this.$emit('click-chat', this.rating.id);
     },
+    /** 点击收藏 */
     handleClickLike() {
       this.$emit('click-like', this.rating.id);
     },
+    /** 点击修改 */
     handleClickEdit() {
       this.$emit('click-edit', this.rating.id);
     },
+    /** 点击删除 */
     handleClickDelete() {
       this.$emit('click-delete', this.rating.id);
     },
@@ -175,6 +190,11 @@ export default defineComponent({
         flex-direction: column;
         > .card-reactive-rating__five-stars-hints {
           text-align: left;
+          font-size: 10px;
+          color: $gray3;
+          > .card-reactive-rating__hints-contents {
+            margin-right: 5px;
+          }
         }
       }
     }
@@ -182,6 +202,14 @@ export default defineComponent({
   .card-reactive-rating__content {
     text-align: left;
     color: $gray2;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    margin-bottom: 10px;
   }
   .card-reactive-rating__top-nickname {
     color: $primary-color;
@@ -193,10 +221,6 @@ export default defineComponent({
     color: #c4c4c4;
     font-size: 12px;
   }
-  .card-reactive-rating__five-stars-hints {
-    font-size: 10px;
-    color: $gray3
-  }
   .card-reactive-rating__five-stars-score {
     color: $gray3;
     margin-left: 4px;
@@ -204,7 +228,7 @@ export default defineComponent({
   .card-reactive-rating__bottom-icons {
     display: inline;
     color: $gray3;
-    .card-reactive-rating__icon {
+    > .card-reactive-rating__icon {
       display: flex;
       align-items: center;
       > .card-reactive-rating__statistics {

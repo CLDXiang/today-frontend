@@ -26,7 +26,7 @@
           class="list-card__middle-field"
         >
           <span class="card-rating__content">
-            {{ rating.content }}
+            {{ rating.form.content }}
           </span>
         </div>
       </div>
@@ -143,9 +143,10 @@ export default defineComponent({
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break: break-all;
   }
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
   .card-rating__bottom-class-info {
     font-size: 12px;

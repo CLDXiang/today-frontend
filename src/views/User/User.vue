@@ -11,7 +11,7 @@
         >
           <f-icon
             class="text-light"
-            name="edit-square"
+            name="pencil-square"
           />
         </div>
         <div
@@ -39,6 +39,7 @@
             <span class="user-name text-dark">
               {{ userProfile.nickname }}
             </span>
+            <!-- TODO: 实现关注功能 -->
             <span
               v-if="!isCurrentUser()"
               class="follow-btn"
@@ -138,8 +139,8 @@ import {
 
 import { useProcessAvatar } from '@/composables';
 import {
-  CardCommentItem,
   CardRatingItem,
+  CardCommentItem,
   CardLectureItem,
   CardCommonItem,
 } from '@/components/listCard';

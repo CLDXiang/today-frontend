@@ -1,6 +1,4 @@
-import {
-  CardCommonItem,
-} from '@/components/listCard';
+import { CardCommonItem } from '@/components/listCard';
 
 export const mockWatches: CardCommonItem[] = [
   {

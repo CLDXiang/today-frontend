@@ -7,17 +7,21 @@
       >
         <div
           class="control-btn"
-          @click="$router.push('/me/edit')"
+          @click="$router.push('/user/edit')"
         >
-          <f-icon name="edit-square" />
+          <f-icon
+            class="text-light"
+            name="edit-square"
+          />
         </div>
         <div
           class="control-btn"
           @click="logout"
         >
-          <!-- TODO: src/components/common/FIcon.vue: "logout" icon not implemented,
-            temporarily using "back" icon instead -->
-          <f-icon name="back" />
+          <f-icon
+            class="text-light"
+            name="door-open"
+          />
         </div>
       </div>
       <div
@@ -27,13 +31,13 @@
       <div class="info-box">
         <img
           class="avatar"
-          :src="processAvatar(user.avatar)"
+          :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
         <div class="info-section">
           <div>
             <span class="user-name text-dark">
-              {{ user.name }}
+              {{ userProfile.nickname }}
             </span>
             <span
               v-if="!isCurrentUser()"
@@ -43,29 +47,26 @@
             </span>
           </div>
           <span class="bio text-light">
-            {{
-              user.bio ||
-                '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名'
-            }}
+            {{ userProfile.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
           </span>
         </div>
       </div>
       <div class="follow-box">
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ following }}
+            {{ userProfile.watchers || 0 }}
           </span>
           <span class="follow-text text-light"> 关注 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ follower }}
+            {{ userProfile.watchees || 0 }}
           </span>
           <span class="follow-text text-light"> 粉丝 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ star }}
+            {{ userProfile.fans || 0 }}
           </span>
           <span class="follow-text text-light"> 被收藏数 </span>
         </div>
@@ -126,6 +127,7 @@ import { defineComponent } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 
 import {
+  profileClient,
   ratingClient,
   commentClient,
   lectureClient,
@@ -152,6 +154,13 @@ export default defineComponent({
     LectureList,
     CommonList,
   },
+  props: {
+    // 访问的用户 ID
+    userId: {
+      type: String,
+      default: '',
+    },
+  },
   setup() {
     const { processAvatar } = useProcessAvatar();
     return {
@@ -159,10 +168,16 @@ export default defineComponent({
     };
   },
   data: () => ({
-    // TODO: obtain following data from backend
-    following: 90,
-    follower: 80,
-    star: 70,
+    // 访问的用户数据
+    userProfile: {
+      avatar: '',
+      bio: '',
+      name: '',
+      nickname: '',
+      fans: 0,
+      watchers: 0,
+      watchees: 0,
+    },
     activeTab: '点评',
     /** 点评列表 */
     ratingList: [] as CardRatingItem[],
@@ -178,10 +193,19 @@ export default defineComponent({
     historyList: [] as CardCommonItem[],
   }),
   computed: {
+    // 自己的用户数据
     ...mapState(['user']),
     ...mapGetters(['userLoggedIn']),
   },
   created() {
+    profileClient.getUserProfile({ userId: this.userId || this.user.id })
+      .then((resp) => {
+        this.userProfile = resp;
+      })
+      .catch(() => {
+        // 返回到上一页面
+        this.$router.go(-1);
+      });
     ratingClient.getRatingListByUser({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.ratingList = resp.data;
     });
@@ -211,11 +235,12 @@ export default defineComponent({
         this.$router.replace({ name: 'Timetable' });
       } else {
         this.vuexLogout();
-        this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
+        this.$router.replace({ name: 'Login', query: { redirect: '/user' } });
       }
     },
     isCurrentUser(): boolean {
-      return this.$route.name === 'Me';
+      // 访问的用户 ID == 自己的用户 ID
+      return this.userLoggedIn && (this.userId === this.user.id || this.userId === '');
     },
   },
 });
@@ -264,7 +289,7 @@ export default defineComponent({
 
       > .control-btn:hover {
         cursor: pointer;
-        background-color: $primary-color;
+        background-color: #ccf;
       }
     }
 

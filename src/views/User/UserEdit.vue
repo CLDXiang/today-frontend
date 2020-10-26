@@ -3,7 +3,7 @@
     <div class="title-box">
       <span
         class="back-btn"
-        @click="$router.push('/me')"
+        @click="$router.push('/user')"
       >
         <f-icon name="back" />
       </span>

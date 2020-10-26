@@ -19,11 +19,11 @@ const store = createStore({
       // eslint-disable-next-line @typescript-eslint/camelcase
       jwt_token: '',
       id: '',
-      name: '',
-      bio: '',
-      avatar: '',
-      nickname: '',
       email: '',
+      name: '',
+      nickname: '',
+      avatar: '',
+      bio: '',
     },
     profile: {
       notifications: [],
@@ -62,7 +62,7 @@ const store = createStore({
       // eslint-disable-next-line @typescript-eslint/camelcase
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
-      state.user.id = JSON.parse(payload).sub;
+      state.user.id = JSON.parse(payload).sub.toString();
       // log.info('set jwt_token', token);
     },
     setUser(state, payload: { name: string; email: string }) {

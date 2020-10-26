@@ -108,7 +108,7 @@ export default defineComponent({
   justify-content: center;
   user-select: none;
 
-  color: #4f4f4f;
+  color: $gray2;
   font-size: 14px;
 
   > span {

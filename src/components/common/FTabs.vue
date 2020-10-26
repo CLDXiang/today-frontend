@@ -101,7 +101,7 @@ $padding-x: 12px;
     height: 28px;
     font-size: $font-size;
     line-height: 22px;
-    color: #828282;
+    color: $gray3;
 
     position: relative;
 

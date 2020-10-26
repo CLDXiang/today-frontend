@@ -86,7 +86,7 @@ export default defineComponent({
   box-sizing: border-box;
   cursor: text;
   border-radius: 16px;
-  color: #828282;
+  color: $gray3;
   background-color: #f2f2f2;
   padding: 0 10px;
   font-size: 16px;

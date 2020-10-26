@@ -16,7 +16,7 @@ const store = createStore({
     /** 视窗大小，即 window.innerHeight */
     innerHeight: 667,
     user: {
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line camelcase
       jwt_token: '',
       id: '',
       email: '',
@@ -59,7 +59,7 @@ const store = createStore({
   },
   mutations: {
     setJwtToken(state, token) {
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line camelcase
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
       state.user.id = JSON.parse(payload).sub.toString();
@@ -71,7 +71,7 @@ const store = createStore({
     },
     logout(state) {
       // log.info('logout');
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line camelcase
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';

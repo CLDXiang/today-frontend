@@ -8,6 +8,7 @@ const login: (req: {
   /** 密码 */
   password: string;
 }) => Promise<{
+  // eslint-disable-next-line camelcase
   access_token: string;
   email: string;
   name: string;

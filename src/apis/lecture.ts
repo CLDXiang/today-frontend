@@ -5,8 +5,8 @@ import { LectureItem } from './types';
 
 // FIXME: mock
 const getSelectList: (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户 Id */
+  userId: string;
   /** 当前学期，没有时返回所有学期 */
   semester?: string;
   /** 分页 - 最后一个 lecture 的 id */
@@ -20,6 +20,29 @@ const getSelectList: (req: {
   req,
 ) => {
   log.info('lectureClient.getSelectList', req);
+  return new Promise((resolve) => {
+    resolve({
+      msg: 'ok',
+      data: mockSelects,
+    });
+  });
+};
+
+// FIXME: mock
+const getLectureList: (req: {
+  /** 课程类型 */
+  type: string;
+  /** 分页 - 最后一个 lecture 的 id */
+  lastId?: string;
+  /** 拉取条数 */
+  limit: number;
+}) => Promise<{
+  msg: string;
+  data: CardLectureItem[];
+}> = (
+  req,
+) => {
+  log.info('lectureClient.getLectureList', req);
   return new Promise((resolve) => {
     resolve({
       msg: 'ok',
@@ -46,6 +69,7 @@ const getLectureDetail: (req: {
 };
 
 const lectureClient = {
+  getLectureList,
   getSelectList,
   getLectureDetail,
 };

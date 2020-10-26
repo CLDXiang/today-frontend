@@ -54,19 +54,19 @@
       <div class="follow-box">
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ userProfile.watchers }}
+            {{ userProfile.watchers || 0 }}
           </span>
           <span class="follow-text text-light"> 关注 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ userProfile.watchees }}
+            {{ userProfile.watchees || 0 }}
           </span>
           <span class="follow-text text-light"> 粉丝 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ userProfile.fans }}
+            {{ userProfile.fans || 0 }}
           </span>
           <span class="follow-text text-light"> 被收藏数 </span>
         </div>

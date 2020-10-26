@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rating__lecture-list">
     <card-lecture
       v-for="lecture in lectures"
       :key="lecture.id"
@@ -20,9 +20,15 @@ export default defineComponent({
     lectures: { type: Array as PropType<CardLectureItem[]>, required: true },
   },
 });
-
 </script>
 
 <style lang="scss" scoped>
+.rating__lecture-list {
+  background-color: #f2f2f2;
+  padding-top: 6px;
 
+  > .list-card {
+    margin-bottom: 8px;
+  }
+}
 </style>

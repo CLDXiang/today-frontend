@@ -1,4 +1,8 @@
 import './listCard.scss';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
+import 'dayjs/locale/zh-cn';
+import dayjs from 'dayjs';
 
 export { default as CardRating } from './CardRating.vue';
 export { default as CardComment } from './CardComment.vue';
@@ -7,3 +11,7 @@ export { default as CardUser } from './CardUser.vue';
 export { default as CardReactiveRating } from './CardReactiveRating.vue';
 
 export * from './types';
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+dayjs.locale('zh-cn');

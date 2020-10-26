@@ -11,11 +11,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapState, mapGetters } from 'vuex';
-import defaultAvatar from '@/assets/default_avatar.jpg';
-
+import { useProcessAvatar } from '@/composables';
 // TODO: 点击弹出侧栏
 
 export default defineComponent({
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   data() {
     return {
     };
@@ -23,14 +28,6 @@ export default defineComponent({
   computed: {
     ...mapState(['user']),
     ...mapGetters(['userLoggedIn']),
-  },
-  methods: {
-    processAvatar(originAvatar: string) {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
-        return defaultAvatar;
-      }
-      return originAvatar;
-    },
   },
 });
 </script>

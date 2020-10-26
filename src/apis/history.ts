@@ -6,12 +6,12 @@ import { mockHistories } from './mocks/history';
 
 // FIXME: mock
 const getHistoryList: (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户 Id */
+  userId: string;
   /** 足迹类型 - user / lecture */
   type?: string;
   /** 分页 - 最后一个 history 的 id */
-  last_id?: string;
+  lastId?: string;
   /** 拉取条数 */
   limit: number;
 }) => Promise<{

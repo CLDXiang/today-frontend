@@ -6,10 +6,10 @@ import { mockWatches } from './mocks/watch';
 
 // FIXME: mock
 const getWatchList: (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户 Id */
+  userId: string;
   /** 分页 - 最后一个 user 的 id */
-  last_id?: string;
+  lastId?: string;
   /** 拉取条数 */
   limit: number;
 }) => Promise<{

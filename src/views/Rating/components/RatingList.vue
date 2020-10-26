@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rating__rating-list">
     <card-rating
       v-for="rating in ratings"
       :key="rating.id"
@@ -20,9 +20,15 @@ export default defineComponent({
     ratings: { type: Array as PropType<CardRatingItem[]>, required: true },
   },
 });
-
 </script>
 
 <style lang="scss" scoped>
+.rating__rating-list {
+  background-color: #f2f2f2;
+  padding-top: 6px;
 
+  > .list-card {
+    margin-bottom: 8px;
+  }
+}
 </style>

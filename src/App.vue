@@ -121,7 +121,18 @@ export default defineComponent({
 }
 
 .ant-btn-danger {
-  background-color: $danger-color;
-  border-color: $danger-color;
+  background-color: $color-red;
+  border-color: $color-red;
+}
+
+.ant-popover-inner {
+  border-radius: 8px;
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+}
+
+:focus {
+  outline: none;
 }
 </style>

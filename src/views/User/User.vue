@@ -39,6 +39,7 @@
             <span class="user-name text-dark">
               {{ userProfile.nickname }}
             </span>
+            <!-- TODO: 实现关注功能 -->
             <span
               v-if="!isCurrentUser()"
               class="follow-btn"

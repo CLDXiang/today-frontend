@@ -11,7 +11,7 @@
         >
           <f-icon
             class="text-light"
-            name="edit-square"
+            name="pencil-square"
           />
         </div>
         <div
@@ -138,8 +138,8 @@ import {
 
 import { useProcessAvatar } from '@/composables';
 import {
-  CardCommentItem,
   CardRatingItem,
+  CardCommentItem,
   CardLectureItem,
   CardCommonItem,
 } from '@/components/listCard';

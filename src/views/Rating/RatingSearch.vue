@@ -109,7 +109,7 @@ export default defineComponent({
     margin: 9px 0 8px 15px;
     font-size: 16px;
     line-height: 22px;
-    color: #828282;
+    color: $gray3;
   }
 
   > .search-result-list {

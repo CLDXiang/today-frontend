@@ -259,11 +259,11 @@ export default defineComponent({
   overflow-y: auto;
 
   .text-dark {
-    color: #4f4f4f;
+    color: $gray2;
   }
 
   .text-light {
-    color: #828282;
+    color: $gray3;
   }
 
   > .profile-card {

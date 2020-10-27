@@ -48,7 +48,7 @@ export default defineComponent({
     font-size: 12px;
     zoom: 0.83;
     line-height: 12px;
-    color: #828282;
+    color: $gray3;
   }
 }
 

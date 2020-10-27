@@ -26,7 +26,7 @@
           <div
             class="info-bar__star"
             :style="{
-              color: lectureInfo.starred ? '#ef755a' : '#828282'
+              color: lectureInfo.starred ? '#ef755a' : '$gray3'
             }"
           >
             <f-icon
@@ -44,7 +44,7 @@
               size="small"
               :style="{
                 backgroundColor: '#e3f1f3',
-                color: '#4f4f4f',
+                color: '$gray2',
                 borderColor: '#e3f1f3',
                 padding: '0 8px',
               }"
@@ -224,7 +224,7 @@ export default defineComponent({
           }
 
           > span:last-child {
-            color: #4f4f4f;
+            color: $gray2;
             font-size: 16px;
             line-height: 16px;
           }
@@ -237,7 +237,7 @@ export default defineComponent({
           > span {
             margin-left: 8px;
             font-size: 16px;
-            color: #828282;
+            color: $gray3;
           }
         }
       }
@@ -281,7 +281,7 @@ export default defineComponent({
         flex-direction: column;
 
         > div:first-child {
-          color: #4f4f4f;
+          color: $gray2;
           font-size: 14px;
           line-height: 14px;
         }

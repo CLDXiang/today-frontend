@@ -20,6 +20,6 @@ module.exports = {
     'prefer-promise-reject-errors': 0,
     'implicit-arrow-linebreak': 0,
     'import/prefer-default-export': 0,
-    'typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
   },
 };

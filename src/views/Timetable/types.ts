@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /** 原始上课时间段结构体（来自 JSON 文件） */
 export interface RawTimeSlot {
   /** 时间段编号（仅对该课程） */

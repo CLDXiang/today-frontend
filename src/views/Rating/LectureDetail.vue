@@ -1,8 +1,9 @@
 <template>
-  <div
-    class="content-box"
-  >
-    <rating-head-bar is-back-visible>
+  <div class="content-box">
+    <rating-head-bar
+      is-back-visible
+      @click-back="$router.back()"
+    >
       <span class="title">课程评价</span>
     </rating-head-bar>
     <div class="info-bar">
@@ -26,12 +27,12 @@
           <div
             class="info-bar__star"
             :style="{
-              color: lectureInfo.starred ? '#ef755a' : '$gray3'
+              color: lectureInfo.starred ? '#ef755a' : '#828282',
             }"
           >
             <f-icon
               class="icon-star"
-              :name="lectureInfo.starred ? 'heart-fill': 'heart'"
+              :name="lectureInfo.starred ? 'heart-fill' : 'heart'"
               :size="24"
               @click="handleClickStar"
             />
@@ -42,12 +43,8 @@
               type="primary"
               shape="round"
               size="small"
-              :style="{
-                backgroundColor: '#e3f1f3',
-                color: '$gray2',
-                borderColor: '#e3f1f3',
-                padding: '0 8px',
-              }"
+              class="info-bar__watch-button"
+              :class="{ 'info-bar__watch-button--watched': lectureInfo.watched }"
               @click="handleClickWatch"
             >
               <template
@@ -108,6 +105,7 @@
         <card-reactive-rating
           v-for="rating in ratingList"
           :key="rating.id"
+          :rating="rating"
         />
       </div>
     </div>
@@ -115,10 +113,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  toRefs,
-} from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
 import { CardReactiveRating } from '@/components/listCard';
@@ -258,12 +253,23 @@ export default defineComponent({
           }
 
           > .icon-star {
-            cursor: pointer
+            cursor: pointer;
           }
         }
 
         > .info-bar__watch {
           margin-top: 12px;
+
+          > .info-bar__watch-button {
+            background-color: #e3f1f3;
+            color: $gray2;
+            border-color: #e3f1f3;
+            padding: 0 8px;
+            &.info-bar__watch-button--watched {
+              background-color: #e0e0e0;
+              border-color: #e0e0e0;
+            }
+          }
         }
       }
     }

@@ -1,5 +1,6 @@
 import { CardRatingItem } from '@/components/listCard';
 import dayjs from 'dayjs';
+import { Rate } from '../types';
 
 export const mockRatings: CardRatingItem[] = [
   {
@@ -139,3 +140,18 @@ export const mockRatings: CardRatingItem[] = [
     },
   },
 ];
+
+export const mockRate: Rate = {
+  difficulty: 4,
+  nice: 4,
+  workload: 4,
+  recommended: 4,
+  content: '点评内容点评内容点评内容点评内容点评内容',
+  draft: {
+    difficulty: 4,
+    nice: 4,
+    workload: 4,
+    recommended: 4,
+    content: '点评内容点评内容点评内容点评内容点评内容',
+  },
+};

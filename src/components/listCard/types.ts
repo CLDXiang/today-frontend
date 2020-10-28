@@ -15,7 +15,7 @@ interface ReactionFieldValue {
   };
 }
 
-interface RateForm {
+export interface RateForm {
   /** 难易程度 */
   difficulty?: number;
   /** 给分好坏 */

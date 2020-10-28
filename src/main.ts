@@ -11,7 +11,7 @@ import {
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import {
-  FIcon, FInput, FSelect, FTabs,
+  FIcon, FInput, FSelect, FTabs, FTabPane,
 } from '@/components/common';
 import axios from 'axios';
 
@@ -55,7 +55,8 @@ app
   .component('FIcon', FIcon)
   .component('FInput', FInput)
   .component('FSelect', FSelect)
-  .component('FTabs', FTabs);
+  .component('FTabs', FTabs)
+  .component('FTabPane', FTabPane);
 
 // axios 拦截器
 axios.interceptors.response.use((resp) => resp, (err) => {

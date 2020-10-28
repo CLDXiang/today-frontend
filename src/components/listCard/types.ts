@@ -15,6 +15,19 @@ interface ReactionFieldValue {
   };
 }
 
+interface RateForm {
+  /** 难易程度 */
+  difficulty?: number;
+  /** 给分好坏 */
+  nice?: number;
+  /** 工作量 */
+  workload?: number;
+  /** 综合推荐指数 */
+  recommended?: number;
+  /** 评价内容 */
+  content?: string;
+}
+
 /** 点评类列表项 */
 export interface CardRatingItem {
   /** 点评 ID */
@@ -118,19 +131,6 @@ export interface CardUserItem {
   avatar: string;
   /** 个性签名 */
   bio: string;
-}
-
-interface RateForm {
-  /** 难易程度 */
-  difficulty?: number;
-  /** 给分好坏 */
-  nice?: number;
-  /** 工作量 */
-  workload?: number;
-  /** 综合推荐指数 */
-  recommended?: number;
-  /** 评价内容 */
-  content?: string;
 }
 
 /** 类型不定列表项 */

@@ -52,7 +52,7 @@ export default defineComponent({
   padding: 0 8px;
 
   > .lecture-info__title {
-    color: #4f4f4f;
+    color: $gray2;
     font-size: 16px;
     line-height: 16px;
     align-self: flex-start;
@@ -63,7 +63,7 @@ export default defineComponent({
 
     > span {
       margin-top: 10px;
-      color: #828282;
+      color: $gray3;
       font-size: 12px;
       line-height: 12px;
       text-align: left;

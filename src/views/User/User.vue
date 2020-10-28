@@ -7,17 +7,21 @@
       >
         <div
           class="control-btn"
-          @click="$router.push('/me/edit')"
+          @click="$router.push('/user/edit')"
         >
-          <f-icon name="edit-square" />
+          <f-icon
+            class="text-light"
+            name="pencil-square"
+          />
         </div>
         <div
           class="control-btn"
           @click="logout"
         >
-          <!-- TODO: src/components/common/FIcon.vue: "logout" icon not implemented,
-            temporarily using "back" icon instead -->
-          <f-icon name="back" />
+          <f-icon
+            class="text-light"
+            name="door-open"
+          />
         </div>
       </div>
       <div
@@ -27,63 +31,91 @@
       <div class="info-box">
         <img
           class="avatar"
-          :src="processAvatar(user.avatar)"
+          :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
         <div class="info-section">
           <div>
             <span class="user-name text-dark">
-              {{ user.name }}
+              {{ userProfile.nickname }}
             </span>
+            <!-- TODO: 实现关注功能 -->
             <span
               v-if="!isCurrentUser()"
               class="follow-btn"
             >
-              <span class="text-dark">
-                ＋&nbsp;关注
-              </span>
+              <span class="text-dark"> ＋&nbsp;关注 </span>
             </span>
           </div>
           <span class="bio text-light">
-            {{ user.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
+            {{ userProfile.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
           </span>
         </div>
       </div>
       <div class="follow-box">
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ following }}
+            {{ userProfile.watchers || 0 }}
           </span>
-          <span class="follow-text text-light">
-            关注
-          </span>
+          <span class="follow-text text-light"> 关注 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ follower }}
+            {{ userProfile.watchees || 0 }}
           </span>
-          <span class="follow-text text-light">
-            粉丝
-          </span>
+          <span class="follow-text text-light"> 粉丝 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-dark">
-            {{ star }}
+            {{ userProfile.fans || 0 }}
           </span>
-          <span class="follow-text text-light">
-            被收藏数
-          </span>
+          <span class="follow-text text-light"> 被收藏数 </span>
         </div>
       </div>
     </div>
 
     <div class="white-card">
       <div class="main-box">
-        <f-tabs
-          v-model="activeTab"
-          size="small"
-          :pages="pages"
-        />
+        <f-tabs v-model="activeTab">
+          <f-tab-pane
+            v-show="activeTab === '点评'"
+            tab="点评"
+          >
+            <rating-list :ratings="ratingList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-show="activeTab === '回复'"
+            tab="回复"
+          >
+            <comment-list :comments="commentList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-show="activeTab === '课程'"
+            tab="课程"
+          >
+            <lecture-list :lectures="lectureList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-show="activeTab === '收藏'"
+            tab="收藏"
+          >
+            <common-list :contents="starList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-if="isCurrentUser"
+            v-show="activeTab === '关注'"
+            tab="关注"
+          >
+            <common-list :contents="watchList" />
+          </f-tab-pane>
+          <f-tab-pane
+            v-if="isCurrentUser"
+            v-show="activeTab === '足迹'"
+            tab="足迹"
+          >
+            <common-list :contents="historyList" />
+          </f-tab-pane>
+        </f-tabs>
       </div>
     </div>
 
@@ -92,10 +124,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, markRaw } from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 
 import {
+  profileClient,
   ratingClient,
   commentClient,
   lectureClient,
@@ -106,13 +139,29 @@ import {
 
 import { useProcessAvatar } from '@/composables';
 import {
-  RatingList,
-  CommentList,
-  LectureList,
-  CommonList,
+  CardRatingItem,
+  CardCommentItem,
+  CardLectureItem,
+  CardCommonItem,
+} from '@/components/listCard';
+import {
+  RatingList, CommentList, LectureList, CommonList,
 } from './components';
 
 export default defineComponent({
+  components: {
+    RatingList,
+    CommentList,
+    LectureList,
+    CommonList,
+  },
+  props: {
+    // 访问的用户 ID
+    userId: {
+      type: String,
+      default: '',
+    },
+  },
   setup() {
     const { processAvatar } = useProcessAvatar();
     return {
@@ -120,47 +169,62 @@ export default defineComponent({
     };
   },
   data: () => ({
-    // TODO: obtain following data from backend
-    following: 90,
-    follower: 80,
-    star: 70,
-    pages: {
-      点评: { component: markRaw(RatingList), props: { ratings: [] } },
-      回复: { component: markRaw(CommentList), props: { comments: [] } },
-      课程: { component: markRaw(LectureList), props: { lectures: [] } },
-      收藏: { component: markRaw(CommonList), props: { contents: [] } },
-    } as Record<string, { component: unknown; props: Record<string, unknown> }>,
+    // 访问的用户数据
+    userProfile: {
+      avatar: '',
+      bio: '',
+      name: '',
+      nickname: '',
+      fans: 0,
+      watchers: 0,
+      watchees: 0,
+    },
     activeTab: '点评',
+    /** 点评列表 */
+    ratingList: [] as CardRatingItem[],
+    /** 回复列表 */
+    commentList: [] as CardCommentItem[],
+    /** 课程列表 */
+    lectureList: [] as CardLectureItem[],
+    /** 收藏列表 */
+    starList: [] as CardCommonItem[],
+    /** 关注列表 */
+    watchList: [] as CardCommonItem[],
+    /** 足迹列表 */
+    historyList: [] as CardCommonItem[],
   }),
   computed: {
-    ...mapState(['user', 'profile']),
-    ...mapGetters(['countHistory', 'userLoggedIn']),
-  },
-  mounted() {
-    if (this.isCurrentUser()) {
-      this.pages.关注 = { component: markRaw(CommonList), props: { contents: [] } };
-      this.pages.足迹 = { component: markRaw(CommonList), props: { contents: [] } };
-    }
+    // 自己的用户数据
+    ...mapState(['user']),
+    ...mapGetters(['userLoggedIn']),
   },
   created() {
-    ratingClient.getRatingListByUser({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.点评.props.ratings = resp.data;
+    profileClient.getUserProfile({ userId: this.userId || this.user.id })
+      .then((resp) => {
+        this.userProfile = resp;
+      })
+      .catch(() => {
+        // 返回到上一页面
+        this.$router.go(-1);
+      });
+    ratingClient.getRatingListByUser({ userId: this.user.id, limit: 20 }).then((resp) => {
+      this.ratingList = resp.data;
     });
-    commentClient.getCommentList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.回复.props.comments = resp.data;
+    commentClient.getCommentList({ userId: this.user.id, limit: 20 }).then((resp) => {
+      this.commentList = resp.data;
     });
-    lectureClient.getSelectList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.课程.props.lectures = resp.data;
+    lectureClient.getSelectList({ userId: this.user.id, limit: 20 }).then((resp) => {
+      this.lectureList = resp.data;
     });
-    starClient.getStarList({ username: this.user.name, limit: 20 }).then((resp) => {
-      this.pages.收藏.props.contents = resp.data;
+    starClient.getStarList({ userId: this.user.id, limit: 20 }).then((resp) => {
+      this.starList = resp.data;
     });
     if (this.isCurrentUser()) {
-      watchClient.getWatchList({ username: this.user.name, limit: 20 }).then((resp) => {
-        this.pages.关注.props.contents = resp.data;
+      watchClient.getWatchList({ userId: this.user.id, limit: 20 }).then((resp) => {
+        this.watchList = resp.data;
       });
-      historyClient.getHistoryList({ username: this.user.name, limit: 20 }).then((resp) => {
-        this.pages.足迹.props.contents = resp.data;
+      historyClient.getHistoryList({ userId: this.user.id, limit: 20 }).then((resp) => {
+        this.historyList = resp.data;
       });
     }
   },
@@ -172,11 +236,12 @@ export default defineComponent({
         this.$router.replace({ name: 'Timetable' });
       } else {
         this.vuexLogout();
-        this.$router.replace({ name: 'Login', query: { redirect: '/me' } });
+        this.$router.replace({ name: 'Login', query: { redirect: '/user' } });
       }
     },
     isCurrentUser(): boolean {
-      return this.$route.name === 'Me';
+      // 访问的用户 ID == 自己的用户 ID
+      return this.userLoggedIn && (this.userId === this.user.id || this.userId === '');
     },
   },
 });
@@ -191,13 +256,14 @@ export default defineComponent({
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  overflow-y: auto;
 
   .text-dark {
-    color: #4f4f4f;
+    color: $gray2;
   }
 
   .text-light {
-    color: #828282;
+    color: $gray3;
   }
 
   > .profile-card {
@@ -224,7 +290,7 @@ export default defineComponent({
 
       > .control-btn:hover {
         cursor: pointer;
-        background-color: $primary-color;
+        background-color: #ccf;
       }
     }
 
@@ -343,7 +409,6 @@ export default defineComponent({
 
   > .white-card {
     display: flex;
-    padding: 15px 0;
     background-color: #fff;
     box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
     border-radius: 8px;
@@ -351,6 +416,35 @@ export default defineComponent({
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+  }
+}
+</style>
+
+<style lang="scss">
+.content-box > .white-card > .main-box > .f-tabs {
+  .f-tabs__header {
+    height: 29px;
+    padding: 13px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .f-tabs__tab {
+    padding: 2px 8px 3px 8px;
+    color: #aaadb3;
+    border: 1px solid #e0e0e0;
+    border-radius: 100px;
+
+    &.f-tabs__tab--active {
+      color: #fff;
+    }
+  }
+
+  .list-card {
+    margin-bottom: 8px;
   }
 }
 </style>

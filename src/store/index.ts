@@ -16,14 +16,14 @@ const store = createStore({
     /** 视窗大小，即 window.innerHeight */
     innerHeight: 667,
     user: {
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line camelcase
       jwt_token: '',
       id: '',
-      name: '',
-      bio: '',
-      avatar: '',
-      nickName: '',
       email: '',
+      name: '',
+      nickname: '',
+      avatar: '',
+      bio: '',
     },
     profile: {
       notifications: [],
@@ -59,10 +59,10 @@ const store = createStore({
   },
   mutations: {
     setJwtToken(state, token) {
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line camelcase
       state.user.jwt_token = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
-      state.user.id = JSON.parse(payload).sub;
+      state.user.id = JSON.parse(payload).sub.toString();
       // log.info('set jwt_token', token);
     },
     setUser(state, payload: { name: string; email: string }) {
@@ -71,7 +71,7 @@ const store = createStore({
     },
     logout(state) {
       // log.info('logout');
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line camelcase
       state.user.jwt_token = '';
       state.user.name = '未登录';
       state.user.email = '';
@@ -80,7 +80,7 @@ const store = createStore({
     setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
-      state.user.nickName = profile.nickName;
+      state.user.nickname = profile.nickname;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;

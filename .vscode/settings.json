@@ -1,14 +1,22 @@
 {
   "cSpell.words": [
     "Vuex",
-    "fudan"
+    "camelcase",
+    "esnext",
+    "fdxk",
+    "fudan",
+    "hoverable",
+    "linebreak",
+    "scripthost"
   ],
   "eslint.nodePath": "../node_modules",
   "eslint.validate": [
-    "typescript"
+    "typescript",
+    "javascript",
+    "javascriptreact"
   ],
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+    "source.fixAll.eslint": true
   },
 }

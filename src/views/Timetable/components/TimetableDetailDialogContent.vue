@@ -244,7 +244,7 @@ export default defineComponent({
       > div:last-child {
         font-size: 14px;
         line-height: 14px;
-        color: #4f4f4f;
+        color: $gray2;
       }
     }
   }
@@ -279,7 +279,7 @@ export default defineComponent({
       > div:last-child {
         font-size: 14px;
         line-height: 14px;
-        color: #828282;
+        color: $gray3;
       }
     }
 

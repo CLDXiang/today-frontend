@@ -3,7 +3,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 const Timetable = () => import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
 const Rating = () => import(/* webpackChunkName: "rating" */ '@/views/Rating/Rating.vue');
 const Notification = () => import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
-const Me = () => import(/* webpackChunkName: "me" */ '@/views/Me/Me.vue');
+const User = () => import(/* webpackChunkName: "user" */ '@/views/User/User.vue');
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/timetable' },
@@ -28,11 +28,17 @@ const routes: Array<RouteRecordRaw> = [
     props: (route) => ({ lectureId: route.params.id }),
   },
   { path: '/notification', name: 'Notification', component: Notification },
-  { path: '/me', name: 'Me', component: Me },
+  { path: '/user', name: 'Me', component: User },
   {
-    path: '/me/edit',
-    name: 'MeEdit',
-    component: () => import(/* webpackChunkName: "me" */ '@/views/Me/MeEdit.vue'),
+    path: '/user/:id',
+    name: 'User',
+    component: User,
+    props: (route) => ({ userId: route.params.id }),
+  },
+  {
+    path: '/user/edit',
+    name: 'UserEdit',
+    component: () => import(/* webpackChunkName: "user" */ '@/views/User/UserEdit.vue'),
   },
   {
     path: '/login',
@@ -58,7 +64,7 @@ export const HeapPagePathReges = [
   /\/timetable$/,
   /\/rating$/,
   /\/notification$/,
-  /\/me$/,
+  /\/user$/,
   /\/login$/,
   /\/forgot-password$/,
   /\/register$/,

@@ -7,10 +7,12 @@ const getUserProfile: (req: {
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
-}> = ({
-  userId = store.state.user.id as string,
-}) =>
+  name: string;
+  nickname: string;
+  fans: number;
+  watchers: number;
+  watchees: number;
+}> = ({ userId = store.state.user.id as string }) =>
   new Promise((resolve, reject) => {
     const authHeader = {
       Authorization: `Bearer ${store.state.user.jwt_token}`,
@@ -21,18 +23,22 @@ const getUserProfile: (req: {
         headers: authHeader,
       })
       .then((resp) => {
-        resolve(resp.data);
+        const profile = resp.data;
+        if (!profile.nickname) {
+          profile.nickname = profile.name;
+        }
+        resolve(profile);
       })
       .catch((err) => reject(err));
   });
 
 const editProfile: (req: {
-  nickName: string;
+  nickname: string;
   bio: string;
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
     const authHeader = {
@@ -51,7 +57,7 @@ const uploadAvatar: (req: {
 }) => Promise<{
   avatar: string;
   bio: string;
-  nickName: string;
+  nickname: string;
 }> = ({ userAvatar }) =>
   new Promise((resolve, reject) => {
     const authHeader = {

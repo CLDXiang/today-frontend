@@ -96,16 +96,12 @@ export default defineComponent({
 .content-box {
   height: 100%;
   width: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   color: #444;
   font-size: 14px;
-
   margin: 0 auto;
-
   max-width: 2560px;
 
   > .title {
@@ -113,7 +109,7 @@ export default defineComponent({
     margin: 9px 0 8px 15px;
     font-size: 16px;
     line-height: 22px;
-    color: #828282;
+    color: $gray3;
   }
 
   > .search-result-list {

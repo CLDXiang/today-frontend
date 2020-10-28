@@ -54,7 +54,7 @@ export default defineComponent({
         return 'notification';
       }
       if (
-        /\/me\/?.*$/.test(path)
+        /\/user\/?.*$/.test(path)
         || /\/login\/?.*$/.test(path)
         || /\/register\/?.*$/.test(path)
         || /\/forgot-password\/?.*$/.test(path)
@@ -108,7 +108,7 @@ export default defineComponent({
   justify-content: center;
   user-select: none;
 
-  color: #4f4f4f;
+  color: $gray2;
   font-size: 14px;
 
   > span {

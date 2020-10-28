@@ -174,7 +174,7 @@ export default defineComponent({
     align-self: center;
     font-size: 14px;
     line-height: 14px;
-    color: #4f4f4f;
+    color: $gray2;
 
     margin-bottom: 24px;
   }
@@ -193,7 +193,7 @@ export default defineComponent({
 
       > .column-title {
         align-self: center;
-        color: #4f4f4f;
+        color: $gray2;
         font-size: 14px;
         font-weight: bold;
         margin-bottom: 6px;
@@ -227,14 +227,14 @@ export default defineComponent({
             > div:first-child {
               font-size: 14px;
               line-height: 14px;
-              color: #4f4f4f;
+              color: $gray2;
               margin-bottom: 10px;
             }
 
             > div:last-child {
               font-size: 12px;
               line-height: 12px;
-              color: #828282;
+              color: $gray3;
             }
           }
         }

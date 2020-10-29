@@ -119,6 +119,9 @@ import { useProcessAvatar } from '@/composables';
 import { mapScoreToText } from '@/utils/rating';
 import { Reaction, EmojiTable } from '@/components/reaction';
 import { CardRatingItem } from './types';
+import { reactionClient } from '@/apis';
+import { mockReaction } from '@/apis/mocks/reaction';
+
 
 export default defineComponent({
   components: {
@@ -151,6 +154,9 @@ export default defineComponent({
       mockReaction: {} as EmojiTable,
     };
   },
+  created() {
+    this.mockReaction = mockReaction.data.emoji;
+  },
   computed: {
     ...mapState(['user']),
     timeDiff() {
@@ -162,6 +168,16 @@ export default defineComponent({
     },
   },
   methods: {
+     handleAddReaction(emojiId: string) {
+      reactionClient.addReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
+        this.mockReaction = { ...data.emoji };
+      });
+    },
+    handleDeleteReaction(emojiId: string) {
+      reactionClient.deleteReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
+        this.mockReaction = { ...data.emoji };
+      });
+    },
     mapScoreToText,
     /** 点击头像 */
     handleClickAvatar() {
@@ -233,7 +249,7 @@ export default defineComponent({
     margin-bottom: 10px;
   }
   .card-reactive-rating__reactions {
-    margin-bottom: 9px;
+    height: 33px;
   }
   .card-reactive-rating__top-nickname {
     color: $primary-color;

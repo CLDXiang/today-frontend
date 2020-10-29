@@ -67,7 +67,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { useProcessAvatar } from '@/composables';
-import { Reaction, EmojiTable } from '@/components/reaction';
+import { Reaction } from '@/components/reaction';
 import { CardCommentItem } from './types';
 
 export default defineComponent({

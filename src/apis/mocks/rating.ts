@@ -146,12 +146,14 @@ export const mockRate: Rate = {
   nice: 4,
   workload: 4,
   recommended: 4,
-  content: '点评内容点评内容点评内容点评内容点评内容',
+  content: '服务器点评',
   draft: {
     difficulty: 4,
     nice: 4,
     workload: 4,
     recommended: 4,
-    content: '点评内容点评内容点评内容点评内容点评内容',
+    content: '服务器草稿',
+    updatedAt: dayjs('Wed Oct 14 2020 00:09:34 GMT+0800 (中国标准时间)'),
   },
+  updatedAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
 };

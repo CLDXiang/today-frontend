@@ -99,10 +99,11 @@
 import { defineComponent } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { ratingClient, lectureClient } from '@/apis';
-import { mapState } from 'vuex';
-import { RateForm } from '@/components/listCard';
+import { mapMutations, mapState } from 'vuex';
+import { RateForm } from '@/apis/types';
 import { scoreTextTable } from '@/utils/rating';
 import logger from '@/utils/log';
+import dayjs from 'dayjs';
 import { RatingHeadBar } from './components';
 
 export default defineComponent({
@@ -132,6 +133,8 @@ export default defineComponent({
         recommended: 0,
         /** 评价内容 */
         content: '',
+        /** 更新时间 */
+        updatedAt: dayjs(0),
       } as RateForm,
       /** 是否为草稿 */
       isDraft: false,
@@ -142,14 +145,32 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'ratingForms']),
     /** 表单内容是否都有有效值 */
     isFormDataAvailable(): boolean {
-      return !!(this.formData.difficulty
+      return !!(
+        this.formData.difficulty
         && this.formData.nice
         && this.formData.workload
         && this.formData.recommended
-        && this.formData.content?.trim());
+        && this.formData.content?.trim()
+      );
+    },
+  },
+  watch: {
+    formData: {
+      handler() {
+        if (this.isLoading) {
+          return;
+        }
+        // 这样频繁存储可能会有性能问题
+        // 本打算用 beforeUnmount 处理，但是在路由强跳时似乎无法触发
+        this.setRatingForm({
+          lectureId: this.lectureId,
+          formData: { ...this.formData, updatedAt: dayjs() },
+        });
+      },
+      deep: true,
     },
   },
   created() {
@@ -159,30 +180,47 @@ export default defineComponent({
       this.lectureName = data.name;
     });
 
+    /** 拿 storage 的 */
+    const localRatingForm: RateForm = this.ratingForms[this.lectureId];
+
+    this.formData = localRatingForm || this.formData;
+
     // 拉取点评信息
     if (this.ratingId) {
       // 若有 ratingId，则直接拉点评数据
-      ratingClient.getRatingById({ ratingId: this.ratingId }).then(({ data }) => {
-        if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
-          // 如果有非草稿有效内容，则使用有效内容
-          const {
-            difficulty, nice, workload, recommended, content,
-          } = data;
-          this.formData = {
-            difficulty,
-            nice,
-            workload,
-            recommended,
-            content,
-          };
-        } else if (data.draft) {
-          // 使用草稿内容
-          this.formData = data.draft;
-          this.isDraft = true;
-        }
-      }).finally(() => {
-        this.isLoading = false;
-      });
+      ratingClient
+        .getRatingById({ ratingId: this.ratingId })
+        .then(({ data }) => {
+          if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
+            // 如果有非草稿有效内容，则使用有效内容
+            const {
+              difficulty, nice, workload, recommended, content, updatedAt,
+            } = data;
+
+            if (!this.formData.updatedAt || (updatedAt && updatedAt > this.formData.updatedAt)) {
+              // 如果拉下来的内容更新，替换本地的
+              this.formData = {
+                difficulty,
+                nice,
+                workload,
+                recommended,
+                content,
+                updatedAt,
+              };
+            }
+          } else if (
+            data.draft && (
+              !this.formData.updatedAt
+            || (data.draft.updatedAt && data.draft.updatedAt > this.formData.updatedAt))
+          ) {
+            // 使用草稿内容
+            this.formData = data.draft;
+            this.isDraft = true;
+          }
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     } else {
       // 没有 ratingId，创建新的
       this.isDraft = true;
@@ -190,6 +228,7 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapMutations(['setRatingForm']),
     /** 检查表单字段有效性 */
     checkFormData() {
       const {
@@ -225,6 +264,7 @@ export default defineComponent({
         workload: 0,
         recommended: 0,
         content: '',
+        updatedAt: dayjs(0),
       };
     },
     /** 点击保存按钮 */
@@ -238,6 +278,7 @@ export default defineComponent({
         return;
       }
       this.isLoading = true;
+      this.formData.updatedAt = dayjs();
       // TODO: 调用 API 保存草稿并给出用户反馈
       logger.log('保存草稿');
       this.$message.success('保存草稿成功！');
@@ -250,6 +291,7 @@ export default defineComponent({
         return;
       }
       this.isLoading = true;
+      this.formData.updatedAt = dayjs();
       // TODO: 调用 API 提交点评并给出用户反馈
       logger.log('提交点评');
       this.$message.success('点评已发布！');

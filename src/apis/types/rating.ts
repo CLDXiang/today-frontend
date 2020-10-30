@@ -1,5 +1,7 @@
+import { Dayjs } from 'dayjs';
+
 // FIXME: 在 @/components/listCard 中也有定义，考虑放哪比较好
-interface RateForm {
+export interface RateForm {
   /** 难易程度 */
   difficulty?: number;
   /** 给分好坏 */
@@ -10,6 +12,8 @@ interface RateForm {
   recommended?: number;
   /** 评价内容 */
   content?: string;
+  /** 更新时间 */
+  updatedAt?: Dayjs;
 }
 
 export interface Rate extends RateForm {

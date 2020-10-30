@@ -46,12 +46,12 @@ export default defineComponent({
     /** 间距 */
     spacing: { type: [String, Number], default: 2 },
     /** v-model */
-    modelValue: { type: Number, required: true },
+    modelValue: { type: Number, default: undefined },
   },
   emits: ['change', 'update:modelValue'],
   computed: {
     scoreInt(): number {
-      return Math.round(this.score || this.modelValue);
+      return Math.round(this.score || this.modelValue || 0);
     },
   },
   methods: {

@@ -3,7 +3,7 @@
     <span
       v-if="isBackVisible"
       class="back-btn"
-      @click="$router.go('-1')"
+      @click="handleClickBack"
     >
       <f-icon
         name="back"
@@ -35,9 +35,11 @@ export default defineComponent({
     /** 搜索是否禁用 */
     searchDisabled: { type: Boolean, default: false },
   },
-  data() {
-    return {
-    };
+  emits: ['click-back'],
+  methods: {
+    handleClickBack() {
+      this.$emit('click-back');
+    },
   },
 });
 </script>

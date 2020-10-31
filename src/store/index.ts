@@ -1,13 +1,14 @@
 import { createStore } from 'vuex';
 import { localStorage, sessionStorage } from '@/utils/storage';
 import { Sections } from '@/views/Timetable/types';
+import { RateForm } from '@/components/listCard';
 
 import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
 const persistedState = {
   localStorage: ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'],
-  sessionStorage: [],
+  sessionStorage: ['ratingForms'],
 };
 
 const store = createStore({
@@ -52,6 +53,9 @@ const store = createStore({
     // 仅缓存用户打开 Timetable 会加载的第一个页面的内容
     selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
     hoveredCourseId: -1,
+
+    /** 点评表单页缓存 */
+    ratingForms: {} as { [lectureId: string]: RateForm },
 
     // storage 中保存的 state
     ...localStorage.getVuexStates(),
@@ -142,6 +146,11 @@ const store = createStore({
     setInnerHeight(state, newInnerHeight: number) {
       state.innerHeight = newInnerHeight;
     },
+    /** 设置 ratingForms */
+    setRatingForm(state, payload: { lectureId: string, formData: RateForm }) {
+      const { lectureId, formData } = payload;
+      state.ratingForms[lectureId] = formData;
+    },
   },
   getters: {
     userLoggedIn: (state) => state.user.jwt_token !== '',
@@ -164,7 +173,7 @@ persistedState.sessionStorage.forEach((stateKey) => {
   store.watch(
     (state) => state[stateKey],
     (newValue) => {
-      localStorage.setVuexState(stateKey, newValue);
+      sessionStorage.setVuexState(stateKey, newValue);
     },
     {
       deep: true,

@@ -20,7 +20,7 @@
               {{ rating.creator.nickname }}
             </span>
             <five-stars
-              score="rating.form.recommended"
+              :score="rating.form.recommended"
               size="12"
             />
             <span class="card-reactive-rating__five-stars-score">

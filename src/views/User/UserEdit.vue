@@ -150,7 +150,7 @@
 
 <script lang="ts">
 import { mapMutations, mapState } from 'vuex';
-import { profileClient } from '@/apis';
+import { userClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 import { useProcessAvatar } from '@/composables';
@@ -198,7 +198,7 @@ export default defineComponent({
       this.isAvatarUploading = true;
       const data = new FormData();
       data.append('file', f);
-      profileClient.uploadAvatar({ userAvatar: data })
+      userClient.uploadAvatar({ userAvatar: data })
         .then((resp) => {
           this.setUserProfile(resp);
           this.$message.success('修改头像成功！');
@@ -221,7 +221,7 @@ export default defineComponent({
         return;
       }
       this.isInfoModifying = true;
-      profileClient.editProfile({ nickname: this.nickname, bio: this.bio })
+      userClient.editUserInfo({ nickname: this.nickname, bio: this.bio })
         .then((resp) => {
           this.setUserProfile(resp);
           this.$message.success('修改成功！');

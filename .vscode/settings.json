@@ -7,7 +7,8 @@
     "fudan",
     "hoverable",
     "linebreak",
-    "scripthost"
+    "scripthost",
+    "watchees"
   ],
   "eslint.nodePath": "../node_modules",
   "eslint.validate": [

@@ -55,6 +55,7 @@
       <textarea
         v-model="formData.content"
         placeholder="请输入具体点评内容"
+        maxlength="5000"
       />
     </div>
     <div class="action-box">
@@ -376,7 +377,7 @@ export default defineComponent({
   > .action-box {
     display: flex;
     justify-content: space-between;
-    padding: 0 31px 64px 28px;
+    padding: 0 28px 64px;
 
     > .action-box__right > button {
       margin-left: 13px;

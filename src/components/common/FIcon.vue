@@ -4,15 +4,15 @@
     v-if="name === 'back'"
     :width="parsedWidth"
     :height="parsedHeight"
-    viewBox="0 0 16 16"
+    viewBox="0 0 14 24"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      fill-rule="evenodd"
-      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+      d="M3.9596 12L14 22.0235L12.0202 24L1.9798 13.9765L0 12L1.9798 10.0235L12.0202 0L14 1.97647L3.9596 12Z"
     />
   </svg>
+
   <svg
     v-else-if="name === 'cloud'"
     :width="parsedWidth"
@@ -421,6 +421,30 @@
       d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
     />
   </svg>
+  <svg
+    v-else-if="name === 'right'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 10 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5.94203 8L0 13.9636L2.02899 16L10 8L2.02899 0L0 2.03636L5.94203 8Z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'left'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 10 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.05797 8L10 13.9636L7.97101 16L0 8L7.97101 0L10 2.03636L4.05797 8Z"
+    />
+  </svg>
 </template>
 
 <script lang="ts">
@@ -455,6 +479,8 @@ type NameType =
   | 'chat'
   | 'door-open'
   | 'pencil-square'
+  | 'right'
+  | 'left'
   ;
 
 export default defineComponent({

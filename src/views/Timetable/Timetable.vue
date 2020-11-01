@@ -53,6 +53,8 @@
         :courses="selectedCourses"
         @click-cloud="fetchSelectedCourses"
         @click-back="hideSelectedCourseList"
+        @delete-course="(courseId) => removeSelectedCourse(courseId)"
+        @show-detail="handleShowDetail"
       />
     </a-drawer>
     <timetable-head-bar @click-menu-button="showSelectedCourseList" />
@@ -299,6 +301,8 @@ export default defineComponent({
       'setUserProfile',
       'setSelectedCourses',
       'hideDetailDialog',
+      'changeDetailPageContent',
+      'showDetailDialog',
     ]),
     areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;
@@ -609,6 +613,12 @@ export default defineComponent({
     },
     mapDay(day: number) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
+    },
+    /** 根据 lesson id 显示详情页 */
+    handleShowDetail(courseId: number) {
+      this.hideSelectedCourseList();
+      this.changeDetailPageContent(this.allCourses[courseId]);
+      this.showDetailDialog();
     },
   },
 });

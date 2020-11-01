@@ -12,12 +12,14 @@
           <a-button
             type="primary"
             size="small"
+            @click.stop="handleClickDetailButton"
           >
             <span>详情</span>
           </a-button>
           <a-button
             type="danger"
             size="small"
+            @click.stop="handleClickDeleteButton"
           >
             <span>删除</span>
           </a-button>
@@ -35,6 +37,7 @@ export default defineComponent({
   props: {
     course: { type: Object as PropType<SelectedCourse>, required: true },
   },
+  emits: ['show-detail', 'delete-course'],
   computed: {
     classCourseCard(): string[] {
       return [
@@ -44,6 +47,16 @@ export default defineComponent({
           || 0
         }`,
       ];
+    },
+  },
+  methods: {
+    /** 点击详情按钮 */
+    handleClickDetailButton() {
+      this.$emit('show-detail', this.course.id);
+    },
+    /** 点击删除按钮 */
+    handleClickDeleteButton() {
+      this.$emit('delete-course', this.course.id);
     },
   },
 });

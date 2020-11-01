@@ -30,6 +30,9 @@
         v-for="course in courses"
         :key="course.id"
         :course="course"
+        @click="handleClickCard"
+        @delete-course="(courseId) => $emit('delete-course', courseId)"
+        @show-detail="(courseId) => $emit('show-detail', courseId)"
       />
     </div>
   </div>
@@ -47,7 +50,7 @@ export default defineComponent({
   props: {
     courses: { type: Array as PropType<SelectedCourse[]>, required: true },
   },
-  emits: ['click-cloud', 'click-back'],
+  emits: ['click-cloud', 'click-back', 'delete-course', 'show-detail'],
   data() {
     return {
       /** 同步冷却 */
@@ -55,6 +58,7 @@ export default defineComponent({
     };
   },
   methods: {
+    /** 点击云 */
     handleClickCloud() {
       if (this.cooldownCnt > 0) {
         this.$message.warn(`请等待${this.cooldownCnt}秒再进行下一次云同步~`);
@@ -72,6 +76,10 @@ export default defineComponent({
       this.cooldownCnt = 60;
       cooldown();
       this.$emit('click-cloud');
+    },
+    /** 点击卡片 */
+    handleClickCard() {
+      // TODO: 待后端传入 lectureId 后跳转至评课页
     },
   },
 });

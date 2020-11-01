@@ -3,7 +3,7 @@
     <side-avatar />
     <div class="semester">
       <f-icon
-        name="chevron-left"
+        name="left"
         size="12"
         class="icon"
         @click="handleClickLeft"
@@ -12,7 +12,7 @@
         {{ semester }}
       </span>
       <f-icon
-        name="chevron-right"
+        name="right"
         size="12"
         class="icon"
         @click="handleClickRight"

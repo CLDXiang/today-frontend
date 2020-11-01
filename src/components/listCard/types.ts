@@ -15,7 +15,7 @@ interface ReactionFieldValue {
   };
 }
 
-interface RateForm {
+export interface RateForm {
   /** 难易程度 */
   difficulty?: number;
   /** 给分好坏 */
@@ -26,6 +26,8 @@ interface RateForm {
   recommended?: number;
   /** 评价内容 */
   content?: string;
+  /** 更新时间 */
+  updatedAt?: Dayjs;
 }
 
 /** 点评类列表项 */

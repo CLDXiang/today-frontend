@@ -1,6 +1,7 @@
 import { CardRatingItem } from '@/components/listCard';
 import log from '@/utils/log';
-import { mockRatings } from './mocks/rating';
+import { mockRatings, mockRate } from './mocks/rating';
+import { Rate } from './types';
 
 // FIXME: mock
 /** 获取某用户的点评列表 */
@@ -49,23 +50,21 @@ const getRatingListByLecture: (req: {
   });
 
 // FIXME: mock
-/** 获取某用户对某门课的点评 */
-const getRating: (req: {
-  /** 用户 Id */
-  userId: string;
-  /** 课程 Id */
-  lectureId: string;
+/** 根据 Id 获取点评 */
+const getRatingById: (req: {
+  /** 点评 Id */
+  ratingId: string;
 }) => Promise<{
-  msg: string;
-  data: CardRatingItem | undefined;
+  msg?: string;
+  data: Rate;
 }> = (
   req,
 ) =>
   new Promise((resolve) => {
-    log.info('ratingClient.getRating', req);
+    log.info('ratingClient.getRatingById', req);
     resolve({
       msg: 'ok',
-      data: mockRatings[0],
+      data: mockRate,
     });
   });
 
@@ -86,7 +85,7 @@ const getRatingList: () => Promise<{
 const ratingClient = {
   getRatingListByUser,
   getRatingListByLecture,
-  getRating,
+  getRatingById,
   getRatingList,
 };
 

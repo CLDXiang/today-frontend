@@ -2,7 +2,10 @@
   <div
     class="content-box"
   >
-    <rating-head-bar is-back-visible />
+    <rating-head-bar
+      is-back-visible
+      @click-back="$router.back()"
+    />
     <div class="title">
       “{{ parsedQ }}”的搜索结果
     </div>

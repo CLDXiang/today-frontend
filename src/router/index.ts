@@ -23,9 +23,15 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/rating/lecture/:id/form',
-    name: 'RatingForm',
+    name: 'RatingFormNew',
     component: () => import(/* webpackChunkName: "rating" */ '@/views/Rating/RatingForm.vue'),
     props: (route) => ({ lectureId: route.params.id }),
+  },
+  {
+    path: '/rating/lecture/:lid/form/:rid',
+    name: 'RatingForm',
+    component: () => import(/* webpackChunkName: "rating" */ '@/views/Rating/RatingForm.vue'),
+    props: (route) => ({ lectureId: route.params.lid, ratingId: route.params.rid }),
   },
   { path: '/notification', name: 'Notification', component: Notification },
   { path: '/user', name: 'Me', component: User },

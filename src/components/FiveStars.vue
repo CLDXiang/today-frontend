@@ -35,10 +35,7 @@ export default defineComponent({
     /** 是否可交互 */
     clickable: { type: Boolean, default: false },
     /** 分数 */
-    score: {
-      type: Number,
-      required: true,
-    },
+    score: { type: Number, default: undefined },
     /** 星星底部文案 */
     hint: {
       type: Array as PropType<string[]>,
@@ -48,11 +45,13 @@ export default defineComponent({
     size: { type: [String, Number], default: 12 },
     /** 间距 */
     spacing: { type: [String, Number], default: 2 },
+    /** v-model */
+    modelValue: { type: Number, default: undefined },
   },
-  emits: ['change'],
+  emits: ['change', 'update:modelValue'],
   computed: {
     scoreInt(): number {
-      return Math.round(this.score);
+      return Math.round(this.score || this.modelValue || 0);
     },
   },
   methods: {
@@ -60,6 +59,7 @@ export default defineComponent({
     handleClickStar(i: number) {
       if (this.clickable) {
         this.$emit('change', i);
+        this.$emit('update:modelValue', i);
       }
     },
   },

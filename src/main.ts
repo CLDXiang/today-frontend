@@ -15,11 +15,20 @@ import {
 } from '@/components/common';
 import axios from 'axios';
 
+import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
+import 'dayjs/locale/zh-cn';
+import dayjs from 'dayjs';
+
 import App from './App.vue';
 import './registerServiceWorker';
 // TODO: 有空测试下不同引入方式的 bundle size
 import router from './router';
 import store from './store';
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+dayjs.locale('zh-cn');
 
 const app = createApp(App);
 

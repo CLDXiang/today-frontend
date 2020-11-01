@@ -24,7 +24,7 @@
               size="12"
             />
             <span class="card-reactive-rating__five-stars-score">
-              {{ rating.form.recommended }}
+              {{ rating.form.recommended.toFixed(1) }}
             </span>
           </div>
           <span class="card-reactive-rating__five-stars-hints">
@@ -52,7 +52,12 @@
       {{ rating.form.content }}
     </div>
     <div class="card-reactive-rating__reactions">
-      REACTIONS
+      <reaction
+        :value="mockReaction"
+        :readonly="false"
+        @add="handleAddReaction"
+        @delete="handleDeleteReaction"
+      />
     </div>
     <div class="card-reactive-rating__division-bar" />
     <div class="card-reactive-rating__bottom-icons">
@@ -112,20 +117,23 @@ import FiveStars from '@/components/FiveStars.vue';
 import { mapState } from 'vuex';
 import { useProcessAvatar } from '@/composables';
 import { mapScoreToText } from '@/utils/rating';
+import { Reaction, EmojiTable } from '@/components/reaction';
+import { reactionClient } from '@/apis';
+import { mockReaction } from '@/apis/mocks/reaction';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
   components: {
     FiveStars,
+    Reaction,
   },
   props: {
     /** 点评数据项 */
-    rating: { type: Object as PropType<CardRatingItem>, required: true },
-    showChat: { type: Boolean, required: true },
-    showLike: { type: Boolean, required: true },
-    showEdit: { type: Boolean, required: false },
-    showDelete: { type: Boolean, required: false },
-
+    rating: { type: Object as PropType<CardRatingItem>, default: true },
+    showChat: { type: Boolean, default: true },
+    showLike: { type: Boolean, default: true },
+    showEdit: { type: Boolean, default: false },
+    showDelete: { type: Boolean, default: false },
   },
   emits: [
     'click-avatar',
@@ -140,6 +148,11 @@ export default defineComponent({
       processAvatar,
     };
   },
+  data() {
+    return {
+      mockReaction: {} as EmojiTable,
+    };
+  },
   computed: {
     ...mapState(['user']),
     timeDiff() {
@@ -150,7 +163,20 @@ export default defineComponent({
       return this.rating.starred ? '#ef755a' : '';
     },
   },
+  created() {
+    this.mockReaction = mockReaction.data.emoji;
+  },
   methods: {
+    handleAddReaction(emojiId: string) {
+      reactionClient.addReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
+        this.mockReaction = { ...data.emoji };
+      });
+    },
+    handleDeleteReaction(emojiId: string) {
+      reactionClient.deleteReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
+        this.mockReaction = { ...data.emoji };
+      });
+    },
     mapScoreToText,
     /** 点击头像 */
     handleClickAvatar() {
@@ -178,7 +204,7 @@ export default defineComponent({
 
 <style lang='scss' scoped>
 .card-reactive-rating {
-  padding: 16px 16px 10px 16px;
+  padding: 16px 16px 7px 16px;
 }
 
 .card-reactive-rating {
@@ -209,6 +235,7 @@ export default defineComponent({
     }
   }
   .card-reactive-rating__content {
+    margin-top: 7px;
     text-align: left;
     color: $gray2;
     font-size: 14px;
@@ -219,6 +246,9 @@ export default defineComponent({
     text-overflow: ellipsis;
     word-break: break-all;
     margin-bottom: 10px;
+  }
+  .card-reactive-rating__reactions {
+    height: 33px;
   }
   .card-reactive-rating__top-nickname {
     color: $primary-color;
@@ -234,9 +264,17 @@ export default defineComponent({
     color: $gray3;
     margin-left: 4px;
   }
+  .card-reactive-rating__division-bar {
+    height: 2px;
+    width: 100vw;
+    margin: 0 0 7px -16px;
+    background-color: #f2f2f2;
+  }
   .card-reactive-rating__bottom-icons {
-    display: inline;
+    display: flex;
+    justify-content: space-around;
     color: $gray3;
+    height: 14px;
     > .card-reactive-rating__icon {
       display: flex;
       align-items: center;
@@ -245,18 +283,6 @@ export default defineComponent({
         font-size: 12px;
       }
     }
-  }
-  .card-reactive-rating__division-bar {
-    height: 2px;
-    width: 100vw;
-    margin: 0 0 10px -16px;
-    background-color: #f2f2f2;
-  }
-  .card-reactive-rating__bottom-icons {
-    display: flex;
-    justify-content: space-around;
-    color: $gray3;
-    height: 15px;
   }
 }
 

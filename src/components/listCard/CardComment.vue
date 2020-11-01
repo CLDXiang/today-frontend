@@ -29,9 +29,27 @@
         </div>
       </div>
     </div>
+    <div class="card-comment__reactions">
+      <reaction
+        :value="mockReaction"
+        :readonly="false"
+        @add="handleAddReaction"
+        @delete="handleDeleteReaction"
+      />
+    </div>
     <div class="list-card__bottom-field">
       <span />
       <span class="card-comment__icon-field">
+        <f-icon
+          name="edit"
+          size="14"
+          @click.stop="handleClickStar"
+        />
+        <f-icon
+          name="delete"
+          size="14"
+          @click.stop="handleClickStar"
+        />
         <f-icon
           :style="{color: starColor}"
           :name="comment.starred ? 'heart-fill' : 'heart'"
@@ -49,9 +67,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { useProcessAvatar } from '@/composables';
+import { Reaction } from '@/components/reaction';
 import { CardCommentItem } from './types';
 
 export default defineComponent({
+  components: {
+    Reaction,
+  },
   props: {
     comment: { type: Object as PropType<CardCommentItem>, required: true },
   },
@@ -94,19 +116,22 @@ export default defineComponent({
     font-size: 12px;
   }
   .card-comment__comment-content {
+    word-break: break-all;
+    font-size: 14px;
     color: $gray2;
   }
   .card-comment__icon-field {
     display: flex;
     align-items: center;
-    .card-comment__statistics {
+    > svg {
+      cursor: pointer;
+      margin-left: 18px;
+    }
+    > .card-comment__statistics {
       margin-left: 4px;
       color: $gray3;
       font-size: 12px;
     }
   }
-}
-f-icon {
-  cursor: pointer;
 }
 </style>

@@ -276,7 +276,8 @@ export default defineComponent({
       this.semesterIndex += step;
       this.semester = semesterNameArray[this.semesterIndex];
       this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
-      // this.getCoursesFromJSON(jsonNameArray[this.semesterIndex]);
+      this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
+      this.getCoursesFromJSON(jsonNameArray[this.semesterIndex]);
       return true;
     },
     areSetsSame(set1: Set<number>, set2: Set<number>) {

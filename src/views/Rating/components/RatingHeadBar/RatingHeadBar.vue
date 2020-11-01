@@ -7,7 +7,8 @@
     >
       <f-icon
         name="back"
-        :size="24"
+        :width="14"
+        :height="24"
       />
     </span>
     <side-avatar v-else />

@@ -5,8 +5,10 @@
       placement="bottom"
       :closable="false"
       :visible="isDetailDialogVisible"
+
       @close="hideDetailDialog"
     >
+      w
       <timetable-detail-dialog-content
         :course="detailPageCourse"
         :class="classDetailPage"
@@ -43,7 +45,12 @@
         @hide-search-dialog="hideSearchDialog"
       />
     </a-drawer>
-    <timetable-head-bar @click-cloud="fetchSelectedCourses" />
+    <timetable-head-bar
+      :semester="semester"
+      @click-cloud="fetchSelectedCourses"
+      @click-left="moveSemester(-1)"
+      @click-right="moveSemester(1)"
+    />
     <div class="timetable__body">
       <div class="timetable__day-box">
         <div class="timetable__time">
@@ -120,6 +127,7 @@ import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { timetableClient, profileClient } from '@/apis';
 import log from '@/utils/log';
+import { semesterNameArray, jsonNameArray } from '@/utils/config';
 import {
   TimetableDay,
   TimetableDetailDialogContent,
@@ -147,6 +155,8 @@ export default defineComponent({
   data() {
     return {
       semester: '2020-2021学年1学期',
+      semesterIndex: 0,
+      semesterJsonName: '',
       isLoadingCourses: false,
       /** 课程数据 */
       allCourses: {} as AllCourses,
@@ -236,11 +246,16 @@ export default defineComponent({
       return `${Math.floor(this.innerHeight * 0.9)}px`;
     },
   },
+  created() {
+    this.semesterIndex = semesterNameArray.findIndex((name) => name === this.semester);
+    this.semesterJsonName = jsonNameArray[this.semesterIndex];
+    return true;
+  },
   mounted() {
     this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
     this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
     // 读取课程信息
-    this.getCoursesFromJSON();
+    this.getCoursesFromJSON(this.semesterJsonName);
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
@@ -250,6 +265,20 @@ export default defineComponent({
       'setSelectedCourses',
       'hideDetailDialog',
     ]),
+    moveSemester(step: -1 | 1) {
+      if (step === -1 && this.semesterIndex === 0) {
+        this.$message.warn('已经是最后一个学期啦', 0.5);
+        return false;
+      } if (step === 1 && this.semesterIndex === semesterNameArray.length - 1) {
+        this.$message.warn('已经是最新学期啦', 0.5);
+        return false;
+      }
+      this.semesterIndex += step;
+      this.semester = semesterNameArray[this.semesterIndex];
+      this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
+      // this.getCoursesFromJSON(jsonNameArray[this.semesterIndex]);
+      return true;
+    },
     areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;
       const intersect = [...set1].filter((item) => set2.has(item));
@@ -321,7 +350,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          this.$message.error('拉取课程数据失败，请尝试刷新页面');
+          this.$message.error('拉取课程数据失败，请尝试刷新页面', 1.5);
           throw err;
         });
     },

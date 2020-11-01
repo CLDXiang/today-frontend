@@ -5,11 +5,11 @@
       2020年秋季学期
     </div>
     <div
-      class="action-group"
-      @click="handleClickCloud"
+      class="action-group clickable"
+      @click="handleClickMenuButton"
     >
       <f-icon
-        name="cloud"
+        name="menu-button"
         size="24"
       />
     </div>
@@ -24,37 +24,18 @@ export default defineComponent({
   components: {
     SideAvatar,
   },
-  emits: ['click-cloud'],
-  data() {
-    return {
-      /** 同步冷却 */
-      cooldownCnt: 0,
-    };
-  },
+  emits: ['click-menu-button'],
   methods: {
-    handleClickCloud() {
-      if (this.cooldownCnt > 0) {
-        this.$message.warn(`请等待${this.cooldownCnt}秒再进行下一次云同步~`);
-        return;
-      }
-      const cooldown = () => {
-        setTimeout(() => {
-          this.cooldownCnt -= 1;
-          if (this.cooldownCnt > 0) {
-            cooldown();
-          }
-        }, 1000);
-      };
-
-      this.cooldownCnt = 60;
-      cooldown();
-      this.$emit('click-cloud');
+    handleClickMenuButton() {
+      this.$emit('click-menu-button');
     },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_clickable';
+
 .head-bar {
   width: 100%;
 

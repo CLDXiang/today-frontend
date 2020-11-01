@@ -80,8 +80,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#app {
+body {
   font-family: Heiti SC, Roboto, Avenir, Helvetica, Arial, sans-serif;
+}
+
+#app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -114,6 +117,19 @@ export default defineComponent({
     height: 100%;
     padding: 0;
   }
+}
+
+.ant-drawer-right > .ant-drawer-content-wrapper > .ant-drawer-content {
+  border-radius: 16px 0 0 16px;
+
+  > .ant-drawer-wrapper-body > .ant-drawer-body {
+    height: 100%;
+    padding: 0;
+  }
+}
+
+.ant-drawer-open .ant-drawer-content-wrapper {
+  box-shadow: none !important;
 }
 
 .ant-btn-round.ant-btn-lg {

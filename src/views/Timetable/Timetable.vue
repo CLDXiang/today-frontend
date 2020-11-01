@@ -43,7 +43,19 @@
         @hide-search-dialog="hideSearchDialog"
       />
     </a-drawer>
-    <timetable-head-bar @click-cloud="fetchSelectedCourses" />
+    <a-drawer
+      :height="drawerHeight"
+      placement="right"
+      :closable="false"
+      :visible="isSelectedCourseListVisible"
+      @close="hideSelectedCourseList"
+    >
+      <timetable-selected-course-list
+        @click-cloud="fetchSelectedCourses"
+        @click-back="hideSelectedCourseList"
+      />
+    </a-drawer>
+    <timetable-head-bar @click-menu-button="showSelectedCourseList" />
     <div class="timetable__body">
       <div class="timetable__day-box">
         <div class="timetable__time">
@@ -116,7 +128,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { timetableClient, userClient } from '@/apis';
 import log from '@/utils/log';
@@ -126,6 +138,7 @@ import {
   TimetableConflictDialogContent,
   TimetableSearchBar,
   TimetableHeadBar,
+  TimetableSelectedCourseList,
 } from './components';
 import {
   RawCourse,
@@ -142,8 +155,31 @@ export default defineComponent({
     TimetableConflictDialogContent,
     TimetableSearchBar,
     TimetableHeadBar,
+    TimetableSelectedCourseList,
   },
-  props: {},
+  setup() {
+    /** 是否显示已选课程列表抽屉 */
+    const isSelectedCourseListVisible = ref<boolean>(false);
+
+    /** 显示已选课程列表抽屉 */
+    const showSelectedCourseList = () => {
+      isSelectedCourseListVisible.value = true;
+    };
+
+    /** 隐藏已选课程列表抽屉 */
+    const hideSelectedCourseList = () => {
+      isSelectedCourseListVisible.value = false;
+    };
+
+    return {
+      /** 是否显示已选课程列表抽屉 */
+      isSelectedCourseListVisible,
+      /** 显示已选课程列表抽屉 */
+      showSelectedCourseList,
+      /** 隐藏已选课程列表抽屉 */
+      hideSelectedCourseList,
+    };
+  },
   data() {
     return {
       semester: '2020-2021学年1学期',
@@ -192,7 +228,6 @@ export default defineComponent({
       isConflictDialogVisible: false,
 
       isSearchDialogVisible: false,
-      isSelectedCourseListVisible: false,
     };
   },
   computed: {

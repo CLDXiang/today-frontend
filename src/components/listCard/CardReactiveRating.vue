@@ -118,10 +118,9 @@ import { mapState } from 'vuex';
 import { useProcessAvatar } from '@/composables';
 import { mapScoreToText } from '@/utils/rating';
 import { Reaction, EmojiTable } from '@/components/reaction';
-import { CardRatingItem } from './types';
 import { reactionClient } from '@/apis';
 import { mockReaction } from '@/apis/mocks/reaction';
-
+import { CardRatingItem } from './types';
 
 export default defineComponent({
   components: {
@@ -154,9 +153,6 @@ export default defineComponent({
       mockReaction: {} as EmojiTable,
     };
   },
-  created() {
-    this.mockReaction = mockReaction.data.emoji;
-  },
   computed: {
     ...mapState(['user']),
     timeDiff() {
@@ -167,8 +163,11 @@ export default defineComponent({
       return this.rating.starred ? '#ef755a' : '';
     },
   },
+  created() {
+    this.mockReaction = mockReaction.data.emoji;
+  },
   methods: {
-     handleAddReaction(emojiId: string) {
+    handleAddReaction(emojiId: string) {
       reactionClient.addReaction({ uniId: 'uni-1', emojiId }).then(({ data }) => {
         this.mockReaction = { ...data.emoji };
       });

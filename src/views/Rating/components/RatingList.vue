@@ -1,6 +1,6 @@
 <template>
   <div class="rating__rating-list">
-    <card-rating
+    <card-reactive-rating
       v-for="rating in ratings"
       :key="rating.id"
       :rating="rating"
@@ -10,11 +10,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { CardRatingItem, CardRating } from '@/components/listCard';
+import { CardRatingItem, CardReactiveRating } from '@/components/listCard';
 
 export default defineComponent({
   components: {
-    CardRating,
+    CardReactiveRating,
   },
   props: {
     ratings: { type: Array as PropType<CardRatingItem[]>, required: true },

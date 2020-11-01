@@ -25,13 +25,28 @@
         />
       </span>
     </div>
+    <div class="selected-course-list">
+      <timetable-selected-course-card
+        v-for="course in courses"
+        :key="course.id"
+        :course="course"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { SelectedCourse } from '../types';
+import TimetableSelectedCourseCard from './TimetableSelectedCourseCard.vue';
 
 export default defineComponent({
+  components: {
+    TimetableSelectedCourseCard,
+  },
+  props: {
+    courses: { type: Array as PropType<SelectedCourse[]>, required: true },
+  },
   emits: ['click-cloud', 'click-back'],
   data() {
     return {
@@ -59,20 +74,23 @@ export default defineComponent({
       this.$emit('click-cloud');
     },
   },
-
 });
 </script>
 
 <style lang="scss" scoped>
 @import '@/scss/_clickable';
+$header-height: 55px;
 
 .selected-course-list-box {
   background-color: #e3f1f3;
   height: 100%;
   border-radius: 16px 0 0 16px;
+  display: flex;
+  flex-direction: column;
 
   > .selected-course-list__header {
-    height: 55px;
+    flex-shrink: 0;
+    height: $header-height;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -98,6 +116,12 @@ export default defineComponent({
       color: #828282;
       height: 16px;
     }
+  }
+
+  > .selected-course-list {
+    padding: 4px 8px 12px 10px;
+    flex: 1;
+    overflow-y: auto;
   }
 }
 </style>

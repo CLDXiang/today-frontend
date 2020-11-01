@@ -9,7 +9,6 @@
     >
       <timetable-detail-dialog-content
         :course="detailPageCourse"
-        :class="classDetailPage"
         @delete-course="removeSelectedCourse(detailPageCourse.id)"
       />
     </a-drawer>
@@ -51,6 +50,7 @@
       @close="hideSelectedCourseList"
     >
       <timetable-selected-course-list
+        :courses="selectedCourses"
         @click-cloud="fetchSelectedCourses"
         @click-back="hideSelectedCourseList"
       />
@@ -146,6 +146,7 @@ import {
   SearchIndexItem,
   SearchIndexItemTimeSlot,
   Sections,
+  SelectedCourse,
 } from './types';
 
 export default defineComponent({
@@ -243,17 +244,6 @@ export default defineComponent({
       selectedCoursesIdsVuex: 'selectedCoursesIds',
     }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
-    classDetailPage() {
-      // if (!this.detailPageCourse.id) return [];
-      // const classList = [
-      //   `color-${(this.detailPageCourse.code &&
-      //     parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
-      //       96) ||
-      //     0}`,
-      // ];
-      // return classList;
-      return [];
-    },
     isMobileMode(): boolean {
       switch (this.breakpoint) {
         case 'xs':
@@ -269,6 +259,31 @@ export default defineComponent({
     /** 底部抽屉高度 */
     drawerHeight(): string {
       return `${Math.floor(this.innerHeight * 0.9)}px`;
+    },
+    /** 已选课程列表数据 */
+    selectedCourses(): SelectedCourse[] {
+      if (this.isLoadingCourses) {
+        // 还没加载好 JSON
+        return [];
+      }
+      return [...this.selectedCoursesIds].map((lessonId) => {
+        const {
+          id,
+          name,
+          // eslint-disable-next-line camelcase
+          time_slot,
+          code,
+        } = this.allCourses[lessonId];
+        const teachers = [
+          ...new Set(time_slot.reduce((pv, ts) => [...pv, ...ts.teacher], [] as string[])),
+        ];
+        return {
+          id,
+          name,
+          teachers,
+          code,
+        };
+      });
     },
   },
   mounted() {
@@ -301,7 +316,11 @@ export default defineComponent({
         this.replaceSelectedCourses(selectedCoursesIds);
       }
       if (changeRemote) {
-        const hide = this.$message.loading({ content: '正在向服务器同步数据...', key: messageKey, duration: 0 });
+        const hide = this.$message.loading({
+          content: '正在向服务器同步数据...',
+          key: messageKey,
+          duration: 0,
+        });
         timetableClient
           .replaceSelectedCourses(this.semester, [...selectedCoursesIds])
           .then(() => {
@@ -367,7 +386,11 @@ export default defineComponent({
         this.$message.warn('需要登录才能进行云同步');
         return;
       }
-      const hide = this.$message.loading({ content: '正在与服务器同步数据', key: messageKey, duration: 0 });
+      const hide = this.$message.loading({
+        content: '正在与服务器同步数据',
+        key: messageKey,
+        duration: 0,
+      });
       timetableClient
         .getSelectedCourses(this.semester)
         .then((res: number[]) => {

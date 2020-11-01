@@ -37,6 +37,8 @@ export default defineComponent({
   padding: 2px 3px;
   align-items: center;
   user-select: none;
+  border: 1.5px solid transparent;
+  min-width: 38px;
 
   > span:first-child {
     font-size: 16px;
@@ -50,9 +52,16 @@ export default defineComponent({
     line-height: 12px;
     color: $gray3;
   }
+
+  &:active {
+    > span:first-child {
+      zoom: 0.85;
+    }
+  }
 }
 
 .emoji-button.emoji-button--active {
-  background-color: #9fd3da;
+  background-color: #e3f1f3;
+  border-color: #60bdca;
 }
 </style>

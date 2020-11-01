@@ -128,7 +128,7 @@ import { defineComponent } from 'vue';
 import { mapGetters, mapState, mapMutations } from 'vuex';
 
 import {
-  profileClient,
+  userClient,
   ratingClient,
   commentClient,
   lectureClient,
@@ -199,7 +199,7 @@ export default defineComponent({
     ...mapGetters(['userLoggedIn']),
   },
   created() {
-    profileClient.getUserProfile({ userId: this.userId || this.user.id })
+    userClient.getUserInfo({ userId: this.userId || this.user.id })
       .then((resp) => {
         this.userProfile = resp;
       })

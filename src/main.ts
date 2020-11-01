@@ -15,11 +15,20 @@ import {
 } from '@/components/common';
 import axios from 'axios';
 
+import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
+import 'dayjs/locale/zh-cn';
+import dayjs from 'dayjs';
+
 import App from './App.vue';
 import './registerServiceWorker';
 // TODO: 有空测试下不同引入方式的 bundle size
 import router from './router';
 import store from './store';
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+dayjs.locale('zh-cn');
 
 const app = createApp(App);
 
@@ -50,6 +59,15 @@ app
   .component('FTabPane', FTabPane);
 
 // axios 拦截器
+axios.interceptors.request.use((req) => {
+  // 设置请求头 JWT
+  const newReq = { ...req };
+  if (store.state.user.jwt_token) {
+    newReq.headers.Authorization = `Bearer ${store.state.user.jwt_token}`;
+  }
+  return newReq;
+}, (err) => Promise.reject(err));
+
 axios.interceptors.response.use((resp) => resp, (err) => {
   if (err.response.status === 401 && store.getters.userLoggedIn) {
     // 处理登录态失效

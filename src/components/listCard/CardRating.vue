@@ -130,7 +130,7 @@ export default defineComponent({
     cursor: pointer;
   }
   .card-rating__top-datetime {
-    color: #c4c4c4;
+    color: $gray3;
     font-size: 12px;
   }
   .card-rating__content {
@@ -161,7 +161,7 @@ export default defineComponent({
     display: flex;
     color: $gray3;
     .card-rating__bottom-icon {
-      margin-right: 10px;
+      margin-left: 10px;
       display: flex;
       align-items: flex-start;
       .card-rating__bottom-statistics {

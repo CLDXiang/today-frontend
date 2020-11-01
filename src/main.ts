@@ -50,6 +50,15 @@ app
   .component('FTabPane', FTabPane);
 
 // axios 拦截器
+axios.interceptors.request.use((req) => {
+  // 设置请求头 JWT
+  const newReq = { ...req };
+  if (store.state.user.jwt_token) {
+    newReq.headers.Authorization = `Bearer ${store.state.user.jwt_token}`;
+  }
+  return newReq;
+}, (err) => Promise.reject(err));
+
 axios.interceptors.response.use((resp) => resp, (err) => {
   if (err.response.status === 401 && store.getters.userLoggedIn) {
     // 处理登录态失效

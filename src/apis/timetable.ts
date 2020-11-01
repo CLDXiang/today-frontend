@@ -1,16 +1,11 @@
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
-import store from '../store';
 
 const getSelectedCourses: (semester: string) => Promise<number[]> = (semester) =>
   new Promise((resolve, reject) => {
-    const authHeader = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
     axios
       .get(`${API_URL}/course/select`, {
         params: { semester },
-        headers: authHeader,
       })
       .then((resp) => {
         resolve(resp.data);
@@ -23,18 +18,12 @@ const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) =
   selectedCoursesIDs,
 ) =>
   new Promise((resolve, reject) => {
-    const authHeader = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
     axios
       .post(
         `${API_URL}/course/select`,
         {
           semester,
           selectedCoursesIDs,
-        },
-        {
-          headers: authHeader,
         },
       )
       .then(() => {
@@ -45,16 +34,10 @@ const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) =
 
 const addSelectedCourse: (courseId: number) => Promise<never> = (courseId) =>
   new Promise((resolve, reject) => {
-    const authHeader = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
     axios
       .post(
         `${API_URL}/course/${courseId}/select`,
         {},
-        {
-          headers: authHeader,
-        },
       )
       .then(() => {
         resolve();
@@ -64,13 +47,8 @@ const addSelectedCourse: (courseId: number) => Promise<never> = (courseId) =>
 
 const removeSelectedCourse: (courseId: number) => Promise<never> = (courseId) =>
   new Promise((resolve, reject) => {
-    const authHeader = {
-      Authorization: `Bearer ${store.state.user.jwt_token}`,
-    };
     axios
-      .delete(`${API_URL}/course/${courseId}/select`, {
-        headers: authHeader,
-      })
+      .delete(`${API_URL}/course/${courseId}/select`)
       .then(() => {
         resolve();
       })

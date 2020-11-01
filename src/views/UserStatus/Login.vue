@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { mapGetters, mapMutations } from 'vuex';
-import { authClient, profileClient } from '@/apis';
+import { authClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 
@@ -82,7 +82,7 @@ export default defineComponent({
   methods: {
     ...mapMutations(['setUserProfile']),
     getProfile() {
-      profileClient.getUserProfile({})
+      userClient.getUserInfo({})
         .then((profile) => {
           this.setUserProfile(profile);
         })

@@ -118,7 +118,7 @@
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import { timetableClient, profileClient } from '@/apis';
+import { timetableClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import {
   TimetableDay,
@@ -310,8 +310,8 @@ export default defineComponent({
           if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
             this.fetchSelectedCourses();
             // 顺便更新用户信息
-            profileClient
-              .getUserProfile({})
+            userClient
+              .getUserInfo({})
               .then((profile) => {
                 this.setUserProfile(profile);
               })

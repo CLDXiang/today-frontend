@@ -4,7 +4,8 @@
     <div class="semester">
       <f-icon
         name="left"
-        size="12"
+        :height="16"
+        :width="12"
         class="icon"
         @click="handleClickLeft"
       />
@@ -13,7 +14,8 @@
       </span>
       <f-icon
         name="right"
-        size="12"
+        :height="16"
+        :width="12"
         class="icon"
         @click="handleClickRight"
       />

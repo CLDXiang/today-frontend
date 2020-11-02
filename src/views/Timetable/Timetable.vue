@@ -5,10 +5,8 @@
       placement="bottom"
       :closable="false"
       :visible="isDetailDialogVisible"
-
       @close="hideDetailDialog"
     >
-      w
       <timetable-detail-dialog-content
         :course="detailPageCourse"
         :class="classDetailPage"
@@ -46,7 +44,7 @@
       />
     </a-drawer>
     <timetable-head-bar
-      :semester="semester"
+      :semester="semesterName"
       @click-cloud="fetchSelectedCourses"
       @click-left="moveSemester(-1)"
       @click-right="moveSemester(1)"
@@ -127,7 +125,7 @@ import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { timetableClient, userClient } from '@/apis';
 import log from '@/utils/log';
-import { semesterNameArray, jsonNameArray } from '@/utils/config';
+import { semesterArray } from '@/utils/config';
 import {
   TimetableDay,
   TimetableDetailDialogContent,
@@ -245,13 +243,14 @@ export default defineComponent({
     drawerHeight(): string {
       return `${Math.floor(this.innerHeight * 0.9)}px`;
     },
-  },
-  created() {
-    this.semesterIndex = semesterNameArray.findIndex((name) => name === this.semester);
-    this.semesterJsonName = jsonNameArray[this.semesterIndex];
-    return true;
+    /** 展示的学期名 */
+    semesterName(): string {
+      return semesterArray[this.semesterIndex].name;
+    },
   },
   mounted() {
+    this.semesterIndex = semesterArray.findIndex((semester) => semester.key === this.semester);
+    this.semesterJsonName = semesterArray[this.semesterIndex].jsonFileName;
     this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
     this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
     // 读取课程信息
@@ -269,15 +268,15 @@ export default defineComponent({
       if (step === -1 && this.semesterIndex === 0) {
         this.$message.warn('已经是最后一个学期啦', 0.5);
         return false;
-      } if (step === 1 && this.semesterIndex === semesterNameArray.length - 1) {
+      } if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
         this.$message.warn('已经是最新学期啦', 0.5);
         return false;
       }
       this.semesterIndex += step;
-      this.semester = semesterNameArray[this.semesterIndex];
+      this.semester = semesterArray[this.semesterIndex].key;
       this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
       this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
-      this.getCoursesFromJSON(jsonNameArray[this.semesterIndex]);
+      this.getCoursesFromJSON(semesterArray[this.semesterIndex].jsonFileName);
       return true;
     },
     areSetsSame(set1: Set<number>, set2: Set<number>) {
@@ -314,7 +313,8 @@ export default defineComponent({
       }
       this.hideConflictDialog();
     },
-    getCoursesFromJSON(filePath = 'lessons_344_2020-2021_fall.json') {
+    getCoursesFromJSON(filePathOrigin = 'lessons_344_2020-2021_fall.json') {
+      const filePath = `lessons/${filePathOrigin}`;
       this.isLoadingCourses = true;
       axios
         .get(filePath)

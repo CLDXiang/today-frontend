@@ -2,7 +2,23 @@
   <div class="head-bar">
     <side-avatar />
     <div class="semester">
-      2020年秋季学期
+      <f-icon
+        name="left"
+        :height="16"
+        :width="12"
+        class="icon"
+        @click="handleClickLeft"
+      />
+      <span class="semester__name">
+        {{ semester }}
+      </span>
+      <f-icon
+        name="right"
+        :height="16"
+        :width="12"
+        class="icon"
+        @click="handleClickRight"
+      />
     </div>
     <div
       class="action-group"
@@ -24,7 +40,10 @@ export default defineComponent({
   components: {
     SideAvatar,
   },
-  emits: ['click-cloud'],
+  props: {
+    semester: { type: String, required: true },
+  },
+  emits: ['click-cloud', 'click-left', 'click-right'],
   data() {
     return {
       /** 同步冷却 */
@@ -50,6 +69,12 @@ export default defineComponent({
       cooldown();
       this.$emit('click-cloud');
     },
+    handleClickLeft() {
+      this.$emit('click-left');
+    },
+    handleClickRight() {
+      this.$emit('click-right');
+    },
   },
 });
 </script>
@@ -69,6 +94,15 @@ export default defineComponent({
 
   > .semester {
     font-size: 18px;
+    display: flex;
+    align-items: baseline;
+    > .icon {
+      cursor: pointer;
+      color: $primary-color;
+    }
+    > .semester__name {
+      width: 220px;
+    }
   }
 
   > .action-group {

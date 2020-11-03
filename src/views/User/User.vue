@@ -207,7 +207,7 @@ export default defineComponent({
         // 返回到上一页面
         this.$router.go(-1);
       });
-    ratingClient.getRatingListByUser({ userId: this.user.id, limit: 20 }).then((resp) => {
+    ratingClient.getRatingListByUser({ userId: this.user.id }).then((resp) => {
       this.ratingList = resp.data;
     });
     commentClient.getCommentList({ userId: this.user.id, limit: 20 }).then((resp) => {

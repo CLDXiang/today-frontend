@@ -2,8 +2,8 @@ import { CardRatingItem } from '@/components/listCard';
 import log from '@/utils/log';
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
-import { dayjsOrUndefined, dayjsFormatOrUndefined } from '@/utils/dayjs';
-import { Dayjs } from 'dayjs';
+import { dayjsFormatOrUndefined } from '@/utils/dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { Rate } from '@/views/Rating/types';
 import {
   GetRatesRespDto,
@@ -22,7 +22,7 @@ const getRatingListByUser: (req: {
   userId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
-  /** 拉取条数 */
+  /** 分页 - 拉取条数 */
   limit?: number;
 }) => Promise<{
   msg?: string;
@@ -82,6 +82,10 @@ const getRatingListByLecture: (req: {
 const getRatingById: (req: {
   /** 点评 Id */
   ratingId: string;
+  /** 分页 - 最后一个 rating 的 id */
+  lastId?: string;
+  /** 分页 - 拉取条数 */
+  limit?: number;
 }) => Promise<{
   msg?: string;
   data: Rate;
@@ -93,11 +97,11 @@ const getRatingById: (req: {
       .then(({ data: { data } }) => {
         const res = {
           ...data,
-          updatedAt: dayjsOrUndefined(data.updatedAt),
+          updatedAt: dayjs(data.updatedAt),
           draft: data.draft
             ? {
               ...data.draft,
-              updatedAt: dayjsOrUndefined(data.draft.updatedAt),
+              updatedAt: dayjs(data.draft.updatedAt),
             }
             : undefined,
         };
@@ -109,14 +113,24 @@ const getRatingById: (req: {
   });
 
 /** 获取点评列表 */
-const getRatingList: () => Promise<{
+const getRatingList: (req: {
+  /** 分页 - 最后一个 rating 的 id */
+  lastId?: string;
+  /** 分页 - 拉取条数 */
+  limit?: number;
+}) => Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = () =>
+}> = (req) =>
   new Promise((resolve, reject) => {
     log.info('ratingClient.getRatingList');
     axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`)
+      .get<GetRatesRespDto>(`${API_URL}/rates`, {
+        params: {
+          last_id: req.lastId,
+          limit: req.limit,
+        },
+      })
       .then(({ data: { data } }) => {
         const res = data.map(transferRateItemToCardRatingItem);
         resolve({
@@ -128,6 +142,8 @@ const getRatingList: () => Promise<{
 
 /** 发布点评 */
 const createRating: (req: {
+  /** 课程 Id */
+  lectureId: string;
   /** 难易程度 */
   difficulty: number;
   /** 给分好坏 */
@@ -148,7 +164,8 @@ const createRating: (req: {
     log.info('ratingClient.createRating', req);
     axios
       .post<PostRatesRespDto>(`${API_URL}/rates`, {
-        data: { ...req, updatedAt: dayjsFormatOrUndefined(req.updatedAt) },
+        ...req,
+        updatedAt: dayjsFormatOrUndefined(req.updatedAt),
       } as PostRatesReqDto)
       .then(({ data: { data } }) => {
         const res = data.map(transferRateItemToCardRatingItem);
@@ -161,6 +178,8 @@ const createRating: (req: {
 
 /** 存草稿 */
 const createDraft: (req: {
+  /** 课程 Id */
+  lectureId: string;
   /** 难易程度 */
   difficulty: number;
   /** 给分好坏 */
@@ -175,19 +194,19 @@ const createDraft: (req: {
   updatedAt: Dayjs;
 }) => Promise<{
   msg?: string;
-  data: CardRatingItem[];
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('ratingClient.createDraft', req);
     axios
       .post<PostRatesRespDto>(`${API_URL}/rates`, {
-        data: { draft: { ...req, updatedAt: dayjsFormatOrUndefined(req.updatedAt) } },
+        lectureId: req.lectureId,
+        draft: {
+          ...req,
+          updatedAt: dayjsFormatOrUndefined(req.updatedAt),
+        },
       } as PostRatesReqDto)
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
+      .then(() => {
+        resolve();
       })
       .catch((err) => reject(err));
   });
@@ -216,7 +235,8 @@ const editRating: (req: {
     log.info('ratingClient.editRating', req);
     axios
       .patch<PatchRatesIdRespDto>(`${API_URL}/rates/${req.ratingId}`, {
-        data: { ...req, updatedAt: dayjsFormatOrUndefined(req.updatedAt) },
+        ...req,
+        updatedAt: dayjsFormatOrUndefined(req.updatedAt),
       } as PatchRatesIdReqDto)
       .then(({ data: { data } }) => {
         const res = transferRateItemToCardRatingItem(data);
@@ -245,19 +265,18 @@ const editDraft: (req: {
   updatedAt: Dayjs;
 }) => Promise<{
   msg?: string;
-  data: CardRatingItem;
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('ratingClient.editDraft', req);
     axios
       .patch<PatchRatesIdRespDto>(`${API_URL}/rates/${req.ratingId}`, {
-        data: { draft: { ...req, updatedAt: dayjsFormatOrUndefined(req.updatedAt) } },
+        draft: {
+          ...req,
+          updatedAt: dayjsFormatOrUndefined(req.updatedAt),
+        },
       } as PatchRatesIdReqDto)
-      .then(({ data: { data } }) => {
-        const res = transferRateItemToCardRatingItem(data);
-        resolve({
-          data: res,
-        });
+      .then(() => {
+        resolve();
       })
       .catch((err) => reject(err));
   });

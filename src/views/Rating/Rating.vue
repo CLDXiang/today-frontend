@@ -75,7 +75,7 @@ export default defineComponent({
     const fetchList = (type: TabType) => {
       switch (type) {
         case '最新':
-          ratingClient.getRatingList().then(({ data }) => {
+          ratingClient.getRatingList({ limit: 20 }).then(({ data }) => {
             tabLists.value.最新 = data;
           });
           break;
@@ -97,9 +97,14 @@ export default defineComponent({
       // TODO: 传入 lastId
       switch (type) {
         case '最新':
-          ratingClient.getRatingList().then(({ data }) => {
-            tabLists.value.最新 = [...tabLists.value.最新, ...data];
-          });
+          ratingClient
+            .getRatingList({
+              lastId: tabLists.value.最新[tabLists.value.最新.length - 1].id,
+              limit: 20,
+            })
+            .then(({ data }) => {
+              tabLists.value.最新 = [...tabLists.value.最新, ...data];
+            });
           break;
         case '通识':
         case '思政':

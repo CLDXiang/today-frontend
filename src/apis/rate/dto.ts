@@ -1,4 +1,4 @@
-import { RateItem, RawRate } from './types';
+import { RateItem, RawRate, RawRateResp } from './types';
 
 /** GET rates Resp */
 export interface GetRatesRespDto {
@@ -8,8 +8,35 @@ export interface GetRatesRespDto {
 
 /** POST rates Req */
 export interface PostRatesReqDto {
-  /** 点评 */
-  data: RawRate;
+  /** Lecture Id */
+  lectureId: string;
+  /** 难易程度 */
+  difficulty?: number;
+  /** 给分好坏 */
+  nice?: number;
+  /** 工作量 */
+  workload?: number;
+  /** 综合推荐指数 */
+  recommended?: number;
+  /** 评价内容 */
+  content?: string;
+  /** 发布时间 */
+  updatedAt?: string;
+  /** 草稿 */
+  draft?: {
+    /** 难易程度 */
+    difficulty?: number;
+    /** 给分好坏 */
+    nice?: number;
+    /** 工作量 */
+    workload?: number;
+    /** 综合推荐指数 */
+    recommended?: number;
+    /** 评价内容 */
+    content?: string;
+    /** 发布时间 */
+    updatedAt: string;
+  }
 }
 
 /** POST rates Resp */
@@ -20,12 +47,38 @@ export interface PostRatesRespDto {
 
 /** GET rates/:id Resp */
 export interface GetRatesIdRespDto {
-  data: RawRate;
+  data: RawRateResp;
 }
 
 /** PATCH rates/:id Req */
 export interface PatchRatesIdReqDto {
-  data: RawRate;
+  /** 难易程度 */
+  difficulty?: number;
+  /** 给分好坏 */
+  nice?: number;
+  /** 工作量 */
+  workload?: number;
+  /** 综合推荐指数 */
+  recommended?: number;
+  /** 评价内容 */
+  content?: string;
+  /** 发布时间 */
+  updatedAt?: string;
+  /** 草稿 */
+  draft?: {
+    /** 难易程度 */
+    difficulty?: number;
+    /** 给分好坏 */
+    nice?: number;
+    /** 工作量 */
+    workload?: number;
+    /** 综合推荐指数 */
+    recommended?: number;
+    /** 评价内容 */
+    content?: string;
+    /** 发布时间 */
+    updatedAt: string;
+  }
 }
 
 /** PATCH rates/:id Resp */

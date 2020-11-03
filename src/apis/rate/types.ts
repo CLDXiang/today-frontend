@@ -1,5 +1,27 @@
 import { ReactionType } from '../reaction/types';
 
+export interface RawRateFormResp {
+  /** 难易程度 */
+  difficulty: number;
+  /** 给分好坏 */
+  nice: number;
+  /** 工作量 */
+  workload: number;
+  /** 综合推荐指数 */
+  recommended: number;
+  /** 评价内容 */
+  content: string;
+  /** 发布时间 */
+  updatedAt: string;
+}
+
+export interface RawRateResp extends RawRateFormResp {
+  /** 草稿 */
+  draft?: RawRateFormResp;
+  /** 课程 Id */
+  lectureId?: string;
+}
+
 export interface RawRateForm {
   /** 难易程度 */
   difficulty?: number;

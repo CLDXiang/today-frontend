@@ -102,7 +102,6 @@ import FiveStars from '@/components/FiveStars.vue';
 import { ratingClient, lectureClient } from '@/apis';
 import { mapMutations, mapState } from 'vuex';
 import { scoreTextTable } from '@/utils/rating';
-import logger from '@/utils/log';
 import dayjs from 'dayjs';
 import { RateForm } from './types';
 import { RatingHeadBar } from './components';
@@ -189,6 +188,7 @@ export default defineComponent({
     // 拉取点评信息
     if (this.ratingId) {
       // 若有 ratingId，则直接拉点评数据
+      // TODO: 根据后端 API 逻辑修改
       ratingClient
         .getRatingById({ ratingId: this.ratingId })
         .then(({ data }) => {
@@ -223,7 +223,7 @@ export default defineComponent({
           this.isLoading = false;
         });
     } else {
-      // 没有 ratingId，创建新的
+      // 没有点评 Id，创建新的
       this.isDraft = true;
       this.isLoading = false;
     }
@@ -280,10 +280,21 @@ export default defineComponent({
       }
       this.isLoading = true;
       this.formData.updatedAt = dayjs();
-      // TODO: 调用 API 保存草稿并给出用户反馈
-      logger.log('保存草稿');
-      this.$message.success('保存草稿成功！');
-      this.isLoading = false;
+      if (!this.ratingId) {
+        // 没有点评 Id，新建草稿
+        ratingClient.createDraft({ lectureId: this.lectureId, ...this.formData }).then(() => {
+          this.$message.success('保存草稿成功！');
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      } else {
+        // 有点评 Id，编辑草稿
+        ratingClient.editDraft({ ratingId: this.ratingId, ...this.formData }).then(() => {
+          this.$message.success('编辑草稿成功！');
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      }
     },
     /** 点击提交按钮 */
     handleClickSubmit() {
@@ -293,10 +304,26 @@ export default defineComponent({
       }
       this.isLoading = true;
       this.formData.updatedAt = dayjs();
-      // TODO: 调用 API 提交点评并给出用户反馈
-      logger.log('提交点评');
-      this.$message.success('点评已发布！');
-      this.isLoading = false;
+      if (!this.ratingId) {
+        // 没有点评 Id，新建点评
+        ratingClient.createRating({ lectureId: this.lectureId, ...this.formData }).then(() => {
+          this.$message.success('提交点评成功！');
+          // TODO: 更新详情页数据
+          // TODO: 验证一下 back 后究竟是否会保留原来的 state，如果是重新 mount 就不需要从这里更新数据了，下同
+          this.$router.back();
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      } else {
+        // 有点评 Id，编辑点评
+        ratingClient.editRating({ ratingId: this.ratingId, ...this.formData }).then(() => {
+          this.$message.success('编辑点评成功！');
+          // TODO: 更新详情页数据
+          this.$router.back();
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      }
     },
   },
 });

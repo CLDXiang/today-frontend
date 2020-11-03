@@ -3,7 +3,9 @@
     <card-lecture
       v-for="lecture in lectures"
       :key="lecture.id"
+      class="clickable"
       :lecture="lecture"
+      @click="$router.push(`/rating/lecture/${lecture.id}`)"
     />
   </div>
 </template>
@@ -23,6 +25,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_clickable';
+
 .rating__lecture-list {
   background-color: #f2f2f2;
   padding-top: 6px;

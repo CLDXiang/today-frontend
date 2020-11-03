@@ -101,10 +101,10 @@ import { defineComponent } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { ratingClient, lectureClient } from '@/apis';
 import { mapMutations, mapState } from 'vuex';
-import { RateForm } from '@/apis/types';
 import { scoreTextTable } from '@/utils/rating';
 import logger from '@/utils/log';
 import dayjs from 'dayjs';
+import { RateForm } from './types';
 import { RatingHeadBar } from './components';
 
 export default defineComponent({

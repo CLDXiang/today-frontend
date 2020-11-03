@@ -2,14 +2,30 @@
   <div class="head-bar">
     <side-avatar />
     <div class="semester">
-      2020年秋季学期
+      <f-icon
+        name="left"
+        :height="16"
+        :width="12"
+        class="icon"
+        @click="handleClickLeft"
+      />
+      <span class="semester__name">
+        {{ semester }}
+      </span>
+      <f-icon
+        name="right"
+        :height="16"
+        :width="12"
+        class="icon"
+        @click="handleClickRight"
+      />
     </div>
     <div
-      class="action-group"
-      @click="handleClickCloud"
+      class="action-group clickable"
+      @click="handleClickMenuButton"
     >
       <f-icon
-        name="cloud"
+        name="menu-button"
         size="24"
       />
     </div>
@@ -24,7 +40,10 @@ export default defineComponent({
   components: {
     SideAvatar,
   },
-  emits: ['click-cloud'],
+  props: {
+    semester: { type: String, required: true },
+  },
+  emits: ['click-menu-button', 'click-left', 'click-right'],
   data() {
     return {
       /** 同步冷却 */
@@ -32,29 +51,22 @@ export default defineComponent({
     };
   },
   methods: {
-    handleClickCloud() {
-      if (this.cooldownCnt > 0) {
-        this.$message.warn(`请等待${this.cooldownCnt}秒再进行下一次云同步~`);
-        return;
-      }
-      const cooldown = () => {
-        setTimeout(() => {
-          this.cooldownCnt -= 1;
-          if (this.cooldownCnt > 0) {
-            cooldown();
-          }
-        }, 1000);
-      };
-
-      this.cooldownCnt = 60;
-      cooldown();
-      this.$emit('click-cloud');
+    handleClickMenuButton() {
+      this.$emit('click-menu-button');
+    },
+    handleClickLeft() {
+      this.$emit('click-left');
+    },
+    handleClickRight() {
+      this.$emit('click-right');
     },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_clickable';
+
 .head-bar {
   width: 100%;
 
@@ -69,6 +81,15 @@ export default defineComponent({
 
   > .semester {
     font-size: 18px;
+    display: flex;
+    align-items: baseline;
+    > .icon {
+      cursor: pointer;
+      color: $primary-color;
+    }
+    > .semester__name {
+      width: 220px;
+    }
   }
 
   > .action-group {

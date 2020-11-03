@@ -9,7 +9,6 @@
     >
       <timetable-detail-dialog-content
         :course="detailPageCourse"
-        :class="classDetailPage"
         @delete-course="removeSelectedCourse(detailPageCourse.id)"
       />
     </a-drawer>
@@ -43,9 +42,24 @@
         @hide-search-dialog="hideSearchDialog"
       />
     </a-drawer>
+    <a-drawer
+      :height="drawerHeight"
+      placement="right"
+      :closable="false"
+      :visible="isSelectedCourseListVisible"
+      @close="hideSelectedCourseList"
+    >
+      <timetable-selected-course-list
+        :courses="selectedCourses"
+        @click-cloud="fetchSelectedCourses"
+        @click-back="hideSelectedCourseList"
+        @delete-course="(courseId) => removeSelectedCourse(courseId)"
+        @show-detail="handleShowDetail"
+      />
+    </a-drawer>
     <timetable-head-bar
       :semester="semesterName"
-      @click-cloud="fetchSelectedCourses"
+      @click-menu-button="showSelectedCourseList"
       @click-left="moveSemester(-1)"
       @click-right="moveSemester(1)"
     />
@@ -121,7 +135,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { timetableClient, userClient } from '@/apis';
 import log from '@/utils/log';
@@ -132,6 +146,7 @@ import {
   TimetableConflictDialogContent,
   TimetableSearchBar,
   TimetableHeadBar,
+  TimetableSelectedCourseList,
 } from './components';
 import {
   RawCourse,
@@ -139,6 +154,7 @@ import {
   SearchIndexItem,
   SearchIndexItemTimeSlot,
   Sections,
+  SelectedCourse,
 } from './types';
 
 export default defineComponent({
@@ -148,8 +164,31 @@ export default defineComponent({
     TimetableConflictDialogContent,
     TimetableSearchBar,
     TimetableHeadBar,
+    TimetableSelectedCourseList,
   },
-  props: {},
+  setup() {
+    /** 是否显示已选课程列表抽屉 */
+    const isSelectedCourseListVisible = ref<boolean>(false);
+
+    /** 显示已选课程列表抽屉 */
+    const showSelectedCourseList = () => {
+      isSelectedCourseListVisible.value = true;
+    };
+
+    /** 隐藏已选课程列表抽屉 */
+    const hideSelectedCourseList = () => {
+      isSelectedCourseListVisible.value = false;
+    };
+
+    return {
+      /** 是否显示已选课程列表抽屉 */
+      isSelectedCourseListVisible,
+      /** 显示已选课程列表抽屉 */
+      showSelectedCourseList,
+      /** 隐藏已选课程列表抽屉 */
+      hideSelectedCourseList,
+    };
+  },
   data() {
     return {
       semester: '2020-2021学年1学期',
@@ -200,7 +239,6 @@ export default defineComponent({
       isConflictDialogVisible: false,
 
       isSearchDialogVisible: false,
-      isSelectedCourseListVisible: false,
     };
   },
   computed: {
@@ -216,17 +254,6 @@ export default defineComponent({
       selectedCoursesIdsVuex: 'selectedCoursesIds',
     }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
-    classDetailPage() {
-      // if (!this.detailPageCourse.id) return [];
-      // const classList = [
-      //   `color-${(this.detailPageCourse.code &&
-      //     parseInt(this.detailPageCourse.code.slice(this.detailPageCourse.code.length - 3), 10) %
-      //       96) ||
-      //     0}`,
-      // ];
-      // return classList;
-      return [];
-    },
     isMobileMode(): boolean {
       switch (this.breakpoint) {
         case 'xs':
@@ -242,6 +269,31 @@ export default defineComponent({
     /** 底部抽屉高度 */
     drawerHeight(): string {
       return `${Math.floor(this.innerHeight * 0.9)}px`;
+    },
+    /** 已选课程列表数据 */
+    selectedCourses(): SelectedCourse[] {
+      if (this.isLoadingCourses) {
+        // 还没加载好 JSON
+        return [];
+      }
+      return [...this.selectedCoursesIds].map((lessonId) => {
+        const {
+          id,
+          name,
+          // eslint-disable-next-line camelcase
+          time_slot,
+          code,
+        } = this.allCourses[lessonId];
+        const teachers = [
+          ...new Set(time_slot.reduce((pv, ts) => [...pv, ...ts.teacher], [] as string[])),
+        ];
+        return {
+          id,
+          name,
+          teachers,
+          code,
+        };
+      });
     },
     /** 展示的学期名 */
     semesterName(): string {
@@ -263,6 +315,8 @@ export default defineComponent({
       'setUserProfile',
       'setSelectedCourses',
       'hideDetailDialog',
+      'changeDetailPageContent',
+      'showDetailDialog',
     ]),
     moveSemester(step: -1 | 1) {
       if (step === -1 && this.semesterIndex === 0) {
@@ -295,7 +349,11 @@ export default defineComponent({
         this.replaceSelectedCourses(selectedCoursesIds);
       }
       if (changeRemote) {
-        const hide = this.$message.loading({ content: '正在向服务器同步数据...', key: messageKey, duration: 0 });
+        const hide = this.$message.loading({
+          content: '正在向服务器同步数据...',
+          key: messageKey,
+          duration: 0,
+        });
         timetableClient
           .replaceSelectedCourses(this.semester, [...selectedCoursesIds])
           .then(() => {
@@ -362,7 +420,11 @@ export default defineComponent({
         this.$message.warn('需要登录才能进行云同步');
         return;
       }
-      const hide = this.$message.loading({ content: '正在与服务器同步数据', key: messageKey, duration: 0 });
+      const hide = this.$message.loading({
+        content: '正在与服务器同步数据',
+        key: messageKey,
+        duration: 0,
+      });
       timetableClient
         .getSelectedCourses(this.semester)
         .then((res: number[]) => {
@@ -581,6 +643,12 @@ export default defineComponent({
     },
     mapDay(day: number) {
       return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
+    },
+    /** 根据 lesson id 显示详情页 */
+    handleShowDetail(courseId: number) {
+      this.hideSelectedCourseList();
+      this.changeDetailPageContent(this.allCourses[courseId]);
+      this.showDetailDialog();
     },
   },
 });

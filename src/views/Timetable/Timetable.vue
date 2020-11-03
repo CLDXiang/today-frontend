@@ -57,7 +57,12 @@
         @show-detail="handleShowDetail"
       />
     </a-drawer>
-    <timetable-head-bar @click-menu-button="showSelectedCourseList" />
+    <timetable-head-bar
+      :semester="semesterName"
+      @click-menu-button="showSelectedCourseList"
+      @click-left="moveSemester(-1)"
+      @click-right="moveSemester(1)"
+    />
     <div class="timetable__body">
       <div class="timetable__day-box">
         <div class="timetable__time">
@@ -134,6 +139,7 @@ import { defineComponent, ref } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { timetableClient, userClient } from '@/apis';
 import log from '@/utils/log';
+import { semesterArray } from '@/utils/config';
 import {
   TimetableDay,
   TimetableDetailDialogContent,
@@ -186,6 +192,8 @@ export default defineComponent({
   data() {
     return {
       semester: '2020-2021学年1学期',
+      semesterIndex: 0,
+      semesterJsonName: '',
       isLoadingCourses: false,
       /** 课程数据 */
       allCourses: {} as AllCourses,
@@ -287,12 +295,18 @@ export default defineComponent({
         };
       });
     },
+    /** 展示的学期名 */
+    semesterName(): string {
+      return semesterArray[this.semesterIndex].name;
+    },
   },
   mounted() {
+    this.semesterIndex = semesterArray.findIndex((semester) => semester.key === this.semester);
+    this.semesterJsonName = semesterArray[this.semesterIndex].jsonFileName;
     this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
     this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
     // 读取课程信息
-    this.getCoursesFromJSON();
+    this.getCoursesFromJSON(this.semesterJsonName);
     // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
   },
   methods: {
@@ -304,6 +318,21 @@ export default defineComponent({
       'changeDetailPageContent',
       'showDetailDialog',
     ]),
+    moveSemester(step: -1 | 1) {
+      if (step === -1 && this.semesterIndex === 0) {
+        this.$message.warn('已经是最后一个学期啦', 0.5);
+        return false;
+      } if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
+        this.$message.warn('已经是最新学期啦', 0.5);
+        return false;
+      }
+      this.semesterIndex += step;
+      this.semester = semesterArray[this.semesterIndex].key;
+      this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
+      this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
+      this.getCoursesFromJSON(semesterArray[this.semesterIndex].jsonFileName);
+      return true;
+    },
     areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;
       const intersect = [...set1].filter((item) => set2.has(item));
@@ -342,7 +371,8 @@ export default defineComponent({
       }
       this.hideConflictDialog();
     },
-    getCoursesFromJSON(filePath = 'lessons_344_2020-2021_fall.json') {
+    getCoursesFromJSON(filePathOrigin = 'lessons_344_2020-2021_fall.json') {
+      const filePath = `lessons/${filePathOrigin}`;
       this.isLoadingCourses = true;
       axios
         .get(filePath)
@@ -379,7 +409,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          this.$message.error('拉取课程数据失败，请尝试刷新页面');
+          this.$message.error('拉取课程数据失败，请尝试刷新页面', 1.5);
           throw err;
         });
     },

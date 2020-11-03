@@ -14,8 +14,8 @@ export interface PostRatesReqDto {
 
 /** POST rates Resp */
 export interface PostRatesRespDto {
-  // TODO: 加上数据
   msg?: string;
+  data: RateItem[];
 }
 
 /** GET rates/:id Resp */
@@ -28,6 +28,12 @@ export interface PatchRatesIdReqDto {
   data: RawRate;
 }
 
+/** PATCH rates/:id Resp */
+export interface PatchRatesIdRespDto {
+  /** 当前修改项数据 */
+  data: RateItem;
+}
+
 /** DELETE rates/:id Req */
 export interface DeleteRatesIdReqDto {
   id: string;
@@ -36,4 +42,6 @@ export interface DeleteRatesIdReqDto {
 /** DELETE rates/:id Resp */
 export interface DeleteRatesIdRespDto {
   msg?: string;
+  /** 最新列表数据 */
+  data: RateItem[];
 }

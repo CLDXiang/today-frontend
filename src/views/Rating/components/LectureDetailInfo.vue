@@ -5,14 +5,14 @@
     </div>
     <div class="lecture-info__content">
       <span>所属模块：暂无数据</span>
-      <span>学分：{{ lectureInfo.credit }}</span>
-      <span>开课院系：{{ lectureInfo.department }}</span>
-      <span>校区：{{ lectureInfo.campus }}</span>
+      <span>学分：{{ lectureInfo.detailInfo.credit }}</span>
+      <span>开课院系：{{ lectureInfo.detailInfo.department }}</span>
+      <span>校区：{{ lectureInfo.detailInfo.campus }}</span>
       <template v-if="isAllLectureInfoVisible">
         <span>主讲老师：{{ lectureInfo.taughtBy.join(' ') }}</span>
-        <span>考试时间：{{ lectureInfo.examTime }}</span>
-        <span>考试形式：{{ lectureInfo.examType }}</span>
-        <span>是否允许期中退课：{{ lectureInfo.withdrawable }}</span>
+        <span>考试时间：{{ lectureInfo.detailInfo.examTime }}</span>
+        <span>考试形式：{{ lectureInfo.detailInfo.examType }}</span>
+        <span>是否允许期中退课：{{ lectureInfo.detailInfo.withdrawable }}</span>
       </template>
     </div>
     <div
@@ -27,12 +27,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { LectureItem } from '@/apis/types';
+import { LectureDetail } from '@/apis/types';
 
 export default defineComponent({
   props: {
     lectureInfo: {
-      type: Object as PropType<LectureItem>,
+      type: Object as PropType<LectureDetail>,
       required: true,
     },
   },

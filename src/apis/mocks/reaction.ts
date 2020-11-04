@@ -1,4 +1,4 @@
-import { PostReactionsIdResp } from '../types';
+import { PostReactionsIdResp } from '../reaction/types';
 
 export const mockReaction: PostReactionsIdResp = {
   data: {

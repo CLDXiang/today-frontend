@@ -1,7 +1,7 @@
 import log from '@/utils/log';
 import dayjs from 'dayjs';
 import { ReactionType } from './types';
-import { mockReaction } from './mocks/reaction';
+import { mockReaction } from '../mocks/reaction';
 
 // FIXME: mock
 /** 添加 Reaction */

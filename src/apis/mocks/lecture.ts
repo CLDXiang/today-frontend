@@ -1,5 +1,5 @@
 import { CardLectureItem } from '@/components/listCard';
-import { LectureItem } from '../types';
+import { LectureDetail } from '../types';
 
 export const mockSelects: CardLectureItem[] = [
   {
@@ -54,27 +54,31 @@ export const mockSelects: CardLectureItem[] = [
   },
 ];
 
-export const mockLectureDetail: LectureItem = {
-  id: 'ididid',
+export const mockLectureDetail: LectureDetail = {
+  id: '5',
   code: 'COMP111232.23',
   taughtBy: ['老王', '老李'],
   name: '测试课程名',
-  credit: 2,
-  department: '哈哈哈学院',
-  campus: '邯郸校区',
-  language: '中文',
-  remark: '上海市精品课程',
-  examType: '论文',
-  examTime: 'XXXXXX',
-  withdrawable: '是',
-  r3limit: '无',
+  category: '通识选修',
   rateCount: 123,
   starCount: 321,
+  recommended: 4,
   starred: true,
+  detailInfo: {
+    credit: 2,
+    department: '哈哈哈学院',
+    campus: '邯郸校区',
+    language: '中文',
+    remark: '上海市精品课程',
+    examType: '论文',
+    examTime: 'coiwdjqowijd',
+    withdrawable: '是',
+    r3limit: '无',
+  },
+  difficulty: 3,
+  nice: 2,
+  workload: 1,
   rated: false,
   watched: true,
-  difficulty: 3.2,
-  nice: 4.5,
-  workload: 2.3,
-  recommended: 4,
+  ratingId: undefined,
 };

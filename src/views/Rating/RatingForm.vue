@@ -101,10 +101,9 @@ import { defineComponent } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { ratingClient, lectureClient } from '@/apis';
 import { mapMutations, mapState } from 'vuex';
-import { RateForm } from '@/apis/types';
 import { scoreTextTable } from '@/utils/rating';
-import logger from '@/utils/log';
 import dayjs from 'dayjs';
+import { RateForm } from './types';
 import { RatingHeadBar } from './components';
 
 export default defineComponent({
@@ -115,13 +114,13 @@ export default defineComponent({
   props: {
     /** 课程 Id */
     lectureId: { type: String, required: true },
-    /** 点评 Id */
-    ratingId: { type: String, default: undefined },
   },
   data() {
     return {
       /** 课程名 */
       lectureName: '',
+      /** 当前用户对该课程的点评 Id */
+      ratingId: '',
       /** 表单数据 */
       formData: {
         /** 难易程度 */
@@ -176,57 +175,58 @@ export default defineComponent({
   },
   created() {
     // 拉取课程信息
-    // TODO: field 只需要 name
-    lectureClient.getLectureDetail({ lectureId: this.lectureId }).then(({ data }) => {
-      this.lectureName = data.name;
-    });
+    // TODO: field 只需要 name、ratingId
+    lectureClient.getLectureDetail({ lectureId: this.lectureId }).then(({ data: lectureInfo }) => {
+      this.lectureName = lectureInfo.name;
+      this.ratingId = lectureInfo.ratingId || '';
+      /** 拿 storage 的 */
+      const localRatingForm: RateForm = this.ratingForms[this.lectureId];
 
-    /** 拿 storage 的 */
-    const localRatingForm: RateForm = this.ratingForms[this.lectureId];
+      this.formData = localRatingForm || this.formData;
 
-    this.formData = localRatingForm || this.formData;
-
-    // 拉取点评信息
-    if (this.ratingId) {
+      // 拉取点评信息
+      if (this.ratingId) {
       // 若有 ratingId，则直接拉点评数据
-      ratingClient
-        .getRatingById({ ratingId: this.ratingId })
-        .then(({ data }) => {
-          if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
+      // TODO: 根据后端 API 逻辑修改
+        ratingClient
+          .getRatingById({ ratingId: this.ratingId })
+          .then(({ data }) => {
+            if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
             // 如果有非草稿有效内容，则使用有效内容
-            const {
-              difficulty, nice, workload, recommended, content, updatedAt,
-            } = data;
+              const {
+                difficulty, nice, workload, recommended, content, updatedAt,
+              } = data;
 
-            if (!this.formData.updatedAt || (updatedAt && updatedAt > this.formData.updatedAt)) {
+              if (!this.formData.updatedAt || (updatedAt && updatedAt > this.formData.updatedAt)) {
               // 如果拉下来的内容更新，替换本地的
-              this.formData = {
-                difficulty,
-                nice,
-                workload,
-                recommended,
-                content,
-                updatedAt,
-              };
-            }
-          } else if (
-            data.draft && (
-              !this.formData.updatedAt
+                this.formData = {
+                  difficulty,
+                  nice,
+                  workload,
+                  recommended,
+                  content,
+                  updatedAt,
+                };
+              }
+            } else if (
+              data.draft && (
+                !this.formData.updatedAt
             || (data.draft.updatedAt && data.draft.updatedAt > this.formData.updatedAt))
-          ) {
+            ) {
             // 使用草稿内容
-            this.formData = data.draft;
-            this.isDraft = true;
-          }
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    } else {
-      // 没有 ratingId，创建新的
-      this.isDraft = true;
-      this.isLoading = false;
-    }
+              this.formData = data.draft;
+              this.isDraft = true;
+            }
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      } else {
+      // 没有点评 Id，创建新的
+        this.isDraft = true;
+        this.isLoading = false;
+      }
+    });
   },
   methods: {
     ...mapMutations(['setRatingForm']),
@@ -280,10 +280,21 @@ export default defineComponent({
       }
       this.isLoading = true;
       this.formData.updatedAt = dayjs();
-      // TODO: 调用 API 保存草稿并给出用户反馈
-      logger.log('保存草稿');
-      this.$message.success('保存草稿成功！');
-      this.isLoading = false;
+      if (!this.ratingId) {
+        // 没有点评 Id，新建草稿
+        ratingClient.createDraft({ lectureId: this.lectureId, ...this.formData }).then(() => {
+          this.$message.success('保存草稿成功！');
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      } else {
+        // 有点评 Id，编辑草稿
+        ratingClient.editDraft({ ratingId: this.ratingId, ...this.formData }).then(() => {
+          this.$message.success('编辑草稿成功！');
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      }
     },
     /** 点击提交按钮 */
     handleClickSubmit() {
@@ -293,10 +304,26 @@ export default defineComponent({
       }
       this.isLoading = true;
       this.formData.updatedAt = dayjs();
-      // TODO: 调用 API 提交点评并给出用户反馈
-      logger.log('提交点评');
-      this.$message.success('点评已发布！');
-      this.isLoading = false;
+      if (!this.ratingId) {
+        // 没有点评 Id，新建点评
+        ratingClient.createRating({ lectureId: this.lectureId, ...this.formData }).then(() => {
+          this.$message.success('提交点评成功！');
+          // TODO: 更新详情页数据
+          // TODO: 验证一下 back 后究竟是否会保留原来的 state，如果是重新 mount 就不需要从这里更新数据了，下同
+          this.$router.back();
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      } else {
+        // 有点评 Id，编辑点评
+        ratingClient.editRating({ ratingId: this.ratingId, ...this.formData }).then(() => {
+          this.$message.success('编辑点评成功！');
+          // TODO: 更新详情页数据
+          this.$router.back();
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      }
     },
   },
 });

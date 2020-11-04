@@ -3,7 +3,9 @@
     <card-rating
       v-for="rating in ratings"
       :key="rating.id"
+      class="clickable"
       :rating="rating"
+      @click="$router.push(`/rating/lecture/${rating.lecture.id}`)"
     />
   </div>
 </template>
@@ -23,6 +25,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_clickable';
+
 .rating__rating-list {
   background-color: #f2f2f2;
   padding-top: 6px;

@@ -25,6 +25,7 @@ import './registerServiceWorker';
 // TODO: 有空测试下不同引入方式的 bundle size
 import router from './router';
 import store from './store';
+import logger from './utils/log';
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -74,6 +75,12 @@ axios.interceptors.response.use((resp) => resp, (err) => {
     message.error('登录已失效，请重新登录');
     store.commit('logout');
     router.push('/login');
+  } else if (err.response.status >= 400 && err.response.status < 500) {
+    // 后端错误消息
+    if (err.response?.data?.message) {
+      logger.error(err.response?.data);
+      message.error(err.response?.data?.message);
+    }
   }
   return Promise.reject(err);
 });

@@ -1,42 +1,42 @@
 import { lectureClient } from '@/apis';
-import { LectureItem } from '@/apis/types';
-import {
-  ref, Ref, watch,
-} from 'vue';
+import { LectureDetail } from '@/apis/types';
+import { ref, Ref, watch } from 'vue';
 
 /**
  * 拉取课程详情信息
  * @param lectureId 课程 ID
  */
-const useLectureInfo: (
-  lectureId: Ref<string>
-) => { lectureInfo: Ref<LectureItem> } = (
+const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDetail> } = (
   lectureId,
 ) => {
   /** 课程基本信息 */
-  const lectureInfo = ref<LectureItem>({
-    id: lectureId.value,
+  const lectureInfo = ref<LectureDetail>({
+    id: '',
     code: '',
     taughtBy: [],
     name: '',
-    credit: 0,
-    department: '',
-    campus: '',
-    language: '',
-    remark: '',
-    examType: '',
-    examTime: '',
-    withdrawable: '',
-    r3limit: '',
+    category: '',
     rateCount: 0,
     starCount: 0,
+    recommended: 0,
     starred: false,
-    watched: false,
-    rated: false,
+    detailInfo: {
+      credit: 0,
+      department: '',
+      campus: '',
+      language: '',
+      remark: '',
+      examType: '',
+      examTime: '',
+      withdrawable: '',
+      r3limit: '',
+    },
     difficulty: 0,
     nice: 0,
     workload: 0,
-    recommended: 0,
+    rated: false,
+    watched: false,
+    ratingId: undefined,
   });
 
   /** 拉取课程信息 */

@@ -114,13 +114,13 @@ export default defineComponent({
   props: {
     /** 课程 Id */
     lectureId: { type: String, required: true },
-    /** 点评 Id */
-    ratingId: { type: String, default: undefined },
   },
   data() {
     return {
       /** 课程名 */
       lectureName: '',
+      /** 当前用户对该课程的点评 Id */
+      ratingId: '',
       /** 表单数据 */
       formData: {
         /** 难易程度 */
@@ -175,58 +175,58 @@ export default defineComponent({
   },
   created() {
     // 拉取课程信息
-    // TODO: field 只需要 name
-    lectureClient.getLectureDetail({ lectureId: this.lectureId }).then(({ data }) => {
-      this.lectureName = data.name;
-    });
+    // TODO: field 只需要 name、ratingId
+    lectureClient.getLectureDetail({ lectureId: this.lectureId }).then(({ data: lectureInfo }) => {
+      this.lectureName = lectureInfo.name;
+      this.ratingId = lectureInfo.ratingId || '';
+      /** 拿 storage 的 */
+      const localRatingForm: RateForm = this.ratingForms[this.lectureId];
 
-    /** 拿 storage 的 */
-    const localRatingForm: RateForm = this.ratingForms[this.lectureId];
+      this.formData = localRatingForm || this.formData;
 
-    this.formData = localRatingForm || this.formData;
-
-    // 拉取点评信息
-    if (this.ratingId) {
+      // 拉取点评信息
+      if (this.ratingId) {
       // 若有 ratingId，则直接拉点评数据
       // TODO: 根据后端 API 逻辑修改
-      ratingClient
-        .getRatingById({ ratingId: this.ratingId })
-        .then(({ data }) => {
-          if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
+        ratingClient
+          .getRatingById({ ratingId: this.ratingId })
+          .then(({ data }) => {
+            if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
             // 如果有非草稿有效内容，则使用有效内容
-            const {
-              difficulty, nice, workload, recommended, content, updatedAt,
-            } = data;
+              const {
+                difficulty, nice, workload, recommended, content, updatedAt,
+              } = data;
 
-            if (!this.formData.updatedAt || (updatedAt && updatedAt > this.formData.updatedAt)) {
+              if (!this.formData.updatedAt || (updatedAt && updatedAt > this.formData.updatedAt)) {
               // 如果拉下来的内容更新，替换本地的
-              this.formData = {
-                difficulty,
-                nice,
-                workload,
-                recommended,
-                content,
-                updatedAt,
-              };
-            }
-          } else if (
-            data.draft && (
-              !this.formData.updatedAt
+                this.formData = {
+                  difficulty,
+                  nice,
+                  workload,
+                  recommended,
+                  content,
+                  updatedAt,
+                };
+              }
+            } else if (
+              data.draft && (
+                !this.formData.updatedAt
             || (data.draft.updatedAt && data.draft.updatedAt > this.formData.updatedAt))
-          ) {
+            ) {
             // 使用草稿内容
-            this.formData = data.draft;
-            this.isDraft = true;
-          }
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    } else {
+              this.formData = data.draft;
+              this.isDraft = true;
+            }
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      } else {
       // 没有点评 Id，创建新的
-      this.isDraft = true;
-      this.isLoading = false;
-    }
+        this.isDraft = true;
+        this.isLoading = false;
+      }
+    });
   },
   methods: {
     ...mapMutations(['setRatingForm']),

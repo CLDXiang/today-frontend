@@ -90,7 +90,7 @@
             padding: '0 8px',
             borderRadius: '6px',
           }"
-          @click="$router.push(`/rating/lecture/${lectureId}/form`)"
+          @click="handleClickFormButton"
         >
           <template #icon>
             <f-icon
@@ -107,6 +107,15 @@
           :key="rating.id"
           :rating="rating"
         />
+        <div
+          v-if="ratingList.length === 0"
+          class="rating-bar__empty"
+        >
+          你来到了一块空地，来<span
+            class="clickable link-text"
+            @click="handleClickFormButton"
+          >第一个点评</span>吧！
+        </div>
       </div>
     </div>
   </div>
@@ -150,12 +159,12 @@ export default defineComponent({
 
   methods: {
     mapScoreToText,
-    /** 处理点击关注按钮 */
+    /** 点击关注按钮 */
     handleClickWatch() {
       // TODO: 接入 API
       this.lectureInfo.watched = !this.lectureInfo.watched;
     },
-    /** 处理点击收藏按钮 */
+    /** 点击收藏按钮 */
     handleClickStar() {
       // TODO: 接入 API
       if (this.lectureInfo.starred) {
@@ -166,11 +175,17 @@ export default defineComponent({
         this.lectureInfo.starCount += 1;
       }
     },
+    /** 点击点评按钮 */
+    handleClickFormButton() {
+      this.$router.push(`/rating/lecture/${this.lectureId}/edit-rating`);
+    },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_clickable';
+
 .content-box {
   background-color: #f2f2f2;
   height: 100%;
@@ -322,6 +337,15 @@ export default defineComponent({
     > .rating-bar__list {
       > .list-card {
         margin-bottom: 12px;
+      }
+
+      > .rating-bar__empty {
+        padding: 12px;
+        border-radius: 8px;
+        background-color: #fff;
+        .link-text {
+          color: $primary-color;
+        }
       }
     }
   }

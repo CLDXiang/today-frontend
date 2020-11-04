@@ -1,7 +1,7 @@
 import { CardLectureItem } from '@/components/listCard';
 import log from '@/utils/log';
 import { mockSelects, mockLectureDetail } from './mocks/lecture';
-import { LectureItem } from './types';
+import { LectureDetail } from './types';
 
 // FIXME: mock
 const getSelectList: (req: {
@@ -56,7 +56,7 @@ const getLectureDetail: (req: {
   /** Lecture Id */
   lectureId: string;
 }) => Promise<{
-  data: LectureItem;
+  data: LectureDetail;
 }> = (
   req,
 ) => {

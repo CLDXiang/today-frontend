@@ -1,4 +1,4 @@
-import { RateItem, RawRate, RawRateResp } from './types';
+import { RateItem, RawRateResp } from './types';
 
 /** GET rates Resp */
 export interface GetRatesRespDto {

@@ -20,7 +20,6 @@ export const mockHistories: CardCommonItem[] = [
       avatar: '/default_avatar.png',
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
-    content: '点评内容点评内容点评内容点评内容点评内容',
     lecture: {
       id: 'COMP233333.3',
       name: '思修',
@@ -43,7 +42,7 @@ export const mockHistories: CardCommonItem[] = [
       nice: 4,
       workload: 4,
       recommended: 4,
-      content: 'hello',
+      content: '点评内容点评内容点评内容点评内容点评内容',
     },
   },
 ];

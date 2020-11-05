@@ -3,10 +3,11 @@ import dayjs from 'dayjs';
 import { RateItem } from './types';
 
 /** 将 RateItem 转为 CardRatingItem */
-export const transferRateItemToCardRatingItem: (rateItem: RateItem) => CardRatingItem = (
-  rateItem,
+export const transferRateItemToCardRatingItem: (item: RateItem) => CardRatingItem = (
+  item,
 ) => ({
-  ...rateItem,
-  createdAt: dayjs(rateItem.createdAt),
-  updatedAt: dayjs(rateItem.updatedAt),
+  ...item,
+  type: 'rating',
+  createdAt: dayjs(item.createdAt),
+  updatedAt: dayjs(item.updatedAt),
 });

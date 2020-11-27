@@ -21,12 +21,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         persist-credentials: false
-    - run: npm install
+    - run: yarn install
     - run: |
         echo 'VUE_APP_API_URL=https://fducslg.zfhu.ac.cn' > .env.production
         echo 'BASE_URL=https://fdxk.info' >> .env.production
-    - run: npm run update-public-data
-    - run: npm run build --if-present
+    - run: yarn run update-public-data
+    - run: yarn run build --if-present
     - run: |
         mkdir ~/.ssh
         chmod 700 ~/.ssh

@@ -4,13 +4,16 @@ import debounce from 'lodash.debounce';
 /**
  * 使得对应 ref 的容器滚动到底部时触发回调函数
  * @param callback 滚动到底部时触发的回调函数
+ * @param bottom 距离底部多少 px 时执行回调，默认 0
  * @param delay 防抖延迟，默认 150
  */
 const useScrollToBottom: (
   callback: (() => void) | (() => Promise<void>),
+  bottom?: number,
   delay?: number,
 ) => { scrollRef: Ref<HTMLElement | undefined>; pending: Ref<boolean> } = (
   callback,
+  bottom = 0,
   delay = 150,
 ) => {
   const scrollRef = ref<HTMLElement>();
@@ -26,7 +29,7 @@ const useScrollToBottom: (
             return;
           }
           const { offsetHeight, scrollTop, scrollHeight } = el;
-          if (offsetHeight + scrollTop - scrollHeight >= -1) {
+          if (offsetHeight + scrollTop - scrollHeight >= -bottom - 1) {
             pending.value = true;
             // 需要执行的代码
             await callback();

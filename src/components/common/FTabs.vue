@@ -1,5 +1,8 @@
 <template>
-  <div class="f-tabs">
+  <div
+    ref="scroll"
+    class="f-tabs"
+  >
     <div class="f-tabs__header">
       <span
         v-for="tabPane in tabPanes"
@@ -22,6 +25,7 @@
 </template>
 
 <script lang="ts">
+import { useScrollToBottom } from '@/composables';
 import {
   defineComponent, ref,
 } from 'vue';
@@ -32,8 +36,10 @@ export default defineComponent({
   props: {
     /** (v-model) 激活的页面 key */
     modelValue: { type: String, required: true },
+    /** 距离底部多少 px 触发 on-scroll-to-bottom */
+    bottomOffset: { type: Number, default: 0 },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'on-scroll-to-bottom'],
   setup(props, ctx) {
     const tabPanes = ref<{
       tab: string;
@@ -46,27 +52,12 @@ export default defineComponent({
       // children: (vNode.children as any)?.default?.() || null,
     }));
 
+    const { scrollRef: scroll } = useScrollToBottom(() => ctx.emit('on-scroll-to-bottom'), props.bottomOffset);
+
     return {
       tabPanes,
+      scroll,
     };
-  },
-  computed: {
-    // /** 计算下方悬浮 border 尺寸位置 */
-    // floatingBorderStyle(): Record<string, string> {
-    //   // 按照全角 key 计算
-    //   const fontSize = 17;
-    //   const paddingX = 12;
-    //   const width = this.modelValue.length * fontSize + 6;
-    //   const index = this.pageKeys.indexOf(this.modelValue);
-    //   if (index === -1) return {};
-    //   const pageKeysBefore = this.pageKeys.slice(0, index);
-    //   const totalLength = pageKeysBefore.reduce((pv, cv) => pv + cv.length, 0);
-    //   const left = pageKeysBefore.length * paddingX * 2 + paddingX + totalLength * fontSize - 3;
-    //   return {
-    //     width: `${width}px`,
-    //     left: `${left}px`,
-    //   };
-    // },
   },
   methods: {
     handleClickTab(pageKey: string) {
@@ -91,6 +82,7 @@ $padding-x: 12px;
   justify-content: stretch;
 
   > .f-tabs__header {
+    flex: 0 0 auto;
     overflow-x: auto;
     display: flex;
     justify-content: flex-start;
@@ -125,17 +117,6 @@ $padding-x: 12px;
         margin-left: 0;
       }
     }
-
-    // > .f-tabs__floating-border {
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 0;
-    //   height: 3px;
-    //   background-color: $primary-color;
-    //   border-radius: 1px;
-
-    //   transition: all 0.3s cubic-bezier(.4,0,.2,1);
-    // }
   }
 
   > .f-tabs__content {

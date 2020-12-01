@@ -1,10 +1,13 @@
 <template>
   <div
-    ref="scroll"
     class="content-box"
   >
     <rating-head-bar />
-    <f-tabs v-model="activeTab">
+    <f-tabs
+      v-model="activeTab"
+      :bottom-offset="500"
+      @on-scroll-to-bottom="handleScrollToBottom"
+    >
       <f-tab-pane
         v-show="activeTab === '最新'"
         tab="最新"
@@ -43,7 +46,6 @@
 import { defineComponent, ref, watch } from 'vue';
 import { ratingClient, lectureClient } from '@/apis';
 import { CardLectureItem, CardRatingItem } from '@/components/listCard';
-import { useScrollToBottom } from '@/composables';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
 type TabType = '最新' | '通识' | '思政' | '外语' | '体育';
@@ -127,7 +129,7 @@ export default defineComponent({
     });
 
     // 滚动到底部时拉新数据
-    const { scrollRef: scroll } = useScrollToBottom(() => fetchMore(activeTab.value));
+    const handleScrollToBottom = () => fetchMore(activeTab.value);
 
     // 首次进入该页面拉数据
     fetchList(activeTab.value);
@@ -135,7 +137,7 @@ export default defineComponent({
     return {
       activeTab,
       tabLists,
-      scroll,
+      handleScrollToBottom,
     };
   },
 });
@@ -145,31 +147,28 @@ export default defineComponent({
 .content-box {
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   color: #444;
   font-size: 14px;
   margin: 0 auto;
   max-width: 2560px;
-  overflow-y: auto;
+  overflow-y: hidden;
 
   > .head-bar {
     background-color: #fff;
-    position: sticky;
-    top: 0;
-    z-index: 1;
   }
 }
 </style>
 
 <style lang="scss">
 .content-box > .f-tabs {
+  height: calc(100vh - 48px - 64px);
+  overflow-y: auto;
+
   > .f-tabs__header {
     padding: 15px 15px 6px 15px;
     background-color: #fff;
     position: sticky;
-    top: 48px;
+    top: 0;
     z-index: 1;
   }
 }

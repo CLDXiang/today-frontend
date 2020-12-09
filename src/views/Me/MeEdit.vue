@@ -5,7 +5,11 @@
         class="back-btn"
         @click="$router.push('/me')"
       >
-        <f-icon name="back" />
+        <f-icon
+          name="back"
+          :width="14"
+          :height="24"
+        />
       </span>
       <span class="title">修改个人信息</span>
     </div>

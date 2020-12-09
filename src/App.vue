@@ -120,7 +120,7 @@ export default defineComponent({
 }
 
 .ant-btn-danger {
-  background-color: $danger-color;
-  border-color: $danger-color;
+  background-color: $color-red;
+  border-color: $color-red;
 }
 </style>

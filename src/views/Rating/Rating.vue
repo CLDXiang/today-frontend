@@ -2,7 +2,7 @@
   <div class="content-box">
     <div class="center-content">
       <div>技术重构中，敬请期待 😊</div>
-      <div>预计于本学期期末前上线</div>
+      <div>预计于下学期前上线</div>
     </div>
     <div class="bottom-content">
       <div>希望关注项目进度吗？在这里联系我们：</div>

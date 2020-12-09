@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /** 原始上课时间段结构体（来自 JSON 文件） */
 export interface RawTimeSlot {
   /** 时间段编号（仅对该课程） */
@@ -158,3 +159,15 @@ export interface SectionInColumn extends Section {
 
 /** 列数据 */
 export type Column = (number | SectionInColumn)[];
+
+/** 已选课程列表项 */
+export interface SelectedCourse {
+  /** lesson Id */
+  id: number;
+  /** 课程名称 */
+  name: string;
+  /** 授课教师 */
+  teachers: string[];
+  /** 课程代码 */
+  code: string;
+}

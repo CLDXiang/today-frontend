@@ -4,78 +4,74 @@
       <div>{{ courseInfo.codeId || '' }}</div>
       <div>{{ courseInfo.name || '' }}</div>
     </div>
-    <div class="info-card-num">
-      <span>
-        <div>学分</div>
-        <div>{{ courseInfo.credit }}</div>
-      </span>
-      <span>
-        <div>周学时</div>
-        <div>{{ courseInfo.sectionCount }}</div>
-      </span>
-      <span>
-        <div>人数上限</div>
-        <div>{{ courseInfo.maxStudent }}</div>
-      </span>
-    </div>
-    <div class="info-card-text">
-      <div v-if="courseInfo.teachers">
-        <div>主讲老师</div>
-        <div>{{ courseInfo.teachers }}</div>
+    <div class="course-info">
+      <div class="info-card-num">
+        <span>
+          <div>学分</div>
+          <div>{{ courseInfo.credit }}</div>
+        </span>
+        <span>
+          <div>周学时</div>
+          <div>{{ courseInfo.sectionCount }}</div>
+        </span>
+        <span>
+          <div>人数上限</div>
+          <div>{{ courseInfo.maxStudent }}</div>
+        </span>
       </div>
-      <div v-if="courseInfo.department">
-        <div>开课院系</div>
-        <div>{{ courseInfo.department }}</div>
+      <div class="info-card-text">
+        <div v-if="courseInfo.teachers">
+          <div>主讲老师</div>
+          <div>{{ courseInfo.teachers }}</div>
+        </div>
+        <div v-if="courseInfo.department">
+          <div>开课院系</div>
+          <div>{{ courseInfo.department }}</div>
+        </div>
+        <div v-if="courseInfo.campus">
+          <div>校区</div>
+          <div>{{ courseInfo.campus }}</div>
+        </div>
+        <div v-if="courseInfo.examType">
+          <div>考试形式</div>
+          <div>{{ courseInfo.examType }}</div>
+        </div>
+        <div v-if="courseInfo.examTime">
+          <div>考试时间</div>
+          <div>{{ courseInfo.examTime }}</div>
+        </div>
+        <div v-if="courseInfo.drop">
+          <div>是否允许期中退课</div>
+          <div>{{ courseInfo.drop }}</div>
+        </div>
+        <div v-if="courseInfo.remark">
+          <div>备注</div>
+          <div>{{ courseInfo.remark }}</div>
+        </div>
       </div>
-      <div v-if="courseInfo.campus">
-        <div>校区</div>
-        <div>{{ courseInfo.campus }}</div>
+      <div class="info-card-ts">
+        <table>
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>地点</th>
+              <th>教师</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="ts in courseInfo.timeSlots"
+              :key="ts.week + ts.day + ts.section"
+            >
+              <td>
+                {{ `${ts.week} 周，每周周${ts.day}第 ${ts.section} 节` }}
+              </td>
+              <td>{{ ts.place }}</td>
+              <td>{{ ts.teachers }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div v-if="courseInfo.examType">
-        <div>考试形式</div>
-        <div>{{ courseInfo.examType }}</div>
-      </div>
-      <div v-if="courseInfo.examTime">
-        <div>考试时间</div>
-        <div>{{ courseInfo.examTime }}</div>
-      </div>
-      <div v-if="courseInfo.drop">
-        <div>是否允许期中退课</div>
-        <div>{{ courseInfo.drop }}</div>
-      </div>
-      <div v-if="courseInfo.remark">
-        <div>备注</div>
-        <div>{{ courseInfo.remark }}</div>
-      </div>
-    </div>
-    <div class="info-card-ts">
-      <table>
-        <thead>
-          <tr>
-            <th>
-              时间
-            </th><th>
-              地点
-            </th><th>
-              教师
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="ts in courseInfo.timeSlots"
-            :key="ts.week+ts.day+ts.section"
-          >
-            <td>
-              {{
-                `${ts.week} 周，每周周${ts.day}第 ${
-                  ts.section
-                } 节`
-              }}
-            </td><td>{{ ts.place }}</td><td>{{ ts.teachers }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
     <div class="btn-group">
       <div class="btn-line">
@@ -84,7 +80,7 @@
           type="primary"
           disabled
         >
-          查看课程评价（开发中）
+          查看课程评价
         </a-button>
         <a-button
           shape="round"
@@ -118,9 +114,7 @@ export default defineComponent({
   props: {
     course: { type: Object as PropType<RawCourse>, required: true },
   },
-  emits: [
-    'delete-course',
-  ],
+  emits: ['delete-course'],
   data() {
     return {};
   },
@@ -162,12 +156,12 @@ export default defineComponent({
             section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
             place,
             teachers:
-            (ts.teacher
-              && ts.teacher
-                .map((t) => t.trim())
-                .filter((t) => !!t)
-                .join(', '))
-            || '',
+              (ts.teacher
+                && ts.teacher
+                  .map((t) => t.trim())
+                  .filter((t) => !!t)
+                  .join(', '))
+              || '',
           });
         });
       }
@@ -194,6 +188,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content-box {
+  overflow-y: hidden;
   background-color: #fff;
   height: 100%;
 
@@ -218,80 +213,82 @@ export default defineComponent({
     }
   }
 
-  > .info-card-num {
-    margin-top: 24px;
-    background-color: #e3f1f3;
-    border-radius: 8px;
-
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 16px;
-
-    > span {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      > div:first-child {
-        font-weight: bold;
-        margin-bottom: 4px;
-        font-size: 18px;
-        line-height: 18px;
-        margin-bottom: 8px;
-        color: #333;
-      }
-
-      > div:last-child {
-        font-size: 14px;
-        line-height: 14px;
-        color: #4f4f4f;
-      }
-    }
-  }
-
-  > .info-card-text {
-    height: 0;
+  > .course-info {
     flex: 1;
-    overflow-y: auto;
-    margin-top: 24px;
-    padding: 20px;
-    background-color: #f2f2f2;
-    border-radius: 8px;
-
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    margin-top: 24px;
 
-    > div {
+    > .info-card-num {
+      background-color: #e3f1f3;
+      border-radius: 8px;
+
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+
+      > span {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        > div:first-child {
+          font-weight: bold;
+          margin-bottom: 4px;
+          font-size: 18px;
+          line-height: 18px;
+          margin-bottom: 8px;
+          color: #333;
+        }
+
+        > div:last-child {
+          font-size: 14px;
+          line-height: 14px;
+          color: $gray2;
+        }
+      }
+    }
+
+    > .info-card-text {
+      margin-top: 24px;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 8px;
+
       display: flex;
       flex-direction: column;
-      margin-top: 20px;
-      flex: 1 0 auto;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        flex: 1 0 auto;
+
+        > div:first-child {
+          font-weight: bold;
+          margin-bottom: 4px;
+          font-size: 16px;
+          line-height: 18px;
+          margin-bottom: 8px;
+          color: #333;
+        }
+
+        > div:last-child {
+          font-size: 14px;
+          line-height: 14px;
+          color: $gray3;
+        }
+      }
 
       > div:first-child {
-        font-weight: bold;
-        margin-bottom: 4px;
-        font-size: 16px;
-        line-height: 18px;
-        margin-bottom: 8px;
-        color: #333;
-      }
-
-      > div:last-child {
-        font-size: 14px;
-        line-height: 14px;
-        color: #828282;
+        margin-top: 0;
       }
     }
 
-    > div:first-child {
-      margin-top: 0;
+    > .info-card-ts {
+      margin-top: 24px;
     }
-  }
-
-  > .info-card-ts {
-    max-height: 240px;
-    overflow: auto;
-    margin-top: 24px;
   }
 
   .btn-group {

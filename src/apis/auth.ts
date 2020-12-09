@@ -19,6 +19,7 @@ interface LoginReq {
 }
 
 interface LoginResp {
+  // eslint-disable-next-line camelcase
   access_token: string;
   email: string;
   name: string;

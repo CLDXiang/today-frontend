@@ -1,21 +1,31 @@
 <template>
   <div class="head-bar">
-    <img
-      v-if="userLoggedIn"
-      class="avatar"
-      :src="processAvatar(user.avatar)"
-      alt="avatar"
-    >
-    <div v-else />
+    <side-avatar />
     <div class="semester">
-      2020年秋季学期
+      <f-icon
+        name="left"
+        :height="16"
+        :width="12"
+        class="icon"
+        @click="handleClickLeft"
+      />
+      <span class="semester__name">
+        {{ semester }}
+      </span>
+      <f-icon
+        name="right"
+        :height="16"
+        :width="12"
+        class="icon"
+        @click="handleClickRight"
+      />
     </div>
     <div
-      class="action-group"
-      @click="handleClickCloud"
+      class="action-group clickable"
+      @click="handleClickMenuButton"
     >
       <f-icon
-        name="cloud"
+        name="menu-button"
         size="24"
       />
     </div>
@@ -24,51 +34,39 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState, mapGetters } from 'vuex';
-import defaultAvatar from '@/assets/default_avatar.jpg';
+import SideAvatar from '@/components/SideAvatar.vue';
 
 export default defineComponent({
-  emits: ['click-cloud'],
+  components: {
+    SideAvatar,
+  },
+  props: {
+    semester: { type: String, required: true },
+  },
+  emits: ['click-menu-button', 'click-left', 'click-right'],
   data() {
     return {
       /** 同步冷却 */
       cooldownCnt: 0,
     };
   },
-  computed: {
-    ...mapState(['user']),
-    ...mapGetters(['userLoggedIn']),
-  },
   methods: {
-    processAvatar(originAvatar: string) {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
-        return defaultAvatar;
-      }
-      return originAvatar;
+    handleClickMenuButton() {
+      this.$emit('click-menu-button');
     },
-    handleClickCloud() {
-      if (this.cooldownCnt > 0) {
-        this.$message.warn(`请等待${this.cooldownCnt}秒再进行下一次云同步~`);
-        return;
-      }
-      const cooldown = () => {
-        setTimeout(() => {
-          this.cooldownCnt -= 1;
-          if (this.cooldownCnt > 0) {
-            cooldown();
-          }
-        }, 1000);
-      };
-
-      this.cooldownCnt = 60;
-      cooldown();
-      this.$emit('click-cloud');
+    handleClickLeft() {
+      this.$emit('click-left');
+    },
+    handleClickRight() {
+      this.$emit('click-right');
     },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_clickable';
+
 .head-bar {
   width: 100%;
 
@@ -83,13 +81,15 @@ export default defineComponent({
 
   > .semester {
     font-size: 18px;
-  }
-
-  > .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 18px;
-    border: solid 2px $primary-color;
+    display: flex;
+    align-items: baseline;
+    > .icon {
+      cursor: pointer;
+      color: $primary-color;
+    }
+    > .semester__name {
+      width: 220px;
+    }
   }
 
   > .action-group {

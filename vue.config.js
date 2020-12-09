@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 module.exports = {
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {

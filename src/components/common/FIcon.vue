@@ -3,21 +3,21 @@
   <svg
     v-if="name === 'back'"
     :width="parsedWidth"
-    :height="parsedHeigth"
-    viewBox="0 0 16 16"
+    :height="parsedHeight"
+    viewBox="0 0 14 24"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      fill-rule="evenodd"
-      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+      d="M3.9596 12L14 22.0235L12.0202 24L1.9798 13.9765L0 12L1.9798 10.0235L12.0202 0L14 1.97647L3.9596 12Z"
     />
   </svg>
+
   <svg
     v-else-if="name === 'cloud'"
     :width="parsedWidth"
-    :height="parsedHeigth"
-    viewBox="0 0 16 16"
+    :height="parsedHeight"
+    viewBox="0 2.5 16 10"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -33,7 +33,7 @@
   <svg
     v-else-if="name === 'my'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     class="bi bi-person-circle"
     fill="currentColor"
@@ -54,7 +54,7 @@
   <svg
     v-else-if="name === 'notification'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@
   <svg
     v-else-if="name === 'rating'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@
   <svg
     v-else-if="name === 'search'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@
   <svg
     v-else-if="name === 'timetable'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +119,7 @@
   <svg
     v-else-if="name === 'edit-square'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -134,9 +134,21 @@
     />
   </svg>
   <svg
+    v-else-if="name === 'edit'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 1024 1024"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  ><path
+    d="M257.7 752c2 0 4-0.2 6-0.5L431.9 722c2-0.4 3.9-1.3 5.3-2.8l423.9-423.9c3.9-3.9 3.9-10.2 0-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2c-1.9 11.1 1.5 21.9 9.4 29.8 6.6 6.4 14.9 9.9 23.8 9.9z m67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
+    p-id="8055"
+  />
+  </svg>
+  <svg
     v-else-if="name === 'delete'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +164,7 @@
   <svg
     v-else-if="name === 'shrink'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +177,7 @@
   <svg
     v-else-if="name === 'arrawsalt'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +190,7 @@
   <svg
     v-else-if="name === 'undo'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 1024 1024"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +203,7 @@
   <svg
     v-else-if="name === 'contract'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +216,7 @@
   <svg
     v-else-if="name === 'expand'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +229,7 @@
   <svg
     v-else-if="name === 'eye'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +246,7 @@
   <svg
     v-else-if="name === 'eye-slash'"
     :width="parsedWidth"
-    :height="parsedHeigth"
+    :height="parsedHeight"
     viewBox="0 0 16 16"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -253,6 +265,205 @@
       d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"
     />
   </svg>
+  <svg
+    v-else-if="name === 'plus'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="4 4 8 8"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'plus-circle'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'heart'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'heart-fill'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'star'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.523-3.356c.329-.314.158-.888-.283-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767l-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288l1.847-3.658 1.846 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.564.564 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'star-fill'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+  </svg>
+  <svg
+    v-else-if="name === 'reaction'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M12.331 9.5a1 1 0 0 1 0 1A4.998 4.998 0 0 1 8 13a4.998 4.998 0 0 1-4.33-2.5A1 1 0 0 1 4.535 9h6.93a1 1 0 0 1 .866.5z"
+    />
+    <path d="M7 6.5c0 .828-.448 0-1 0s-1 .828-1 0S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 0-1 0s-1 .828-1 0S9.448 5 10 5s1 .672 1 1.5z" />
+  </svg>
+  <svg
+    v-else-if="name === 'chat'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"
+    />
+    <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+  </svg>
+  <svg
+    v-else-if="name === 'trash'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+    <path
+      fill-rule="evenodd"
+      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'door-open'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M1 15.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM11.5 2H11V1h.5A1.5 1.5 0 0 1 13 2.5V15h-1V2.5a.5.5 0 0 0-.5-.5z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M10.828.122A.5.5 0 0 1 11 .5V15h-1V1.077l-6 .857V15H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117z"
+    />
+    <path d="M8 9c0 .552.224 1 .5 1s.5-.448.5-1-.224-1-.5-1-.5.448-.5 1z" />
+  </svg>
+  <svg
+    v-else-if="name === 'pencil-square'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+    <path
+      fill-rule="evenodd"
+      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'right'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 10 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5.94203 8L0 13.9636L2.02899 16L10 8L2.02899 0L0 2.03636L5.94203 8Z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'left'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 10 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.05797 8L10 13.9636L7.97101 16L0 8L7.97101 0L10 2.03636L4.05797 8Z"
+    />
+  </svg>
+  <svg
+    v-else-if="name === 'menu-button'"
+    :width="parsedWidth"
+    :height="parsedHeight"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M0 1.5A1.5 1.5 0 0 1 1.5 0h8A1.5 1.5 0 0 1 11 1.5v2A1.5 1.5 0 0 1 9.5 5h-8A1.5 1.5 0 0 1 0 3.5v-2zM1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-8zM14 7H2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM2 6a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H2z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M15 11H1v-1h14v1zM2 12.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"
+    />
+    <path d="M7.823 2.823l-.396-.396A.25.25 0 0 1 7.604 2h.792a.25.25 0 0 1 .177.427l-.396.396a.25.25 0 0 1-.354 0z" />
+  </svg>
 </template>
 
 <script lang="ts">
@@ -268,6 +479,7 @@ type NameType =
   | 'search'
   | 'timetable'
   | 'edit-square'
+  | 'edit'
   | 'delete'
   | 'shrink'
   | 'arrawsalt'
@@ -275,7 +487,21 @@ type NameType =
   | 'contract'
   | 'expand'
   | 'eye'
-  | 'eye-slash';
+  | 'eye-slash'
+  | 'plus'
+  | 'plus-circle'
+  | 'heart'
+  | 'heart-fill'
+  | 'star'
+  | 'star-fill'
+  | 'reaction'
+  | 'chat'
+  | 'door-open'
+  | 'pencil-square'
+  | 'right'
+  | 'left'
+  | 'menu-button'
+  ;
 
 export default defineComponent({
   props: {
@@ -294,7 +520,7 @@ export default defineComponent({
       }
       return '20px';
     },
-    parsedHeigth(): string {
+    parsedHeight(): string {
       if (this.heigth !== undefined) {
         return typeof this.heigth === 'number' ? `${this.heigth}px` : this.heigth;
       }

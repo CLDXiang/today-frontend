@@ -80,8 +80,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+body {
+  font-family: Heiti SC, Roboto, Avenir, Helvetica, Arial, sans-serif;
+}
+
 #app {
-  font-family: Roboto, Heiti SC, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -93,6 +96,7 @@ export default defineComponent({
   > .main-container {
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
@@ -115,6 +119,19 @@ export default defineComponent({
   }
 }
 
+.ant-drawer-right > .ant-drawer-content-wrapper > .ant-drawer-content {
+  border-radius: 16px 0 0 16px;
+
+  > .ant-drawer-wrapper-body > .ant-drawer-body {
+    height: 100%;
+    padding: 0;
+  }
+}
+
+.ant-drawer-open .ant-drawer-content-wrapper {
+  box-shadow: none !important;
+}
+
 .ant-btn-round.ant-btn-lg {
   padding: 0 16px;
 }
@@ -122,5 +139,16 @@ export default defineComponent({
 .ant-btn-danger {
   background-color: $color-red;
   border-color: $color-red;
+}
+
+.ant-popover-inner {
+  border-radius: 8px;
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+}
+
+:focus {
+  outline: none;
 }
 </style>

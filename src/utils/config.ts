@@ -42,6 +42,7 @@ export const semesterArray: semesterItem[] = [
   { key: '2019-2020学年2学期', name: '2019-2020学年2学期', jsonFileName: 'lessons_325_2019-2020_spring.json' },
   { key: '2019-2020学年暑期学期', name: '2019-2020学年暑期学期', jsonFileName: 'lessons_327_2019-2020_summer.json' },
   { key: '2020-2021学年1学期', name: '2020-2021学年1学期', jsonFileName: 'lessons_344_2020-2021_fall.json' },
+  { key: '2020-2021学年2学期', name: '2020-2021学年2学期', jsonFileName: 'lessons_364_2020-2021_spring.json' },
 ];
 
 // export const semesterNameArray = semesterArray.map((x) => x.name);

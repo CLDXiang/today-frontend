@@ -220,6 +220,10 @@ export default defineComponent({
     overflow-y: auto;
     margin-top: 24px;
 
+    > div {
+      flex: 0 0 auto;
+    }
+
     > .info-card-num {
       background-color: #e3f1f3;
       border-radius: 8px;

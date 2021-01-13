@@ -48,7 +48,10 @@
             </span>
           </div>
           <span class="bio text-light">
-            {{ userProfile.bio || '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名' }}
+            {{
+              userProfile.bio ||
+                '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名'
+            }}
           </span>
         </div>
       </div>
@@ -77,40 +80,26 @@
     <div class="white-card">
       <div class="main-box">
         <f-tabs v-model="activeTab">
-          <f-tab-pane
-            v-show="activeTab === '点评'"
-            tab="点评"
-          >
+          <f-tab-pane tab="点评">
             <rating-list :ratings="ratingList" />
           </f-tab-pane>
-          <f-tab-pane
-            v-show="activeTab === '回复'"
-            tab="回复"
-          >
+          <f-tab-pane tab="回复">
             <comment-list :comments="commentList" />
           </f-tab-pane>
-          <f-tab-pane
-            v-show="activeTab === '课程'"
-            tab="课程"
-          >
+          <f-tab-pane tab="课程">
             <lecture-list :lectures="lectureList" />
           </f-tab-pane>
-          <f-tab-pane
-            v-show="activeTab === '收藏'"
-            tab="收藏"
-          >
+          <f-tab-pane tab="收藏">
             <common-list :contents="starList" />
           </f-tab-pane>
           <f-tab-pane
             v-if="isCurrentUser"
-            v-show="activeTab === '关注'"
             tab="关注"
           >
             <common-list :contents="watchList" />
           </f-tab-pane>
           <f-tab-pane
             v-if="isCurrentUser"
-            v-show="activeTab === '足迹'"
             tab="足迹"
           >
             <common-list :contents="historyList" />
@@ -199,7 +188,8 @@ export default defineComponent({
     ...mapGetters(['userLoggedIn']),
   },
   created() {
-    userClient.getUserInfo({ userId: this.userId || this.user.id })
+    userClient
+      .getUserInfo({ userId: this.userId || this.user.id })
       .then((resp) => {
         this.userProfile = resp;
       })

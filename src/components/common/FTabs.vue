@@ -3,7 +3,7 @@
     ref="scroll"
     class="f-tabs"
   >
-    <div class="f-tabs__header">
+    <div class="f-tabs__header hide-scrollbar">
       <span
         v-for="tabPane in tabPanes"
         :key="tabPane.tab"
@@ -18,7 +18,11 @@
         :style="floatingBorderStyle"
       /> -->
     </div>
-    <div class="f-tabs__content">
+    <div
+      ref="scrollContent"
+      class="f-tabs__content hide-scrollbar"
+      @scroll="handleContentScroll"
+    >
       <slot />
     </div>
   </div>
@@ -29,8 +33,6 @@ import { useScrollToBottom } from '@/composables';
 import {
   defineComponent, ref,
 } from 'vue';
-
-// TODO: 如何让外部 FTabPane 不必写 v-show/v-if
 
 export default defineComponent({
   props: {
@@ -53,19 +55,45 @@ export default defineComponent({
     }));
 
     const { scrollRef: scroll } = useScrollToBottom(() => ctx.emit('on-scroll-to-bottom'), props.bottomOffset);
+    /** scroll-content 元素 */
+    const scrollContentRef = ref<HTMLDivElement>();
+
+    /** 变更标签页 */
+    const changeTabPage = (pageKey: string) => {
+      if (props.modelValue === pageKey) {
+        return;
+      }
+      ctx.emit('update:modelValue', pageKey);
+    };
+
+    /** 点击 tab 项 */
+    const handleClickTab = (pageKey: string) => {
+      const pageIndex = tabPanes.value.findIndex((v) => (v.tab === pageKey));
+      if (!scrollContentRef.value || pageIndex === -1) {
+        return;
+      }
+      const { offsetWidth } = scrollContentRef.value;
+      scrollContentRef.value.scrollTo(pageIndex * offsetWidth, 0);
+    };
+
+    /** 内容横向滚动监听 */
+    const handleContentScroll = (e: Event) => {
+      const target = e.target as HTMLDivElement;
+      const { scrollLeft, offsetWidth } = target;
+      const scrollRatio = scrollLeft / offsetWidth;
+      if (Number.isInteger(scrollRatio) && tabPanes.value[scrollRatio].tab !== props.modelValue) {
+        // 若滚动比例为整数（贴在某页左边沿）且当前滚动位置不等于 modelValue，将 modelValue 更新为当前滚动位置所在页
+        changeTabPage(tabPanes.value[scrollRatio].tab);
+      }
+    };
 
     return {
       tabPanes,
       scroll,
+      scrollContent: scrollContentRef,
+      handleClickTab,
+      handleContentScroll,
     };
-  },
-  methods: {
-    handleClickTab(pageKey: string) {
-      if (this.modelValue === pageKey) {
-        return;
-      }
-      this.$emit('update:modelValue', pageKey);
-    },
   },
 });
 </script>
@@ -80,6 +108,7 @@ $padding-x: 12px;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
+  overflow: hidden;
 
   > .f-tabs__header {
     flex: 0 0 auto;
@@ -121,10 +150,15 @@ $padding-x: 12px;
 
   > .f-tabs__content {
     flex: 1;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
 
     > .f-tabs__pane {
       height: 100%;
       width: 100%;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
     }
   }
 }

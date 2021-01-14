@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="f-tabs__pane"
-  >
+  <span class="f-tabs__pane">
     <slot />
-  </div>
+  </span>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-} from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {

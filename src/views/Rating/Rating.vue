@@ -1,41 +1,24 @@
 <template>
-  <div
-    class="content-box"
-  >
+  <div class="content-box">
     <rating-head-bar />
     <f-tabs
       v-model="activeTab"
       :bottom-offset="500"
       @on-scroll-to-bottom="handleScrollToBottom"
     >
-      <f-tab-pane
-        v-show="activeTab === '最新'"
-        tab="最新"
-      >
+      <f-tab-pane tab="最新">
         <rating-list :ratings="tabLists.最新" />
       </f-tab-pane>
-      <f-tab-pane
-        v-show="activeTab === '通识'"
-        tab="通识"
-      >
+      <f-tab-pane tab="通识">
         <lecture-list :lectures="tabLists.通识" />
       </f-tab-pane>
-      <f-tab-pane
-        v-show="activeTab === '思政'"
-        tab="思政"
-      >
+      <f-tab-pane tab="思政">
         <lecture-list :lectures="tabLists.思政" />
       </f-tab-pane>
-      <f-tab-pane
-        v-show="activeTab === '外语'"
-        tab="外语"
-      >
+      <f-tab-pane tab="外语">
         <lecture-list :lectures="tabLists.外语" />
       </f-tab-pane>
-      <f-tab-pane
-        v-show="activeTab === '体育'"
-        tab="体育"
-      >
+      <f-tab-pane tab="体育">
         <lecture-list :lectures="tabLists.体育" />
       </f-tab-pane>
     </f-tabs>

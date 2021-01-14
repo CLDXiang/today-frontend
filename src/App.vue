@@ -1,7 +1,7 @@
 <template>
   <div
     class="main-container"
-    :style="{ paddingBottom: isBottomNavVisible ? '64px': '0' }"
+    :style="{ paddingBottom: isBottomNavVisible ? '64px' : '0' }"
   >
     <router-view />
   </div>
@@ -150,5 +150,17 @@ body {
 
 :focus {
   outline: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-color: transparent transparent;
+  min-width: unset;
+  &::-webkit-scrollbar {
+    display: none;
+    min-width: inherit;
+    background-color: transparent;
+  }
 }
 </style>

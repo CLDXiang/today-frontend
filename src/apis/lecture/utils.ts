@@ -1,7 +1,7 @@
 import { CardLectureItem } from '@/components/listCard';
-import { LectureItem } from './dto';
+import { LectureItem } from './types';
 
-/** 将 RateItem 转为 CardRatingItem */
+/** 将 LectureItem 转为 CardLectureItem */
 export const transferLectureItemToCardLectureItem: (lectureItem: LectureItem) => CardLectureItem = (
   lectureItem,
 ) => ({

@@ -2,13 +2,14 @@ import { CardLectureItem } from '@/components/listCard';
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
 import log from '@/utils/log';
+import { LectureDetail } from './types';
 import {
-  LectureDetail,
   GetLecturesRespDto,
   GetLecturesIdRespDto,
 } from './dto';
 import { transferLectureItemToCardLectureItem } from './utils';
 
+/** 获取某用户的课程列表 */
 const getSelectList: (req: {
   /** 用户 Id */
   userId: string;
@@ -40,6 +41,7 @@ const getSelectList: (req: {
       .catch((err) => reject(err));
   });
 
+/** 根据课程类型获得课程列表 */
 const getLectureList: (req: {
   /** 课程类型 */
   type: string;
@@ -69,6 +71,7 @@ const getLectureList: (req: {
       .catch((err) => reject(err));
   });
 
+/** 获取某课程详情 */
 const getLectureDetail: (req: {
   /** Lecture Id */
   lectureId: string;

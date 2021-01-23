@@ -1,5 +1,5 @@
 import { lectureClient } from '@/apis';
-import { LectureDetail } from '@/apis/lecture/dto';
+import { LectureDetail } from '@/apis/lecture/types';
 import { ref, Ref, watch } from 'vue';
 
 /**
@@ -33,7 +33,6 @@ const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDeta
       timeSlot: JSON.parse('{}'),
       maxStudent: 0,
     },
-    limit: 0,
     difficulty: 0,
     nice: 0,
     workload: 0,

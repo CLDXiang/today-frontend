@@ -27,7 +27,10 @@
         {{ lecture.teachers.join(' ') }}
       </span>
       <div class="card-lecture__bottom-icon-field">
-        <span class="card-lecture__bottom-icon">
+        <span
+          v-if="hasReaction"
+          class="card-lecture__bottom-icon"
+        >
           <f-icon
             name="reaction"
             size="14"
@@ -71,6 +74,12 @@ export default defineComponent({
   props: {
     /** 课程数据项 */
     lecture: { type: Object as PropType<CardLectureItem>, required: true },
+  },
+  data() {
+    return {
+    // TODO: lecture 引入 reactions 后删除此 data 与 上面的 v-if={hasReaction}
+      hasReaction: false,
+    };
   },
 });
 </script>

@@ -110,7 +110,7 @@ export interface CardLectureItem {
   /** 平均综合评分 */
   score: number;
   /** reaction 数（TODO: 如果 reaction 系统能够完成设计，可以返回各 reaction 数量） */
-  reactionCount: number;
+  reactionCount?: number;
   /** 评价数 */
   ratingCount: number;
   /** 收藏数 */

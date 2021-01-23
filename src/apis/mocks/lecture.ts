@@ -1,5 +1,5 @@
 import { CardLectureItem } from '@/components/listCard';
-import { LectureDetail } from '../types';
+import { LectureDetail } from '../lecture/dto';
 
 export const mockSelects: CardLectureItem[] = [
   {

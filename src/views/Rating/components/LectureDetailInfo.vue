@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { LectureDetail } from '@/apis/types';
+import { LectureDetail } from '@/apis/lecture/types';
 
 export default defineComponent({
   props: {

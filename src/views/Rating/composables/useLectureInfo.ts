@@ -30,7 +30,7 @@ const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDeta
       examTime: '',
       withdrawable: '',
       r3limit: '',
-      timeSlot: JSON.parse('{}'),
+      timeSlot: [],
       maxStudent: 0,
     },
     difficulty: 0,

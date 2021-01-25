@@ -1,6 +1,7 @@
 import { ReactionType } from '../reaction/types';
 
-export interface RawRateFormResp {
+/** 评课表单 DTO */
+export interface RateFormDto {
   /** 难易程度 */
   difficulty: number;
   /** 给分好坏 */
@@ -11,36 +12,10 @@ export interface RawRateFormResp {
   recommended: number;
   /** 评价内容 */
   content: string;
-  /** 发布时间 */
-  updatedAt: string;
 }
 
-export interface RawRateResp extends RawRateFormResp {
-  /** 草稿 */
-  draft?: RawRateFormResp;
-  /** 课程 Id */
-  lectureId?: string;
-}
-
-export interface RawRateForm {
-  /** 难易程度 */
-  difficulty?: number;
-  /** 给分好坏 */
-  nice?: number;
-  /** 工作量 */
-  workload?: number;
-  /** 综合推荐指数 */
-  recommended?: number;
-  /** 评价内容 */
-  content?: string;
-  /** 更新时间 */
-  updatedAt?: string;
-}
-
-export interface RawRate extends RawRateForm {
-  /** 草稿 */
-  draft?: RawRateForm;
-}
+/** 评课表单 DTO（字段可选） */
+export type RateFormDtoPartial = Partial<RateFormDto>;
 
 export interface RateItem {
   /** 点评 ID */
@@ -56,10 +31,10 @@ export interface RateItem {
   };
   /** 发布时间 */
   createdAt: string;
-  /** 发布时间 */
+  /** 更新时间 */
   updatedAt: string;
   /** 点评表单 */
-  form: RawRateForm;
+  form: RateFormDto;
   /** 课程信息 */
   lecture: {
     /** lecture ID */

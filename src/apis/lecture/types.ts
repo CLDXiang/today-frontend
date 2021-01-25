@@ -78,8 +78,6 @@ export interface LectureDetail extends LectureType {
   rated: boolean;
   /** 当前用户是否关注 */
   watched: boolean;
-  /** 当前用户对该课程的点评 Id（包括草稿） */
-  ratingId?: string;
 }
 
 /** 列表页 Lecture 项 */

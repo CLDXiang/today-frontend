@@ -2,7 +2,7 @@
   <div class="content-box">
     <rating-head-bar
       is-back-visible
-      @click-back="$router.back()"
+      @click-back="$router.replace('/rating')"
     >
       <span class="title">课程评价</span>
     </rating-head-bar>

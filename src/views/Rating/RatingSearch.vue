@@ -4,7 +4,7 @@
   >
     <rating-head-bar
       is-back-visible
-      @click-back="$router.back()"
+      @click-back="$router.replace('/rating')"
     />
     <div class="title">
       “{{ parsedQ }}”的搜索结果

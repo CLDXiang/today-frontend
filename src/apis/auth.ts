@@ -52,24 +52,24 @@ const register: (req: {
 
 const requestCodeRegister: (req: {
   email: string;
-}) => Promise<never> = (req) =>
+}) => Promise<null> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/register-mail`, req)
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch((err) => reject(err));
   });
 
 const requestCodeForForgotPassword: (req: {
   email: string;
-}) => Promise<never> = (req) =>
+}) => Promise<null> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .post(`${API_URL}/auth/password`, req)
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch((err) => reject(err));
   });
@@ -78,12 +78,12 @@ const modifyPassword: (req: {
   email: string;
   code: number;
   password: string;
-}) => Promise<never> = (req) =>
+}) => Promise<null> = (req) =>
   new Promise((resolve, reject) => {
     axios
       .put(`${API_URL}/auth/password`, req)
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch((err) => reject(err));
   });

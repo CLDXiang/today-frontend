@@ -2,17 +2,17 @@ import API from '@/utils/axios';
 import store from '@/store';
 import log from '@/utils/log';
 
-const login: (req: {
+const login = async (req: {
   /** 用户名 */
   username: string;
   /** 密码 */
   password: string;
-}) => Promise<{
+}): Promise<{
   // eslint-disable-next-line camelcase
   access_token: string;
   email: string;
   name: string;
-}> = async (req) => {
+}> => {
   log.info('authClient.login', req);
   const { data } = await API.post('auth/login', req);
   const { access_token: jwtToken, email, name } = data;
@@ -25,7 +25,7 @@ const login: (req: {
   return data;
 };
 
-const register: (req: {
+const register = async (req: {
   /** 用户名 */
   name: string;
   /** 验证码 */
@@ -34,35 +34,35 @@ const register: (req: {
   password: string;
   /** 邮箱 */
   email: string;
-}) => Promise<{
+}): Promise<{
   result: 'success' | 'failed';
-}> = async (req) => {
+}> => {
   log.info('authClient.register', req);
   const { data } = await API.post('auth/register', req);
   return data;
 };
 
-const requestCodeRegister: (req: {
+const requestCodeRegister = async (req: {
   email: string;
-}) => Promise<null> = async (req) => {
+}): Promise<null> => {
   log.info('authClient.requestCodeRegister', req);
   await API.post('auth/register-mail', req);
   return null;
 };
 
-const requestCodeForForgotPassword: (req: {
+const requestCodeForForgotPassword = async (req: {
   email: string;
-}) => Promise<null> = async (req) => {
+}): Promise<null> => {
   log.info('authClient.requestCodeForForgotPassword', req);
   await API.post('auth/password', req);
   return null;
 };
 
-const modifyPassword: (req: {
+const modifyPassword = async (req: {
   email: string;
   code: number;
   password: string;
-}) => Promise<null> = async (req) => {
+}): Promise<null> => {
   log.info('authClient.modifyPassword', req);
   await API.put('auth/password', req);
   return null;

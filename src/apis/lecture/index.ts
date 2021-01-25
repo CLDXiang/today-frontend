@@ -9,7 +9,7 @@ import {
 import { transferLectureItemToCardLectureItem } from './utils';
 
 /** 获取某用户的课程列表 */
-const getSelectList: (req: {
+const getSelectList = async (req: {
   /** 用户 Id */
   userId: string;
   /** 拉取条数 */
@@ -18,10 +18,10 @@ const getSelectList: (req: {
   semester?: string;
   /** 分页 - 最后一个 lecture 的 id */
   lastId?: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardLectureItem[];
-}> = async (req) => {
+}> => {
   log.info('lectureClient.getSelectList', req);
   const { data: { data } } = await API.get<GetLecturesRespDto>('lectures', {
     params: {
@@ -33,17 +33,17 @@ const getSelectList: (req: {
 };
 
 /** 根据课程类型获得课程列表 */
-const getLectureList: (req: {
+const getLectureList = async (req: {
   /** 课程类型 */
   type: string;
   /** 拉取条数 */
   limit: number;
   /** 分页 - 最后一个 lecture 的 id */
   lastId?: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardLectureItem[];
-}> = async (req) => {
+}> => {
   log.info('lectureClient.getLectureList', req);
   const { data: { data } } = await API.get<GetLecturesRespDto>('lectures', {
     params: {
@@ -55,13 +55,13 @@ const getLectureList: (req: {
 };
 
 /** 获取某课程详情 */
-const getLectureDetail: (req: {
+const getLectureDetail = async (req: {
   /** Lecture Id */
   lectureId: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: LectureDetail;
-}> = async (req) => {
+}> => {
   log.info('lectureClient.getLectureDetail', req);
   const { data: { data } } = await API.get<GetLecturesIdRespDto>(`lectures/${req.lectureId}`, {
     params: {

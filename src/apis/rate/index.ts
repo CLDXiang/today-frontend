@@ -15,17 +15,17 @@ import { transferRateItemToCardRatingItem } from './utils';
 import { RateDraftDtoPartial } from '../rateDraft/types';
 
 /** 获取某用户的点评列表 */
-const getRatingListByUser: (req: {
+const getRatingListByUser = async (req: {
   /** 用户 Id */
   userId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = async (req) => {
+}> => {
   log.info('rateClient.getRatingListByUser', req);
   try {
     const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
@@ -42,17 +42,17 @@ const getRatingListByUser: (req: {
 };
 
 /** 获取某门课的点评列表 */
-const getRatingListByLecture: (req: {
+const getRatingListByLecture = async (req: {
   /** 课程 Id */
   lectureId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 拉取条数 */
   limit?: number;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = async (req) => {
+}> => {
   log.info('rateClient.getRatingListByLecture', req);
   try {
     const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
@@ -69,32 +69,32 @@ const getRatingListByLecture: (req: {
 };
 
 /** 根据 Lecture Id 获取点评 */
-const getRatingByLectureId: (req: {
+const getRatingByLectureId = async (req: {
   /** Lecture Id */
   lectureId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: RateForm | RateDraftDtoPartial;
-}> = async (req) => {
+}> => {
   log.info('rateClient.getRatingById', req);
   const { data: { data } } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`);
   return { data };
 };
 
 /** 获取点评列表 */
-const getRatingList: (req: {
+const getRatingList = async (req: {
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = async (req) => {
+}> => {
   log.info('rateClient.getRatingList');
   const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
     params: {
@@ -106,7 +106,7 @@ const getRatingList: (req: {
 };
 
 /** 发布点评 */
-const saveRating: (req: {
+const saveRating = async (req: {
   /** 课程 Id */
   lectureId: string;
   /** 难易程度 */
@@ -119,16 +119,16 @@ const saveRating: (req: {
   recommended: number;
   /** 评价内容 */
   content: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
-}> = async (req) => {
+}> => {
   log.info('rateClient.saveRating', req);
   await API.post<PostRatesRespDto>('rates', req as PostRatesReqDto);
   return {};
 };
 
 /** 编辑点评 */
-const editRating: (req: {
+const editRating = async (req: {
   /** Lecture Id */
   lectureId: string;
   /** 难易程度 */
@@ -141,22 +141,22 @@ const editRating: (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
-}> = async (req) => {
+}> => {
   log.info('rateClient.editRating', req);
   await API.patch<PatchRatesLectureIdRespDto>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto);
   return {};
 };
 
 /** 删除点评 */
-const deleteRating: (req: {
+const deleteRating = async (req: {
   /** Lecture Id */
   lectureId: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = async (req) => {
+}> => {
   log.info('rateClient.deleteRating', req);
   const { data: { data } } = await API.delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`);
   return { data: data.map(transferRateItemToCardRatingItem) };

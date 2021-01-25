@@ -5,15 +5,15 @@ import { mockReaction } from '../mocks/reaction';
 
 // FIXME: mock
 /** 添加 Reaction */
-const addReaction: (req: {
+const addReaction = async (req: {
   /** Uni Id */
   uniId: string;
   /** emoji Id */
   emojiId: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: ReactionType;
-}> = async (req) => {
+}> => {
   log.info('reactionClient.addReaction', req);
   const { emojiId } = req;
 
@@ -36,15 +36,15 @@ const addReaction: (req: {
 
 // FIXME: mock
 /** 删除 Reaction */
-const deleteReaction: (req: {
+const deleteReaction = async (req: {
   /** Uni Id */
   uniId: string;
   /** emoji Id */
   emojiId: string;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: ReactionType;
-}> = async (req) => {
+}> => {
   log.info('reactionClient.deleteReaction', req);
   const { emojiId } = req;
 

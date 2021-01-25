@@ -3,10 +3,10 @@ import log from '@/utils/log';
 import { GetUsersIdRespDto, PatchUsersIdReqDto, PatchUsersIdRespDto } from './dto';
 
 /** 获取用户信息 */
-const getUserInfo: (req: {
+const getUserInfo = async (req: {
   /** 用户 Id */
   userId?: string;
-}) => Promise<{
+}): Promise<{
   id: string;
   email: string;
   name: string;
@@ -16,14 +16,14 @@ const getUserInfo: (req: {
   fans: number;
   watchers: number;
   watchees: number;
-}> = async ({ userId }) => {
-  log.info('userClient.getUserInfo', { userId });
-  const { data: { data } } = await API.get<GetUsersIdRespDto>(`users/${userId || ''}`);
+}> => {
+  log.info('userClient.getUserInfo', req);
+  const { data: { data } } = await API.get<GetUsersIdRespDto>(`users/${req.userId || ''}`);
   return data;
 };
 
 /** 修改用户信息 */
-const editUserInfo: (req: {
+const editUserInfo = async (req: {
   /** 用户 Id */
   uid?: string;
   /** 邮箱 */
@@ -40,29 +40,29 @@ const editUserInfo: (req: {
   bio?: string;
   /** 验证码 */
   code?: string;
-}) => Promise<{
+}): Promise<{
   id: string;
   email: string;
   name: string;
   nickname?: string;
   avatar: string;
   bio?: string;
-}> = async (req) => {
+}> => {
   log.info('userClient.editUserInfo', req);
   const { data: { data } } = await API.patch<PatchUsersIdRespDto>(`users/${req.uid || ''}`, req as PatchUsersIdReqDto);
   return data;
 };
 
 /** 修改用户头像 */
-const uploadAvatar: (req: {
+const uploadAvatar = async (req: {
   userAvatar: FormData;
-}) => Promise<{
+}): Promise<{
   avatar: string;
   bio: string;
   nickname: string;
-}> = async ({ userAvatar }) => {
-  log.info('userClient.uploadAvatar', { userAvatar });
-  const { data } = await API.post('user/profile/avatar', userAvatar);
+}> => {
+  log.info('userClient.uploadAvatar', req);
+  const { data } = await API.post('user/profile/avatar', req.userAvatar);
   return data;
 };
 

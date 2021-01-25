@@ -1,7 +1,7 @@
 import API from '@/utils/axios';
 import log from '@/utils/log';
 
-const getSelectedCourses: (semester: string) => Promise<number[]> = async (semester) => {
+const getSelectedCourses = async (semester: string): Promise<number[]> => {
   log.info('timetableClient.getSelectedCourses', { semester });
   const { data } = await API.get('course/select', {
     params: { semester },
@@ -9,13 +9,10 @@ const getSelectedCourses: (semester: string) => Promise<number[]> = async (semes
   return data;
 };
 
-const replaceSelectedCourses: (
+const replaceSelectedCourses = async (
   semester: string,
-  selectedCoursesIDs: number[]
-) => Promise<null> = async (
-  semester,
-  selectedCoursesIDs,
-) => {
+  selectedCoursesIDs: number[],
+): Promise<null> => {
   log.info('timetableClient.replaceSelectedCourses', { semester, selectedCoursesIDs });
   await API.post('course/select', {
     semester,
@@ -24,13 +21,13 @@ const replaceSelectedCourses: (
   return null;
 };
 
-const addSelectedCourse: (courseId: number) => Promise<null> = async (courseId) => {
+const addSelectedCourse = async (courseId: number): Promise<null> => {
   log.info('timetableClient.addSelectedCourse', { courseId });
   await API.post(`course/${courseId}/select`);
   return null;
 };
 
-const removeSelectedCourse: (courseId: number) => Promise<null> = async (courseId) => {
+const removeSelectedCourse = async (courseId: number): Promise<null> => {
   log.info('timetableClient.removeSelectedCourse', { courseId });
   await API.delete(`course/${courseId}/select`);
   return null;

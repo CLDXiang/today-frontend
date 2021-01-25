@@ -5,7 +5,7 @@ import log from '@/utils/log';
 import { mockHistories } from './mocks/history';
 
 // FIXME: mock
-const getHistoryList: (req: {
+const getHistoryList = async (req: {
   /** 用户 Id */
   userId: string;
   /** 足迹类型 - user / lecture */
@@ -14,10 +14,10 @@ const getHistoryList: (req: {
   lastId?: string;
   /** 拉取条数 */
   limit: number;
-}) => Promise<{
+}): Promise<{
   msg?: string;
   data: CardCommonItem[];
-}> = async (req) => {
+}> => {
   log.info('historyClient.getHistoryList', req);
   return { data: mockHistories };
 };

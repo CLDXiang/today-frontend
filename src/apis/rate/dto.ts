@@ -1,3 +1,4 @@
+import { RateDraftDtoPartial } from '../rateDraft/types';
 import { RateItem, RateFormDto, RateFormDtoPartial } from './types';
 
 /** GET rates Resp */
@@ -20,7 +21,7 @@ export interface PostRatesRespDto {
 /** GET rates/:lectureId Resp */
 export interface GetRatesLectureIdRespDto {
   msg?: string;
-  data: RateFormDto;
+  data: RateFormDto | RateDraftDtoPartial;
 }
 
 /** PATCH rates/:lectureId Req */
@@ -30,9 +31,6 @@ export type PatchRatesLectureIdReqDto = RateFormDtoPartial;
 export interface PatchRatesLectureIdRespDto {
   msg?: string;
 }
-
-/** DELETE rates/:lectureId Req */
-export interface DeleteRatesLectureIdReqDto {}
 
 /** DELETE rates/:lectureId Resp */
 export interface DeleteRatesLectureIdRespDto {

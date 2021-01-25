@@ -69,28 +69,37 @@
           清空
         </a-button>
       </span>
-      <span class="action-box__right">
-        <a-button
-          v-if="isDraft"
-          :class="{ 'button-gray': isFormDataAvailable }"
-          shape="round"
-          size="large"
-          :disabled="!isFormDataAvailable"
-          :loading="isLoading"
-          @click="handleClickSaveDraft"
-        >
-          保存
-        </a-button>
-        <a-button
-          shape="round"
-          type="primary"
-          size="large"
-          :disabled="!isFormDataAvailable"
-          :loading="isLoading"
-          @click="handleClickSubmit"
-        >
-          提交点评
-        </a-button>
+      <span class>
+        <span class="action-box__right">
+          <a-button
+            shape="round"
+            size="large"
+            :loading="isLoading"
+            @click="handleClickGetDraft"
+          >
+            恢复草稿
+          </a-button>
+          <a-button
+            :class="{ 'button-gray': isFormDataEdited }"
+            shape="round"
+            size="large"
+            :disabled="!isFormDataEdited"
+            :loading="isLoading"
+            @click="handleClickSaveDraft"
+          >
+            保存
+          </a-button>
+          <a-button
+            shape="round"
+            type="primary"
+            size="large"
+            :disabled="!isFormDataAvailable || !isFormDataEdited"
+            :loading="isLoading"
+            @click="handleClickSubmit"
+          >
+            发布
+          </a-button>
+        </span>
       </span>
     </div>
   </div>
@@ -99,10 +108,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
-import { rateClient, lectureClient } from '@/apis';
+import { rateClient, lectureClient, rateDraftClient } from '@/apis';
 import { mapMutations, mapState } from 'vuex';
 import { scoreTextTable } from '@/utils/rating';
-import dayjs from 'dayjs';
 import { RateForm } from './types';
 import { RatingHeadBar } from './components';
 
@@ -119,8 +127,6 @@ export default defineComponent({
     return {
       /** 课程名 */
       lectureName: '',
-      /** 当前用户对该课程的点评 Id */
-      ratingId: '',
       /** 表单数据 */
       formData: {
         /** 难易程度 */
@@ -133,11 +139,20 @@ export default defineComponent({
         recommended: 0,
         /** 评价内容 */
         content: '',
-        /** 更新时间 */
-        updatedAt: dayjs(0),
       } as RateForm,
-      /** 是否为草稿 */
-      isDraft: false,
+      /** 上一次保存的表单数据 */
+      savedFormData: {
+        /** 难易程度 */
+        difficulty: 0,
+        /** 给分好坏 */
+        nice: 0,
+        /** 工作量 */
+        workload: 0,
+        /** 综合推荐指数 */
+        recommended: 0,
+        /** 评价内容 */
+        content: '',
+      } as RateForm,
       /** 星星文案 */
       scoreTextTable,
       /** 是否正在加载 */
@@ -156,6 +171,16 @@ export default defineComponent({
         && this.formData.content?.trim()
       );
     },
+    /** 与上一次保存相比是否修改过 */
+    isFormDataEdited(): boolean {
+      return !(
+        this.formData.difficulty === this.savedFormData.difficulty
+        && this.formData.nice === this.savedFormData.nice
+        && this.formData.workload === this.savedFormData.workload
+        && this.formData.recommended === this.savedFormData.recommended
+        && this.formData.content?.trim() === this.savedFormData.content?.trim()
+      );
+    },
   },
   watch: {
     formData: {
@@ -167,7 +192,7 @@ export default defineComponent({
         // 本打算用 beforeUnmount 处理，但是在路由强跳时似乎无法触发
         this.setRatingForm({
           lectureId: this.lectureId,
-          formData: { ...this.formData, updatedAt: dayjs() },
+          formData: { ...this.formData },
         });
       },
       deep: true,
@@ -178,53 +203,26 @@ export default defineComponent({
     // TODO: field 只需要 name、ratingId
     lectureClient.getLectureDetail({ lectureId: this.lectureId }).then(({ data: lectureInfo }) => {
       this.lectureName = lectureInfo.name;
-      this.ratingId = lectureInfo.ratingId || '';
+
       /** 拿 storage 的 */
       const localRatingForm: RateForm = this.ratingForms[this.lectureId];
 
-      this.formData = localRatingForm || this.formData;
-
-      // 拉取点评信息
-      if (this.ratingId) {
-      // 若有 ratingId，则直接拉点评数据
-      // TODO: 根据后端 API 逻辑修改
+      if (localRatingForm) {
+        // 有 sessionStorage 的就用本地的
+        this.formData = { ...localRatingForm };
+        this.savedFormData = { ...localRatingForm };
+        this.isLoading = false;
+      } else {
+        // 没有的话尝试同步线上的
         rateClient
-          .getRatingById({ ratingId: this.ratingId })
+          .getRatingByLectureId({ lectureId: this.lectureId })
           .then(({ data }) => {
-            if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
-            // 如果有非草稿有效内容，则使用有效内容
-              const {
-                difficulty, nice, workload, recommended, content, updatedAt,
-              } = data;
-
-              if (!this.formData.updatedAt || (updatedAt && updatedAt > this.formData.updatedAt)) {
-              // 如果拉下来的内容更新，替换本地的
-                this.formData = {
-                  difficulty,
-                  nice,
-                  workload,
-                  recommended,
-                  content,
-                  updatedAt,
-                };
-              }
-            } else if (
-              data.draft && (
-                !this.formData.updatedAt
-            || (data.draft.updatedAt && data.draft.updatedAt > this.formData.updatedAt))
-            ) {
-            // 使用草稿内容
-              this.formData = data.draft;
-              this.isDraft = true;
-            }
+            this.formData = { ...this.formData, ...data };
+            this.savedFormData = { ...this.formData, ...data };
           })
           .finally(() => {
             this.isLoading = false;
           });
-      } else {
-      // 没有点评 Id，创建新的
-        this.isDraft = true;
-        this.isLoading = false;
       }
     });
   },
@@ -265,65 +263,56 @@ export default defineComponent({
         workload: 0,
         recommended: 0,
         content: '',
-        updatedAt: dayjs(0),
       };
+    },
+    /** 点击恢复草稿按钮 */
+    handleClickGetDraft() {
+      this.isLoading = true;
+      rateDraftClient
+        .getDraft(this.lectureId)
+        .then(({ data }) => {
+          this.formData = { ...this.formData, ...data };
+          this.savedFormData = { ...this.formData, ...data };
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    /** 对比字段，如果没有变化返回 undefined，否则返回新的值 */
+    editedValue<K extends keyof RateForm>(fieldName: K): RateForm[K] | undefined {
+      if (this.formData[fieldName] === this.savedFormData[fieldName]) return undefined;
+      if (fieldName === 'content' && this.formData.content?.trim() === this.savedFormData.content?.trim()) return undefined;
+      return this.formData[fieldName];
     },
     /** 点击保存按钮 */
     handleClickSaveDraft() {
-      if (!this.isDraft) {
-        // 正常情况下应该不会触发这里
-        this.$message.warn('已经发布过点评啦，请直接提交修改');
-      }
-      if (!this.checkFormData()) {
-        // 有字段没有填，正常情况下应该不会触发这里
-        return;
-      }
       this.isLoading = true;
-      this.formData.updatedAt = dayjs();
-      if (!this.ratingId) {
-        // 没有点评 Id，新建草稿
-        rateClient.createDraft({ lectureId: this.lectureId, ...this.formData }).then(() => {
-          this.$message.success('保存草稿成功！');
-        }).finally(() => {
-          this.isLoading = false;
-        });
-      } else {
-        // 有点评 Id，编辑草稿
-        rateClient.editDraft({ ratingId: this.ratingId, ...this.formData }).then(() => {
-          this.$message.success('编辑草稿成功！');
-        }).finally(() => {
-          this.isLoading = false;
-        });
-      }
+      rateDraftClient.saveDraft({
+        lectureId: this.lectureId,
+        difficulty: this.editedValue('difficulty'),
+        nice: this.editedValue('nice'),
+        workload: this.editedValue('workload'),
+        recommended: this.editedValue('recommended'),
+        content: this.editedValue('content'),
+      }).then(() => {
+        this.$message.success('保存草稿成功！');
+        this.savedFormData = { ...this.formData };
+      }).finally(() => {
+        this.isLoading = false;
+      });
     },
-    /** 点击提交按钮 */
+    /** 点击发布按钮 */
     handleClickSubmit() {
-      if (!this.checkFormData()) {
-        // 有字段没有填，正常情况下应该不会触发这里
-        return;
-      }
       this.isLoading = true;
-      this.formData.updatedAt = dayjs();
-      if (!this.ratingId) {
-        // 没有点评 Id，新建点评
-        rateClient.createRating({ lectureId: this.lectureId, ...this.formData }).then(() => {
-          this.$message.success('提交点评成功！');
-          // TODO: 更新详情页数据
-          // TODO: 验证一下 back 后究竟是否会保留原来的 state，如果是重新 mount 就不需要从这里更新数据了，下同
-          this.$router.back();
-        }).finally(() => {
+      rateClient
+        .saveRating({ lectureId: this.lectureId, ...this.formData })
+        .then(() => {
+          this.$message.success('发布点评成功！');
+          this.$router.replace(`/rating/lecture/${this.lectureId}`);
+        })
+        .finally(() => {
           this.isLoading = false;
         });
-      } else {
-        // 有点评 Id，编辑点评
-        rateClient.editRating({ ratingId: this.ratingId, ...this.formData }).then(() => {
-          this.$message.success('编辑点评成功！');
-          // TODO: 更新详情页数据
-          this.$router.back();
-        }).finally(() => {
-          this.isLoading = false;
-        });
-      }
     },
   },
 });

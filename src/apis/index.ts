@@ -9,3 +9,4 @@ export { default as starClient } from './star';
 export { default as watchClient } from './watch';
 export { default as historyClient } from './history';
 export { default as reactionClient } from './reaction';
+export { default as rateDraftClient } from './rateDraft';

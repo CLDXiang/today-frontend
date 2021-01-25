@@ -26,8 +26,6 @@ export interface RateForm {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-  /** 更新时间 */
-  updatedAt?: Dayjs;
 }
 
 /** 点评类列表项 */

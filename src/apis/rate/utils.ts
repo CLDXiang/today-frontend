@@ -1,5 +1,4 @@
 import { CardRatingItem } from '@/components/listCard';
-import { dayjsOrUndefined } from '@/utils/dayjs';
 import dayjs from 'dayjs';
 import { RateItem } from './types';
 

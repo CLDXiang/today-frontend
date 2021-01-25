@@ -13,6 +13,7 @@ import {
   DeleteRatesLectureIdRespDto,
 } from './dto';
 import { transferRateItemToCardRatingItem } from './utils';
+import { RateDraftDtoPartial } from '../rateDraft/types';
 
 /** 获取某用户的点评列表 */
 const getRatingListByUser: (req: {
@@ -86,7 +87,7 @@ const getRatingByLectureId: (req: {
   limit?: number;
 }) => Promise<{
   msg?: string;
-  data: RateForm;
+  data: RateForm | RateDraftDtoPartial;
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.getRatingById', req);
@@ -129,7 +130,7 @@ const getRatingList: (req: {
   });
 
 /** 发布点评 */
-const createRating: (req: {
+const saveRating: (req: {
   /** 课程 Id */
   lectureId: string;
   /** 难易程度 */
@@ -146,7 +147,7 @@ const createRating: (req: {
   msg?: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('rateClient.createRating', req);
+    log.info('rateClient.saveRating', req);
     axios
       .post<PostRatesRespDto>(`${API_URL}/rates`, req as PostRatesReqDto)
       .then(() => {
@@ -213,7 +214,7 @@ const rateClient = {
   /** 获取点评列表 */
   getRatingList,
   /** 发布点评 */
-  createRating,
+  saveRating,
   /** 编辑点评 */
   editRating,
   /** 删除点评 */

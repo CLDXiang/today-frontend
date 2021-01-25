@@ -26,31 +26,21 @@ const saveDraft: (req: {
   content?: string;
 }) => Promise<{
   msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.saveDraft', req);
-    API
-      .post<PostRateDraftsRespDto>('rate_drafts', req as PostRateDraftsReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateDraftClient.saveDraft', req);
+  await API.post<PostRateDraftsRespDto>('rate_drafts', req as PostRateDraftsReqDto);
+  return {};
+};
 
 /** 获取保存的草稿 */
 const getDraft: (lectureId: string) => Promise<{
   msg?: string;
   data: RateForm
-}> = (lectureId) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.getDraft', { lectureId });
-    API
-      .get<GetRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`)
-      .then(({ data }) => {
-        resolve(data);
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (lectureId) => {
+  log.info('rateDraftClient.getDraft', { lectureId });
+  const { data } = await API.get<GetRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`);
+  return data;
+};
 
 /** 编辑草稿 */
 const editDraft: (req: {
@@ -68,30 +58,20 @@ const editDraft: (req: {
   content?: string;
 }) => Promise<{
   msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.editDraft', req);
-    API
-      .patch<PatchRateDraftsLectureIdRespDto>(`rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateDraftClient.editDraft', req);
+  await API.patch<PatchRateDraftsLectureIdRespDto>(`rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto);
+  return {};
+};
 
 /** 清空草稿 */
 const deleteDraft: (lectureId: string) => Promise<{
   msg?: string;
-}> = (lectureId) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.deleteDraft', { lectureId });
-    API
-      .delete<DeleteRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (lectureId) => {
+  log.info('rateDraftClient.deleteDraft', { lectureId });
+  await API.delete<DeleteRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`);
+  return {};
+};
 
 /** 评课草稿 API */
 const rateDraftClient = {

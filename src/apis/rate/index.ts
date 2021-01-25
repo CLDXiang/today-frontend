@@ -25,25 +25,21 @@ const getRatingListByUser: (req: {
 }) => Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingListByUser', req);
-    API
-      .get<GetRatesRespDto>('rates', {
-        params: {
-          user_id: req.userId,
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateClient.getRatingListByUser', req);
+  try {
+    const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+      params: {
+        user_id: req.userId,
+        last_id: req.lastId,
+        limit: req.limit,
+      },
+    });
+    return { data: data.map(transferRateItemToCardRatingItem) };
+  } catch (err) {
+    return err;
+  }
+};
 
 /** 获取某门课的点评列表 */
 const getRatingListByLecture: (req: {
@@ -56,25 +52,21 @@ const getRatingListByLecture: (req: {
 }) => Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingListByLecture', req);
-    API
-      .get<GetRatesRespDto>('rates', {
-        params: {
-          lecture_id: req.lectureId,
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateClient.getRatingListByLecture', req);
+  try {
+    const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+      params: {
+        lecture_id: req.lectureId,
+        last_id: req.lastId,
+        limit: req.limit,
+      },
+    });
+    return { data: data.map(transferRateItemToCardRatingItem) };
+  } catch (err) {
+    return err;
+  }
+};
 
 /** 根据 Lecture Id 获取点评 */
 const getRatingByLectureId: (req: {
@@ -87,18 +79,11 @@ const getRatingByLectureId: (req: {
 }) => Promise<{
   msg?: string;
   data: RateForm | RateDraftDtoPartial;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingById', req);
-    API
-      .get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`)
-      .then(({ data: { data } }) => {
-        resolve({
-          data,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateClient.getRatingById', req);
+  const { data: { data } } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`);
+  return { data };
+};
 
 /** 获取点评列表 */
 const getRatingList: (req: {
@@ -109,24 +94,16 @@ const getRatingList: (req: {
 }) => Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingList');
-    API
-      .get<GetRatesRespDto>('rates', {
-        params: {
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> = async (req) => {
+  log.info('rateClient.getRatingList');
+  const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+    params: {
+      last_id: req.lastId,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferRateItemToCardRatingItem) };
+};
 
 /** 发布点评 */
 const saveRating: (req: {
@@ -144,16 +121,11 @@ const saveRating: (req: {
   content: string;
 }) => Promise<{
   msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.saveRating', req);
-    API
-      .post<PostRatesRespDto>('rates', req as PostRatesReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateClient.saveRating', req);
+  await API.post<PostRatesRespDto>('rates', req as PostRatesReqDto);
+  return {};
+};
 
 /** 编辑点评 */
 const editRating: (req: {
@@ -171,16 +143,11 @@ const editRating: (req: {
   content?: string;
 }) => Promise<{
   msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.editRating', req);
-    API
-      .patch<PatchRatesLectureIdRespDto>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateClient.editRating', req);
+  await API.patch<PatchRatesLectureIdRespDto>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto);
+  return {};
+};
 
 /** 删除点评 */
 const deleteRating: (req: {
@@ -189,19 +156,11 @@ const deleteRating: (req: {
 }) => Promise<{
   msg?: string;
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.deleteRating', req);
-    API
-      .delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`)
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('rateClient.deleteRating', req);
+  const { data: { data } } = await API.delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`);
+  return { data: data.map(transferRateItemToCardRatingItem) };
+};
 
 const rateClient = {
   /** 获取某用户的点评列表 */

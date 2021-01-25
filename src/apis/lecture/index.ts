@@ -21,24 +21,16 @@ const getSelectList: (req: {
 }) => Promise<{
   msg?: string;
   data: CardLectureItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('lectureClient.getSelectList', req);
-    API
-      .get<GetLecturesRespDto>('lectures', {
-        params: {
-          user_id: req.userId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferLectureItemToCardLectureItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> = async (req) => {
+  log.info('lectureClient.getSelectList', req);
+  const { data: { data } } = await API.get<GetLecturesRespDto>('lectures', {
+    params: {
+      user_id: req.userId,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferLectureItemToCardLectureItem) };
+};
 
 /** 根据课程类型获得课程列表 */
 const getLectureList: (req: {
@@ -51,24 +43,16 @@ const getLectureList: (req: {
 }) => Promise<{
   msg?: string;
   data: CardLectureItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('lectureClient.getLectureList', req);
-    API
-      .get<GetLecturesRespDto>('lectures', {
-        params: {
-          category: req.type,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferLectureItemToCardLectureItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> = async (req) => {
+  log.info('lectureClient.getLectureList', req);
+  const { data: { data } } = await API.get<GetLecturesRespDto>('lectures', {
+    params: {
+      category: req.type,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferLectureItemToCardLectureItem) };
+};
 
 /** 获取某课程详情 */
 const getLectureDetail: (req: {
@@ -77,22 +61,15 @@ const getLectureDetail: (req: {
 }) => Promise<{
   msg?: string;
   data: LectureDetail;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('lectureClient.getLectureDetail', req);
-    API
-      .get<GetLecturesIdRespDto>(`lectures/${req.lectureId}`, {
-        params: {
-          id: req.lectureId,
-        },
-      })
-      .then(({ data: { data } }) => {
-        resolve({
-          data,
-        });
-      })
-      .catch((err) => reject(err));
+}> = async (req) => {
+  log.info('lectureClient.getLectureDetail', req);
+  const { data: { data } } = await API.get<GetLecturesIdRespDto>(`lectures/${req.lectureId}`, {
+    params: {
+      id: req.lectureId,
+    },
   });
+  return { data };
+};
 
 const lectureClient = {
   getLectureList,

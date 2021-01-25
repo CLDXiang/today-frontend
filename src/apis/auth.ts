@@ -1,5 +1,6 @@
 import API from '@/utils/axios';
 import store from '@/store';
+import log from '@/utils/log';
 
 const login: (req: {
   /** 用户名 */
@@ -11,22 +12,18 @@ const login: (req: {
   access_token: string;
   email: string;
   name: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    API
-      .post('auth/login', req)
-      .then((resp) => {
-        const { access_token: jwtToken, email, name } = resp.data;
-        if (jwtToken) {
-          store.commit('setJwtToken', jwtToken);
-          store.commit('setUser', { name, email });
-        } else {
-          reject(new Error('jwtToken no contained in response'));
-        }
-        return resolve(resp.data);
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('authClient.login', req);
+  const { data } = await API.post('auth/login', req);
+  const { access_token: jwtToken, email, name } = data;
+  if (jwtToken) {
+    store.commit('setJwtToken', jwtToken);
+    store.commit('setUser', { name, email });
+  } else {
+    throw new Error('jwtToken no contained in response');
+  }
+  return data;
+};
 
 const register: (req: {
   /** 用户名 */
@@ -39,53 +36,37 @@ const register: (req: {
   email: string;
 }) => Promise<{
   result: 'success' | 'failed';
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    API
-      .post('auth/register', req)
-      .then((resp) => {
-        resolve(resp.data);
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('authClient.register', req);
+  const { data } = await API.post('auth/register', req);
+  return data;
+};
 
 const requestCodeRegister: (req: {
   email: string;
-}) => Promise<null> = (req) =>
-  new Promise((resolve, reject) => {
-    API
-      .post('auth/register-mail', req)
-      .then(() => {
-        resolve(null);
-      })
-      .catch((err) => reject(err));
-  });
+}) => Promise<null> = async (req) => {
+  log.info('authClient.requestCodeRegister', req);
+  await API.post('auth/register-mail', req);
+  return null;
+};
 
 const requestCodeForForgotPassword: (req: {
   email: string;
-}) => Promise<null> = (req) =>
-  new Promise((resolve, reject) => {
-    API
-      .post('auth/password', req)
-      .then(() => {
-        resolve(null);
-      })
-      .catch((err) => reject(err));
-  });
+}) => Promise<null> = async (req) => {
+  log.info('authClient.requestCodeForForgotPassword', req);
+  await API.post('auth/password', req);
+  return null;
+};
 
 const modifyPassword: (req: {
   email: string;
   code: number;
   password: string;
-}) => Promise<null> = (req) =>
-  new Promise((resolve, reject) => {
-    API
-      .put('auth/password', req)
-      .then(() => {
-        resolve(null);
-      })
-      .catch((err) => reject(err));
-  });
+}) => Promise<null> = async (req) => {
+  log.info('authClient.modifyPassword', req);
+  await API.put('auth/password', req);
+  return null;
+};
 
 const authClient = {
   /** 登录 */

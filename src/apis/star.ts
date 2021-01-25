@@ -13,16 +13,14 @@ const getStarList: (req: {
   /** 拉取条数 */
   limit: number;
 }) => Promise<{
-  msg: string;
+  msg?: string;
   data: CardCommonItem[];
-}> = (req) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockStars,
-    });
-  });
+}> = async (req) => {
+  log.info('starClient.getStarList', req);
+  return {
+    data: mockStars,
+  };
+};
 
 const starClient = {
   getStarList,

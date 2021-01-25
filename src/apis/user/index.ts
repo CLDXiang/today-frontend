@@ -1,4 +1,5 @@
 import API from '@/utils/axios';
+import log from '@/utils/log';
 import { GetUsersIdRespDto, PatchUsersIdReqDto, PatchUsersIdRespDto } from './dto';
 
 /** 获取用户信息 */
@@ -15,15 +16,11 @@ const getUserInfo: (req: {
   fans: number;
   watchers: number;
   watchees: number;
-}> = ({ userId }) =>
-  new Promise((resolve, reject) => {
-    API
-      .get<GetUsersIdRespDto>(`users/${userId || ''}`)
-      .then(({ data: { data } }) => {
-        resolve(data);
-      })
-      .catch((err) => reject(err));
-  });
+}> = async ({ userId }) => {
+  log.info('userClient.getUserInfo', { userId });
+  const { data: { data } } = await API.get<GetUsersIdRespDto>(`users/${userId || ''}`);
+  return data;
+};
 
 /** 修改用户信息 */
 const editUserInfo: (req: {
@@ -50,32 +47,24 @@ const editUserInfo: (req: {
   nickname?: string;
   avatar: string;
   bio?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    API
-      .patch<PatchUsersIdRespDto>(`users/${req.uid || ''}`, req as PatchUsersIdReqDto)
-      .then(({ data: { data } }) => {
-        resolve(data);
-      })
-      .catch((err) => reject(err));
-  });
+}> = async (req) => {
+  log.info('userClient.editUserInfo', req);
+  const { data: { data } } = await API.patch<PatchUsersIdRespDto>(`users/${req.uid || ''}`, req as PatchUsersIdReqDto);
+  return data;
+};
 
 /** 修改用户头像 */
 const uploadAvatar: (req: {
-    userAvatar: FormData;
-  }) => Promise<{
-    avatar: string;
-    bio: string;
-    nickname: string;
-  }> = ({ userAvatar }) =>
-    new Promise((resolve, reject) => {
-      API
-        .post('user/profile/avatar', userAvatar)
-        .then((resp) => {
-          resolve(resp.data);
-        })
-        .catch((err) => reject(err));
-    });
+  userAvatar: FormData;
+}) => Promise<{
+  avatar: string;
+  bio: string;
+  nickname: string;
+}> = async ({ userAvatar }) => {
+  log.info('userClient.uploadAvatar', { userAvatar });
+  const { data } = await API.post('user/profile/avatar', userAvatar);
+  return data;
+};
 
 const userClient = {
   /** 获取用户信息 */

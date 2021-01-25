@@ -13,18 +13,14 @@ const getWatchList: (req: {
   /** 拉取条数 */
   limit: number;
 }) => Promise<{
-  msg: string;
+  msg?: string;
   data: CardCommonItem[];
-}> = (
-  req,
-) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockWatches,
-    });
-  });
+}> = async (req) => {
+  log.info('watchClient.getWatchList', req);
+  return {
+    data: mockWatches,
+  };
+};
 
 const watchClient = {
   getWatchList,

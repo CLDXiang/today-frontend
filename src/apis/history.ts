@@ -15,16 +15,12 @@ const getHistoryList: (req: {
   /** 拉取条数 */
   limit: number;
 }) => Promise<{
-  msg: string;
+  msg?: string;
   data: CardCommonItem[];
-}> = (req) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockHistories,
-    });
-  });
+}> = async (req) => {
+  log.info('historyClient.getHistoryList', req);
+  return { data: mockHistories };
+};
 
 const historyClient = {
   getHistoryList,

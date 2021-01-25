@@ -13,18 +13,12 @@ const getCommentList: (req: {
   /** 拉取条数 */
   limit: number;
 }) => Promise<{
-  msg: string;
+  msg?: string;
   data: CardCommentItem[];
-}> = (
-  req,
-) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockComments,
-    });
-  });
+}> = async (req) => {
+  log.info('commentClient.getCommentList', req);
+  return { data: mockComments };
+};
 
 const commentClient = {
   getCommentList,

@@ -25,9 +25,6 @@ export interface PatchRateDraftsLectureIdRespDto {
   msg?: string;
 }
 
-/** DELETE rate_drafts/:lectureId Req */
-export interface DeleteRateDraftsLectureIdReqDto {}
-
 /** DELETE rate_drafts/:lectureId Resp */
 export interface DeleteRateDraftsLectureIdRespDto {
   msg?: string;

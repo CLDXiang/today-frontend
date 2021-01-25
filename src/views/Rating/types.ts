@@ -1,5 +1,3 @@
-import { Dayjs } from 'dayjs';
-
 export interface RateForm {
   /** 难易程度 */
   difficulty: number;
@@ -11,11 +9,4 @@ export interface RateForm {
   recommended: number;
   /** 评价内容 */
   content: string;
-  /** 更新时间 */
-  updatedAt: Dayjs;
-}
-
-export interface Rate extends RateForm {
-  /** 草稿 */
-  draft?: RateForm;
 }

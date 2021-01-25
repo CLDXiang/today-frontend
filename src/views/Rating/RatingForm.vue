@@ -2,7 +2,7 @@
   <div class="content-box">
     <rating-head-bar
       is-back-visible
-      @click-back="$router.back()"
+      @click-back="$router.replace(`/rating/lecture/${lectureId}`)"
     >
       <span class="title">撰写点评</span>
     </rating-head-bar>

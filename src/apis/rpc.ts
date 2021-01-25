@@ -11,7 +11,6 @@ const search = async (req: {
   /** 分页 - 项数 */
   limit: number;
 }): Promise<{
-  msg?: string;
   data: CardLectureItem[];
 }> => {
   log.info('rpcClient.search', req);

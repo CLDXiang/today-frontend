@@ -5,10 +5,8 @@ import { RateForm } from '@/views/Rating/types';
 import {
   GetRatesRespDto,
   GetRatesLectureIdRespDto,
-  PostRatesRespDto,
   PostRatesReqDto,
   PatchRatesLectureIdReqDto,
-  PatchRatesLectureIdRespDto,
   DeleteRatesLectureIdRespDto,
 } from './dto';
 import { transferRateItemToCardRatingItem } from './utils';
@@ -23,7 +21,6 @@ const getRatingListByUser = async (req: {
   /** 分页 - 拉取条数 */
   limit?: number;
 }): Promise<{
-  msg?: string;
   data: CardRatingItem[];
 }> => {
   log.info('rateClient.getRatingListByUser', req);
@@ -50,7 +47,6 @@ const getRatingListByLecture = async (req: {
   /** 拉取条数 */
   limit?: number;
 }): Promise<{
-  msg?: string;
   data: CardRatingItem[];
 }> => {
   log.info('rateClient.getRatingListByLecture', req);
@@ -77,7 +73,6 @@ const getRatingByLectureId = async (req: {
   /** 分页 - 拉取条数 */
   limit?: number;
 }): Promise<{
-  msg?: string;
   data: RateForm | RateDraftDtoPartial;
 }> => {
   log.info('rateClient.getRatingById', req);
@@ -92,7 +87,6 @@ const getRatingList = async (req: {
   /** 分页 - 拉取条数 */
   limit?: number;
 }): Promise<{
-  msg?: string;
   data: CardRatingItem[];
 }> => {
   log.info('rateClient.getRatingList');
@@ -119,12 +113,10 @@ const saveRating = async (req: {
   recommended: number;
   /** 评价内容 */
   content: string;
-}): Promise<{
-  msg?: string;
-}> => {
+}): Promise<null> => {
   log.info('rateClient.saveRating', req);
-  await API.post<PostRatesRespDto>('rates', req as PostRatesReqDto);
-  return {};
+  await API.post<null>('rates', req as PostRatesReqDto);
+  return null;
 };
 
 /** 编辑点评 */
@@ -141,12 +133,10 @@ const editRating = async (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}): Promise<{
-  msg?: string;
-}> => {
+}): Promise<null> => {
   log.info('rateClient.editRating', req);
-  await API.patch<PatchRatesLectureIdRespDto>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto);
-  return {};
+  await API.patch<null>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto);
+  return null;
 };
 
 /** 删除点评 */
@@ -154,7 +144,6 @@ const deleteRating = async (req: {
   /** Lecture Id */
   lectureId: string;
 }): Promise<{
-  msg?: string;
   data: CardRatingItem[];
 }> => {
   log.info('rateClient.deleteRating', req);

@@ -13,7 +13,6 @@ const getStarList = async (req: {
   /** 拉取条数 */
   limit: number;
 }): Promise<{
-  msg?: string;
   data: CardCommonItem[];
 }> => {
   log.info('starClient.getStarList', req);

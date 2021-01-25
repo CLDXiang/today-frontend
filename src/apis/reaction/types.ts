@@ -30,15 +30,11 @@ export interface ReactionType {
 }
 
 export interface PostReactionsIdResp {
-  /** 返回信息（非 200 时给用户看的） */
-  msg?: string;
   /** Reaction */
   data: RawReactionType;
 }
 
 export interface DeleteReactionsIdResp {
-  /** 返回信息（非 200 时给用户看的） */
-  msg?: string;
   /** Reaction */
   data: RawReactionType;
 }

@@ -27,9 +27,9 @@ API.interceptors.response.use((resp) => resp, (err) => {
     router.push('/login');
   } else if (err.response.status >= 400 && err.response.status < 500) {
     // 后端错误消息
-    if (err.response?.data?.message) {
+    if (err.response?.data?.message || err.response?.data?.msg) {
       logger.error(err.response?.data);
-      message.error(err.response?.data?.message);
+      message.error(err.response?.data?.message || err.response?.data?.msg);
     }
   }
   return Promise.reject(err);

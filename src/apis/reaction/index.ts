@@ -11,7 +11,6 @@ const addReaction = async (req: {
   /** emoji Id */
   emojiId: string;
 }): Promise<{
-  msg?: string;
   data: ReactionType;
 }> => {
   log.info('reactionClient.addReaction', req);
@@ -42,7 +41,6 @@ const deleteReaction = async (req: {
   /** emoji Id */
   emojiId: string;
 }): Promise<{
-  msg?: string;
   data: ReactionType;
 }> => {
   log.info('reactionClient.deleteReaction', req);

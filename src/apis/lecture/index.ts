@@ -19,7 +19,6 @@ const getSelectList = async (req: {
   /** 分页 - 最后一个 lecture 的 id */
   lastId?: string;
 }): Promise<{
-  msg?: string;
   data: CardLectureItem[];
 }> => {
   log.info('lectureClient.getSelectList', req);
@@ -41,7 +40,6 @@ const getLectureList = async (req: {
   /** 分页 - 最后一个 lecture 的 id */
   lastId?: string;
 }): Promise<{
-  msg?: string;
   data: CardLectureItem[];
 }> => {
   log.info('lectureClient.getLectureList', req);
@@ -59,7 +57,6 @@ const getLectureDetail = async (req: {
   /** Lecture Id */
   lectureId: string;
 }): Promise<{
-  msg?: string;
   data: LectureDetail;
 }> => {
   log.info('lectureClient.getLectureDetail', req);

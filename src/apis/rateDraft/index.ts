@@ -2,12 +2,9 @@ import log from '@/utils/log';
 import API from '@/utils/axios';
 import { RateForm } from '@/views/Rating/types';
 import {
-  PostRateDraftsRespDto,
   PostRateDraftsReqDto,
   GetRateDraftsLectureIdRespDto,
   PatchRateDraftsLectureIdReqDto,
-  PatchRateDraftsLectureIdRespDto,
-  DeleteRateDraftsLectureIdRespDto,
 } from './dto';
 
 /** 保存草稿 */
@@ -24,17 +21,14 @@ const saveDraft = async (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}): Promise<{
-  msg?: string;
-}> => {
+}): Promise<null> => {
   log.info('rateDraftClient.saveDraft', req);
-  await API.post<PostRateDraftsRespDto>('rate_drafts', req as PostRateDraftsReqDto);
-  return {};
+  await API.post<null>('rate_drafts', req as PostRateDraftsReqDto);
+  return null;
 };
 
 /** 获取保存的草稿 */
 const getDraft = async (lectureId: string): Promise<{
-  msg?: string;
   data: RateForm
 }> => {
   log.info('rateDraftClient.getDraft', { lectureId });
@@ -56,21 +50,17 @@ const editDraft = async (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}): Promise<{
-  msg?: string;
-}> => {
+}): Promise<null> => {
   log.info('rateDraftClient.editDraft', req);
-  await API.patch<PatchRateDraftsLectureIdRespDto>(`rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto);
-  return {};
+  await API.patch<null>(`rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto);
+  return null;
 };
 
 /** 清空草稿 */
-const deleteDraft = async (lectureId: string): Promise<{
-  msg?: string;
-}> => {
+const deleteDraft = async (lectureId: string): Promise<null> => {
   log.info('rateDraftClient.deleteDraft', { lectureId });
-  await API.delete<DeleteRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`);
-  return {};
+  await API.delete<null>(`rate_drafts/${lectureId}`);
+  return null;
 };
 
 /** 评课草稿 API */

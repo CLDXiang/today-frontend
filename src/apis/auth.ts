@@ -46,7 +46,7 @@ const requestCodeRegister = async (req: {
   email: string;
 }): Promise<null> => {
   log.info('authClient.requestCodeRegister', req);
-  await API.post('auth/register-mail', req);
+  await API.post<null>('auth/register-mail', req);
   return null;
 };
 
@@ -54,7 +54,7 @@ const requestCodeForForgotPassword = async (req: {
   email: string;
 }): Promise<null> => {
   log.info('authClient.requestCodeForForgotPassword', req);
-  await API.post('auth/password', req);
+  await API.post<null>('auth/password', req);
   return null;
 };
 
@@ -64,7 +64,7 @@ const modifyPassword = async (req: {
   password: string;
 }): Promise<null> => {
   log.info('authClient.modifyPassword', req);
-  await API.put('auth/password', req);
+  await API.put<null>('auth/password', req);
   return null;
 };
 

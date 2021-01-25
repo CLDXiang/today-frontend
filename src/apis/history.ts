@@ -15,7 +15,6 @@ const getHistoryList = async (req: {
   /** 拉取条数 */
   limit: number;
 }): Promise<{
-  msg?: string;
   data: CardCommonItem[];
 }> => {
   log.info('historyClient.getHistoryList', req);

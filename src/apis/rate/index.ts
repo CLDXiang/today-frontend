@@ -206,7 +206,7 @@ const createDraft: (req: {
         },
       } as PostRatesReqDto)
       .then(() => {
-        resolve();
+        resolve({});
       })
       .catch((err) => reject(err));
   });
@@ -276,7 +276,7 @@ const editDraft: (req: {
         },
       } as PatchRatesIdReqDto)
       .then(() => {
-        resolve();
+        resolve({});
       })
       .catch((err) => reject(err));
   });

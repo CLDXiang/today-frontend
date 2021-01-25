@@ -13,7 +13,7 @@ const getSelectedCourses: (semester: string) => Promise<number[]> = (semester) =
       .catch((err) => reject(err));
   });
 
-const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) => Promise<never> = (
+const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) => Promise<null> = (
   semester,
   selectedCoursesIDs,
 ) =>
@@ -27,12 +27,12 @@ const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) =
         },
       )
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch((err) => reject(err));
   });
 
-const addSelectedCourse: (courseId: number) => Promise<never> = (courseId) =>
+const addSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
   new Promise((resolve, reject) => {
     axios
       .post(
@@ -40,17 +40,17 @@ const addSelectedCourse: (courseId: number) => Promise<never> = (courseId) =>
         {},
       )
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch((err) => reject(err));
   });
 
-const removeSelectedCourse: (courseId: number) => Promise<never> = (courseId) =>
+const removeSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
   new Promise((resolve, reject) => {
     axios
       .delete(`${API_URL}/course/${courseId}/select`)
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch((err) => reject(err));
   });

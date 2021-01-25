@@ -13,7 +13,6 @@ import { Message } from 'ant-design-vue/types/message.d';
 import {
   FIcon, FInput, FSelect, FTabs, FTabPane,
 } from '@/components/common';
-import axios from 'axios';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
@@ -25,7 +24,6 @@ import './registerServiceWorker';
 // TODO: 有空测试下不同引入方式的 bundle size
 import router from './router';
 import store from './store';
-import logger from './utils/log';
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -58,31 +56,5 @@ app
   .component('FSelect', FSelect)
   .component('FTabs', FTabs)
   .component('FTabPane', FTabPane);
-
-// axios 拦截器
-axios.interceptors.request.use((req) => {
-  // 设置请求头 JWT
-  const newReq = { ...req };
-  if (store.state.user.jwt_token) {
-    newReq.headers.Authorization = `Bearer ${store.state.user.jwt_token}`;
-  }
-  return newReq;
-}, (err) => Promise.reject(err));
-
-axios.interceptors.response.use((resp) => resp, (err) => {
-  if (err.response.status === 401 && store.getters.userLoggedIn) {
-    // 处理登录态失效
-    message.error('登录已失效，请重新登录');
-    store.commit('logout');
-    router.push('/login');
-  } else if (err.response.status >= 400 && err.response.status < 500) {
-    // 后端错误消息
-    if (err.response?.data?.message) {
-      logger.error(err.response?.data);
-      message.error(err.response?.data?.message);
-    }
-  }
-  return Promise.reject(err);
-});
 
 app.mount('#app');

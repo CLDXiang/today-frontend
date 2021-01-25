@@ -1,6 +1,5 @@
 import { CardLectureItem } from '@/components/listCard';
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import log from '@/utils/log';
 import { LectureDetail } from './types';
 import {
@@ -25,8 +24,8 @@ const getSelectList: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('lectureClient.getSelectList', req);
-    axios
-      .get<GetLecturesRespDto>(`${API_URL}/lectures`, {
+    API
+      .get<GetLecturesRespDto>('lectures', {
         params: {
           user_id: req.userId,
           limit: req.limit,
@@ -55,8 +54,8 @@ const getLectureList: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('lectureClient.getLectureList', req);
-    axios
-      .get<GetLecturesRespDto>(`${API_URL}/lectures`, {
+    API
+      .get<GetLecturesRespDto>('lectures', {
         params: {
           category: req.type,
           limit: req.limit,
@@ -81,8 +80,8 @@ const getLectureDetail: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('lectureClient.getLectureDetail', req);
-    axios
-      .get<GetLecturesIdRespDto>(`${API_URL}/lectures/${req.lectureId}`, {
+    API
+      .get<GetLecturesIdRespDto>(`lectures/${req.lectureId}`, {
         params: {
           id: req.lectureId,
         },

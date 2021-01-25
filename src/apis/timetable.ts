@@ -1,10 +1,9 @@
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 
 const getSelectedCourses: (semester: string) => Promise<number[]> = (semester) =>
   new Promise((resolve, reject) => {
-    axios
-      .get(`${API_URL}/course/select`, {
+    API
+      .get('course/select', {
         params: { semester },
       })
       .then((resp) => {
@@ -18,9 +17,9 @@ const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) =
   selectedCoursesIDs,
 ) =>
   new Promise((resolve, reject) => {
-    axios
+    API
       .post(
-        `${API_URL}/course/select`,
+        'course/select',
         {
           semester,
           selectedCoursesIDs,
@@ -34,9 +33,9 @@ const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) =
 
 const addSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
   new Promise((resolve, reject) => {
-    axios
+    API
       .post(
-        `${API_URL}/course/${courseId}/select`,
+        `course/${courseId}/select`,
         {},
       )
       .then(() => {
@@ -47,8 +46,8 @@ const addSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
 
 const removeSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
   new Promise((resolve, reject) => {
-    axios
-      .delete(`${API_URL}/course/${courseId}/select`)
+    API
+      .delete(`course/${courseId}/select`)
       .then(() => {
         resolve(null);
       })

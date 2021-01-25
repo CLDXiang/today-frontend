@@ -1,7 +1,6 @@
 import { CardRatingItem } from '@/components/listCard';
 import log from '@/utils/log';
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import { RateForm } from '@/views/Rating/types';
 import {
   GetRatesRespDto,
@@ -29,8 +28,8 @@ const getRatingListByUser: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.getRatingListByUser', req);
-    axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`, {
+    API
+      .get<GetRatesRespDto>('rates', {
         params: {
           user_id: req.userId,
           last_id: req.lastId,
@@ -60,8 +59,8 @@ const getRatingListByLecture: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.getRatingListByLecture', req);
-    axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`, {
+    API
+      .get<GetRatesRespDto>('rates', {
         params: {
           lecture_id: req.lectureId,
           last_id: req.lastId,
@@ -91,8 +90,8 @@ const getRatingByLectureId: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.getRatingById', req);
-    axios
-      .get<GetRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`)
+    API
+      .get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`)
       .then(({ data: { data } }) => {
         resolve({
           data,
@@ -113,8 +112,8 @@ const getRatingList: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.getRatingList');
-    axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`, {
+    API
+      .get<GetRatesRespDto>('rates', {
         params: {
           last_id: req.lastId,
           limit: req.limit,
@@ -148,8 +147,8 @@ const saveRating: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.saveRating', req);
-    axios
-      .post<PostRatesRespDto>(`${API_URL}/rates`, req as PostRatesReqDto)
+    API
+      .post<PostRatesRespDto>('rates', req as PostRatesReqDto)
       .then(() => {
         resolve({});
       })
@@ -175,8 +174,8 @@ const editRating: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.editRating', req);
-    axios
-      .patch<PatchRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto)
+    API
+      .patch<PatchRatesLectureIdRespDto>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto)
       .then(() => {
         resolve({});
       })
@@ -193,8 +192,8 @@ const deleteRating: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateClient.deleteRating', req);
-    axios
-      .delete<DeleteRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`)
+    API
+      .delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`)
       .then(({ data: { data } }) => {
         const res = data.map(transferRateItemToCardRatingItem);
         resolve({

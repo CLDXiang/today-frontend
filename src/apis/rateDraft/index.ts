@@ -1,6 +1,5 @@
-import axios from 'axios';
 import log from '@/utils/log';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import { RateForm } from '@/views/Rating/types';
 import {
   PostRateDraftsRespDto,
@@ -30,8 +29,8 @@ const saveDraft: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateDraftClient.saveDraft', req);
-    axios
-      .post<PostRateDraftsRespDto>(`${API_URL}/rate_drafts`, req as PostRateDraftsReqDto)
+    API
+      .post<PostRateDraftsRespDto>('rate_drafts', req as PostRateDraftsReqDto)
       .then(() => {
         resolve({});
       })
@@ -45,8 +44,8 @@ const getDraft: (lectureId: string) => Promise<{
 }> = (lectureId) =>
   new Promise((resolve, reject) => {
     log.info('rateDraftClient.getDraft', { lectureId });
-    axios
-      .get<GetRateDraftsLectureIdRespDto>(`${API_URL}/rate_drafts/${lectureId}`)
+    API
+      .get<GetRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`)
       .then(({ data }) => {
         resolve(data);
       })
@@ -72,8 +71,8 @@ const editDraft: (req: {
 }> = (req) =>
   new Promise((resolve, reject) => {
     log.info('rateDraftClient.editDraft', req);
-    axios
-      .patch<PatchRateDraftsLectureIdRespDto>(`${API_URL}/rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto)
+    API
+      .patch<PatchRateDraftsLectureIdRespDto>(`rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto)
       .then(() => {
         resolve({});
       })
@@ -86,8 +85,8 @@ const deleteDraft: (lectureId: string) => Promise<{
 }> = (lectureId) =>
   new Promise((resolve, reject) => {
     log.info('rateDraftClient.deleteDraft', { lectureId });
-    axios
-      .delete<DeleteRateDraftsLectureIdRespDto>(`${API_URL}/rate_drafts/${lectureId}`)
+    API
+      .delete<DeleteRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`)
       .then(() => {
         resolve({});
       })

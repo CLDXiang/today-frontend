@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import store from '@/store';
 
 const login: (req: {
@@ -14,8 +13,8 @@ const login: (req: {
   name: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/login`, req)
+    API
+      .post('auth/login', req)
       .then((resp) => {
         const { access_token: jwtToken, email, name } = resp.data;
         if (jwtToken) {
@@ -42,8 +41,8 @@ const register: (req: {
   result: 'success' | 'failed';
 }> = (req) =>
   new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/register`, req)
+    API
+      .post('auth/register', req)
       .then((resp) => {
         resolve(resp.data);
       })
@@ -54,8 +53,8 @@ const requestCodeRegister: (req: {
   email: string;
 }) => Promise<null> = (req) =>
   new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/register-mail`, req)
+    API
+      .post('auth/register-mail', req)
       .then(() => {
         resolve(null);
       })
@@ -66,8 +65,8 @@ const requestCodeForForgotPassword: (req: {
   email: string;
 }) => Promise<null> = (req) =>
   new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/password`, req)
+    API
+      .post('auth/password', req)
       .then(() => {
         resolve(null);
       })
@@ -80,8 +79,8 @@ const modifyPassword: (req: {
   password: string;
 }) => Promise<null> = (req) =>
   new Promise((resolve, reject) => {
-    axios
-      .put(`${API_URL}/auth/password`, req)
+    API
+      .put('auth/password', req)
       .then(() => {
         resolve(null);
       })

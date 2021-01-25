@@ -9,11 +9,10 @@
  * 参见 https://cli.vuejs.org/guide/mode-and-env.html#modes
  */
 export const { NODE_ENV, BASE_URL } = process.env;
-export const API_URL = process.env.VUE_APP_API_URL;
 
 if (NODE_ENV !== 'production') {
   // eslint-disable-next-line no-console
-  console.log(NODE_ENV, API_URL, BASE_URL);
+  console.log(NODE_ENV, BASE_URL);
 }
 
 interface semesterItem {

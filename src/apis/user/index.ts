@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import { GetUsersIdRespDto, PatchUsersIdReqDto, PatchUsersIdRespDto } from './dto';
 
 /** 获取用户信息 */
@@ -18,8 +17,8 @@ const getUserInfo: (req: {
   watchees: number;
 }> = ({ userId }) =>
   new Promise((resolve, reject) => {
-    axios
-      .get<GetUsersIdRespDto>(`${API_URL}/users/${userId || ''}`)
+    API
+      .get<GetUsersIdRespDto>(`users/${userId || ''}`)
       .then(({ data: { data } }) => {
         resolve(data);
       })
@@ -53,8 +52,8 @@ const editUserInfo: (req: {
   bio?: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
-    axios
-      .patch<PatchUsersIdRespDto>(`${API_URL}/users/${req.uid || ''}`, req as PatchUsersIdReqDto)
+    API
+      .patch<PatchUsersIdRespDto>(`users/${req.uid || ''}`, req as PatchUsersIdReqDto)
       .then(({ data: { data } }) => {
         resolve(data);
       })
@@ -70,8 +69,8 @@ const uploadAvatar: (req: {
     nickname: string;
   }> = ({ userAvatar }) =>
     new Promise((resolve, reject) => {
-      axios
-        .post(`${API_URL}/user/profile/avatar`, userAvatar)
+      API
+        .post('user/profile/avatar', userAvatar)
         .then((resp) => {
           resolve(resp.data);
         })

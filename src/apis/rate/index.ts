@@ -2,17 +2,15 @@ import { CardRatingItem } from '@/components/listCard';
 import log from '@/utils/log';
 import axios from 'axios';
 import { API_URL } from '@/utils/config';
-import { dayjsFormatOrUndefined } from '@/utils/dayjs';
-import dayjs, { Dayjs } from 'dayjs';
-import { Rate } from '@/views/Rating/types';
+import { RateForm } from '@/views/Rating/types';
 import {
   GetRatesRespDto,
-  GetRatesIdRespDto,
+  GetRatesLectureIdRespDto,
   PostRatesRespDto,
   PostRatesReqDto,
-  PatchRatesIdReqDto,
-  PatchRatesIdRespDto,
-  DeleteRatesIdRespDto,
+  PatchRatesLectureIdReqDto,
+  PatchRatesLectureIdRespDto,
+  DeleteRatesLectureIdRespDto,
 } from './dto';
 import { transferRateItemToCardRatingItem } from './utils';
 
@@ -29,7 +27,7 @@ const getRatingListByUser: (req: {
   data: CardRatingItem[];
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.getRatingListByUser', req);
+    log.info('rateClient.getRatingListByUser', req);
     axios
       .get<GetRatesRespDto>(`${API_URL}/rates`, {
         params: {
@@ -60,7 +58,7 @@ const getRatingListByLecture: (req: {
   data: CardRatingItem[];
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.getRatingListByLecture', req);
+    log.info('rateClient.getRatingListByLecture', req);
     axios
       .get<GetRatesRespDto>(`${API_URL}/rates`, {
         params: {
@@ -78,35 +76,25 @@ const getRatingListByLecture: (req: {
       .catch((err) => reject(err));
   });
 
-/** 根据 Id 获取点评 */
-const getRatingById: (req: {
-  /** 点评 Id */
-  ratingId: string;
+/** 根据 Lecture Id 获取点评 */
+const getRatingByLectureId: (req: {
+  /** Lecture Id */
+  lectureId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
 }) => Promise<{
   msg?: string;
-  data: Rate;
+  data: RateForm;
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.getRatingById', req);
+    log.info('rateClient.getRatingById', req);
     axios
-      .get<GetRatesIdRespDto>(`${API_URL}/rates/${req.ratingId}`)
+      .get<GetRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`)
       .then(({ data: { data } }) => {
-        const res = {
-          ...data,
-          updatedAt: dayjs(data.updatedAt),
-          draft: data.draft
-            ? {
-              ...data.draft,
-              updatedAt: dayjs(data.draft.updatedAt),
-            }
-            : undefined,
-        };
         resolve({
-          data: res,
+          data,
         });
       })
       .catch((err) => reject(err));
@@ -123,7 +111,7 @@ const getRatingList: (req: {
   data: CardRatingItem[];
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.getRatingList');
+    log.info('rateClient.getRatingList');
     axios
       .get<GetRatesRespDto>(`${API_URL}/rates`, {
         params: {
@@ -154,57 +142,13 @@ const createRating: (req: {
   recommended: number;
   /** 评价内容 */
   content: string;
-  /** 更新时间 */
-  updatedAt: Dayjs;
-}) => Promise<{
-  msg?: string;
-  data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('ratingClient.createRating', req);
-    axios
-      .post<PostRatesRespDto>(`${API_URL}/rates`, {
-        ...req,
-        updatedAt: dayjsFormatOrUndefined(req.updatedAt),
-      } as PostRatesReqDto)
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
-
-/** 存草稿 */
-const createDraft: (req: {
-  /** 课程 Id */
-  lectureId: string;
-  /** 难易程度 */
-  difficulty: number;
-  /** 给分好坏 */
-  nice: number;
-  /** 工作量 */
-  workload: number;
-  /** 综合推荐指数 */
-  recommended: number;
-  /** 评价内容 */
-  content: string;
-  /** 更新时间 */
-  updatedAt: Dayjs;
 }) => Promise<{
   msg?: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.createDraft', req);
+    log.info('rateClient.createRating', req);
     axios
-      .post<PostRatesRespDto>(`${API_URL}/rates`, {
-        lectureId: req.lectureId,
-        draft: {
-          ...req,
-          updatedAt: dayjsFormatOrUndefined(req.updatedAt),
-        },
-      } as PostRatesReqDto)
+      .post<PostRatesRespDto>(`${API_URL}/rates`, req as PostRatesReqDto)
       .then(() => {
         resolve({});
       })
@@ -213,8 +157,8 @@ const createDraft: (req: {
 
 /** 编辑点评 */
 const editRating: (req: {
-  /** 点评 Id */
-  ratingId: string;
+  /** Lecture Id */
+  lectureId: string;
   /** 难易程度 */
   difficulty?: number;
   /** 给分好坏 */
@@ -225,56 +169,13 @@ const editRating: (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-  /** 更新时间 */
-  updatedAt: Dayjs;
-}) => Promise<{
-  msg?: string;
-  data: CardRatingItem;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('ratingClient.editRating', req);
-    axios
-      .patch<PatchRatesIdRespDto>(`${API_URL}/rates/${req.ratingId}`, {
-        ...req,
-        updatedAt: dayjsFormatOrUndefined(req.updatedAt),
-      } as PatchRatesIdReqDto)
-      .then(({ data: { data } }) => {
-        const res = transferRateItemToCardRatingItem(data);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
-
-/** 编辑草稿 */
-const editDraft: (req: {
-  /** 点评 Id */
-  ratingId: string;
-  /** 难易程度 */
-  difficulty?: number;
-  /** 给分好坏 */
-  nice?: number;
-  /** 工作量 */
-  workload?: number;
-  /** 综合推荐指数 */
-  recommended?: number;
-  /** 评价内容 */
-  content?: string;
-  /** 更新时间 */
-  updatedAt: Dayjs;
 }) => Promise<{
   msg?: string;
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.editDraft', req);
+    log.info('rateClient.editRating', req);
     axios
-      .patch<PatchRatesIdRespDto>(`${API_URL}/rates/${req.ratingId}`, {
-        draft: {
-          ...req,
-          updatedAt: dayjsFormatOrUndefined(req.updatedAt),
-        },
-      } as PatchRatesIdReqDto)
+      .patch<PatchRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto)
       .then(() => {
         resolve({});
       })
@@ -283,16 +184,16 @@ const editDraft: (req: {
 
 /** 删除点评 */
 const deleteRating: (req: {
-  /** 点评 Id */
-  ratingId: string;
+  /** Lecture Id */
+  lectureId: string;
 }) => Promise<{
   msg?: string;
   data: CardRatingItem[];
 }> = (req) =>
   new Promise((resolve, reject) => {
-    log.info('ratingClient.deleteRating', req);
+    log.info('rateClient.deleteRating', req);
     axios
-      .delete<DeleteRatesIdRespDto>(`${API_URL}/rates/${req.ratingId}`)
+      .delete<DeleteRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`)
       .then(({ data: { data } }) => {
         const res = data.map(transferRateItemToCardRatingItem);
         resolve({
@@ -302,16 +203,21 @@ const deleteRating: (req: {
       .catch((err) => reject(err));
   });
 
-const ratingClient = {
+const rateClient = {
+  /** 获取某用户的点评列表 */
   getRatingListByUser,
+  /** 获取某门课的点评列表 */
   getRatingListByLecture,
-  getRatingById,
+  /** 根据 Lecture Id 获取点评 */
+  getRatingByLectureId,
+  /** 获取点评列表 */
   getRatingList,
+  /** 发布点评 */
   createRating,
-  createDraft,
+  /** 编辑点评 */
   editRating,
-  editDraft,
+  /** 删除点评 */
   deleteRating,
 };
 
-export default ratingClient;
+export default rateClient;

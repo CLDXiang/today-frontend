@@ -2,7 +2,7 @@ export { default as authClient } from './auth';
 export { default as userClient } from './user';
 export { default as timetableClient } from './timetable';
 export { default as rpcClient } from './rpc';
-export { default as ratingClient } from './rate';
+export { default as rateClient } from './rate';
 export { default as commentClient } from './comment';
 export { default as lectureClient } from './lecture';
 export { default as starClient } from './star';

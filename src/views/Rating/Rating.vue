@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { ratingClient, lectureClient } from '@/apis';
+import { rateClient, lectureClient } from '@/apis';
 import { CardLectureItem, CardRatingItem } from '@/components/listCard';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
@@ -60,7 +60,7 @@ export default defineComponent({
     const fetchList = (type: TabType) => {
       switch (type) {
         case '最新':
-          ratingClient.getRatingList({ limit: 20 }).then(({ data }) => {
+          rateClient.getRatingList({ limit: 20 }).then(({ data }) => {
             tabLists.value.最新 = data;
           });
           break;
@@ -82,7 +82,7 @@ export default defineComponent({
       // TODO: 传入 lastId
       switch (type) {
         case '最新':
-          ratingClient
+          rateClient
             .getRatingList({
               lastId: tabLists.value.最新[tabLists.value.最新.length - 1].id,
               limit: 20,

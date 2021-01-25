@@ -38,7 +38,6 @@ const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDeta
     workload: 0,
     rated: false,
     watched: false,
-    ratingId: undefined,
   });
 
   /** 拉取课程信息 */

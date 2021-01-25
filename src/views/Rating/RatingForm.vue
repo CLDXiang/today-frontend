@@ -99,7 +99,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
-import { ratingClient, lectureClient } from '@/apis';
+import { rateClient, lectureClient } from '@/apis';
 import { mapMutations, mapState } from 'vuex';
 import { scoreTextTable } from '@/utils/rating';
 import dayjs from 'dayjs';
@@ -188,7 +188,7 @@ export default defineComponent({
       if (this.ratingId) {
       // 若有 ratingId，则直接拉点评数据
       // TODO: 根据后端 API 逻辑修改
-        ratingClient
+        rateClient
           .getRatingById({ ratingId: this.ratingId })
           .then(({ data }) => {
             if (data.difficulty && data.nice && data.workload && data.recommended && data.content) {
@@ -282,14 +282,14 @@ export default defineComponent({
       this.formData.updatedAt = dayjs();
       if (!this.ratingId) {
         // 没有点评 Id，新建草稿
-        ratingClient.createDraft({ lectureId: this.lectureId, ...this.formData }).then(() => {
+        rateClient.createDraft({ lectureId: this.lectureId, ...this.formData }).then(() => {
           this.$message.success('保存草稿成功！');
         }).finally(() => {
           this.isLoading = false;
         });
       } else {
         // 有点评 Id，编辑草稿
-        ratingClient.editDraft({ ratingId: this.ratingId, ...this.formData }).then(() => {
+        rateClient.editDraft({ ratingId: this.ratingId, ...this.formData }).then(() => {
           this.$message.success('编辑草稿成功！');
         }).finally(() => {
           this.isLoading = false;
@@ -306,7 +306,7 @@ export default defineComponent({
       this.formData.updatedAt = dayjs();
       if (!this.ratingId) {
         // 没有点评 Id，新建点评
-        ratingClient.createRating({ lectureId: this.lectureId, ...this.formData }).then(() => {
+        rateClient.createRating({ lectureId: this.lectureId, ...this.formData }).then(() => {
           this.$message.success('提交点评成功！');
           // TODO: 更新详情页数据
           // TODO: 验证一下 back 后究竟是否会保留原来的 state，如果是重新 mount 就不需要从这里更新数据了，下同
@@ -316,7 +316,7 @@ export default defineComponent({
         });
       } else {
         // 有点评 Id，编辑点评
-        ratingClient.editRating({ ratingId: this.ratingId, ...this.formData }).then(() => {
+        rateClient.editRating({ ratingId: this.ratingId, ...this.formData }).then(() => {
           this.$message.success('编辑点评成功！');
           // TODO: 更新详情页数据
           this.$router.back();

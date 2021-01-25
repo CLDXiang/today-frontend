@@ -1,4 +1,4 @@
-import { ratingClient } from '@/apis';
+import { rateClient } from '@/apis';
 import { CardRatingItem } from '@/components/listCard';
 import {
   ref, Ref, watch,
@@ -19,7 +19,7 @@ const useLectureRatings: (
   /** 拉取点评列表 */
   const fetchRatingList = () => {
     if (lectureId.value) {
-      ratingClient.getRatingListByLecture({ lectureId: lectureId.value }).then((resp) => {
+      rateClient.getRatingListByLecture({ lectureId: lectureId.value }).then((resp) => {
         ratingList.value = resp.data;
       });
     }

@@ -10,8 +10,4 @@ export const transferRateItemToCardRatingItem: (rateItem: RateItem) => CardRatin
   ...rateItem,
   createdAt: dayjs(rateItem.createdAt),
   updatedAt: dayjs(rateItem.updatedAt),
-  form: {
-    ...rateItem.form,
-    updatedAt: dayjsOrUndefined(rateItem.form.updatedAt),
-  },
 });

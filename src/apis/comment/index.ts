@@ -27,8 +27,8 @@ const getCommentList = async (req: {
   log.info('commentClient.getCommentList', req);
   const { data: { data } } = await API.get<GetCommentsRespDto>('comments', {
     params: {
-      user_id: req.userId || undefined,
-      rate_id: req.ratingId || undefined,
+      user_id: req.userId,
+      rate_id: req.ratingId,
       last_id: req.lastId,
       limit: req.limit,
     },

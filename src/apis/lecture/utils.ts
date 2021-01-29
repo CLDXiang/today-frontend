@@ -6,7 +6,7 @@ export const transferLectureItemToCardLectureItem: (lectureItem: LectureItem) =>
   lectureItem,
 ) => ({
   id: lectureItem.id,
-  type: lectureItem.category,
+  type: 'lecture',
   name: lectureItem.name,
   teachers: lectureItem.taughtBy,
   score: lectureItem.recommended,

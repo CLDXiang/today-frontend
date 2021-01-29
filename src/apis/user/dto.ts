@@ -1,3 +1,11 @@
+/** POST users/forget Req */
+export interface PostUsersForgetReqDto {
+  email: string;
+  newPassword: string;
+  /** 验证码 */
+  code: string;
+}
+
 /** GET users/:id Resp */
 export interface GetUsersIdRespDto {
   data: {

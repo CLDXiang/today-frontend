@@ -2,6 +2,18 @@ import API from '@/utils/axios';
 import log from '@/utils/log';
 import { GetUsersIdRespDto, PatchUsersIdReqDto, PatchUsersIdRespDto } from './dto';
 
+/** 修改密码 */
+const modifyPassword = async (req: {
+  email: string;
+  newPassword: string;
+  /** 验证码 */
+  code: string;
+}): Promise<null> => {
+  log.info('userClient.getUserInfo', req);
+  await API.post<null>('users/forget');
+  return null;
+};
+
 /** 获取用户信息 */
 const getUserInfo = async (req: {
   /** 用户 Id */
@@ -67,6 +79,8 @@ const uploadAvatar = async (req: {
 };
 
 const userClient = {
+  /** 修改密码 */
+  modifyPassword,
   /** 获取用户信息 */
   getUserInfo,
   /** 修改用户信息 */

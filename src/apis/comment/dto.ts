@@ -16,7 +16,6 @@ export interface PostCommentsReqDto {
 
 /** POST comments Resp */
 export interface PostCommentsRespDto {
-  msg?: string;
   data: CommentItem[];
 }
 
@@ -30,16 +29,12 @@ export interface PutCommentsIdReqDto {
 
 /** PUT comments/:id Resp */
 export interface PutCommentsIdRespDto {
-  /** 返回信息（非 200 时给用户看的） */
-  msg?: string;
   /** 当前修改的回复 */
   data: CommentItem;
 }
 
 /** DELETE comments/:id Resp */
 export interface DeleteCommentsIdRespDto {
-  /** 返回信息（非 200 时给用户看的） */
-  msg?: string;
   /** 回复列表 */
   data: CommentItem[];
 }

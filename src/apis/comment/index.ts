@@ -1,7 +1,6 @@
 import { CardCommentItem } from '@/components/listCard';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import log from '@/utils/log';
-import axios from 'axios';
 import {
   PutCommentsIdReqDto,
   GetCommentsRespDto,
@@ -13,7 +12,7 @@ import {
 import { transferCommentItemToCardCommentItem } from './utils';
 
 /** 获取回复列表 */
-const getCommentList: (req: {
+const getCommentList = async (req: {
   /** 用户 id */
   userId?: string;
   /** 点评 ID */
@@ -22,100 +21,68 @@ const getCommentList: (req: {
   lastId?: string;
   /** 拉取条数 */
   limit?: number;
-}) => Promise<{
+}): Promise<{
   data: CardCommentItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('commentClient.getCommentList', req);
-    axios
-      .get<GetCommentsRespDto>(`${API_URL}/comments`, {
-        params: {
-          user_id: req.userId || undefined,
-          rate_id: req.ratingId || undefined,
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferCommentItemToCardCommentItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> => {
+  log.info('commentClient.getCommentList', req);
+  const { data: { data } } = await API.get<GetCommentsRespDto>('comments', {
+    params: {
+      user_id: req.userId || undefined,
+      rate_id: req.ratingId || undefined,
+      last_id: req.lastId,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferCommentItemToCardCommentItem) };
+};
 
 /** 发表回复 */
-const createComment: (req: {
+const createComment = async (req: {
   /** 点评 ID */
   ratingId: string;
   /** 回复内容 */
   content: string;
-}) => Promise<{
+}): Promise<{
   data: CardCommentItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('commentClient.createComment', req);
-    axios
-      .post<PostCommentsRespDto>(`${API_URL}/comments`, {
-        content: req.content,
-        id: req.ratingId,
-      } as PostCommentsReqDto)
-      .then(({ data: { data } }) => {
-        const res = data.map(transferCommentItemToCardCommentItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('commentClient.createComment', req);
+  const { data: { data } } = await API.post<PostCommentsRespDto>('comments', {
+    content: req.content,
+    id: req.ratingId,
+  } as PostCommentsReqDto);
+  return { data: data.map(transferCommentItemToCardCommentItem) };
+};
 
 /** 编辑回复 */
-const editComment: (req: {
+const editComment = async (req: {
   /** 回复 Id */
   commentId: string;
   /** 点评 ID */
   ratingId: string;
   /** 回复内容 */
   content: string;
-}) => Promise<{
+}): Promise<{
   data: CardCommentItem;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('commentClient.editComment', req);
-    axios
-      .put<PutCommentsIdRespDto>(`${API_URL}/comments/${req.commentId}`, {
-        content: req.content,
-        id: req.ratingId,
-      } as PutCommentsIdReqDto)
-      .then(({ data: { data } }) => {
-        const res = transferCommentItemToCardCommentItem(data);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('commentClient.editComment', req);
+  const { data: { data } } = await API.put<PutCommentsIdRespDto>(`comments/${req.commentId}`, {
+    content: req.content,
+    id: req.ratingId,
+  } as PutCommentsIdReqDto);
+  return { data: transferCommentItemToCardCommentItem(data) };
+};
 
 /** 删除回复 */
-const deleteComment: (req: {
+const deleteComment = async (req: {
   /** 回复 Id */
   commentId: string;
-}) => Promise<{
+}): Promise<{
   data: CardCommentItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('commentClient.deleteComment', req);
-    axios
-      .delete<DeleteCommentsIdRespDto>(`${API_URL}/comments/${req.commentId}`)
-      .then(({ data: { data } }) => {
-        const res = data.map(transferCommentItemToCardCommentItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('commentClient.deleteComment', req);
+  const { data: { data } } = await API.delete<DeleteCommentsIdRespDto>(`comments/${req.commentId}`);
+  return { data: data.map(transferCommentItemToCardCommentItem) };
+};
 
 const commentClient = {
   /** 获取回复列表 */

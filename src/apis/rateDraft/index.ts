@@ -1,18 +1,14 @@
-import axios from 'axios';
 import log from '@/utils/log';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import { RateForm } from '@/views/Rating/types';
 import {
-  PostRateDraftsRespDto,
   PostRateDraftsReqDto,
   GetRateDraftsLectureIdRespDto,
   PatchRateDraftsLectureIdReqDto,
-  PatchRateDraftsLectureIdRespDto,
-  DeleteRateDraftsLectureIdRespDto,
 } from './dto';
 
 /** 保存草稿 */
-const saveDraft: (req: {
+const saveDraft = async (req: {
   /** 课程 Id */
   lectureId: string;
   /** 难易程度 */
@@ -25,36 +21,23 @@ const saveDraft: (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}) => Promise<{
-  msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.saveDraft', req);
-    axios
-      .post<PostRateDraftsRespDto>(`${API_URL}/rate_drafts`, req as PostRateDraftsReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}): Promise<null> => {
+  log.info('rateDraftClient.saveDraft', req);
+  await API.post<null>('rate_drafts', req as PostRateDraftsReqDto);
+  return null;
+};
 
 /** 获取保存的草稿 */
-const getDraft: (lectureId: string) => Promise<{
-  msg?: string;
+const getDraft = async (lectureId: string): Promise<{
   data: RateForm
-}> = (lectureId) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.getDraft', { lectureId });
-    axios
-      .get<GetRateDraftsLectureIdRespDto>(`${API_URL}/rate_drafts/${lectureId}`)
-      .then(({ data }) => {
-        resolve(data);
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('rateDraftClient.getDraft', { lectureId });
+  const { data } = await API.get<GetRateDraftsLectureIdRespDto>(`rate_drafts/${lectureId}`);
+  return data;
+};
 
 /** 编辑草稿 */
-const editDraft: (req: {
+const editDraft = async (req: {
   /** 课程 Id */
   lectureId: string;
   /** 难易程度 */
@@ -67,32 +50,18 @@ const editDraft: (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}) => Promise<{
-  msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.editDraft', req);
-    axios
-      .patch<PatchRateDraftsLectureIdRespDto>(`${API_URL}/rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}): Promise<null> => {
+  log.info('rateDraftClient.editDraft', req);
+  await API.patch<null>(`rate_drafts/${req.lectureId}`, req as PatchRateDraftsLectureIdReqDto);
+  return null;
+};
 
 /** 清空草稿 */
-const deleteDraft: (lectureId: string) => Promise<{
-  msg?: string;
-}> = (lectureId) =>
-  new Promise((resolve, reject) => {
-    log.info('rateDraftClient.deleteDraft', { lectureId });
-    axios
-      .delete<DeleteRateDraftsLectureIdRespDto>(`${API_URL}/rate_drafts/${lectureId}`)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+const deleteDraft = async (lectureId: string): Promise<null> => {
+  log.info('rateDraftClient.deleteDraft', { lectureId });
+  await API.delete<null>(`rate_drafts/${lectureId}`);
+  return null;
+};
 
 /** 评课草稿 API */
 const rateDraftClient = {

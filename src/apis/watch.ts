@@ -5,26 +5,21 @@ import log from '@/utils/log';
 import { mockWatches } from './mocks/watch';
 
 // FIXME: mock
-const getWatchList: (req: {
+const getWatchList = async (req: {
   /** 用户 Id */
   userId: string;
   /** 分页 - 最后一个 user 的 id */
   lastId?: string;
   /** 拉取条数 */
   limit: number;
-}) => Promise<{
-  msg: string;
+}): Promise<{
   data: CardCommonItem[];
-}> = (
-  req,
-) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockWatches,
-    });
-  });
+}> => {
+  log.info('watchClient.getWatchList', req);
+  return {
+    data: mockWatches,
+  };
+};
 
 const watchClient = {
   getWatchList,

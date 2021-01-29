@@ -1,136 +1,106 @@
 import { CardRatingItem } from '@/components/listCard';
 import log from '@/utils/log';
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import { RateForm } from '@/views/Rating/types';
 import {
   GetRatesRespDto,
   GetRatesLectureIdRespDto,
-  PostRatesRespDto,
   PostRatesReqDto,
   PatchRatesLectureIdReqDto,
-  PatchRatesLectureIdRespDto,
   DeleteRatesLectureIdRespDto,
 } from './dto';
 import { transferRateItemToCardRatingItem } from './utils';
 import { RateDraftDtoPartial } from '../rateDraft/types';
 
 /** 获取某用户的点评列表 */
-const getRatingListByUser: (req: {
+const getRatingListByUser = async (req: {
   /** 用户 Id */
   userId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingListByUser', req);
-    axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`, {
-        params: {
-          user_id: req.userId,
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('rateClient.getRatingListByUser', req);
+  try {
+    const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+      params: {
+        user_id: req.userId,
+        last_id: req.lastId,
+        limit: req.limit,
+      },
+    });
+    return { data: data.map(transferRateItemToCardRatingItem) };
+  } catch (err) {
+    return err;
+  }
+};
 
 /** 获取某门课的点评列表 */
-const getRatingListByLecture: (req: {
+const getRatingListByLecture = async (req: {
   /** 课程 Id */
   lectureId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 拉取条数 */
   limit?: number;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingListByLecture', req);
-    axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`, {
-        params: {
-          lecture_id: req.lectureId,
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('rateClient.getRatingListByLecture', req);
+  try {
+    const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+      params: {
+        lecture_id: req.lectureId,
+        last_id: req.lastId,
+        limit: req.limit,
+      },
+    });
+    return { data: data.map(transferRateItemToCardRatingItem) };
+  } catch (err) {
+    return err;
+  }
+};
 
 /** 根据 Lecture Id 获取点评 */
-const getRatingByLectureId: (req: {
+const getRatingByLectureId = async (req: {
   /** Lecture Id */
   lectureId: string;
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: RateForm | RateDraftDtoPartial;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingById', req);
-    axios
-      .get<GetRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`)
-      .then(({ data: { data } }) => {
-        resolve({
-          data,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('rateClient.getRatingById', req);
+  const { data: { data } } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`);
+  return { data };
+};
 
 /** 获取点评列表 */
-const getRatingList: (req: {
+const getRatingList = async (req: {
   /** 分页 - 最后一个 rating 的 id */
   lastId?: string;
   /** 分页 - 拉取条数 */
   limit?: number;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.getRatingList');
-    axios
-      .get<GetRatesRespDto>(`${API_URL}/rates`, {
-        params: {
-          last_id: req.lastId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> => {
+  log.info('rateClient.getRatingList');
+  const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+    params: {
+      last_id: req.lastId,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferRateItemToCardRatingItem) };
+};
 
 /** 发布点评 */
-const saveRating: (req: {
+const saveRating = async (req: {
   /** 课程 Id */
   lectureId: string;
   /** 难易程度 */
@@ -143,21 +113,14 @@ const saveRating: (req: {
   recommended: number;
   /** 评价内容 */
   content: string;
-}) => Promise<{
-  msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.saveRating', req);
-    axios
-      .post<PostRatesRespDto>(`${API_URL}/rates`, req as PostRatesReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}): Promise<null> => {
+  log.info('rateClient.saveRating', req);
+  await API.post<null>('rates', req as PostRatesReqDto);
+  return null;
+};
 
 /** 编辑点评 */
-const editRating: (req: {
+const editRating = async (req: {
   /** Lecture Id */
   lectureId: string;
   /** 难易程度 */
@@ -170,39 +133,23 @@ const editRating: (req: {
   recommended?: number;
   /** 评价内容 */
   content?: string;
-}) => Promise<{
-  msg?: string;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.editRating', req);
-    axios
-      .patch<PatchRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto)
-      .then(() => {
-        resolve({});
-      })
-      .catch((err) => reject(err));
-  });
+}): Promise<null> => {
+  log.info('rateClient.editRating', req);
+  await API.patch<null>(`rates/${req.lectureId}`, req as PatchRatesLectureIdReqDto);
+  return null;
+};
 
 /** 删除点评 */
-const deleteRating: (req: {
+const deleteRating = async (req: {
   /** Lecture Id */
   lectureId: string;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: CardRatingItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('rateClient.deleteRating', req);
-    axios
-      .delete<DeleteRatesLectureIdRespDto>(`${API_URL}/rates/${req.lectureId}`)
-      .then(({ data: { data } }) => {
-        const res = data.map(transferRateItemToCardRatingItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
-  });
+}> => {
+  log.info('rateClient.deleteRating', req);
+  const { data: { data } } = await API.delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`);
+  return { data: data.map(transferRateItemToCardRatingItem) };
+};
 
 const rateClient = {
   /** 获取某用户的点评列表 */

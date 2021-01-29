@@ -1,6 +1,5 @@
 import { CardLectureItem } from '@/components/listCard';
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import log from '@/utils/log';
 import { LectureDetail } from './types';
 import {
@@ -10,7 +9,7 @@ import {
 import { transferLectureItemToCardLectureItem } from './utils';
 
 /** 获取某用户的课程列表 */
-const getSelectList: (req: {
+const getSelectList = async (req: {
   /** 用户 Id */
   userId: string;
   /** 拉取条数 */
@@ -19,81 +18,55 @@ const getSelectList: (req: {
   semester?: string;
   /** 分页 - 最后一个 lecture 的 id */
   lastId?: string;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: CardLectureItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('lectureClient.getSelectList', req);
-    axios
-      .get<GetLecturesRespDto>(`${API_URL}/lectures`, {
-        params: {
-          user_id: req.userId,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferLectureItemToCardLectureItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> => {
+  log.info('lectureClient.getSelectList', req);
+  const { data: { data } } = await API.get<GetLecturesRespDto>('lectures', {
+    params: {
+      user_id: req.userId,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferLectureItemToCardLectureItem) };
+};
 
 /** 根据课程类型获得课程列表 */
-const getLectureList: (req: {
+const getLectureList = async (req: {
   /** 课程类型 */
   type: string;
   /** 拉取条数 */
   limit: number;
   /** 分页 - 最后一个 lecture 的 id */
   lastId?: string;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: CardLectureItem[];
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('lectureClient.getLectureList', req);
-    axios
-      .get<GetLecturesRespDto>(`${API_URL}/lectures`, {
-        params: {
-          category: req.type,
-          limit: req.limit,
-        },
-      })
-      .then(({ data: { data } }) => {
-        const res = data.map(transferLectureItemToCardLectureItem);
-        resolve({
-          data: res,
-        });
-      })
-      .catch((err) => reject(err));
+}> => {
+  log.info('lectureClient.getLectureList', req);
+  const { data: { data } } = await API.get<GetLecturesRespDto>('lectures', {
+    params: {
+      category: req.type,
+      limit: req.limit,
+    },
   });
+  return { data: data.map(transferLectureItemToCardLectureItem) };
+};
 
 /** 获取某课程详情 */
-const getLectureDetail: (req: {
+const getLectureDetail = async (req: {
   /** Lecture Id */
   lectureId: string;
-}) => Promise<{
-  msg?: string;
+}): Promise<{
   data: LectureDetail;
-}> = (req) =>
-  new Promise((resolve, reject) => {
-    log.info('lectureClient.getLectureDetail', req);
-    axios
-      .get<GetLecturesIdRespDto>(`${API_URL}/lectures/${req.lectureId}`, {
-        params: {
-          id: req.lectureId,
-        },
-      })
-      .then(({ data: { data } }) => {
-        resolve({
-          data,
-        });
-      })
-      .catch((err) => reject(err));
+}> => {
+  log.info('lectureClient.getLectureDetail', req);
+  const { data: { data } } = await API.get<GetLecturesIdRespDto>(`lectures/${req.lectureId}`, {
+    params: {
+      id: req.lectureId,
+    },
   });
+  return { data };
+};
 
 const lectureClient = {
   getLectureList,

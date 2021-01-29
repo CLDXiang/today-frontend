@@ -3,7 +3,7 @@ import log from '@/utils/log';
 import { mockComments } from './mocks/comment';
 
 // FIXME: mock
-const getCommentList: (req: {
+const getCommentList = async (req: {
   /** 用户 id */
   userId: string;
   /** 点评 ID */
@@ -12,19 +12,12 @@ const getCommentList: (req: {
   lastId?: string;
   /** 拉取条数 */
   limit: number;
-}) => Promise<{
-  msg: string;
+}): Promise<{
   data: CardCommentItem[];
-}> = (
-  req,
-) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockComments,
-    });
-  });
+}> => {
+  log.info('commentClient.getCommentList', req);
+  return { data: mockComments };
+};
 
 const commentClient = {
   getCommentList,

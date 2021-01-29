@@ -1,59 +1,37 @@
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
+import log from '@/utils/log';
 
-const getSelectedCourses: (semester: string) => Promise<number[]> = (semester) =>
-  new Promise((resolve, reject) => {
-    axios
-      .get(`${API_URL}/course/select`, {
-        params: { semester },
-      })
-      .then((resp) => {
-        resolve(resp.data);
-      })
-      .catch((err) => reject(err));
+const getSelectedCourses = async (semester: string): Promise<number[]> => {
+  log.info('timetableClient.getSelectedCourses', { semester });
+  const { data } = await API.get('course/select', {
+    params: { semester },
   });
+  return data;
+};
 
-const replaceSelectedCourses: (semester: string, selectedCoursesIDs: number[]) => Promise<null> = (
-  semester,
-  selectedCoursesIDs,
-) =>
-  new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${API_URL}/course/select`,
-        {
-          semester,
-          selectedCoursesIDs,
-        },
-      )
-      .then(() => {
-        resolve(null);
-      })
-      .catch((err) => reject(err));
+const replaceSelectedCourses = async (
+  semester: string,
+  selectedCoursesIDs: number[],
+): Promise<null> => {
+  log.info('timetableClient.replaceSelectedCourses', { semester, selectedCoursesIDs });
+  await API.post('course/select', {
+    semester,
+    selectedCoursesIDs,
   });
+  return null;
+};
 
-const addSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
-  new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${API_URL}/course/${courseId}/select`,
-        {},
-      )
-      .then(() => {
-        resolve(null);
-      })
-      .catch((err) => reject(err));
-  });
+const addSelectedCourse = async (courseId: number): Promise<null> => {
+  log.info('timetableClient.addSelectedCourse', { courseId });
+  await API.post(`course/${courseId}/select`);
+  return null;
+};
 
-const removeSelectedCourse: (courseId: number) => Promise<null> = (courseId) =>
-  new Promise((resolve, reject) => {
-    axios
-      .delete(`${API_URL}/course/${courseId}/select`)
-      .then(() => {
-        resolve(null);
-      })
-      .catch((err) => reject(err));
-  });
+const removeSelectedCourse = async (courseId: number): Promise<null> => {
+  log.info('timetableClient.removeSelectedCourse', { courseId });
+  await API.delete(`course/${courseId}/select`);
+  return null;
+};
 
 const timetableClient = {
   /** 获取云端已选课程列表 */

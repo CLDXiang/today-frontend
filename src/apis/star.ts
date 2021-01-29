@@ -5,24 +5,21 @@ import log from '@/utils/log';
 import { mockStars } from './mocks/star';
 
 // FIXME: mock
-const getStarList: (req: {
+const getStarList = async (req: {
   /** 用户 Id */
   userId: string;
   /** 分页 - 最后一个 star 的 id */
   lastId?: string;
   /** 拉取条数 */
   limit: number;
-}) => Promise<{
-  msg: string;
+}): Promise<{
   data: CardCommonItem[];
-}> = (req) =>
-  new Promise((resolve) => {
-    log.info('rpcClient.search', req);
-    resolve({
-      msg: 'ok',
-      data: mockStars,
-    });
-  });
+}> => {
+  log.info('starClient.getStarList', req);
+  return {
+    data: mockStars,
+  };
+};
 
 const starClient = {
   getStarList,

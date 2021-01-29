@@ -200,7 +200,7 @@ export default defineComponent({
     rateClient.getRatingListByUser({ userId: this.user.id }).then((resp) => {
       this.ratingList = resp.data;
     });
-    commentClient.getCommentList({ userId: this.user.id, limit: 20 }).then((resp) => {
+    commentClient.getCommentList({ userId: this.user.id }).then((resp) => {
       this.commentList = resp.data;
     });
     lectureClient.getSelectList({ userId: this.user.id, limit: 20 }).then((resp) => {

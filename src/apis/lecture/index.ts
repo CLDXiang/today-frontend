@@ -26,6 +26,7 @@ import { transferLectureItemToCardLectureItem } from './utils';
 //     params: {
 //       user_id: req.userId,
 //       limit: req.limit,
+//       last_id: req.lastId,
 //     },
 //   });
 //   return { data: data.map(transferLectureItemToCardLectureItem) };
@@ -47,6 +48,7 @@ const getLectureList = async (req: {
     params: {
       categories: req.categories.join(','),
       limit: req.limit,
+      last_id: req.lastId,
     },
   });
   return { data: data.map(transferLectureItemToCardLectureItem) };

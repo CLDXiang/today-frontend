@@ -46,3 +46,22 @@ export const semesterArray: semesterItem[] = [
 // export const semesterNameArray = semesterArray.map((x) => x.name);
 
 // export const jsonNameArray = semesterArray.map((x) => x.jsonFileName);
+
+/** 用作 Tab 页标题的 lectures 类型 */
+export type LectureType = '七模' | '思政' | '外语' | '体育';
+
+/** 将前端 lectures 所属 Tabs 映射为后端的 categories 字段数组 */
+export const lectureType2Categories = (type: LectureType) => {
+  switch (type) {
+    case '七模':
+      return ['一模', '二模', '三模', '四模', '五模', '六模', '七模'];
+    case '思政':
+      return ['思政 (A组)', '思政 (B组)'];
+    case '外语':
+      return ['通用英语', '专用英语', '英语文化', '二外'];
+    case '体育':
+      return ['体育'];
+    default:
+      return [];
+  }
+};

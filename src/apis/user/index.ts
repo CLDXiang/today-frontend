@@ -1,5 +1,6 @@
 import API from '@/utils/axios';
 import log from '@/utils/log';
+import { getCurrentUserId } from '@/utils/user';
 import { GetUsersIdRespDto, PatchUsersIdReqDto, PatchUsersIdRespDto } from './dto';
 
 /** 修改密码 */
@@ -30,7 +31,8 @@ const getUserInfo = async (req: {
   watchees: number;
 }> => {
   log.info('userClient.getUserInfo', req);
-  const { data: { data } } = await API.get<GetUsersIdRespDto>(`users/${req.userId || ''}`);
+  // TODO: 检查是否存在未登录却缺省 userId 调用该方法的情况，如果有，考虑如何规避发送该无效请求
+  const { data: { data } } = await API.get<GetUsersIdRespDto>(`users/${req.userId || getCurrentUserId() || ''}`);
   return data;
 };
 

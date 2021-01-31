@@ -37,7 +37,7 @@
         <div class="info-section">
           <div>
             <span class="user-name text-dark">
-              {{ userProfile.nickname }}
+              {{ userProfile.nickname || userProfile.name }}
             </span>
             <!-- TODO: 实现关注功能 -->
             <span

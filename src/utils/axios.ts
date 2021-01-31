@@ -13,8 +13,8 @@ const API = axios.create({
 API.interceptors.request.use((req) => {
   // 设置请求头 JWT
   const newReq = { ...req };
-  if (store.state.user.jwt_token) {
-    newReq.headers.Authorization = `Bearer ${store.state.user.jwt_token}`;
+  if (store.state.user.jwtToken) {
+    newReq.headers.Authorization = `Bearer ${store.state.user.jwtToken}`;
   }
   return newReq;
 }, (err) => Promise.reject(err));
@@ -23,6 +23,11 @@ API.interceptors.response.use((resp) => resp, (err) => {
   if (err.response.status === 401 && store.getters.userLoggedIn) {
     // 处理登录态失效
     message.error('登录已失效，请重新登录');
+    store.commit('logout');
+    router.push('/login');
+  } else if (err.response.status === 401) {
+    // 处理其他未登录导致的问题
+    message.error('需要登录才能看到这里噢！');
     store.commit('logout');
     router.push('/login');
   } else if (err.response.status >= 400 && err.response.status < 500) {

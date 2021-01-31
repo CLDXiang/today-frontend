@@ -20,7 +20,7 @@ const search = async (req: {
   const { data: { data } } = await API.get<GetSearchRespDto>('search', {
     params: {
       q,
-      lastId,
+      last_id: lastId,
       limit,
     },
   });

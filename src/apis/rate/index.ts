@@ -76,7 +76,13 @@ const getRatingByLectureId = async (req: {
   data: RateForm | RateDraftDtoPartial;
 }> => {
   log.info('rateClient.getRatingById', req);
-  const { data: { data } } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`);
+  const { data: { data } } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`, {
+    params: {
+      lecture_id: req.lectureId,
+      last_id: req.lastId,
+      limit: req.limit,
+    },
+  });
   return { data };
 };
 

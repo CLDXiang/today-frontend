@@ -120,7 +120,7 @@ import {
   userClient,
   rateClient,
   commentClient,
-  lectureClient,
+  // lectureClient,
   starClient,
   watchClient,
   historyClient,
@@ -203,9 +203,10 @@ export default defineComponent({
     commentClient.getCommentList({ userId: this.user.id }).then((resp) => {
       this.commentList = resp.data;
     });
-    lectureClient.getSelectList({ userId: this.user.id, limit: 20 }).then((resp) => {
-      this.lectureList = resp.data;
-    });
+    // FIXME: 等待 Selects API完成后进行替换
+    // lectureClient.getSelectList({ userId: this.user.id, limit: 20 }).then((resp) => {
+    //   this.lectureList = resp.data;
+    // });
     starClient.getStarList({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.starList = resp.data;
     });

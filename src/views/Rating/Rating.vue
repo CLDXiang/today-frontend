@@ -9,8 +9,8 @@
       <f-tab-pane tab="最新">
         <rating-list :ratings="tabLists.最新" />
       </f-tab-pane>
-      <f-tab-pane tab="通识">
-        <lecture-list :lectures="tabLists.通识" />
+      <f-tab-pane tab="七模">
+        <lecture-list :lectures="tabLists.七模" />
       </f-tab-pane>
       <f-tab-pane tab="思政">
         <lecture-list :lectures="tabLists.思政" />
@@ -29,9 +29,10 @@
 import { defineComponent, ref, watch } from 'vue';
 import { rateClient, lectureClient } from '@/apis';
 import { CardLectureItem, CardRatingItem } from '@/components/listCard';
+import { LectureType, lectureType2Categories } from '@/utils/config';
 import { RatingHeadBar, LectureList, RatingList } from './components';
 
-type TabType = '最新' | '通识' | '思政' | '外语' | '体育';
+type TabType = '最新' | LectureType;
 
 export default defineComponent({
   components: {
@@ -46,8 +47,8 @@ export default defineComponent({
     const tabLists = ref({
       /** 最新点评列表 */
       最新: [] as CardRatingItem[],
-      /** 通识课程列表 */
-      通识: [] as CardLectureItem[],
+      /** 七模课程列表 */
+      七模: [] as CardLectureItem[],
       /** 思政课程列表 */
       思政: [] as CardLectureItem[],
       /** 外语课程列表 */
@@ -64,13 +65,15 @@ export default defineComponent({
             tabLists.value.最新 = data;
           });
           break;
-        case '通识':
+        case '七模':
         case '思政':
         case '外语':
         case '体育':
-          lectureClient.getLectureList({ type, limit: 20 }).then(({ data }) => {
-            tabLists.value[type] = data;
-          });
+          lectureClient
+            .getLectureList({ categories: lectureType2Categories(type), limit: 20 })
+            .then(({ data }) => {
+              tabLists.value[type] = data;
+            });
           break;
         default:
           break;
@@ -91,13 +94,15 @@ export default defineComponent({
               tabLists.value.最新 = [...tabLists.value.最新, ...data];
             });
           break;
-        case '通识':
+        case '七模':
         case '思政':
         case '外语':
         case '体育':
-          lectureClient.getLectureList({ type, limit: 20 }).then(({ data }) => {
-            tabLists.value[type] = [...tabLists.value[type], ...data];
-          });
+          lectureClient
+            .getLectureList({ categories: lectureType2Categories(type), limit: 20 })
+            .then(({ data }) => {
+              tabLists.value[type] = [...tabLists.value[type], ...data];
+            });
           break;
         default:
           break;

@@ -17,8 +17,7 @@ const store = createStore({
     /** 视窗大小，即 window.innerHeight */
     innerHeight: 667,
     user: {
-      // eslint-disable-next-line camelcase
-      jwt_token: '',
+      jwtToken: '',
       id: '',
       email: '',
       name: '',
@@ -63,11 +62,9 @@ const store = createStore({
   },
   mutations: {
     setJwtToken(state, token) {
-      // eslint-disable-next-line camelcase
-      state.user.jwt_token = token;
+      state.user.jwtToken = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
       state.user.id = JSON.parse(payload).sub.toString();
-      // log.info('set jwt_token', token);
     },
     setUser(state, payload: { name: string; email: string }) {
       state.user.name = payload.name;
@@ -75,16 +72,17 @@ const store = createStore({
     },
     logout(state) {
       // log.info('logout');
-      // eslint-disable-next-line camelcase
-      state.user.jwt_token = '';
+      state.user.jwtToken = '';
       state.user.name = '未登录';
+      state.user.nickname = '未登录';
+      state.user.id = '-1';
       state.user.email = '';
       state.hasFetchedSelectedCourses = false;
     },
     setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
-      state.user.nickname = profile.nickname;
+      state.user.nickname = profile.nickname || profile.name;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
@@ -153,7 +151,7 @@ const store = createStore({
     },
   },
   getters: {
-    userLoggedIn: (state) => state.user.jwt_token !== '',
+    userLoggedIn: (state) => !!state.user.jwtToken,
   },
 });
 

@@ -1,4 +1,4 @@
-import { LectureItem, LectureDetail } from './types';
+import { LectureItem, LectureDetailDto } from './types';
 
 /** GET lectures Resp */
 export interface GetLecturesRespDto {
@@ -9,5 +9,5 @@ export interface GetLecturesRespDto {
 /** GET lectures/:id Resp */
 export interface GetLecturesIdRespDto {
   /** 课程信息 */
-  data: LectureDetail;
+  data: LectureDetailDto;
 }

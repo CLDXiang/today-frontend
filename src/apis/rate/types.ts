@@ -42,7 +42,9 @@ export interface RateItem {
     /** 课程名称 */
     name: string;
     /** 授课教师 */
-    teachers: string[];
+    taughtBy: string[];
+    /** 课程类别 */
+    category: string;
   };
   /** 回复数 */
   commentCount: number;

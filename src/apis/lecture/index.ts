@@ -67,7 +67,19 @@ const getLectureDetail = async (req: {
       id: req.lectureId,
     },
   });
-  return { data };
+  const {
+    difficulty, nice, workload, recommended,
+  } = data;
+  const DEFAULT_SCORE = 3;
+  return {
+    data: {
+      ...data,
+      difficulty: difficulty ?? DEFAULT_SCORE,
+      nice: nice ?? DEFAULT_SCORE,
+      workload: workload ?? DEFAULT_SCORE,
+      recommended: recommended ?? DEFAULT_SCORE,
+    },
+  };
 };
 
 const lectureClient = {

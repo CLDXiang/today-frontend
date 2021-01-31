@@ -8,6 +8,10 @@ export const transferRateItemToCardRatingItem: (item: RateItem) => CardRatingIte
 ) => ({
   ...item,
   type: 'rating',
+  lecture: {
+    ...item.lecture,
+    teachers: item.lecture.taughtBy,
+  },
   createdAt: dayjs(item.createdAt),
   updatedAt: dayjs(item.updatedAt),
 });

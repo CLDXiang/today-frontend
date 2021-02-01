@@ -1,6 +1,6 @@
 export { default as authClient } from './auth';
 export { default as userClient } from './user';
-export { default as timetableClient } from './timetable';
+export { default as selectClient } from './select';
 export { default as rpcClient } from './rpc';
 export { default as rateClient } from './rate';
 export { default as commentClient } from './comment';

@@ -25,7 +25,7 @@ API.interceptors.response.use((resp) => resp, (err) => {
     message.error('登录已失效，请重新登录');
     store.commit('logout');
     router.push('/login');
-  } else if (err.response.status === 401) {
+  } else if (err.response.status === 401 && router.currentRoute.value.name !== 'Login') {
     // 处理其他未登录导致的问题
     message.error('需要登录才能看到这里噢！');
     store.commit('logout');

@@ -80,8 +80,8 @@ export default defineComponent({
     const handleContentScroll = (e: Event) => {
       const target = e.target as HTMLDivElement;
       const { scrollLeft, offsetWidth } = target;
-      const scrollRatio = scrollLeft / offsetWidth;
-      if (Number.isInteger(scrollRatio) && tabPanes.value[scrollRatio].tab !== props.modelValue) {
+      const scrollRatio = Math.round(scrollLeft / offsetWidth);
+      if (tabPanes.value[scrollRatio].tab !== props.modelValue) {
         // 若滚动比例为整数（贴在某页左边沿）且当前滚动位置不等于 modelValue，将 modelValue 更新为当前滚动位置所在页
         changeTabPage(tabPanes.value[scrollRatio].tab);
       }

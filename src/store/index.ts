@@ -73,16 +73,16 @@ const store = createStore({
     logout(state) {
       // log.info('logout');
       state.user.jwtToken = '';
-      state.user.name = '未登录';
-      state.user.nickname = '未登录';
-      state.user.id = '-1';
+      state.user.name = '';
+      state.user.nickname = '';
+      state.user.id = '';
       state.user.email = '';
       state.hasFetchedSelectedCourses = false;
     },
     setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
-      state.user.nickname = profile.nickname || profile.name;
+      state.user.nickname = profile.nickname;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;

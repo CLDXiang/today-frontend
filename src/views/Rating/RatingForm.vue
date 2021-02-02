@@ -80,10 +80,10 @@
             恢复草稿
           </a-button>
           <a-button
-            :class="{ 'button-gray': isFormDataEdited }"
+            :class="{ 'button-gray': isRateDraftEdited }"
             shape="round"
             size="large"
-            :disabled="!isFormDataEdited"
+            :disabled="!isRateDraftEdited"
             :loading="isLoading"
             @click="handleClickSaveDraft"
           >
@@ -93,7 +93,7 @@
             shape="round"
             type="primary"
             size="large"
-            :disabled="!isFormDataAvailable || !isFormDataEdited"
+            :disabled="!isFormDataAvailable || !isRateEdited"
             :loading="isLoading"
             @click="handleClickSubmit"
           >
@@ -140,8 +140,21 @@ export default defineComponent({
         /** 评价内容 */
         content: '',
       } as RateForm,
-      /** 上一次保存的表单数据 */
-      savedFormData: {
+      /** 上一次保存的草稿数据 */
+      savedRateDraft: {
+        /** 难易程度 */
+        difficulty: 0,
+        /** 给分好坏 */
+        nice: 0,
+        /** 工作量 */
+        workload: 0,
+        /** 综合推荐指数 */
+        recommended: 0,
+        /** 评价内容 */
+        content: '',
+      } as RateForm,
+      /** 上一次发布的评课数据 */
+      savedRate: {
         /** 难易程度 */
         difficulty: 0,
         /** 给分好坏 */
@@ -171,14 +184,24 @@ export default defineComponent({
         && this.formData.content?.trim()
       );
     },
-    /** 与上一次保存相比是否修改过 */
-    isFormDataEdited(): boolean {
+    /** 与上一次保存的草稿相比是否修改过 */
+    isRateDraftEdited(): boolean {
       return !(
-        this.formData.difficulty === this.savedFormData.difficulty
-        && this.formData.nice === this.savedFormData.nice
-        && this.formData.workload === this.savedFormData.workload
-        && this.formData.recommended === this.savedFormData.recommended
-        && this.formData.content?.trim() === this.savedFormData.content?.trim()
+        this.formData.difficulty === this.savedRateDraft.difficulty
+        && this.formData.nice === this.savedRateDraft.nice
+        && this.formData.workload === this.savedRateDraft.workload
+        && this.formData.recommended === this.savedRateDraft.recommended
+        && this.formData.content?.trim() === this.savedRateDraft.content?.trim()
+      );
+    },
+    /** 与上一次发布的评课相比是否修改过 */
+    isRateEdited(): boolean {
+      return !(
+        this.formData.difficulty === this.savedRate.difficulty
+        && this.formData.nice === this.savedRate.nice
+        && this.formData.workload === this.savedRate.workload
+        && this.formData.recommended === this.savedRate.recommended
+        && this.formData.content?.trim() === this.savedRate.content?.trim()
       );
     },
   },
@@ -207,23 +230,26 @@ export default defineComponent({
       /** 拿 storage 的 */
       const localRatingForm: RateForm = this.ratingForms[this.lectureId];
 
-      if (localRatingForm) {
-        // 有 sessionStorage 的就用本地的
-        this.formData = { ...localRatingForm };
-        this.savedFormData = { ...localRatingForm };
-        this.isLoading = false;
-      } else {
-        // 没有的话尝试同步线上的
-        rateClient
-          .getRatingByLectureId({ lectureId: this.lectureId })
-          .then(({ data }) => {
+      // 拿线上的
+      rateClient
+        .getRatingByLectureId({ lectureId: this.lectureId })
+        .then(({ data }) => {
+          // 以线上拿到的数据为变更参考依据
+          this.savedRate = { ...this.formData, ...data };
+          this.savedRateDraft = { ...this.formData, ...data };
+
+          // 有 sessionStorage 的就用本地的
+          if (localRatingForm) {
+            // 有 sessionStorage 的就用本地的
+            this.formData = { ...localRatingForm };
+          } else {
+            // 没有的话用线上的
             this.formData = { ...this.formData, ...data };
-            this.savedFormData = { ...this.formData, ...data };
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      }
+          }
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     });
   },
   methods: {
@@ -272,7 +298,7 @@ export default defineComponent({
         .getDraft(this.lectureId)
         .then(({ data }) => {
           this.formData = { ...this.formData, ...data };
-          this.savedFormData = { ...this.formData, ...data };
+          this.savedRateDraft = { ...this.formData, ...data };
         })
         .finally(() => {
           this.isLoading = false;
@@ -280,8 +306,8 @@ export default defineComponent({
     },
     /** 对比字段，如果没有变化返回 undefined，否则返回新的值 */
     editedValue<K extends keyof RateForm>(fieldName: K): RateForm[K] | undefined {
-      if (this.formData[fieldName] === this.savedFormData[fieldName]) return undefined;
-      if (fieldName === 'content' && this.formData.content?.trim() === this.savedFormData.content?.trim()) return undefined;
+      if (this.formData[fieldName] === this.savedRateDraft[fieldName]) return undefined;
+      if (fieldName === 'content' && this.formData.content?.trim() === this.savedRateDraft.content?.trim()) return undefined;
       return this.formData[fieldName];
     },
     /** 点击保存按钮 */
@@ -296,7 +322,7 @@ export default defineComponent({
         content: this.editedValue('content'),
       }).then(() => {
         this.$message.success('保存草稿成功！');
-        this.savedFormData = { ...this.formData };
+        this.savedRateDraft = { ...this.formData };
       }).finally(() => {
         this.isLoading = false;
       });
@@ -307,6 +333,7 @@ export default defineComponent({
       rateClient
         .saveRating({ lectureId: this.lectureId, ...this.formData })
         .then(() => {
+          this.savedRate = { ...this.formData };
           this.$message.success('发布点评成功！');
           this.$router.replace(`/rating/lecture/${this.lectureId}`);
         })

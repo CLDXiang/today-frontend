@@ -20,7 +20,9 @@ const getSelectedLessonIds = async (
 
 /** 替换用户所选课程 */
 const replaceSelectedLessons = async (
+  /** 所选课程 Id 列表 */
   selectedLessonIds: number[],
+  /** 学期 */
   semester: string,
 ): Promise<null> => {
   log.info('selectClient.replaceSelectedLessons', { semester, selectedLessonIds });
@@ -32,7 +34,12 @@ const replaceSelectedLessons = async (
 };
 
 /** 添加一门选上的课程 */
-const addSelectedLesson = async (lessonId: number, semester: string): Promise<null> => {
+const addSelectedLesson = async (
+  /** 要添加的课程 Id */
+  lessonId: number,
+  /** 学期 */
+  semester: string,
+): Promise<null> => {
   log.info('selectClient.addSelectedLesson', { semester, lessonId });
   await API.post('selects', {
     id: lessonId.toString(),
@@ -42,7 +49,12 @@ const addSelectedLesson = async (lessonId: number, semester: string): Promise<nu
 };
 
 /** 删除一门选上的课程 */
-const removeSelectedLesson = async (lessonId: number, semester: string): Promise<null> => {
+const removeSelectedLesson = async (
+  /** 要删除的课程 Id */
+  lessonId: number,
+  /** 学期 */
+  semester: string,
+): Promise<null> => {
   log.info('selectClient.removeSelectedCourse', { semester, lessonId });
   await API.delete('selects', {
     data: {

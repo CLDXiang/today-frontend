@@ -55,7 +55,11 @@
           </span>
         </div>
       </div>
-      <div class="follow-box">
+      <!-- FIXME: 实现用户的关注、粉丝、被收藏数统计功能后按照实现的部分显示 -->
+      <div
+        v-if="false"
+        class="follow-box"
+      >
         <div class="follow-section">
           <span class="follow-number text-dark">
             {{ userProfile.watchers || 0 }}
@@ -79,27 +83,37 @@
 
     <div class="white-card">
       <div class="main-box">
+        <!-- FIXME: 下列功能实现后取消注释 -->
         <f-tabs v-model="activeTab">
           <f-tab-pane tab="点评">
             <rating-list :ratings="ratingList" />
           </f-tab-pane>
-          <f-tab-pane tab="回复">
+          <f-tab-pane
+            v-if="false"
+            tab="回复"
+          >
             <comment-list :comments="commentList" />
           </f-tab-pane>
-          <f-tab-pane tab="课程">
+          <f-tab-pane
+            v-if="false"
+            tab="课程"
+          >
             <lecture-list :lectures="lectureList" />
           </f-tab-pane>
-          <f-tab-pane tab="收藏">
+          <f-tab-pane
+            v-if="false"
+            tab="收藏"
+          >
             <common-list :contents="starList" />
           </f-tab-pane>
           <f-tab-pane
-            v-if="isCurrentUser"
+            v-if="isCurrentUser && false"
             tab="关注"
           >
             <common-list :contents="watchList" />
           </f-tab-pane>
           <f-tab-pane
-            v-if="isCurrentUser"
+            v-if="isCurrentUser && false"
             tab="足迹"
           >
             <common-list :contents="historyList" />
@@ -119,10 +133,10 @@ import { mapGetters, mapState, mapMutations } from 'vuex';
 import {
   userClient,
   rateClient,
-  commentClient,
-  // lectureClient,
+  // commentClient,
+  selectClient,
   starClient,
-  watchClient,
+  // watchClient,
   historyClient,
 } from '@/apis';
 
@@ -200,20 +214,24 @@ export default defineComponent({
     rateClient.getRatingListByUser({ userId: this.user.id }).then((resp) => {
       this.ratingList = resp.data;
     });
-    commentClient.getCommentList({ userId: this.user.id }).then((resp) => {
-      this.commentList = resp.data;
-    });
-    // FIXME: 等待 Selects API完成后进行替换
-    // lectureClient.getSelectList({ userId: this.user.id, limit: 20 }).then((resp) => {
+    // FIXME: 等待评论实现
+    // commentClient.getCommentList({ userId: this.user.id }).then((resp) => {
+    //   this.commentList = resp.data;
+    // });
+    // FIXME: 实现 LessonCard
+    // selectClient.getSelectedLessons({ userId: this.user.id, limit: 20 }).then((resp) => {
     //   this.lectureList = resp.data;
     // });
+    // FIXME: 等待收藏实现
     starClient.getStarList({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.starList = resp.data;
     });
     if (this.isCurrentUser()) {
-      watchClient.getWatchList({ userId: this.user.id, limit: 20 }).then((resp) => {
-        this.watchList = resp.data;
-      });
+      // FIXME: 等待关注实现
+      // watchClient.getWatchList({ userId: this.user.id, limit: 20 }).then((resp) => {
+      //   this.watchList = resp.data;
+      // });
+      // FIXME: 等待历史记录实现
       historyClient.getHistoryList({ userId: this.user.id, limit: 20 }).then((resp) => {
         this.historyList = resp.data;
       });

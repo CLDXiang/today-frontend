@@ -2,14 +2,14 @@ import { CardLectureItem } from '@/components/listCard';
 import { LectureItem } from './types';
 
 /** 将 LectureItem 转为 CardLectureItem */
-export const transferLectureItemToCardLectureItem: (lectureItem: LectureItem) => CardLectureItem = (
-  lectureItem,
+export const transferLectureItemToCardLectureItem: (item: LectureItem) => CardLectureItem = (
+  item,
 ) => ({
-  id: lectureItem.id,
+  id: item.id,
   type: 'lecture',
-  name: lectureItem.name,
-  teachers: lectureItem.taughtBy,
-  score: lectureItem.recommended,
-  ratingCount: lectureItem.rateCount,
-  likeCount: lectureItem.starCount,
+  name: item.name,
+  teachers: item.taughtBy,
+  score: item.recommended,
+  ratingCount: item.rateCount,
+  likeCount: item.starCount,
 });

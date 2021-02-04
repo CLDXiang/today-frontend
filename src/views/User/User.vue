@@ -98,12 +98,8 @@
           >
             <comment-list :comments="commentList" />
           </f-tab-pane>
-          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
-          <f-tab-pane
-            v-if="false"
-            tab="课程"
-          >
-            <lecture-list :lectures="lectureList" />
+          <f-tab-pane tab="课程">
+            <lesson-list :lessons="lessonList" />
           </f-tab-pane>
           <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
@@ -142,7 +138,7 @@ import {
   userClient,
   rateClient,
   // commentClient,
-  // selectClient,
+  selectClient,
   starClient,
   // watchClient,
   historyClient,
@@ -152,18 +148,18 @@ import { useProcessAvatar } from '@/composables';
 import {
   CardRatingItem,
   CardCommentItem,
-  CardLectureItem,
+  CardLessonItem,
   CardCommonItem,
 } from '@/components/listCard';
 import {
-  RatingList, CommentList, LectureList, CommonList,
+  RatingList, CommentList, LessonList, CommonList,
 } from './components';
 
 export default defineComponent({
   components: {
     RatingList,
     CommentList,
-    LectureList,
+    LessonList,
     CommonList,
   },
   props: {
@@ -196,7 +192,7 @@ export default defineComponent({
     /** 回复列表 */
     commentList: [] as CardCommentItem[],
     /** 课程列表 */
-    lectureList: [] as CardLectureItem[],
+    lessonList: [] as CardLessonItem[],
     /** 收藏列表 */
     starList: [] as CardCommonItem[],
     /** 关注列表 */
@@ -226,10 +222,9 @@ export default defineComponent({
     // commentClient.getCommentList({ userId: this.user.id }).then((resp) => {
     //   this.commentList = resp.data;
     // });
-    // FIXME: 实现 LessonCard
-    // selectClient.getSelectedLessons({ userId: this.user.id, limit: 20 }).then((resp) => {
-    //   this.lectureList = resp.data;
-    // });
+    selectClient.getSelectedLessons({ userId: this.user.id, limit: 20 }).then((resp) => {
+      this.lessonList = resp.data;
+    });
     // FIXME: 等待收藏实现
     starClient.getStarList({ userId: this.user.id, limit: 20 }).then((resp) => {
       this.starList = resp.data;

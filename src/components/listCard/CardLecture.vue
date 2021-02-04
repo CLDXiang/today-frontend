@@ -11,12 +11,12 @@
           <div class="card-lecture__top-right">
             <span class="card-lecture__top-rating-stars">
               <five-stars
-                :score="lecture.score"
+                :score="lecture.score ?? 3"
                 :size="20"
               />
             </span>
             <span class="card-lecture__top-rating-number">
-              {{ lecture.score }}
+              {{ (lecture.score ?? 3).toFixed(1) }}
             </span>
           </div>
         </div>
@@ -27,8 +27,9 @@
         {{ lecture.teachers.join(' ') }}
       </span>
       <div class="card-lecture__bottom-icon-field">
+        <!-- FIXME: 实现 reaction 后显示 -->
         <span
-          v-if="hasReaction"
+          v-if="false"
           class="card-lecture__bottom-icon"
         >
           <f-icon
@@ -48,7 +49,11 @@
             {{ lecture.ratingCount }}
           </span>
         </span>
-        <span class="card-lecture__bottom-icon">
+        <!-- FIXME: 实现收藏课程后显示 -->
+        <span
+          v-if="false"
+          class="card-lecture__bottom-icon"
+        >
           <f-icon
             name="heart"
             size="14"
@@ -74,12 +79,6 @@ export default defineComponent({
   props: {
     /** 课程数据项 */
     lecture: { type: Object as PropType<CardLectureItem>, required: true },
-  },
-  data() {
-    return {
-    // TODO: lecture 引入 reactions 后删除此 data 与 上面的 v-if={hasReaction}
-      hasReaction: false,
-    };
   },
 });
 </script>

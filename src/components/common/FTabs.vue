@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="scroll"
-    class="f-tabs"
-  >
+  <div class="f-tabs">
     <div class="f-tabs__header hide-scrollbar">
       <span
         v-for="tabPane in tabPanes"
@@ -29,32 +26,30 @@
 </template>
 
 <script lang="ts">
-import { useScrollToBottom } from '@/composables';
-import {
-  defineComponent, ref,
-} from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   props: {
     /** (v-model) 激活的页面 key */
     modelValue: { type: String, required: true },
-    /** 距离底部多少 px 触发 on-scroll-to-bottom */
-    bottomOffset: { type: Number, default: 0 },
   },
-  emits: ['update:modelValue', 'on-scroll-to-bottom'],
+  emits: ['update:modelValue'],
   setup(props, ctx) {
-    const tabPanes = ref<{
-      tab: string;
-      name: string;
-    }[]>([]);
-    tabPanes.value = (ctx.slots.default?.() || []).map((vNode) => ({
-      tab: vNode.props?.tab || '',
-      name: vNode.props?.name || '',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      // children: (vNode.children as any)?.default?.() || null,
-    }));
+    const tabPanes = ref<
+      {
+        tab: string;
+        name: string;
+      }[]
+    >([]);
+    tabPanes.value = (ctx.slots.default?.() || [])
+      .filter((vNode) => vNode.props?.tab !== undefined)
+      .map((vNode) => ({
+        tab: vNode.props?.tab || '',
+        name: vNode.props?.name || '',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // children: (vNode.children as any)?.default?.() || null,
+      }));
 
-    const { scrollRef: scroll } = useScrollToBottom(() => ctx.emit('on-scroll-to-bottom'), props.bottomOffset);
     /** scroll-content 元素 */
     const scrollContentRef = ref<HTMLDivElement>();
 
@@ -68,7 +63,7 @@ export default defineComponent({
 
     /** 点击 tab 项 */
     const handleClickTab = (pageKey: string) => {
-      const pageIndex = tabPanes.value.findIndex((v) => (v.tab === pageKey));
+      const pageIndex = tabPanes.value.findIndex((v) => v.tab === pageKey);
       if (!scrollContentRef.value || pageIndex === -1) {
         return;
       }
@@ -89,7 +84,6 @@ export default defineComponent({
 
     return {
       tabPanes,
-      scroll,
       scrollContent: scrollContentRef,
       handleClickTab,
       handleContentScroll,
@@ -135,7 +129,7 @@ $padding-x: 12px;
       box-sizing: border-box;
 
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       &.f-tabs__tab--active {
         color: #fff;

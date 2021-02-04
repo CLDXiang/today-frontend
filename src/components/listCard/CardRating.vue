@@ -41,7 +41,11 @@
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
       <span class="card-rating__bottom-icon-field">
-        <span class="card-rating__bottom-icon">
+        <!-- FIXME: 实现 reaction 后显示 -->
+        <span
+          v-if="false"
+          class="card-rating__bottom-icon"
+        >
           <span>
             <f-icon
               name="reaction"
@@ -54,7 +58,11 @@
             {{ rating.reaction.count }}
           </span>
         </span>
-        <span class="card-rating__bottom-icon">
+        <!-- FIXME: 实现评论后显示 -->
+        <span
+          v-if="false"
+          class="card-rating__bottom-icon"
+        >
           <f-icon
             name="chat"
             size="14"
@@ -63,7 +71,11 @@
             {{ rating.commentCount }}
           </span>
         </span>
-        <span class="card-rating__bottom-icon">
+        <!-- FIXME: 实现收藏后显示 -->
+        <span
+          v-if="false"
+          class="card-rating__bottom-icon"
+        >
           <f-icon
             :style="{color: starColor}"
             :name="rating.starred ? 'heart-fill' : 'heart'"

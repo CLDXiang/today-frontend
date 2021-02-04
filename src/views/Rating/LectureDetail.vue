@@ -24,7 +24,9 @@
           </div>
         </div>
         <div class="info-bar__action">
+          <!-- FIXME: 实现收藏课程后显示 -->
           <div
+            v-if="false"
             class="info-bar__star"
             :style="{
               color: lectureInfo.starred ? '#ef755a' : '#828282',
@@ -38,7 +40,11 @@
             />
             <span>{{ lectureInfo.starCount }}</span>
           </div>
-          <div class="info-bar__watch">
+          <!-- FIXME: 实现关注课程后显示 -->
+          <div
+            v-if="false"
+            class="info-bar__watch"
+          >
             <a-button
               type="primary"
               shape="round"

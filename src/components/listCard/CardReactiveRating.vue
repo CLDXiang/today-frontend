@@ -51,7 +51,11 @@
     >
       {{ rating.form.content }}
     </div>
-    <div class="card-reactive-rating__reactions">
+    <!-- FIXME: 实现 reaction 后显示 -->
+    <div
+      v-if="false"
+      class="card-reactive-rating__reactions"
+    >
       <reaction
         :value="mockReaction"
         :readonly="false"
@@ -59,8 +63,15 @@
         @delete="handleDeleteReaction"
       />
     </div>
-    <div class="card-reactive-rating__division-bar" />
-    <div class="card-reactive-rating__bottom-icons">
+    <!-- FIXME: 实现对点评的评论、收藏后显示 -->
+    <div
+      v-if="false"
+      class="card-reactive-rating__division-bar"
+    />
+    <div
+      v-if="false"
+      class="card-reactive-rating__bottom-icons"
+    >
       <span
         v-if="showChat"
         class="card-reactive-rating__icon"

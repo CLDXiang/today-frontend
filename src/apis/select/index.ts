@@ -1,21 +1,25 @@
 import API from '@/utils/axios';
 import log from '@/utils/log';
 import {
-  GetSelectsRespDto, PutSelectsReqDto, PostSelectsReqDto, DeleteSelectsReqDto,
+  GetSelectsIdOnlyRespDto,
+  PutSelectsReqDto,
+  PostSelectsReqDto,
+  DeleteSelectsReqDto,
 } from './dto';
 
-/** 同步用户所选课程 Id 列表 */
+/** 获取用户所选课程 Id 列表 */
 const getSelectedLessonIds = async (
-  /** 学期，不填返回所有学期 */
-  semester?: string,
+  /** 学期 */
+  semester: string,
 ): Promise<number[]> => {
   log.info('selectClient.getSelectedLessonIds', { semester });
-  const { data: { data } } = await API.get<GetSelectsRespDto>('selects', {
+  const { data: { data } } = await API.get<GetSelectsIdOnlyRespDto>('selects', {
     params: {
       semester,
+      id_only: 1,
     },
   });
-  return data.map((lessonItem) => parseInt(lessonItem.id, 10));
+  return data.map((id) => parseInt(id, 10));
 };
 
 /** 替换用户所选课程 */

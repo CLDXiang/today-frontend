@@ -1,5 +1,11 @@
 import { LessonItemDto } from './types';
 
+/** GET selects?id_only=1 Resp */
+export interface GetSelectsIdOnlyRespDto {
+  /** 课程列表 */
+  data: string[];
+}
+
 /** GET selects Resp */
 export interface GetSelectsRespDto {
   /** 课程列表 */

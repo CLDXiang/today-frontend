@@ -83,7 +83,6 @@
 
     <div class="white-card">
       <div class="main-box">
-        <!-- FIXME: 下列功能实现后取消注释 -->
         <f-tabs v-model="activeTab">
           <f-tab-pane
             tab="点评"
@@ -92,30 +91,35 @@
           >
             <rating-list :ratings="ratingList" />
           </f-tab-pane>
+          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
             v-if="false"
             tab="回复"
           >
             <comment-list :comments="commentList" />
           </f-tab-pane>
+          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
             v-if="false"
             tab="课程"
           >
             <lecture-list :lectures="lectureList" />
           </f-tab-pane>
+          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
             v-if="false"
             tab="收藏"
           >
             <common-list :contents="starList" />
           </f-tab-pane>
+          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
             v-if="isCurrentUser && false"
             tab="关注"
           >
             <common-list :contents="watchList" />
           </f-tab-pane>
+          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
             v-if="isCurrentUser && false"
             tab="足迹"
@@ -138,7 +142,7 @@ import {
   userClient,
   rateClient,
   // commentClient,
-  selectClient,
+  // selectClient,
   starClient,
   // watchClient,
   historyClient,

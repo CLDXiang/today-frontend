@@ -1,5 +1,6 @@
 import { onMounted, ref, Ref } from 'vue';
 import debounce from 'lodash.debounce';
+import logger from '@/utils/log';
 
 /**
  * 使得对应 ref 的容器滚动到底部时触发回调函数
@@ -29,6 +30,7 @@ const useScrollToBottom: (
             return;
           }
           const { offsetHeight, scrollTop, scrollHeight } = el;
+          logger.info(offsetHeight + scrollTop - scrollHeight, bottom - 1);
           if (offsetHeight + scrollTop - scrollHeight >= -bottom - 1) {
             pending.value = true;
             // 需要执行的代码

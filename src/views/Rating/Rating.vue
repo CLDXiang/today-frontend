@@ -3,22 +3,40 @@
     <rating-head-bar />
     <f-tabs
       v-model="activeTab"
-      :bottom-offset="500"
-      @on-scroll-to-bottom="handleScrollToBottom"
     >
-      <f-tab-pane tab="最新">
+      <f-tab-pane
+        tab="最新"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
         <rating-list :ratings="tabLists.最新" />
       </f-tab-pane>
-      <f-tab-pane tab="七模">
+      <f-tab-pane
+        tab="七模"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
         <lecture-list :lectures="tabLists.七模" />
       </f-tab-pane>
-      <f-tab-pane tab="思政">
+      <f-tab-pane
+        tab="思政"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
         <lecture-list :lectures="tabLists.思政" />
       </f-tab-pane>
-      <f-tab-pane tab="外语">
+      <f-tab-pane
+        tab="外语"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
         <lecture-list :lectures="tabLists.外语" />
       </f-tab-pane>
-      <f-tab-pane tab="体育">
+      <f-tab-pane
+        tab="体育"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
         <lecture-list :lectures="tabLists.体育" />
       </f-tab-pane>
     </f-tabs>

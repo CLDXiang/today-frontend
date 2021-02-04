@@ -85,7 +85,11 @@
       <div class="main-box">
         <!-- FIXME: 下列功能实现后取消注释 -->
         <f-tabs v-model="activeTab">
-          <f-tab-pane tab="点评">
+          <f-tab-pane
+            tab="点评"
+            :bottom-offset="500"
+            @on-scroll-to-bottom="handleScrollToBottom"
+          >
             <rating-list :ratings="ratingList" />
           </f-tab-pane>
           <f-tab-pane

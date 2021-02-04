@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="scroll"
-    class="f-tabs"
-  >
+  <div class="f-tabs">
     <div class="f-tabs__header hide-scrollbar">
       <span
         v-for="tabPane in tabPanes"
@@ -29,17 +26,14 @@
 </template>
 
 <script lang="ts">
-import { useScrollToBottom } from '@/composables';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   props: {
     /** (v-model) 激活的页面 key */
     modelValue: { type: String, required: true },
-    /** 距离底部多少 px 触发 on-scroll-to-bottom */
-    bottomOffset: { type: Number, default: 0 },
   },
-  emits: ['update:modelValue', 'on-scroll-to-bottom'],
+  emits: ['update:modelValue'],
   setup(props, ctx) {
     const tabPanes = ref<
       {
@@ -56,10 +50,6 @@ export default defineComponent({
         // children: (vNode.children as any)?.default?.() || null,
       }));
 
-    const { scrollRef: scroll } = useScrollToBottom(
-      () => ctx.emit('on-scroll-to-bottom'),
-      props.bottomOffset,
-    );
     /** scroll-content 元素 */
     const scrollContentRef = ref<HTMLDivElement>();
 
@@ -94,7 +84,6 @@ export default defineComponent({
 
     return {
       tabPanes,
-      scroll,
       scrollContent: scrollContentRef,
       handleClickTab,
       handleContentScroll,

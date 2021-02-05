@@ -115,6 +115,21 @@ export interface CardLectureItem {
   likeCount: number;
 }
 
+export interface CardLessonItem {
+  /** lesson ID */
+  id: string;
+  /** 类型 */
+  type: 'lesson';
+  /** 完整课程代码 */
+  codeFull: string;
+  /** 学期 */
+  semester: string;
+  /** 课程名称 */
+  name: string;
+  /** 授课教师 */
+  teachers: string[];
+}
+
 /** 用户类列表项 */
 export interface CardUserItem {
   /** 用户 id */
@@ -134,4 +149,9 @@ export interface CardUserItem {
 }
 
 /** 类型不定列表项 */
-export type CardCommonItem = CardCommentItem | CardLectureItem | CardRatingItem | CardUserItem;
+export type CardCommonItem =
+  CardCommentItem
+  | CardLectureItem
+  | CardLessonItem
+  | CardRatingItem
+  | CardUserItem;

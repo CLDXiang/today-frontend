@@ -1,21 +1,54 @@
 import API from '@/utils/axios';
 import log from '@/utils/log';
+import { CardLessonItem } from '@/components/listCard/types';
 import {
-  GetSelectsRespDto, PutSelectsReqDto, PostSelectsReqDto, DeleteSelectsReqDto,
+  GetSelectsIdOnlyRespDto,
+  PutSelectsReqDto,
+  PostSelectsReqDto,
+  DeleteSelectsReqDto,
+  GetSelectsRespDto,
 } from './dto';
+import { transferLessonItemToCardLessonItem } from './utils';
 
-/** 同步用户所选课程 Id 列表 */
+/** 获取用户所选课程 Id 列表 */
 const getSelectedLessonIds = async (
-  /** 学期，不填返回所有学期 */
-  semester?: string,
+  /** 学期 */
+  semester: string,
 ): Promise<number[]> => {
   log.info('selectClient.getSelectedLessonIds', { semester });
-  const { data: { data } } = await API.get<GetSelectsRespDto>('selects', {
+  const { data: { data } } = await API.get<GetSelectsIdOnlyRespDto>('selects', {
     params: {
       semester,
+      id_only: 1,
     },
   });
-  return data.map((lessonItem) => parseInt(lessonItem.id, 10));
+  return data.map((id) => parseInt(id, 10));
+};
+
+/** 获取用户所选课程信息列表 */
+const getSelectedLessons = async (req: {
+  /** 用户 Id，不填使用当前用户 Id */
+  userId?: string;
+  /** 学期，若不提供则返回全部 */
+  semester?: string;
+  /** 拉取条数 */
+  limit: number;
+  /** 分页 - 最后一个 lesson 的 id */
+  lastId?: string;
+}): Promise<{ data: CardLessonItem[] }> => {
+  log.info('selectClient.getSelectedLessons', req);
+  const {
+    userId, semester, limit, lastId,
+  } = req;
+  const { data: { data } } = await API.get<GetSelectsRespDto>('selects', {
+    params: {
+      user_id: userId,
+      semester,
+      limit,
+      last_id: lastId,
+    },
+  });
+  return { data: data.map(transferLessonItemToCardLessonItem) };
 };
 
 /** 替换用户所选课程 */
@@ -68,6 +101,8 @@ const removeSelectedLesson = async (
 const selectClient = {
   /** 同步用户所选课程 Id 列表 */
   getSelectedLessonIds,
+  /** 获取用户所选课程信息列表 */
+  getSelectedLessons,
   /** 替换用户所选课程 */
   replaceSelectedLessons,
   /** 添加一门选上的课程 */

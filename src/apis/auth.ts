@@ -42,19 +42,15 @@ const register = async (req: {
   return data;
 };
 
-const requestCodeRegister = async (req: {
-  email: string;
-}): Promise<null> => {
+const requestCodeRegister = async (req: { email: string }): Promise<null> => {
   log.info('authClient.requestCodeRegister', req);
-  await API.post<null>('auth/register-mail', req);
+  await API.post<null>('auth/mail', { ...req, type: 'register' });
   return null;
 };
 
-const requestCodeForForgotPassword = async (req: {
-  email: string;
-}): Promise<null> => {
+const requestCodeForForgotPassword = async (req: { email: string }): Promise<null> => {
   log.info('authClient.requestCodeForForgotPassword', req);
-  await API.post<null>('auth/password', req);
+  await API.post<null>('auth/mail', { ...req, type: 'reset' });
   return null;
 };
 

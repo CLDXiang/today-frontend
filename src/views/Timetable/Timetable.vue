@@ -191,7 +191,7 @@ export default defineComponent({
   },
   data() {
     return {
-      semester: '2020-2021学年1学期',
+      semester: '2020-2021学年2学期',
       semesterIndex: 0,
       semesterJsonName: '',
       isLoadingCourses: false,

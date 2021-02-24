@@ -1,5 +1,5 @@
 export const scoreTextTable = {
-  difficulty: ['极难', '困难', '正常', '轻松', '小学'],
+  difficulty: ['极难', '困难', '正常', '轻松', '愉悦'],
   nice: ['极差', '害怕', '海星', '善良', '天使'],
   workload: ['负担', '略多', '合理', '摸鱼', '躺好'],
   recommended: ['避雷', '谨慎', '还行', '推荐', '安利'],

@@ -7,7 +7,7 @@ import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
 const persistedState = {
-  localStorage: ['user', 'selectedCoursesIds', 'selectedSectionsByDay'],
+  localStorage: ['user', 'semester', 'selectedCoursesIds', 'selectedSectionsByDay'],
   sessionStorage: ['ratingForms'],
 };
 
@@ -30,6 +30,8 @@ const store = createStore({
     },
     detailPageCourse: {},
     lectures: [],
+    /** 最后一次查看的课表学期 */
+    semester: '2020-2021学年2学期',
     /** 是否自动云同步过 */
     hasFetchedSelectedCourses: false,
     isDetailPageCourseDeleted: false,
@@ -113,7 +115,9 @@ const store = createStore({
     clearGlobalMessageTimer(state) {
       state.globalMessageTimer = -1;
     },
-
+    setSemester(state, semester) {
+      state.semester = semester;
+    },
     setSelectedCourses(
       state,
       payload: {

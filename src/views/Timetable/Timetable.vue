@@ -252,6 +252,7 @@ export default defineComponent({
     ...mapState({
       selectedSectionsByDayVuex: 'selectedSectionsByDay',
       selectedCoursesIdsVuex: 'selectedCoursesIds',
+      semesterVuex: 'semester',
     }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     isMobileMode(): boolean {
@@ -301,6 +302,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.semester = this.semesterVuex;
     this.semesterIndex = semesterArray.findIndex((semester) => semester.key === this.semester);
     this.semesterJsonName = semesterArray[this.semesterIndex].jsonFileName;
     this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
@@ -317,6 +319,7 @@ export default defineComponent({
       'hideDetailDialog',
       'changeDetailPageContent',
       'showDetailDialog',
+      'setSemester',
     ]),
     moveSemester(step: -1 | 1) {
       if (step === -1 && this.semesterIndex === 0) {
@@ -331,7 +334,9 @@ export default defineComponent({
       this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
       this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
       this.getCoursesFromJSON(semesterArray[this.semesterIndex].jsonFileName);
-      this.fetchSelectedCourses();
+      this.fetchSelectedCourses(true);
+
+      this.setSemester(this.semester);
     },
     areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;
@@ -413,11 +418,16 @@ export default defineComponent({
           throw err;
         });
     },
-    fetchSelectedCourses() {
+    /** 同步数据
+     * @param isPassive - 非用户主动触发
+     */
+    fetchSelectedCourses(isPassive?: boolean) {
       const messageKey = 'fetch-selected-courses';
       this.isOffline = false; // 触发拉数据，重新上线
       if (!this.isUserLoggedIn) {
-        this.$message.warn('需要登录才能进行云同步');
+        if (!isPassive) {
+          this.$message.warn('需要登录才能进行云同步');
+        }
         return;
       }
       const hide = this.$message.loading({

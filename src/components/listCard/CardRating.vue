@@ -116,7 +116,8 @@ export default defineComponent({
       return this.rating.starred ? '#ef755a' : '';
     },
     courseCardColor(): string {
-      return `color-${parseInt(this.rating.lecture.id.slice(4, 7), 10) % 96 || 0}`;
+      // TODO: 有实际分类意义的配色
+      return `color-${parseInt(this.rating.lecture.id, 10) % 96 || 0}`;
     },
   },
   methods: {

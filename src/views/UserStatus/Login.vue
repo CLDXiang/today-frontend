@@ -25,6 +25,7 @@
         hint="https 加密传输，后台不会存储明文密码"
         :rules="[(v) => !!v || '密码不能为空']"
         @click:append="showPassword = !showPassword"
+        @keydown="handleKeyDown"
       />
     </div>
     <div class="button-box">
@@ -109,6 +110,12 @@ export default defineComponent({
           log.error(e);
           this.$message.warn('登录失败');
         });
+    },
+    handleKeyDown(e: KeyboardEvent) {
+      // 监听回车键
+      if (e.key === 'Enter') {
+        this.login();
+      }
     },
   },
 });

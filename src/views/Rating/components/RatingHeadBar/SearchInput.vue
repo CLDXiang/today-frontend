@@ -57,7 +57,7 @@ export default defineComponent({
     handleKeyDown(e: KeyboardEvent) {
       // TODO: 如何在移动端监听键盘“完成”按钮？
       // 监听回车键
-      if (e.which === 13) {
+      if (e.key === 'Enter') {
         this.search();
       }
     },

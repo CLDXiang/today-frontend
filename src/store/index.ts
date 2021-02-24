@@ -7,7 +7,7 @@ import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
 const persistedState = {
-  localStorage: ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'],
+  localStorage: ['user', 'selectedCoursesIds', 'selectedSectionsByDay'],
   sessionStorage: ['ratingForms'],
 };
 
@@ -24,15 +24,9 @@ const store = createStore({
       nickname: '',
       avatar: '',
       bio: '',
-    },
-    profile: {
-      notifications: [],
-      trends: [],
-      userStar: [],
-      userRate: [],
-      follower: [],
-      following: [],
-      history: [],
+      fans: 0,
+      watchers: 0,
+      watchees: 0,
     },
     detailPageCourse: {},
     lectures: [],
@@ -83,6 +77,10 @@ const store = createStore({
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
       state.user.nickname = profile.nickname;
+      state.user.name = profile.name;
+      state.user.fans = profile.fans;
+      state.user.watchers = profile.watchers;
+      state.user.watchees = profile.watchees;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;

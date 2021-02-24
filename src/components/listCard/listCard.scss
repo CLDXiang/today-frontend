@@ -17,7 +17,8 @@
       }
 
       > .list-card__content-field {
-          flex: 6;
+          flex: 1;
+          width: 100%;
           
           > .list-card__top-field {
             height: 28px;

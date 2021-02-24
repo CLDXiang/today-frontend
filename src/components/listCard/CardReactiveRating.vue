@@ -250,12 +250,12 @@ export default defineComponent({
     text-align: left;
     color: $gray2;
     font-size: 14px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
+    // display: -webkit-box;
+    // -webkit-line-clamp: 3;
+    // -webkit-box-orient: vertical;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    // word-break: break-all;
     margin-bottom: 10px;
   }
   .card-reactive-rating__reactions {

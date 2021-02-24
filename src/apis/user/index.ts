@@ -76,7 +76,7 @@ const uploadAvatar = async (req: {
   nickname: string;
 }> => {
   log.info('userClient.uploadAvatar', req);
-  const { data } = await API.post('user/profile/avatar', req.userAvatar);
+  const { data } = await API.post('users/profile/avatar', req.userAvatar);
   return data;
 };
 

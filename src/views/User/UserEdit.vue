@@ -3,7 +3,7 @@
     <div class="title-box">
       <span
         class="back-btn"
-        @click="$router.push('/me')"
+        @click="$router.push('/user')"
       >
         <f-icon
           name="back"
@@ -44,7 +44,7 @@
     <div class="info-box">
       <div>
         <f-input
-          v-model="nickName"
+          v-model="nickname"
           :rules="[(v) => v.length <= 10 || '昵称最长 10 个字哦']"
           :counter="10"
           dense
@@ -154,22 +154,28 @@
 
 <script lang="ts">
 import { mapMutations, mapState } from 'vuex';
-import { profileClient } from '@/apis';
+import { userClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
-import defaultAvatar from '../../assets/default_avatar.jpg';
+import { useProcessAvatar } from '@/composables';
 
 export default defineComponent({
+  setup() {
+    const { processAvatar } = useProcessAvatar();
+    return {
+      processAvatar,
+    };
+  },
   data: () => ({
     isAvatarUploading: false,
     isInfoModifying: false,
-    nickName: '',
+    nickname: '',
     bio: '',
   }),
   computed: {
     ...mapState(['user']),
     isInfoModified(): boolean {
-      return this.bio !== (this.user.bio || '') || this.nickName !== (this.user.nickName || '');
+      return this.bio !== (this.user.bio || '') || this.nickname !== (this.user.nickname || '');
     },
   },
   mounted() {
@@ -179,7 +185,7 @@ export default defineComponent({
     ...mapMutations(['setUserProfile']),
     fetchData() {
       this.bio = this.user.bio || '';
-      this.nickName = this.user.nickName || '';
+      this.nickname = this.user.nickname || '';
     },
     handleClickModifyAvatar() {
       this.$el.querySelector('#upload').click();
@@ -196,7 +202,7 @@ export default defineComponent({
       this.isAvatarUploading = true;
       const data = new FormData();
       data.append('file', f);
-      profileClient.uploadAvatar({ userAvatar: data })
+      userClient.uploadAvatar({ userAvatar: data })
         .then((resp) => {
           this.setUserProfile(resp);
           this.$message.success('修改头像成功！');
@@ -210,7 +216,7 @@ export default defineComponent({
         });
     },
     handleClickModifyInfo() {
-      if (this.nickName.length > 10) {
+      if (this.nickname.length > 10) {
         this.$message.warn('昵称最长 10 个字哦！');
         return;
       }
@@ -219,7 +225,7 @@ export default defineComponent({
         return;
       }
       this.isInfoModifying = true;
-      profileClient.editProfile({ nickName: this.nickName, bio: this.bio })
+      userClient.editUserInfo({ nickname: this.nickname, bio: this.bio })
         .then((resp) => {
           this.setUserProfile(resp);
           this.$message.success('修改成功！');
@@ -231,12 +237,6 @@ export default defineComponent({
         .finally(() => {
           this.isInfoModifying = false;
         });
-    },
-    processAvatar(originAvatar: string) {
-      if (!originAvatar || originAvatar.includes('/default_avatar.png')) {
-        return defaultAvatar;
-      }
-      return originAvatar;
     },
   },
 });

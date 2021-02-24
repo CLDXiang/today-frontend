@@ -1,39 +1,150 @@
 <template>
   <div class="content-box">
-    <div class="center-content">
-      <div>技术重构中，敬请期待 😊</div>
-      <div>预计于下学期前上线</div>
-    </div>
-    <div class="bottom-content">
-      <div>希望关注项目进度吗？在这里联系我们：</div>
-      <!-- <div v-if="!userLoggedIn" class="hide-img" @click="$router.push('./login')">
-        <div>登录后显示 🙈</div>
-        <div style="transform: rotate(30deg)">
-          👉
-        </div>
-      </div>
-      <img v-else :src="wxGroupImg" alt="群二维码"> -->
-      <img
-        :src="wxGroupImg"
-        alt="群二维码"
+    <rating-head-bar />
+    <f-tabs
+      v-model="activeTab"
+    >
+      <f-tab-pane
+        tab="最新"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
       >
-    </div>
+        <rating-list :ratings="tabLists.最新" />
+      </f-tab-pane>
+      <f-tab-pane
+        tab="七模"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
+        <lecture-list :lectures="tabLists.七模" />
+      </f-tab-pane>
+      <f-tab-pane
+        tab="思政"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
+        <lecture-list :lectures="tabLists.思政" />
+      </f-tab-pane>
+      <f-tab-pane
+        tab="外语"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
+        <lecture-list :lectures="tabLists.外语" />
+      </f-tab-pane>
+      <f-tab-pane
+        tab="体育"
+        :bottom-offset="500"
+        @on-scroll-to-bottom="handleScrollToBottom"
+      >
+        <lecture-list :lectures="tabLists.体育" />
+      </f-tab-pane>
+    </f-tabs>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-// import { mapGetters } from 'vuex';
-import wxGroupImg from '@/assets/wx_pr.png';
+import { defineComponent, ref, watch } from 'vue';
+import { rateClient, lectureClient } from '@/apis';
+import { CardLectureItem, CardRatingItem } from '@/components/listCard';
+import { LectureType, lectureType2Categories } from '@/utils/config';
+import { RatingHeadBar, LectureList, RatingList } from './components';
+
+type TabType = '最新' | LectureType;
 
 export default defineComponent({
-  data() {
-    return {
-      wxGroupImg,
-    };
+  components: {
+    RatingHeadBar,
+    LectureList,
+    RatingList,
   },
-  computed: {
-    // ...mapGetters(['userLoggedIn']),
+  setup() {
+    /** 激活 tab */
+    const activeTab = ref<TabType>('最新');
+    /** 列表项 */
+    const tabLists = ref({
+      /** 最新点评列表 */
+      最新: [] as CardRatingItem[],
+      /** 七模课程列表 */
+      七模: [] as CardLectureItem[],
+      /** 思政课程列表 */
+      思政: [] as CardLectureItem[],
+      /** 外语课程列表 */
+      外语: [] as CardLectureItem[],
+      /** 体育课程列表 */
+      体育: [] as CardLectureItem[],
+    });
+
+    /** 拉取并覆盖当前列表 */
+    const fetchList = (type: TabType) => {
+      switch (type) {
+        case '最新':
+          rateClient.getRatingList({ limit: 20 }).then(({ data }) => {
+            tabLists.value.最新 = data;
+          });
+          break;
+        case '七模':
+        case '思政':
+        case '外语':
+        case '体育':
+          lectureClient
+            .getLectureList({ categories: lectureType2Categories(type), limit: 20 })
+            .then(({ data }) => {
+              tabLists.value[type] = data;
+            });
+          break;
+        default:
+          break;
+      }
+    };
+
+    /** 拉取并将结果附加在当前列表后 */
+    const fetchMore = (type: TabType) => {
+      // TODO: 传入 lastId
+      switch (type) {
+        case '最新':
+          rateClient
+            .getRatingList({
+              lastId: tabLists.value.最新[tabLists.value.最新.length - 1].id,
+              limit: 20,
+            })
+            .then(({ data }) => {
+              tabLists.value.最新 = [...tabLists.value.最新, ...data];
+            });
+          break;
+        case '七模':
+        case '思政':
+        case '外语':
+        case '体育':
+          lectureClient
+            .getLectureList({ categories: lectureType2Categories(type), limit: 20 })
+            .then(({ data }) => {
+              tabLists.value[type] = [...tabLists.value[type], ...data];
+            });
+          break;
+        default:
+          break;
+      }
+    };
+
+    watch(activeTab, () => {
+      // activeTab 改变时，若当前 tab 无数据则重新拉数据
+      if (!tabLists.value[activeTab.value].length) {
+        fetchList(activeTab.value);
+      }
+    });
+
+    // 滚动到底部时拉新数据
+    const handleScrollToBottom = () => fetchMore(activeTab.value);
+
+    // 首次进入该页面拉数据
+    fetchList(activeTab.value);
+
+    return {
+      activeTab,
+      tabLists,
+      handleScrollToBottom,
+    };
   },
 });
 </script>
@@ -42,49 +153,29 @@ export default defineComponent({
 .content-box {
   height: 100%;
   width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
   color: #444;
   font-size: 14px;
+  margin: 0 auto;
+  max-width: 2560px;
+  overflow-y: hidden;
 
-  > .center-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    > div:last-child {
-      color: #aaa;
-      font-size: 12px;
-    }
+  > .head-bar {
+    background-color: #fff;
   }
-  > .bottom-content {
-    justify-self: flex-end;
-    padding-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+}
+</style>
 
-    > .hide-img {
-      width: 100px;
-      height: 100px;
-      background-color: #e3f1f3;
-      border-radius: 6px;
+<style lang="scss">
+.content-box > .f-tabs {
+  height: calc(100vh - 48px - 64px);
+  overflow-y: auto;
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    > img {
-      width: 100px;
-      height: 100px;
-    }
+  > .f-tabs__header {
+    padding: 15px 15px 6px 15px;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
 }
 </style>

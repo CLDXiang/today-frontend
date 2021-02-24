@@ -166,6 +166,8 @@ $height: 40px;
     display: flex;
     align-items: center;
 
+    cursor: text;
+
     &:hover {
       color: $black;
     }

@@ -137,7 +137,7 @@
 import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import { timetableClient, profileClient } from '@/apis';
+import { selectClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import { semesterArray } from '@/utils/config';
 import {
@@ -354,8 +354,8 @@ export default defineComponent({
           key: messageKey,
           duration: 0,
         });
-        timetableClient
-          .replaceSelectedCourses(this.semester, [...selectedCoursesIds])
+        selectClient
+          .replaceSelectedLessons([...selectedCoursesIds], this.semester)
           .then(() => {
             // TODO: 根据后端响应进行处理
             hide();
@@ -398,8 +398,8 @@ export default defineComponent({
           if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
             this.fetchSelectedCourses();
             // 顺便更新用户信息
-            profileClient
-              .getUserProfile({})
+            userClient
+              .getUserInfo({})
               .then((profile) => {
                 this.setUserProfile(profile);
               })
@@ -425,8 +425,8 @@ export default defineComponent({
         key: messageKey,
         duration: 0,
       });
-      timetableClient
-        .getSelectedCourses(this.semester)
+      selectClient
+        .getSelectedLessonIds(this.semester)
         .then((res: number[]) => {
           this.setHasFetchedSelectedCourses();
           hide();
@@ -448,7 +448,7 @@ export default defineComponent({
         })
         .catch((err) => {
           hide();
-          if (err.response.status !== 401) {
+          if (!err.response || err.response.status !== 401) {
             this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
           }
           this.isOffline = true;
@@ -552,13 +552,13 @@ export default defineComponent({
       // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline && !this.selectedCoursesIds.has(courseId)) {
-        timetableClient
-          .addSelectedCourse(courseId)
+        selectClient
+          .addSelectedLesson(courseId, this.semester)
           .then(() => {
             // TODO: 后端应该返回有效响应
           })
           .catch((err) => {
-            if (err.response.status !== 401) {
+            if (!err.response || err.response.status !== 401) {
               this.$message.error('数据同步失败！进入离线模式');
             }
             this.isOffline = true;
@@ -593,13 +593,13 @@ export default defineComponent({
       // }
       // 若用户已登录，向后端发送请求
       if (this.isUserLoggedIn && !this.isOffline && this.selectedCoursesIds.has(courseId)) {
-        timetableClient
-          .removeSelectedCourse(courseId)
+        selectClient
+          .removeSelectedLesson(courseId, this.semester)
           .then(() => {
             // TODO: 后端应该返回有效响应
           })
           .catch((err) => {
-            if (err.response.status !== 401) {
+            if (!err.response || err.response.status !== 401) {
               this.$message.error('数据同步失败！进入离线模式');
             }
             this.isOffline = true;

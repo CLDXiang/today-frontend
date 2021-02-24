@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { mapGetters, mapMutations } from 'vuex';
-import { authClient, profileClient } from '@/apis';
+import { authClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 
@@ -76,13 +76,13 @@ export default defineComponent({
   mounted() {
     // 若用户已登录，跳转至个人首页
     if (this.userLoggedIn) {
-      this.$router.push('/me');
+      this.$router.push('/user');
     }
   },
   methods: {
     ...mapMutations(['setUserProfile']),
     getProfile() {
-      profileClient.getUserProfile({})
+      userClient.getUserInfo({})
         .then((profile) => {
           this.setUserProfile(profile);
         })

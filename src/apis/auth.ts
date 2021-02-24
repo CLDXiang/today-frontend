@@ -1,48 +1,31 @@
-import axios from 'axios';
-import { API_URL } from '@/utils/config';
+import API from '@/utils/axios';
 import store from '@/store';
+import log from '@/utils/log';
 
-interface RespErr {
-  response: {
-    status: number;
-    data: {
-      message: string;
-    };
-  };
-}
-
-interface LoginReq {
+const login = async (req: {
   /** 用户名 */
   username: string;
   /** 密码 */
   password: string;
-}
-
-interface LoginResp {
+}): Promise<{
   // eslint-disable-next-line camelcase
   access_token: string;
   email: string;
   name: string;
-}
+}> => {
+  log.info('authClient.login', req);
+  const { data } = await API.post('auth/login', req);
+  const { access_token: jwtToken, email, name } = data;
+  if (jwtToken) {
+    store.commit('setJwtToken', jwtToken);
+    store.commit('setUser', { name, email });
+  } else {
+    throw new Error('jwtToken no contained in response');
+  }
+  return data;
+};
 
-const login: (req: LoginReq) => Promise<LoginResp> = (req) =>
-  new Promise<LoginResp>((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/login`, req)
-      .then((resp) => {
-        const { access_token: jwtToken, email, name } = resp.data;
-        if (jwtToken) {
-          store.commit('setJwtToken', jwtToken);
-          store.commit('setUser', { name, email });
-        } else {
-          reject(new Error('jwtToken no contained in response'));
-        }
-        return resolve(resp.data);
-      })
-      .catch((err) => reject(err));
-  });
-
-interface RegisterReq {
+const register = async (req: {
   /** 用户名 */
   name: string;
   /** 验证码 */
@@ -51,61 +34,35 @@ interface RegisterReq {
   password: string;
   /** 邮箱 */
   email: string;
-}
-
-interface RegisterResp {
+}): Promise<{
   result: 'success' | 'failed';
-}
+}> => {
+  log.info('authClient.register', req);
+  const { data } = await API.post('auth/register', req);
+  return data;
+};
 
-const register: (req: RegisterReq) => Promise<RegisterResp> = (req) =>
-  new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/register`, req)
-      .then((resp) => {
-        resolve(resp.data);
-      })
-      .catch((err) => reject(err as RespErr));
-  });
+const requestCodeRegister = async (req: { email: string }): Promise<null> => {
+  log.info('authClient.requestCodeRegister', req);
+  await API.post<null>('auth/mail', { ...req, type: 'register' });
+  return null;
+};
 
-interface RequestCodeReq {
-  email: string;
-}
+const requestCodeForForgotPassword = async (req: { email: string }): Promise<null> => {
+  log.info('authClient.requestCodeForForgotPassword', req);
+  await API.post<null>('auth/mail', { ...req, type: 'reset' });
+  return null;
+};
 
-const requestCodeRegister: (req: RequestCodeReq) => Promise<never> = (req) =>
-  new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/register-mail`, req)
-      .then(() => {
-        resolve();
-      })
-      .catch((err) => reject(err as RespErr));
-  });
-
-const requestCodeForForgotPassword: (req: RequestCodeReq) => Promise<never> = (req) =>
-  new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/auth/password`, req)
-      .then(() => {
-        resolve();
-      })
-      .catch((err) => reject(err as RespErr));
-  });
-
-interface ModifyPasswordReq {
+const modifyPassword = async (req: {
   email: string;
   code: number;
   password: string;
-}
-
-const modifyPassword: (req: ModifyPasswordReq) => Promise<never> = (req) =>
-  new Promise((resolve, reject) => {
-    axios
-      .put(`${API_URL}/auth/password`, req)
-      .then(() => {
-        resolve();
-      })
-      .catch((err) => reject(err as RespErr));
-  });
+}): Promise<null> => {
+  log.info('authClient.modifyPassword', req);
+  await API.put<null>('auth/password', req);
+  return null;
+};
 
 const authClient = {
   /** 登录 */

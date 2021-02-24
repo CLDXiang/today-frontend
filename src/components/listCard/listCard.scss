@@ -1,0 +1,46 @@
+.list-card {
+  border-radius: 8px;
+  background-color: #fff;
+  // border: 3px solid #7edfe7;
+  //margin-bottom: 8px;
+  box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
+  padding: 10px 13px;
+
+  > .list-card__main-field {
+      display: flex;
+
+      > .list-card__avatar-field {
+        max-width: 60px;
+        flex: 1;
+        margin-right: 6px;
+        cursor: pointer;
+      }
+
+      > .list-card__content-field {
+          flex: 6;
+          
+          > .list-card__top-field {
+            height: 28px;
+            display: flex;
+            justify-content: space-between;
+          }
+
+          > .list-card__middle-field {
+            min-height: 22px;
+            text-align: left;
+          }
+      }
+  }
+
+  > .list-card__bottom-field {
+    height: 22px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+  }
+}

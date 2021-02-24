@@ -1,11 +1,15 @@
 import { createStore } from 'vuex';
-import storage from '@/utils/localStorage';
+import { localStorage, sessionStorage } from '@/utils/storage';
 import { Sections } from '@/views/Timetable/types';
+import { RateForm } from '@/components/listCard';
 
 import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
-const persistedState = ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'];
+const persistedState = {
+  localStorage: ['user', 'profile', 'selectedCoursesIds', 'selectedSectionsByDay'],
+  sessionStorage: ['ratingForms'],
+};
 
 const store = createStore({
   state: {
@@ -13,14 +17,13 @@ const store = createStore({
     /** 视窗大小，即 window.innerHeight */
     innerHeight: 667,
     user: {
-      // eslint-disable-next-line camelcase
-      jwt_token: '',
+      jwtToken: '',
       id: '',
-      name: '',
-      bio: '',
-      avatar: '',
-      nickName: '',
       email: '',
+      name: '',
+      nickname: '',
+      avatar: '',
+      bio: '',
     },
     profile: {
       notifications: [],
@@ -50,16 +53,18 @@ const store = createStore({
     selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
     hoveredCourseId: -1,
 
-    // localStorage 中保存的 state
-    ...storage.getVuexStates(),
+    /** 点评表单页缓存 */
+    ratingForms: {} as { [lectureId: string]: RateForm },
+
+    // storage 中保存的 state
+    ...localStorage.getVuexStates(),
+    ...sessionStorage.getVuexStates(),
   },
   mutations: {
     setJwtToken(state, token) {
-      // eslint-disable-next-line camelcase
-      state.user.jwt_token = token;
+      state.user.jwtToken = token;
       const payload = decodeURIComponent(escape(window.atob(token.split('.')[1])));
-      state.user.id = JSON.parse(payload).sub;
-      // log.info('set jwt_token', token);
+      state.user.id = JSON.parse(payload).sub.toString();
     },
     setUser(state, payload: { name: string; email: string }) {
       state.user.name = payload.name;
@@ -67,16 +72,17 @@ const store = createStore({
     },
     logout(state) {
       // log.info('logout');
-      // eslint-disable-next-line camelcase
-      state.user.jwt_token = '';
-      state.user.name = '未登录';
+      state.user.jwtToken = '';
+      state.user.name = '';
+      state.user.nickname = '';
+      state.user.id = '';
       state.user.email = '';
       state.hasFetchedSelectedCourses = false;
     },
     setUserProfile(state, profile) {
       state.user.avatar = profile.avatar;
       state.user.bio = profile.bio;
-      state.user.nickName = profile.nickName;
+      state.user.nickname = profile.nickname;
     },
     showDetailDialog(state) {
       state.isDetailDialogVisible = true;
@@ -138,18 +144,34 @@ const store = createStore({
     setInnerHeight(state, newInnerHeight: number) {
       state.innerHeight = newInnerHeight;
     },
+    /** 设置 ratingForms */
+    setRatingForm(state, payload: { lectureId: string, formData: RateForm }) {
+      const { lectureId, formData } = payload;
+      state.ratingForms[lectureId] = formData;
+    },
   },
   getters: {
-    userLoggedIn: (state) => state.user.jwt_token !== '',
+    userLoggedIn: (state) => !!state.user.jwtToken,
   },
 });
 
-// 监听需要持久化保存的 state，在变化时存入 localStorage
-persistedState.forEach((stateKey) => {
+// 监听需要持久化保存的 state，在变化时存入 storage
+persistedState.localStorage.forEach((stateKey) => {
   store.watch(
     (state) => state[stateKey],
     (newValue) => {
-      storage.setVuexState(stateKey, newValue);
+      localStorage.setVuexState(stateKey, newValue);
+    },
+    {
+      deep: true,
+    },
+  );
+});
+persistedState.sessionStorage.forEach((stateKey) => {
+  store.watch(
+    (state) => state[stateKey],
+    (newValue) => {
+      sessionStorage.setVuexState(stateKey, newValue);
     },
     {
       deep: true,

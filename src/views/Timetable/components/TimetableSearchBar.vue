@@ -594,7 +594,7 @@ export default defineComponent({
 
 .result-line:first-child {
   font-size: 18px;
-  color: #4f4f4f;
+  color: $gray2;
 }
 
 .result-line.cut {
@@ -602,11 +602,11 @@ export default defineComponent({
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  color: #4f4f4f;
+  color: $gray2;
 }
 
 .result-line--ts {
   font-size: 12px;
-  color: #828282;
+  color: $gray3;
 }
 </style>

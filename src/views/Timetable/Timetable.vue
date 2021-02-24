@@ -321,17 +321,17 @@ export default defineComponent({
     moveSemester(step: -1 | 1) {
       if (step === -1 && this.semesterIndex === 0) {
         this.$message.warn('已经是最后一个学期啦', 0.5);
-        return false;
+        return;
       } if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
         this.$message.warn('已经是最新学期啦', 0.5);
-        return false;
+        return;
       }
       this.semesterIndex += step;
       this.semester = semesterArray[this.semesterIndex].key;
       this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
       this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
       this.getCoursesFromJSON(semesterArray[this.semesterIndex].jsonFileName);
-      return true;
+      this.fetchSelectedCourses();
     },
     areSetsSame(set1: Set<number>, set2: Set<number>) {
       if (set1.size !== set2.size) return false;

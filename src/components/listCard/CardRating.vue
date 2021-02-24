@@ -156,6 +156,7 @@ export default defineComponent({
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-all;
+    white-space: pre-wrap;
   }
   > .list-card__main-field .list-card__content-field .list-card__middle-field {
     margin-bottom: 10px;

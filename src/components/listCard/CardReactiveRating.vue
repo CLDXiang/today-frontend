@@ -256,6 +256,7 @@ export default defineComponent({
     // overflow: hidden;
     // text-overflow: ellipsis;
     // word-break: break-all;
+    white-space: pre-wrap;
     margin-bottom: 10px;
   }
   .card-reactive-rating__reactions {

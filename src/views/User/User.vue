@@ -49,8 +49,7 @@
           </div>
           <span class="bio text-light">
             {{
-              userProfile.bio ||
-                '这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名这是我的个性签名'
+              userProfile.bio || ''
             }}
           </span>
         </div>
@@ -110,14 +109,14 @@
           </f-tab-pane>
           <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
-            v-if="isCurrentUser && false"
+            v-if="isCurrentUser() && false"
             tab="关注"
           >
             <common-list :contents="watchList" />
           </f-tab-pane>
           <!-- FIXME: 下方功能实现后删去 v-if="false" -->
           <f-tab-pane
-            v-if="isCurrentUser && false"
+            v-if="isCurrentUser() && false"
             tab="足迹"
           >
             <common-list :contents="historyList" />
@@ -206,10 +205,24 @@ export default defineComponent({
     ...mapGetters(['userLoggedIn']),
   },
   created() {
+    if (this.isCurrentUser()) {
+      this.userProfile = {
+        avatar: this.user.avatar,
+        bio: this.user.bio,
+        name: this.user.name,
+        nickname: this.user.nickname,
+        fans: this.user.fans,
+        watchers: this.user.watchers,
+        watchees: this.user.watchees,
+      };
+    }
     userClient
       .getUserInfo({ userId: this.userId || this.user.id })
       .then((resp) => {
         this.userProfile = resp;
+        if (this.isCurrentUser()) {
+          this.setUserProfile(resp);
+        }
       })
       .catch(() => {
         // 返回到上一页面
@@ -241,7 +254,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations({ vuexLogout: 'logout' }),
+    ...mapMutations({ vuexLogout: 'logout', setUserProfile: 'setUserProfile' }),
     logout(): void {
       if (this.userLoggedIn) {
         this.vuexLogout();

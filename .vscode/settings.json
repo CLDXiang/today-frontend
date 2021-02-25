@@ -1,4 +1,5 @@
 {
+  "css.validate": false,
   "cSpell.words": [
     "Vuex",
     "camelcase",

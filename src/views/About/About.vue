@@ -1,5 +1,15 @@
 <template>
   <main>
+    <span
+      class="fixed top-4 left-4 cursor-pointer hover:opacity-80"
+      @click="$router.replace('/user')"
+    >
+      <f-icon
+        name="back"
+        :width="12"
+        :height="24"
+      />
+    </span>
     <!-- <about-section title="关于我们">
     </about-section> -->
     <about-section title="联系我们">

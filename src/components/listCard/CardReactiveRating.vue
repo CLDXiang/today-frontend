@@ -22,6 +22,7 @@
             <five-stars
               :score="rating.form.recommended"
               size="12"
+              style="display: inline-flex"
             />
             <span class="card-reactive-rating__five-stars-score">
               {{ rating.form.recommended.toFixed(1) }}

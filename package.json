@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --no-fix",
     "check": "yarn lint && yarn build && echo 'check passed!'",

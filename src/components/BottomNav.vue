@@ -58,6 +58,7 @@ export default defineComponent({
         || /\/login\/?.*$/.test(path)
         || /\/register\/?.*$/.test(path)
         || /\/forgot-password\/?.*$/.test(path)
+        || /\/about\/?.*$/.test(path)
       ) {
         return 'status';
       }

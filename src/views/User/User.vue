@@ -7,6 +7,15 @@
       >
         <div
           class="control-btn"
+          @click="$router.push('/about')"
+        >
+          <f-icon
+            class="text-light"
+            name="question-circle"
+          />
+        </div>
+        <div
+          class="control-btn"
           @click="$router.push('/user/edit')"
         >
           <f-icon

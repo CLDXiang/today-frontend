@@ -25,6 +25,12 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 
+/*
+  FIXME: 移除 AntD 和 SCSS 后升级最新的 tailwindcss postcss autoprefixer
+  https://tailwindcss.com/docs/installation#post-css-7-compatibility-build
+ */
+import './index.css';
+
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 dayjs.locale('zh-cn');

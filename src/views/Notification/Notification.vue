@@ -2,12 +2,6 @@
   <div class="content-box">
     <div class="center-content">
       <div>技术重构中，敬请期待 😊</div>
-      <div>预计于本学期期中退课前上线</div>
-    </div>
-    <div class="bottom-content">
-      如果你希望关注项目进度，在这里联系我们：
-      <br>
-      TODO: 这里放二维码
     </div>
   </div>
 </template>

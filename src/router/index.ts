@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 const Timetable = () => import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
 const Rating = () => import(/* webpackChunkName: "rating" */ '@/views/Rating/Rating.vue');
 const Notification = () => import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
+const About = () => import(/* webpackChunkName: "about" */ '@/views/About/About.vue');
 const User = () => import(/* webpackChunkName: "user" */ '@/views/User/User.vue');
 
 const routes: Array<RouteRecordRaw> = [
@@ -55,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Register',
     component: () => import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/Register.vue'),
   },
+  {
+    path: '/about',
+    name: 'About',
+    component: About,
+  },
   { path: '/*', component: Timetable },
 ];
 
@@ -68,6 +74,7 @@ export const HeapPagePathReges = [
   /\/login$/,
   /\/forgot-password$/,
   /\/register$/,
+  /\/about$/,
 ];
 
 const router = createRouter({

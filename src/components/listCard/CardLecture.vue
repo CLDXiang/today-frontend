@@ -1,67 +1,57 @@
 <template>
-  <div
-    class="list-card card-lecture"
-  >
-    <div class="list-card__main-field">
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
-          <span class="card-lecture__top-lecture-name">
-            {{ lecture.name }}
-          </span>
-          <div class="card-lecture__top-right">
-            <span class="card-lecture__top-rating-stars">
-              <five-stars
-                :score="lecture.score ?? 3"
-                :size="20"
-              />
-            </span>
-            <span class="card-lecture__top-rating-number">
-              {{ (lecture.score ?? 3).toFixed(1) }}
-            </span>
-          </div>
-        </div>
+  <div class="card-lecture py-2.5 px-3 rounded-lg bg-white mb-2">
+    <div class="flex flex-row justify-between mt-1 h-7">
+      <div class="overflow-hidden text-lg whitespace-nowrap overflow-ellipsis">
+        {{ lecture.name }}
+      </div>
+      <div class="flex">
+        <five-stars
+          :score="3"
+          :size="20"
+        />
+        <span class="ml-1 text-gray-400">
+          {{ (lecture.score ?? 3).toFixed(1) }}
+        </span>
       </div>
     </div>
-    <div class="list-card__bottom-field">
-      <span class="card-lecture__teacher-name">
+    <div class="flex flex-row justify-between h-6 mt-2">
+      <div class="overflow-hidden text-gray-400 overflow-ellipsis whitespace-nowrap">
         {{ lecture.teachers.join(' ') }}
-      </span>
-      <div class="card-lecture__bottom-icon-field">
-        <!-- FIXME: 实现 reaction 后显示 -->
-        <span
+      </div>
+      <!-- TODO: 实现 reactoin 后显示 -->
+      <div class="flex">
+        <div
           v-if="false"
-          class="card-lecture__bottom-icon"
+          class="ml-4"
         >
           <f-icon
             name="reaction"
             size="14"
           />
-          <span class="card-lecture__bottom-statistics">
-            {{ lecture.reactionCount }}
-          </span>
-        </span>
-        <span class="card-lecture__bottom-icon">
-          <f-icon
-            name="chat"
-            size="14"
-          />
-          <span class="card-lecture__bottom-statistics">
-            {{ lecture.ratingCount }}
-          </span>
-        </span>
-        <!-- FIXME: 实现收藏课程后显示 -->
-        <span
+        </div>
+        <div
           v-if="false"
-          class="card-lecture__bottom-icon"
+          class="ml-2"
         >
           <f-icon
             name="heart"
             size="14"
           />
-          <span class="card-lecture__bottom-statistics">
-            {{ lecture.likeCount }}
+        </div>
+        <div class="flex ml-2 text-gray-400">
+          <div class="flex flex-col ">
+            <!-- HACK: 加上一个 div 实现 SVG 居中 -->
+            <div class="h-0.5" />
+            <f-icon
+              class="align-baseline"
+              name="chat"
+              size="14"
+            />
+          </div>
+          <span class="ml-1 ">
+            {{ lecture.ratingCount }}
           </span>
-        </span>
+        </div>
       </div>
     </div>
   </div>
@@ -83,53 +73,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang='scss' scoped>
+<style scoped>
 .card-lecture {
-  .list-card__top-field {
-    display: flex;
-    justify-content: space-between;
-    > .card-lecture__top-right {
-      display: flex;
-    }
-  }
-  .list-card__bottom-field {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  .card-lecture__top-lecture-name {
-    color: $gray2;
-    font-size: 18px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .card-lecture__top-rating-number {
-    margin-left: 6px;
-    color: $gray3;
-  }
-  .card-lecture__teacher-name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: $gray3;
-    font-size: 14px;
-  }
-  .card-lecture__bottom-icon-field {
-    display: flex;
-    color: $gray3;
-    .card-lecture__bottom-icon {
-      margin-left: 10px;
-      display: flex;
-      align-items: center;
-      .card-lecture__bottom-statistics {
-        margin-left: 4px;
-        font-size: 12px;
-      }
-    }
-  }
-}
-five-stars {
-  display: inline;
+    box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
 }
 </style>

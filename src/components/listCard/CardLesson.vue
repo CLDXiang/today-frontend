@@ -12,7 +12,7 @@
       <div class="overflow-hidden text-gray-400 overflow-ellipsis whitespace-nowrap">
         {{ lesson.teachers.join(' ') }}
       </div>
-      <div class="">
+      <div>
         {{ lesson.semester }}
       </div>
     </div>

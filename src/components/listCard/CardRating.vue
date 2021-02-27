@@ -1,50 +1,43 @@
 <template>
-  <div class="list-card card-rating">
-    <div class="list-card__main-field">
+  <div class="card-rating py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
+    <div class="flex mt-3">
       <div
-        class="list-card__avatar-field"
+        class="flex-shrink-0 w-10"
         @click.stop="handleClickAvatar"
       >
         <img
-          class="avatar"
           :src="processAvatar(rating.creator.avatar)"
+          class="w-10 h-10 rounded-full"
         >
       </div>
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
+      <div class="flex-grow ml-2">
+        <div class="flex justify-between">
           <span
-            class="card-rating__top-nickname"
+            class=""
             @click.stop="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
           </span>
-          <span class="card-rating__top-datetime">
+          <span class="text-sm text-gray-400 card-rating__top-datetime">
             {{ timeDiff }}
           </span>
         </div>
-        <div
-          class="list-card__middle-field"
-        >
-          <span class="card-rating__content">
-            {{ rating.form.content }}
-          </span>
+        <div class="pt-2 overflow-hidden text-left break-all whitespace-pre-wrap max-h-20 overflow-ellipsis line-limit">
+          {{ rating.form.content }}
         </div>
       </div>
     </div>
-    <div
-      class="list-card__bottom-field"
-    >
-      <span
+    <div class="flex justify-between mt-1">
+      <div
         :class="courseCardColor"
-        class="card-rating__bottom-class-info"
+        class="text-sm"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
-      </span>
-      <span class="card-rating__bottom-icon-field">
+      </div>
+      <div>
         <!-- FIXME: 实现 reaction 后显示 -->
         <span
           v-if="false"
-          class="card-rating__bottom-icon"
         >
           <span>
             <f-icon
@@ -53,7 +46,7 @@
             />
           </span>
           <span
-            class="card-rating__bottom-statistics"
+            class=""
           >
             {{ rating.reaction.count }}
           </span>
@@ -61,31 +54,30 @@
         <!-- FIXME: 实现评论后显示 -->
         <span
           v-if="false"
-          class="card-rating__bottom-icon"
+          class=""
         >
           <f-icon
             name="chat"
             size="14"
           />
-          <span class="card-rating__bottom-statistics">
+          <span class="">
             {{ rating.commentCount }}
           </span>
         </span>
         <!-- FIXME: 实现收藏后显示 -->
         <span
           v-if="false"
-          class="card-rating__bottom-icon"
         >
           <f-icon
             :style="{color: starColor}"
             :name="rating.starred ? 'heart-fill' : 'heart'"
             size="14"
           />
-          <span class="card-rating__bottom-statistics">
+          <span class="">
             {{ rating.starCount }}
           </span>
         </span>
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -128,61 +120,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang='scss' scoped>
-@import '@/scss/_timetable';
-
+<style scoped>
 .card-rating {
-  padding: 16px 16px 10px 16px;
+  box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
 }
-
-.card-rating {
-  .card-rating__top-nickname {
-    color: $primary-color;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  .card-rating__top-datetime {
-    color: $gray3;
-    font-size: 12px;
-  }
-  .card-rating__content {
-    color: #979797;
-    text-align: left;
-    color: $gray2;
-    font-size: 14px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    white-space: pre-wrap;
-  }
-  > .list-card__main-field .list-card__content-field .list-card__middle-field {
-    margin-bottom: 10px;
-  }
-  .card-rating__bottom-class-info {
-    font-size: 12px;
-    border-radius: 20px;
-    padding: 2px 9px;
-    color: $gray2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .card-rating__bottom-icon-field {
-    display: flex;
-    color: $gray3;
-    .card-rating__bottom-icon {
-      margin-left: 10px;
-      display: flex;
-      align-items: flex-start;
-      .card-rating__bottom-statistics {
-        margin-left: 4px;
-        font-size: 12px;
-      }
-    }
-  }
+.line-limit {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
 }
 </style>

@@ -1,0 +1,36 @@
+src
+├── apis
+├── App.vue
+├── ARCHITECTURE
+├── assets
+├── components
+├── composables
+├── index.css
+├── main.ts
+├── registerServiceWorker.ts
+├── router
+├── scss
+├── shims-vue.d.ts
+├── store
+├── utils
+└── views
+
+## components
+
+### listcard
+
+原本想设计统一的样式然后再根据不同的卡片做调整，实践下来因为卡片之间的差距
+还是太大了、实际上不如直接单个单个写，最后还是选择了分开写。
+
+card-lecture
++------------------+--------------------+
+|  lecture-name    |   five-stars       |
+|                  |                    |
++------------------+--------------------+
+|  teacher-name    |   icons            |
+|                  |                    |
++------------------+---------------------
+
+课程和老师的名字注意超出的地方省略（white-space: nowrap & overflow: hidden 
+& text-overflow: ellipsis）。
+右下角的 svg 图标用了一点小 hack 来保持居中，具体见组件内。

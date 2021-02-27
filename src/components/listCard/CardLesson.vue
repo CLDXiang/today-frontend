@@ -1,22 +1,18 @@
 <template>
-  <div class="list-card card-lesson">
-    <div class="list-card__main-field">
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
-          <span class="card-lesson__top-lesson-name">
-            {{ lesson.name }}
-          </span>
-          <div class="card-lesson__top-right">
-            {{ lesson.codeFull }}
-          </div>
-        </div>
+  <div class="card-lesson py-2.5 px-3 rounded-lg">
+    <div class="flex flex-row justify-between mt-1 h-7">
+      <div class="overflow-hidden text-lg whitespace-nowrap overflow-ellipsis">
+        {{ lesson.name }}
+      </div>
+      <div>
+        {{ lesson.codeFull }}
       </div>
     </div>
-    <div class="list-card__bottom-field">
-      <span class="card-lesson__teacher-name">
+    <div class="flex flex-row justify-between h-6 mt-2">
+      <div class="overflow-hidden text-gray-400 overflow-ellipsis whitespace-nowrap">
         {{ lesson.teachers.join(' ') }}
-      </span>
-      <div class="card-lesson__smester">
+      </div>
+      <div class="">
         {{ lesson.semester }}
       </div>
     </div>
@@ -35,38 +31,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-// TODO: 这个 Card 样式并未细调
+<style scoped>
 .card-lesson {
-  .list-card__top-field {
-    display: flex;
-    justify-content: space-between;
-    > .card-lecture__top-right {
-      display: flex;
-    }
-  }
-  .list-card__bottom-field {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  .card-lesson__top-lesson-name {
-    color: $gray2;
-    font-size: 18px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .card-lesson__teacher-name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: $gray3;
-    font-size: 14px;
-  }
-  .card-lesson__semester {
-    display: flex;
-    color: $gray3;
-  }
+    box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
 }
 </style>

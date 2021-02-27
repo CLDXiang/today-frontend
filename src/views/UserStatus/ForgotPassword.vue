@@ -18,6 +18,7 @@
         <f-input
           v-model="code"
           label="验证码"
+          hint="如果你有还未使用的验证码，直接填写即可"
           outlined
           required
         />

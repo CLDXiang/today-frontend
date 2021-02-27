@@ -19,6 +19,7 @@
         <f-input
           v-model="code"
           label="验证码"
+          hint="若有未使用的码，可直接填写"
           outlined
           required
         />

@@ -1,5 +1,14 @@
 import {
-  defineComponent, PropType, ref, Teleport, VNode, Transition,
+  defineComponent,
+  PropType,
+  ref,
+  Teleport,
+  VNode,
+  Transition,
+  nextTick,
+  onMounted,
+  onUpdated,
+  onBeforeUnmount,
 } from 'vue';
 import log from '@/utils/log';
 import { addEventListener } from '@/utils/dom';
@@ -7,8 +16,11 @@ import { cloneElement } from './utils';
 import { PlacementType } from './types';
 import { ContentWrapper } from './components';
 
+// TODO: 加上小三角
+
 export default defineComponent({
   props: {
+    visible: { type: Boolean, required: false },
     /** 触发方式 */
     trigger: { type: String as PropType<'hover' | 'click'>, default: 'hover' },
     /** 相对目标元素的位置 */
@@ -17,11 +29,13 @@ export default defineComponent({
       default: 'top',
     },
   },
-  setup(props) {
+  emits: ['update:visible'],
+  setup(props, { emit }) {
     /** 是否可见 */
-    const visible = ref(false);
-    const setVisible = (value: boolean) => {
-      visible.value = value;
+    const isVisible = ref(props.visible ?? false);
+    const setIsVisible = (value: boolean) => {
+      isVisible.value = value;
+      emit('update:visible', value);
     };
 
     const clickOutsideHandler = ref<{ remove:() => void } | null>(null);
@@ -45,11 +59,11 @@ export default defineComponent({
       if (props.trigger === 'click') {
         if (!clickOutsideHandler.value) {
           clickOutsideHandler.value = addEventListener(document, 'mousedown', () =>
-            setVisible(false));
+            setIsVisible(false));
         }
         if (!touchOutsideHandler.value) {
           touchOutsideHandler.value = addEventListener(document, 'touchstart', () =>
-            setVisible(false));
+            setIsVisible(false));
         }
       }
       // } else {
@@ -57,26 +71,27 @@ export default defineComponent({
       // }
     };
 
+    onMounted(async () => {
+      await nextTick();
+      handleUpdate();
+    });
+
+    onUpdated(async () => {
+      await nextTick();
+      handleUpdate();
+    });
+
+    onBeforeUnmount(() => {
+      clearOutsideHandler();
+    });
+
     return {
-      visible,
-      setVisible,
+      isVisible,
+      setIsVisible,
       clearOutsideHandler,
       handleUpdate,
       defaultRef,
     };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.handleUpdate();
-    });
-  },
-  updated() {
-    this.$nextTick(() => {
-      this.handleUpdate();
-    });
-  },
-  beforeUnmount() {
-    this.clearOutsideHandler();
   },
   render() {
     const defaultSlots = this.$slots.default?.();
@@ -90,10 +105,10 @@ export default defineComponent({
     };
 
     if (this.$props.trigger === 'click') {
-      defaultSlotsProps.onClick = () => this.setVisible(!this.visible);
+      defaultSlotsProps.onClick = () => this.setIsVisible(!this.isVisible);
     } else if (this.$props.trigger === 'hover') {
-      defaultSlotsProps.onMouseenter = () => this.setVisible(true);
-      defaultSlotsProps.onMouseleave = () => this.setVisible(false);
+      defaultSlotsProps.onMouseenter = () => this.setIsVisible(true);
+      defaultSlotsProps.onMouseleave = () => this.setIsVisible(false);
     }
     const triggerNode = cloneElement(defaultSlots?.[0], defaultSlotsProps);
 
@@ -110,8 +125,8 @@ export default defineComponent({
             leave-to-class="opacity-0 scale-50"
           >
             <ContentWrapper
-              visible={this.visible}
-              content={this.$slots.content?.() as (VNode | undefined)}
+              visible={this.isVisible}
+              content={this.$slots.content?.() as VNode | undefined}
               target={this.defaultRef}
               placement={this.placement}
             />

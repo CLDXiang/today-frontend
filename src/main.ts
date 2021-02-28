@@ -6,7 +6,6 @@ import {
   Drawer,
   Badge,
   Dropdown,
-  Popover,
   Slider,
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
@@ -46,7 +45,6 @@ app
   .use(Drawer)
   .use(Badge)
   .use(Dropdown)
-  .use(Popover)
   .use(Slider);
 app.config.globalProperties.$message = message;
 declare module '@vue/runtime-core' {

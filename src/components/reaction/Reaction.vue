@@ -11,7 +11,7 @@
       :count-style="countStyle"
       @click="handleClickEmojiButton(emojiEntry)"
     />
-    <a-popover
+    <f-popover
       v-if="!readonly && availableEmoji.length"
       v-model:visible="addEmojiVisible"
       trigger="click"
@@ -32,13 +32,14 @@
           :size="16"
         />
       </div>
-    </a-popover>
+    </f-popover>
   </div>
 </template>
 
 <script lang="ts">
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import logger from '@/utils/log';
+import { FPopover } from '@/components/common';
 import { EmojiTable, EmojiEntry, EmojiItem } from './types';
 import { compareEmojiEntryByTime, compareEmojiEntryByCount, emojiTable } from './utils';
 import { EmojiButton } from './components';
@@ -46,6 +47,7 @@ import { EmojiButton } from './components';
 export default defineComponent({
   components: {
     EmojiButton,
+    FPopover,
   },
   props: {
     /** reaction 对象 */

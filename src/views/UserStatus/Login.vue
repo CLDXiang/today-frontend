@@ -108,7 +108,6 @@ export default defineComponent({
         })
         .catch((e) => {
           log.error(e);
-          this.$message.warn('登录失败');
         });
     },
     handleKeyDown(e: KeyboardEvent) {

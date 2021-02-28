@@ -3,3 +3,4 @@ export { default as FInput } from './FInput.vue';
 export { default as FSelect } from './FSelect.vue';
 export { default as FTabs } from './FTabs.vue';
 export { default as FTabPane } from './FTabPane.vue';
+export { default as FPopover } from './FPopover';

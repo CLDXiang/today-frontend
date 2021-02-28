@@ -139,6 +139,21 @@ export function calculatePosition(
     }
     default: break;
   }
+
+  // 视口边界处理
+  if (x < 0) {
+    x = 0;
+  }
+  if (y < 0) {
+    y = 0;
+  }
+  if (x > document.body.clientWidth - currentBox.width) {
+    x = document.body.clientWidth - currentBox.width;
+  }
+  if (y > document.body.clientHeight - currentBox.height) {
+    y = document.body.clientHeight - currentBox.height;
+  }
+
   return {
     x, y,
   };

@@ -1,9 +1,10 @@
 import {
-  defineComponent, PropType, ref, Teleport, watch,
+  defineComponent, PropType, ref, Teleport, VNode, Transition,
 } from 'vue';
 import log from '@/utils/log';
-import { addEventListener, cloneElement, calculatePosition } from './utils';
-import { PlacementType, Position } from './types';
+import { addEventListener, cloneElement } from './utils';
+import { PlacementType } from './types';
+import { ContentWrapper } from './components';
 
 export default defineComponent({
   props: {
@@ -37,37 +38,22 @@ export default defineComponent({
     };
 
     const defaultRef = ref<HTMLElement | null>(null);
-    const contentRef = ref<HTMLElement | null>(null);
-    /** 定位点 */
-    const position = ref<Position>({
-      x: 0,
-      y: 0,
-      translateX: '0',
-      translateY: '0',
-    });
-
-    watch(defaultRef, () => {
-      position.value = calculatePosition(contentRef.value, defaultRef.value, props.placement);
-    });
-    watch(contentRef, () => {
-      position.value = calculatePosition(contentRef.value, defaultRef.value, props.placement);
-    });
 
     const handleUpdate = () => {
-      if (visible.value) {
-        if (props.trigger === 'click') {
-          if (!clickOutsideHandler.value) {
-            clickOutsideHandler.value = addEventListener(document, 'mousedown', () =>
-              setVisible(false));
-          }
-          if (!touchOutsideHandler.value) {
-            touchOutsideHandler.value = addEventListener(document, 'touchstart', () =>
-              setVisible(false));
-          }
+      // if (visible.value) {
+      if (props.trigger === 'click') {
+        if (!clickOutsideHandler.value) {
+          clickOutsideHandler.value = addEventListener(document, 'mousedown', () =>
+            setVisible(false));
         }
-      } else {
-        clearOutsideHandler();
+        if (!touchOutsideHandler.value) {
+          touchOutsideHandler.value = addEventListener(document, 'touchstart', () =>
+            setVisible(false));
+        }
       }
+      // } else {
+      //   clearOutsideHandler();
+      // }
     };
 
     return {
@@ -76,8 +62,6 @@ export default defineComponent({
       clearOutsideHandler,
       handleUpdate,
       defaultRef,
-      position,
-      contentRef,
     };
   },
   mounted() {
@@ -116,19 +100,21 @@ export default defineComponent({
       <>
         {triggerNode}
         <Teleport to="body">
-          <div
-            ref="contentRef"
-            onMousedown={(e) => { e.stopPropagation(); }}
-            onTouchstart={(e) => { e.stopPropagation(); }}
-            class={`absolute bg-pink-100 ${this.visible ? '' : 'hidden'}`}
-            style={{
-              left: `${this.position.x}px`,
-              top: `${this.position.y}px`,
-              transform: `translate(${this.position.translateX}, ${this.position.translateY})`,
-            }}
+          <Transition
+            enter-active-class="transition ease-out duration-150 transform"
+            enter-from-class="opacity-0 scale-50"
+            enter-to-class="opacity-100 scale-100"
+            leave-active-class="transition ease-in duration-100 transform"
+            leave-from-class="opacity-100 scale-100"
+            leave-to-class="opacity-0 scale-50"
           >
-            {this.$slots.content?.()}
-          </div>
+            <ContentWrapper
+              visible={this.visible}
+              content={this.$slots.content?.() as (VNode | undefined)}
+              target={this.defaultRef}
+              placement={this.placement}
+            />
+          </Transition>
         </Teleport>
       </>
     );

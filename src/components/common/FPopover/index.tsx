@@ -16,8 +16,6 @@ import { cloneElement } from './utils';
 import { PlacementType } from './types';
 import { ContentWrapper } from './components';
 
-// TODO: 加上小三角
-
 export default defineComponent({
   props: {
     visible: { type: Boolean, required: false },

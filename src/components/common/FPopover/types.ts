@@ -12,4 +12,4 @@ export type PlacementType =
   | 'rightTop'
   | 'rightBottom';
 
-export interface Position { x: number, y: number, translateX: string, translateY: string }
+export interface Position { x: number, y: number }

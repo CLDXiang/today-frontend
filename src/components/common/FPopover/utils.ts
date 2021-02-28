@@ -70,20 +70,16 @@ export function addEventListener(
  * @param offset 悬浮元素与定位点元素距离
  */
 export function calculatePosition(
-  current: HTMLElement | null,
-  target: HTMLElement | null,
+  current: HTMLElement | undefined,
+  target: HTMLElement | undefined,
   placement: PlacementType,
   offset = 8,
 ): Position {
   // TODO: 视口边界的处理
-  // TODO: 能不能用被注释掉的方式而非 transform 实现？现在存在的问题是调用这个函数的时候 current 还没有被渲染，得到的 width, height 都是 0
-
-  let translateX = '0';
-  let translateY = '0';
 
   if (!target) {
     return {
-      x: 0, y: 0, translateX, translateY,
+      x: 0, y: 0,
     };
   }
 
@@ -91,65 +87,47 @@ export function calculatePosition(
   let { x, y } = targetBox;
   if (!current) {
     return {
-      x, y, translateX, translateY,
+      x, y,
     };
   }
 
-  // const currentBox = {
-  //   x: current.clientLeft,
-  //   y: current.clientTop,
-  //   width: current.clientWidth,
-  //   height: current.clientHeight,
-  // };
+  const currentBox = {
+    x: current.clientLeft,
+    y: current.clientTop,
+    width: current.clientWidth,
+    height: current.clientHeight,
+  };
+
+  console.log({ current, currentBox });
 
   switch (placement) {
     case 'top': {
-      // x += targetBox.width / 2 - currentBox.width / 2;
-      // y += -currentBox.height - offset;
-      x += targetBox.width / 2;
-      y += -offset;
-      translateX = '-50%';
-      translateY = '-100%';
+      x += targetBox.width / 2 - currentBox.width / 2;
+      y += -currentBox.height - offset;
       break;
     }
     case 'left': {
-      // x += -currentBox.width - offset;
-      // y += -targetBox.height / 2 + currentBox.height / 2;
-      x += -offset;
-      y += -targetBox.height / 2;
-      translateX = '-100%';
-      translateY = '50%';
+      x += -currentBox.width - offset;
+      y += -targetBox.height / 2 + currentBox.height / 2;
       break;
     }
     case 'right': {
-      // x += +targetBox.width + offset;
-      // y += -targetBox.height / 2 + currentBox.height / 2;
       x += +targetBox.width + offset;
-      y += -targetBox.height / 2;
-      translateY = '50%';
+      y += -targetBox.height / 2 + currentBox.height / 2;
       break;
     }
     case 'bottom': {
-      // x += targetBox.width / 2 - currentBox.width / 2;
-      // y += targetBox.height + offset;
-      x += targetBox.width / 2;
+      x += targetBox.width / 2 - currentBox.width / 2;
       y += targetBox.height + offset;
-      translateX = '-50%';
       break;
     }
     case 'topLeft': {
-      // y += -currentBox.height - offset;
-      y += -offset;
-      translateY = '-100%';
+      y += -currentBox.height - offset;
       break;
     }
     case 'topRight': {
-      // x += -currentBox.width + targetBox.width;
-      // y += -currentBox.height - offset;
-      x += targetBox.width;
-      y += -offset;
-      translateX = '-100%';
-      translateY = '-100%';
+      x += -currentBox.width + targetBox.width;
+      y += -currentBox.height - offset;
       break;
     }
     case 'bottomLeft': {
@@ -157,26 +135,17 @@ export function calculatePosition(
       break;
     }
     case 'bottomRight': {
-      // x += -currentBox.width + targetBox.width;
-      // y += targetBox.height + offset;
-      x += targetBox.width;
+      x += -currentBox.width + targetBox.width;
       y += targetBox.height + offset;
-      translateX = '-100%';
       break;
     }
     case 'leftTop': {
-      // x += -currentBox.width - offset;
-      x += -offset;
-      translateX = '-100%';
+      x += -currentBox.width - offset;
       break;
     }
     case 'leftBottom': {
-      // x += -currentBox.width - offset;
-      // y += -currentBox.height + targetBox.height;
-      x += -offset;
-      y += targetBox.height;
-      translateX = '-100%';
-      translateY = '-100%';
+      x += -currentBox.width - offset;
+      y += -currentBox.height + targetBox.height;
       break;
     }
     case 'rightTop': {
@@ -184,16 +153,13 @@ export function calculatePosition(
       break;
     }
     case 'rightBottom': {
-      // x += +targetBox.width + offset;
-      // y += -currentBox.height + targetBox.height;
       x += +targetBox.width + offset;
-      y += targetBox.height;
-      translateY = '-100%';
+      y += -currentBox.height + targetBox.height;
       break;
     }
     default: break;
   }
   return {
-    x, y, translateX, translateY,
+    x, y,
   };
 }

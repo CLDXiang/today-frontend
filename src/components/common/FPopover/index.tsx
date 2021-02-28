@@ -37,7 +37,7 @@ export default defineComponent({
       }
     };
 
-    const defaultRef = ref<HTMLElement | null>(null);
+    const defaultRef = ref<HTMLElement | undefined>(undefined);
 
     const handleUpdate = () => {
       // if (visible.value) {

@@ -1,6 +1,7 @@
 import {
   defineComponent, PropType, ref, VNode, nextTick, watch,
 } from 'vue';
+import { useWindowResize } from '@/composables';
 import { calculatePosition } from '../utils';
 import { PlacementType, Position } from '../types';
 
@@ -28,6 +29,12 @@ export const ContentWrapper = defineComponent({
     watch(() => props.visible, async (value) => {
       if (value) {
         await nextTick();
+        position.value = calculatePosition(contentRef.value, props.target, props.placement);
+      }
+    });
+
+    useWindowResize(() => {
+      if (props.visible) {
         position.value = calculatePosition(contentRef.value, props.target, props.placement);
       }
     });

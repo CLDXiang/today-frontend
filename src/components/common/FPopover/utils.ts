@@ -44,24 +44,6 @@ export function cloneElement(vNode?: VNode, nodeProps = {}, mergeRef = false) {
   return node;
 }
 
-/** 封装 addEventListener，提供 remove 方法 */
-export function addEventListener(
-  target: Document | HTMLElement,
-  eventType: any,
-  cb: (this: HTMLElement, ev: any) => any,
-) {
-  if (target.addEventListener) {
-    target.addEventListener(eventType, cb);
-  }
-  return {
-    remove: () => {
-      if (target.removeEventListener) {
-        target.removeEventListener(eventType, cb);
-      }
-    },
-  };
-}
-
 /**
  * 计算悬浮元素相对视口的偏移量
  * @param current 悬浮元素
@@ -97,8 +79,6 @@ export function calculatePosition(
     width: current.clientWidth,
     height: current.clientHeight,
   };
-
-  console.log({ current, currentBox });
 
   switch (placement) {
     case 'top': {

@@ -2,7 +2,8 @@ import {
   defineComponent, PropType, ref, Teleport, VNode, Transition,
 } from 'vue';
 import log from '@/utils/log';
-import { addEventListener, cloneElement } from './utils';
+import { addEventListener } from '@/utils/dom';
+import { cloneElement } from './utils';
 import { PlacementType } from './types';
 import { ContentWrapper } from './components';
 

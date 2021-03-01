@@ -372,7 +372,7 @@ export default defineComponent({
       }
       this.hideConflictDialog();
     },
-    getCoursesFromJSON(filePathOrigin = 'lessons_344_2020-2021_fall.json') {
+    getCoursesFromJSON(filePathOrigin: string) {
       const filePath = `lessons/${filePathOrigin}`;
       this.isLoadingCourses = true;
       axios

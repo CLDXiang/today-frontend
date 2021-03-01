@@ -6,7 +6,7 @@
         name="left"
         :height="16"
         :width="12"
-        class="icon"
+        :class="`icon ${hideLeft ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickLeft"
       />
       <span class="semester__name">
@@ -16,7 +16,7 @@
         name="right"
         :height="16"
         :width="12"
-        class="icon"
+        :class="`icon ${hideRight ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickRight"
       />
     </div>
@@ -42,6 +42,8 @@ export default defineComponent({
   },
   props: {
     semester: { type: String, required: true },
+    hideLeft: { type: Boolean, default: false },
+    hideRight: { type: Boolean, default: false },
   },
   emits: ['click-menu-button', 'click-left', 'click-right'],
   data() {
@@ -55,10 +57,14 @@ export default defineComponent({
       this.$emit('click-menu-button');
     },
     handleClickLeft() {
-      this.$emit('click-left');
+      if (!this.hideLeft) {
+        this.$emit('click-left');
+      }
     },
     handleClickRight() {
-      this.$emit('click-right');
+      if (!this.hideRight) {
+        this.$emit('click-right');
+      }
     },
   },
 });
@@ -84,7 +90,6 @@ export default defineComponent({
     display: flex;
     align-items: baseline;
     > .icon {
-      cursor: pointer;
       color: $primary-color;
     }
     > .semester__name {

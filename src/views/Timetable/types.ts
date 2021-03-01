@@ -1,64 +1,54 @@
 /* eslint-disable camelcase */
 /** 原始上课时间段结构体（来自 JSON 文件） */
 export interface RawTimeSlot {
-  /** 时间段编号（仅对该课程） */
-  id: number;
-  /** 时间段编号（全局） */
-  aid: number;
-  /** 课程 ID */
-  cid: number;
-  /** 星期 */
-  day: number;
-  /** 节次 */
-  section: string;
+  /** 课程 Id */
+  cid: number
+  /** 课时范围，1-2 对应第一至第二节课 */
+  section: string
   /** 上课地点 */
-  place: string;
-  /** 教室容量 */
-  capacity: string;
-  /** 起止周 */
-  week: string;
-  /** 教师 */
-  teacher: string[];
+  place: string
+  /** 星期几，1 对应星期一 */
+  day: number
+  /** 上课周语义描述 */
+  week: string
 }
 
 /** 原始课程数据结构体（来自 JSON 文件） */
 export interface RawCourse {
-  /** 课程 ID */
-  id: number;
-  /** 课程序号 */
-  code_id: string;
   /** 学期 */
-  semester: string;
-  /** 课程代码 */
-  code: string;
-  /** 课程名称 */
-  name: string;
-  /** 学分 */
-  credit: number;
+  semester: string
   /** 开课院系 */
-  department: string;
+  department: string
+  /** 时间段 */
+  time_slot: RawTimeSlot[]
   /** 校区 */
-  campus: string;
-  /** 授课语言 */
-  language: string;
-  /** 备注 */
-  remark: string;
+  campus: string
+  /** 课程代码 */
+  code: string
+  /** 分类 */
+  category: string
+  /** 学分 */
+  credit: number
   /** 考试类型 */
-  exam_type: string;
+  exam_type: string
   /** 考试时间 */
-  exam_time: string;
-  /** 允许期中退课 */
-  drop: string;
-  /** 第三轮选课限制 */
-  r3limit: string;
-  /** 上课时间段 */
-  time_slot: RawTimeSlot[];
-  /** 人数上限 */
-  max_student: number;
-  /** 最大公选人数 */
-  max_public: number;
-  /** 实际选课人数 */
-  cur_student: number;
+  exam_time: string
+  /** Id */
+  id: number
+  /** 课程名 */
+  name: string
+  /** 课程序号 */
+  code_id: string
+  /** 备注 */
+  remark: string
+  /** 教师，用 , 分隔 */
+  teachers: string
+  /** 周学时 */
+  week_hour: number
+  /** 是否可以期中退课 */
+  drop: boolean
+  /** 选课人数上限 */
+  max_student: number
 }
 
 /** 课程 ID 到数据映射集 */
@@ -117,8 +107,6 @@ export interface CourseDetailInfoTimeSlot {
   section: [number, number];
   /** 上课地点 */
   place: string;
-  /** 授课教师 */
-  teachers: string;
 }
 
 /** 课程详情信息（展示用） */

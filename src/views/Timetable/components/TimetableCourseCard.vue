@@ -22,13 +22,6 @@
       class="course-place"
       :style="{'-webkit-line-clamp': lines.place }"
     >{{ `(${section.currentSlot.week})${section.currentSlot.place}` }}</span>
-    <span
-      v-if="lines.teacher > 0"
-      class="course-teacher"
-      :style="{'-webkit-line-clamp': lines.teacher }"
-    >{{
-      section.currentSlot.teacher.join(',')
-    }}</span>
   </div>
 </template>
 
@@ -48,7 +41,6 @@ export default defineComponent({
         name: 0,
         code: 0,
         place: 0,
-        teacher: 0,
       },
     };
   },
@@ -92,18 +84,16 @@ export default defineComponent({
       name: 2,
       code: 0,
       place: 1,
-      teacher: 0,
     };
     const linesNeed = {
       name: needLines(this.section.name || ''),
       code: needLines(`(${this.section.code_id || ''})`),
       place: needLines(`(${this.section.currentSlot.week})${this.section.currentSlot.place}`),
-      teacher: needLines(this.section.currentSlot.teacher.join(',') || ''),
     };
 
     let leftLines = this.section.sectionsArray.length * 4;
     /** 给 field 字段再分 n 行，返回是否用完所有空间 */
-    const giveLines = (field: 'name' | 'code' | 'place' | 'teacher', n: number) => {
+    const giveLines = (field: 'name' | 'code' | 'place', n: number) => {
       const needMore = linesNeed[field] - lines[field]; // 还需要多少
       if (needMore > 0) {
         const linesToAdd = Math.min(n, leftLines, needMore);
@@ -141,17 +131,12 @@ export default defineComponent({
         lines.name >= linesNeed.name
         && lines.place >= linesNeed.place
         && lines.code >= linesNeed.code
-        && lines.teacher >= linesNeed.teacher
       ) {
         this.lines = lines;
         return;
       }
-      // 如果还有空间，依次给课程名、教师、课程号分一行
+      // 如果还有空间，依次给课程名、课程号分一行
       if (giveLines('name', 1)) {
-        this.lines = lines;
-        return;
-      }
-      if (giveLines('teacher', 1)) {
         this.lines = lines;
         return;
       }
@@ -201,7 +186,6 @@ export default defineComponent({
 
 .course-name,
 .course-code,
-.course-teacher,
 .course-place {
   // word-wrap: break-word;
   word-break: break-all;
@@ -219,7 +203,6 @@ export default defineComponent({
 }
 
 .course-code,
-.course-teacher,
 .course-place {
   font-size: 10px;
   line-height: 12px;

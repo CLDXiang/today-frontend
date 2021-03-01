@@ -55,7 +55,6 @@
             <tr>
               <th>时间</th>
               <th>地点</th>
-              <th>教师</th>
             </tr>
           </thead>
           <tbody>
@@ -67,7 +66,6 @@
                 {{ `${ts.week} 周，每周周${ts.day}第 ${ts.section} 节` }}
               </td>
               <td>{{ ts.place }}</td>
-              <td>{{ ts.teachers }}</td>
             </tr>
           </tbody>
         </table>
@@ -125,47 +123,35 @@ export default defineComponent({
         codeId: this.course.code_id || '',
         name: this.course.name || '',
         credit: this.course.credit || 0,
-        sectionCount: 0,
+        sectionCount: this.course.week_hour || 0,
         maxStudent: this.course.max_student || 0,
         department: this.course.department || '',
         campus: this.course.campus || '',
         remark: this.course.remark || '',
         examTime: this.course.exam_time || '',
         examType: this.course.exam_type || '',
-        drop: this.course.drop || '',
+        drop: this.course.drop ? '是' : '否',
         timeSlots: [],
-        teachers: '',
+        teachers: this.course.teachers || '',
       };
-      const teachersSet = new Set();
       if (this.course.time_slot) {
         this.course.time_slot.forEach((ts: RawTimeSlot) => {
-          ts.teacher.forEach((teacher) => {
-            if (teacher.trim() !== '') {
-              teachersSet.add(teacher);
-            }
-          });
           const {
             week, day, section, place,
           } = ts;
           const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
 
-          courseInfo.sectionCount += sectionEnd - sectionStart + 1;
+          if (!courseInfo.sectionCount) {
+            courseInfo.sectionCount += sectionEnd - sectionStart + 1;
+          }
           courseInfo.timeSlots.push({
             week,
             day: this.mapDay(day), // 注意此处的对应关系，day 1 对应 周一，而非索引
             section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
             place,
-            teachers:
-              (ts.teacher
-                && ts.teacher
-                  .map((t) => t.trim())
-                  .filter((t) => !!t)
-                  .join(', '))
-              || '',
           });
         });
       }
-      courseInfo.teachers = [...teachersSet].join(', ');
       return courseInfo;
     },
   },

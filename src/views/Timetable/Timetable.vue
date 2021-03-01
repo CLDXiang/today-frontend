@@ -281,17 +281,13 @@ export default defineComponent({
         const {
           id,
           name,
-          // eslint-disable-next-line camelcase
-          time_slot,
+          teachers,
           code,
         } = this.allCourses[lessonId];
-        const teachers = [
-          ...new Set(time_slot.reduce((pv, ts) => [...pv, ...ts.teacher], [] as string[])),
-        ];
         return {
           id,
           name,
-          teachers,
+          teachers: teachers.split(','),
           code,
         };
       });
@@ -490,14 +486,8 @@ export default defineComponent({
       const searchIndex = [] as SearchIndexItem[];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
       Object.entries(this.allCourses).forEach(([courseId, course]) => {
-        const teachers = new Set<string>();
         const timeSlots = [] as SearchIndexItemTimeSlot[];
         course.time_slot.forEach((ts) => {
-          ts.teacher.forEach((teacher) => {
-            if (teacher.trim() !== '') {
-              teachers.add(teacher);
-            }
-          });
           const {
             week, day, section, place,
           } = ts;
@@ -513,22 +503,8 @@ export default defineComponent({
 
         const { name, department } = course;
 
-        // 搜索索引字符串
-        // const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
-        //   (s, ts) =>
-        //     `${s}|${ts.week}周|周${ts.dayText}|星期${ts.dayText}|第${ts.section.join('-')}节|${
-        //       ts.place
-        //     }`,
-        //   '',
-        // )}|${course.code_id}`;
-
-        // const index = `${timeSlots.reduce(
-        //   (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
-        //   '',
-        // )}`;
-
         // 这里提前处理便于直接显示用，如果未来需要单独使用其中的字段可以注释掉，然后在其他地方处理
-        const teachersText = [...teachers].join(', ');
+        const teachersText = course.teachers || '';
         // TODO: 考虑如何把 week 整进来
         const timeSlotsTexts = timeSlots.map(
           (ts) => `${ts.week}周 周${ts.dayText} ${ts.section.join('-')} ${ts.place}`,
@@ -545,7 +521,7 @@ export default defineComponent({
 
         searchIndex.push({
           name,
-          teachers: [...teachers],
+          teachers: course.teachers.split(','),
           department,
           timeSlots,
           codeId: course.code_id,

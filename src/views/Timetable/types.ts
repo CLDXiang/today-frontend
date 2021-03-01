@@ -2,53 +2,53 @@
 /** 原始上课时间段结构体（来自 JSON 文件） */
 export interface RawTimeSlot {
   /** 课程 Id */
-  cid: number
+  cid: number;
   /** 课时范围，1-2 对应第一至第二节课 */
-  section: string
+  section: string;
   /** 上课地点 */
-  place: string
+  place: string;
   /** 星期几，1 对应星期一 */
-  day: number
+  day: number;
   /** 上课周语义描述 */
-  week: string
+  week: string;
 }
 
 /** 原始课程数据结构体（来自 JSON 文件） */
 export interface RawCourse {
   /** 学期 */
-  semester: string
+  semester: string;
   /** 开课院系 */
-  department: string
+  department: string;
   /** 时间段 */
-  time_slot: RawTimeSlot[]
+  time_slot: RawTimeSlot[];
   /** 校区 */
-  campus: string
+  campus: string;
   /** 课程代码 */
-  code: string
+  code: string;
   /** 分类 */
-  category: string
+  category: string;
   /** 学分 */
-  credit: number
+  credit: number;
   /** 考试类型 */
-  exam_type: string
+  exam_type: string;
   /** 考试时间 */
-  exam_time: string
+  exam_time: string;
   /** Id */
-  id: number
+  id: number;
   /** 课程名 */
-  name: string
+  name: string;
   /** 课程序号 */
-  code_id: string
+  code_id: string;
   /** 备注 */
-  remark: string
+  remark: string;
   /** 教师，用 , 分隔 */
-  teachers: string
+  teachers: string;
   /** 周学时 */
-  week_hour: number
+  week_hour: number;
   /** 是否可以期中退课 */
-  drop: boolean
+  drop: boolean;
   /** 选课人数上限 */
-  max_student: number
+  max_student: number;
 }
 
 /** 课程 ID 到数据映射集 */

@@ -59,6 +59,8 @@
     </a-drawer>
     <timetable-head-bar
       :semester="semesterName"
+      :hide-left="semesterIndex === 0"
+      :hide-right="semesterIndex === semesterArray.length - 1"
       @click-menu-button="showSelectedCourseList"
       @click-left="moveSemester(-1)"
       @click-right="moveSemester(1)"
@@ -194,6 +196,7 @@ export default defineComponent({
       semester: '2020-2021学年2学期',
       semesterIndex: 0,
       semesterJsonName: '',
+      semesterArray,
       isLoadingCourses: false,
       /** 课程数据 */
       allCourses: {} as AllCourses,

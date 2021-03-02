@@ -3,6 +3,7 @@
     ref="scroll"
     class="h-full overflow-y-auto"
   >
+    <!-- TODO: 接入后加 skeleton  -->
     <card-comment
       v-for="item in items"
       :key="item.id"
@@ -28,25 +29,33 @@ export default defineComponent({
     active: { type: Boolean, default: false },
   },
   setup(props) {
+    /** 正在加载数据 */
+    const loading = ref(true);
     const userId = inject<string>('userId');
 
     const items = ref<CardCommentItem[]>([]);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
+      loading.value = true;
       commentClient.getCommentList({ userId, limit: 20 }).then((resp) => {
         items.value = resp.data;
+      }).finally(() => {
+        loading.value = false;
       });
     };
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      loading.value = true;
       commentClient.getCommentList({
         userId,
         lastId: items.value[items.value.length - 1].id,
         limit: 20,
       }).then((resp) => {
         items.value = [...items.value, ...resp.data];
+      }).finally(() => {
+        loading.value = false;
       });
     };
 
@@ -71,6 +80,7 @@ export default defineComponent({
     return {
       items,
       scroll,
+      loading,
     };
   },
 });

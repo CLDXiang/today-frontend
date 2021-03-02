@@ -7,7 +7,7 @@
       <div
         v-for="i in 6"
         :key="i"
-        class="p-4 pb-3 mb-2 bg-white rounded-lg h-18"
+        class="p-4 pb-3 mb-2 bg-white rounded-lg h-18 shadow-lg"
       >
         <f-skeleton :width="['100%', '50%']" />
       </div>

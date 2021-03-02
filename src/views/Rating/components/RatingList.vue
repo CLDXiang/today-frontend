@@ -7,7 +7,7 @@
       <div
         v-for="i in 3"
         :key="i"
-        class="p-4 pb-3 mb-2 bg-white rounded-lg h-36"
+        class="p-4 pb-3 mb-2 bg-white rounded-lg h-36 shadow-lg"
       >
         <f-skeleton
           avatar

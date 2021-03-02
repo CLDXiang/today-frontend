@@ -3,6 +3,7 @@
     ref="scroll"
     class="h-full overflow-y-auto"
   >
+    <!-- TODO: 接入后加 skeleton  -->
     <template
       v-for="item in items"
       :key="item.id"
@@ -56,26 +57,35 @@ export default defineComponent({
     type: { type: String as PropType<CommonTabType>, required: true },
   },
   setup(props) {
+    /** 正在加载数据 */
+    const loading = ref(true);
     const userId = inject<string>('userId') as string;
 
     const items = ref<CardCommonItem[]>([]);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
+      loading.value = true;
       switch (props.type) {
         case '收藏':
           starClient.getStarList({ userId, limit: 20 }).then((resp) => {
             items.value = resp.data;
+          }).finally(() => {
+            loading.value = false;
           });
           break;
         case '关注':
           watchClient.getWatchList({ userId, limit: 20 }).then((resp) => {
             items.value = resp.data;
+          }).finally(() => {
+            loading.value = false;
           });
           break;
         case '足迹':
           historyClient.getHistoryList({ userId, limit: 20 }).then((resp) => {
             items.value = resp.data;
+          }).finally(() => {
+            loading.value = false;
           });
           break;
         default: break;
@@ -84,6 +94,7 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      loading.value = true;
       // TODO: API 实现后确认 lastId 字段是否正确使用
       switch (props.type) {
         case '收藏':
@@ -93,6 +104,8 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
+          }).finally(() => {
+            loading.value = false;
           });
           break;
         case '关注':
@@ -102,6 +115,8 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
+          }).finally(() => {
+            loading.value = false;
           });
           break;
         case '足迹':
@@ -111,6 +126,8 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
+          }).finally(() => {
+            loading.value = false;
           });
           break;
         default: break;
@@ -141,6 +158,7 @@ export default defineComponent({
     return {
       items,
       scroll,
+      loading,
     };
   },
 });

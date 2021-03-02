@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.f-clickable {
+  @apply cursor-pointer hover:opacity-80 transition-opacity;
+}

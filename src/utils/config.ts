@@ -48,6 +48,9 @@ export const semesterArray: semesterItem[] = [
 
 // export const jsonNameArray = semesterArray.map((x) => x.jsonFileName);
 
+/** 用作 Tab 页标题的 ratings 类型 */
+export type RatingType = '最新';
+
 /** 用作 Tab 页标题的 lectures 类型 */
 export type LectureType = '七模' | '思政' | '外语' | '体育';
 

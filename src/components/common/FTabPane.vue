@@ -1,6 +1,6 @@
 <template>
   <span
-    class="overflow-y-auto h-full w-full flex-initial flex-shrink-0"
+    class="overflow-y-hidden h-full w-full flex-initial flex-shrink-0"
     style="scroll-snap-align: start;"
   >
     <slot />

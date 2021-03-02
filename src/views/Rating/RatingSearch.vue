@@ -16,7 +16,7 @@
       <card-lecture
         v-for="searchResult in searchResults"
         :key="searchResult.id"
-        class="search-result-list__card clickable"
+        class="search-result-list__card f-clickable"
         :lecture="searchResult"
         @click="$router.push(`/rating/lecture/${searchResult.id}`)"
       />
@@ -97,8 +97,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_clickable';
-
 .content-box {
   height: 100%;
   width: 100%;

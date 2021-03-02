@@ -47,15 +47,12 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
-      loading.value = true;
       commentClient.getCommentList({
         userId,
         lastId: items.value[items.value.length - 1].id,
         limit: 20,
       }).then((resp) => {
         items.value = [...items.value, ...resp.data];
-      }).finally(() => {
-        loading.value = false;
       });
     };
 

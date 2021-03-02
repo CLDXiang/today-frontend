@@ -60,7 +60,6 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
-      loading.value = true;
       lectureClient
         .getLectureList({
           categories: lectureType2Categories(props.type),
@@ -69,8 +68,6 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
-        }).finally(() => {
-          loading.value = false;
         });
     };
 

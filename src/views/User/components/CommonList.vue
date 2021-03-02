@@ -94,7 +94,6 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
-      loading.value = true;
       // TODO: API 实现后确认 lastId 字段是否正确使用
       switch (props.type) {
         case '收藏':
@@ -104,8 +103,6 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
-          }).finally(() => {
-            loading.value = false;
           });
           break;
         case '关注':
@@ -115,8 +112,6 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
-          }).finally(() => {
-            loading.value = false;
           });
           break;
         case '足迹':
@@ -126,8 +121,6 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
-          }).finally(() => {
-            loading.value = false;
           });
           break;
         default: break;

@@ -59,7 +59,6 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
-      loading.value = true;
       rateClient
         .getRatingList({
           lastId: items.value[items.value.length - 1].id,
@@ -67,8 +66,6 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
-        }).finally(() => {
-          loading.value = false;
         });
     };
 

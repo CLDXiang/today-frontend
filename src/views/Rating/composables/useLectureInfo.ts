@@ -6,9 +6,13 @@ import { ref, Ref, watch } from 'vue';
  * 拉取课程详情信息
  * @param lectureId 课程 ID
  */
-const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDetail> } = (
+const useLectureInfo: (lectureId: Ref<string>) => {
+  lectureInfo: Ref<LectureDetail>;
+  loading: Ref<boolean>;
+} = (
   lectureId,
 ) => {
+  const loading = ref(true);
   /** 课程基本信息 */
   const lectureInfo = ref<LectureDetail>({
     id: '',
@@ -43,8 +47,11 @@ const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDeta
   /** 拉取课程信息 */
   const fetchLectureInfo = () => {
     if (lectureId.value) {
+      loading.value = true;
       lectureClient.getLectureDetail({ lectureId: lectureId.value }).then((resp) => {
         lectureInfo.value = resp.data;
+      }).finally(() => {
+        loading.value = false;
       });
     }
   };
@@ -60,6 +67,8 @@ const useLectureInfo: (lectureId: Ref<string>) => { lectureInfo: Ref<LectureDeta
   return {
     /** 课程信息 */
     lectureInfo,
+    /** 正在获取数据 */
+    loading,
   };
 };
 

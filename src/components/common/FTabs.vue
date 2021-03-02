@@ -1,5 +1,5 @@
 <template>
-  <div class="f-tabs">
+  <div class="f-tabs h-full">
     <div class="f-tabs__header hide-scrollbar">
       <span
         v-for="tabPane in tabPanes"

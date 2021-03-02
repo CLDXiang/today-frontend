@@ -4,22 +4,21 @@
     class="bg-gray-100 pt-2 h-full overflow-y-auto"
   >
     <card-rating
-      v-for="rating in ratings"
-      :key="rating.id"
+      v-for="item in items"
+      :key="item.id"
       class="f-clickable mb-2"
-      :rating="rating"
-      @click="$router.push(`/rating/lecture/${rating.lecture.id}`)"
+      :rating="item"
+      @click="$router.push(`/rating/lecture/${item.lecture.id}`)"
     />
   </div>
 </template>
 
 <script lang="ts">
 import {
-  defineComponent, PropType, ref, watch,
+  defineComponent, ref, watch,
 } from 'vue';
 import { CardRatingItem, CardRating } from '@/components/listCard';
 import { rateClient } from '@/apis';
-import { RatingType } from '@/utils/config';
 import { useScrollToBottom } from '@/composables';
 
 export default defineComponent({
@@ -29,16 +28,14 @@ export default defineComponent({
   props: {
     /** 当前是否激活 */
     active: { type: Boolean, default: false },
-    /** 类型，对应 tab key */
-    type: { type: String as PropType<RatingType>, required: true },
   },
   setup(props) {
-    const ratings = ref<CardRatingItem[]>([]);
+    const items = ref<CardRatingItem[]>([]);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
       rateClient.getRatingList({ limit: 20 }).then(({ data }) => {
-        ratings.value = data;
+        items.value = data;
       });
     };
 
@@ -46,17 +43,17 @@ export default defineComponent({
     const fetchMore = () => {
       rateClient
         .getRatingList({
-          lastId: ratings.value[ratings.value.length - 1].id,
+          lastId: items.value[items.value.length - 1].id,
           limit: 20,
         })
         .then(({ data }) => {
-          ratings.value = [...ratings.value, ...data];
+          items.value = [...items.value, ...data];
         });
     };
 
     watch(() => props.active, (value) => {
       // activeTab 改变时，若当前 tab 无数据则重新拉数据
-      if (value && !ratings.value.length) {
+      if (value && !items.value.length) {
         fetchList();
       }
     });
@@ -73,7 +70,7 @@ export default defineComponent({
     );
 
     return {
-      ratings,
+      items,
       scroll,
     };
   },

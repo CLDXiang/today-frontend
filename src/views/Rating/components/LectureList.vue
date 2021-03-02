@@ -4,11 +4,11 @@
     class="bg-gray-100 pt-2 h-full overflow-y-auto"
   >
     <card-lecture
-      v-for="lecture in lectures"
-      :key="lecture.id"
+      v-for="item in items"
+      :key="item.id"
       class="f-clickable mb-2"
-      :lecture="lecture"
-      @click="$router.push(`/rating/lecture/${lecture.id}`)"
+      :lecture="item"
+      @click="$router.push(`/rating/lecture/${item.id}`)"
     />
   </div>
 </template>
@@ -33,14 +33,14 @@ export default defineComponent({
     type: { type: String as PropType<LectureType>, required: true },
   },
   setup(props) {
-    const lectures = ref<CardLectureItem[]>([]);
+    const items = ref<CardLectureItem[]>([]);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
       lectureClient
         .getLectureList({ categories: lectureType2Categories(props.type), limit: 20 })
         .then(({ data }) => {
-          lectures.value = data;
+          items.value = data;
         });
     };
 
@@ -50,10 +50,10 @@ export default defineComponent({
         .getLectureList({
           categories: lectureType2Categories(props.type),
           limit: 20,
-          lastId: lectures.value[lectures.value.length - 1].id,
+          lastId: items.value[items.value.length - 1].id,
         })
         .then(({ data }) => {
-          lectures.value = [...lectures.value, ...data];
+          items.value = [...items.value, ...data];
         });
     };
 
@@ -61,7 +61,7 @@ export default defineComponent({
       () => props.active,
       (value) => {
         // activeTab 改变时，若当前 tab 无数据则重新拉数据
-        if (value && !lectures.value.length) {
+        if (value && !items.value.length) {
           fetchList();
         }
       },
@@ -79,7 +79,7 @@ export default defineComponent({
     );
 
     return {
-      lectures,
+      items,
       scroll,
     };
   },

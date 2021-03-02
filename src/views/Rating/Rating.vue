@@ -5,7 +5,7 @@
       v-model="activeTab"
     >
       <f-tab-pane
-        v-for="tabName in ratingTabList"
+        v-for="tabName in ['最新']"
         :key="tabName"
         :tab="tabName"
       >
@@ -15,7 +15,7 @@
         />
       </f-tab-pane>
       <f-tab-pane
-        v-for="tabName in lectureTabList"
+        v-for="tabName in ['七模', '思政', '外语', '体育']"
         :key="tabName"
         :tab="tabName"
       >
@@ -44,14 +44,8 @@ export default defineComponent({
   setup() {
     /** 激活 tab */
     const activeTab = ref<TabType>('最新');
-    /** rating 类 tab 列表 */
-    const ratingTabList = ref<RatingType[]>(['最新']);
-    /** lecture 类 tab 列表 */
-    const lectureTabList = ref<LectureType[]>(['七模', '思政', '外语', '体育']);
     return {
       activeTab,
-      ratingTabList,
-      lectureTabList,
     };
   },
 });

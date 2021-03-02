@@ -3,6 +3,15 @@
     ref="scroll"
     class="bg-gray-100 pt-2 h-full overflow-y-auto"
   >
+    <template v-if="loading">
+      <div
+        v-for="i in 6"
+        :key="i"
+        class="p-4 pb-3 mb-2 bg-white rounded-lg h-18"
+      >
+        <f-skeleton :width="['100%', '50%']" />
+      </div>
+    </template>
     <card-lecture
       v-for="item in items"
       :key="item.id"
@@ -34,18 +43,24 @@ export default defineComponent({
   },
   setup(props) {
     const items = ref<CardLectureItem[]>([]);
+    /** 正在加载数据 */
+    const loading = ref(true);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
+      loading.value = true;
       lectureClient
         .getLectureList({ categories: lectureType2Categories(props.type), limit: 20 })
         .then(({ data }) => {
           items.value = data;
+        }).finally(() => {
+          loading.value = false;
         });
     };
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      loading.value = true;
       lectureClient
         .getLectureList({
           categories: lectureType2Categories(props.type),
@@ -54,6 +69,8 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
+        }).finally(() => {
+          loading.value = false;
         });
     };
 
@@ -81,6 +98,7 @@ export default defineComponent({
     return {
       items,
       scroll,
+      loading,
     };
   },
 });

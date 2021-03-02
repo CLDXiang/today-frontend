@@ -3,6 +3,19 @@
     ref="scroll"
     class="bg-gray-100 pt-2 h-full overflow-y-auto"
   >
+    <template v-if="loading">
+      <div
+        v-for="i in 3"
+        :key="i"
+        class="p-4 pb-3 mb-2 bg-white rounded-lg h-36"
+      >
+        <f-skeleton
+          avatar
+          :rows="4"
+          :width="['80px', '100%', '100%', '144px']"
+        />
+      </div>
+    </template>
     <card-rating
       v-for="item in items"
       :key="item.id"
@@ -31,16 +44,22 @@ export default defineComponent({
   },
   setup(props) {
     const items = ref<CardRatingItem[]>([]);
+    /** 正在加载数据 */
+    const loading = ref(true);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
+      loading.value = true;
       rateClient.getRatingList({ limit: 20 }).then(({ data }) => {
         items.value = data;
+      }).finally(() => {
+        loading.value = false;
       });
     };
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      loading.value = true;
       rateClient
         .getRatingList({
           lastId: items.value[items.value.length - 1].id,
@@ -48,6 +67,8 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
+        }).finally(() => {
+          loading.value = false;
         });
     };
 
@@ -72,6 +93,7 @@ export default defineComponent({
     return {
       items,
       scroll,
+      loading,
     };
   },
 });

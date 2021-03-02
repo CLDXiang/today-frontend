@@ -12,7 +12,7 @@
       <li
         v-for="i in rows"
         :key="i"
-        class="h-4 mt-4 first:mt-0 bg-gray-200 rounded"
+        class="h-4 mt-4 first:mt-0 bg-gray-200 rounded max-w-full"
         :style="{
           width: widths[i - 1]
         }"

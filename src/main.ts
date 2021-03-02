@@ -10,7 +10,7 @@ import {
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import {
-  FIcon, FInput, FSelect, FTabs, FTabPane,
+  FIcon, FInput, FSelect, FTabs, FTabPane, FPopover,
 } from '@/components/common';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -55,6 +55,7 @@ declare module '@vue/runtime-core' {
 
 // 自定义全局组件
 app
+  .component('FPopover', FPopover)
   .component('FIcon', FIcon)
   .component('FInput', FInput)
   .component('FSelect', FSelect)

@@ -39,7 +39,6 @@
 <script lang="ts">
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import logger from '@/utils/log';
-import { FPopover } from '@/components/common';
 import { EmojiTable, EmojiEntry, EmojiItem } from './types';
 import { compareEmojiEntryByTime, compareEmojiEntryByCount, emojiTable } from './utils';
 import { EmojiButton } from './components';
@@ -47,7 +46,6 @@ import { EmojiButton } from './components';
 export default defineComponent({
   components: {
     EmojiButton,
-    FPopover,
   },
   props: {
     /** reaction 对象 */

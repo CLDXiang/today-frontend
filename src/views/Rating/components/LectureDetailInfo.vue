@@ -13,7 +13,7 @@
       v-else
       class="lecture-info__content"
     >
-      <span>所属模块：即将到来</span>
+      <span>所属模块：{{ lectureInfo.category }}</span>
       <span>学分：{{ lectureInfo.detailInfo.credit }}</span>
       <span>开课院系：{{ lectureInfo.detailInfo.department }}</span>
       <span>校区：{{ lectureInfo.detailInfo.campus }}</span>
@@ -21,7 +21,7 @@
         <span>主讲老师：{{ lectureInfo.taughtBy.join(' ') }}</span>
         <span>考试时间：{{ lectureInfo.detailInfo.examTime }}</span>
         <span>考试形式：{{ lectureInfo.detailInfo.examType }}</span>
-        <span>是否允许期中退课：{{ lectureInfo.detailInfo.withdrawable }}</span>
+        <span>是否允许期中退课：{{ withdrawable }}</span>
       </template>
     </div>
     <div
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import { LectureDetail } from '@/apis/lecture/types';
 
 export default defineComponent({
@@ -45,6 +45,20 @@ export default defineComponent({
       required: true,
     },
     loading: { type: Boolean, required: true },
+  },
+  setup(props) {
+    const withdrawable = computed(() => {
+      if (props.lectureInfo.detailInfo.withdrawable === 'true' || props.lectureInfo.detailInfo.withdrawable === '是') {
+        return '是';
+      }
+      if (props.lectureInfo.detailInfo.withdrawable === '否' || props.lectureInfo.detailInfo.withdrawable === '') {
+        return '否';
+      }
+      return '未知';
+    });
+    return {
+      withdrawable,
+    };
   },
   data() {
     return {

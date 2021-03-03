@@ -4,7 +4,7 @@
       <span>
         <span>已选课程列表</span>
         <span
-          class="icon-cloud clickable"
+          class="icon-cloud f-clickable"
           @click="handleClickCloud"
         >
           <f-icon
@@ -15,7 +15,7 @@
         </span>
       </span>
       <span
-        class="icon-right clickable"
+        class="icon-right f-clickable"
         @click="$emit('click-back')"
       >
         <f-icon
@@ -86,7 +86,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_clickable';
 $header-height: 55px;
 
 .selected-course-list-box {

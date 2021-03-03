@@ -3,8 +3,17 @@
     <div class="lecture-info__title">
       课程信息
     </div>
-    <div class="lecture-info__content">
-      <span>所属模块：暂无数据</span>
+    <div
+      v-if="loading"
+      class="py-3"
+    >
+      <f-skeleton />
+    </div>
+    <div
+      v-else
+      class="lecture-info__content"
+    >
+      <span>所属模块：即将到来</span>
       <span>学分：{{ lectureInfo.detailInfo.credit }}</span>
       <span>开课院系：{{ lectureInfo.detailInfo.department }}</span>
       <span>校区：{{ lectureInfo.detailInfo.campus }}</span>
@@ -16,7 +25,7 @@
       </template>
     </div>
     <div
-      v-if="!isAllLectureInfoVisible"
+      v-if="!loading && !isAllLectureInfoVisible"
       class="lecture-info__more"
       @click="isAllLectureInfoVisible = true"
     >
@@ -35,6 +44,7 @@ export default defineComponent({
       type: Object as PropType<LectureDetail>,
       required: true,
     },
+    loading: { type: Boolean, required: true },
   },
   data() {
     return {

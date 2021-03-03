@@ -11,7 +11,7 @@ import {
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import {
-  FIcon, FInput, FSelect, FTabs, FTabPane,
+  FIcon, FInput, FSelect, FTabs, FTabPane, FSkeleton,
 } from '@/components/common';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -60,6 +60,7 @@ app
   .component('FIcon', FIcon)
   .component('FInput', FInput)
   .component('FSelect', FSelect)
+  .component('FSkeleton', FSkeleton)
   .component('FTabs', FTabs)
   .component('FTabPane', FTabPane);
 

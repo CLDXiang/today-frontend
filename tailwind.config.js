@@ -36,7 +36,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+      margin: ['first'],
+    },
   },
   plugins: [],
 };

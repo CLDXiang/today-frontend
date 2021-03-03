@@ -9,6 +9,7 @@
     "hoverable",
     "linebreak",
     "scripthost",
+    "tailwindcss",
     "watchees"
   ],
   "eslint.nodePath": "../node_modules",

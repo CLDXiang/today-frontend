@@ -1,5 +1,5 @@
 <template>
-  <div class="head-bar">
+  <div class="head-bar flex-shrink-0">
     <span
       v-if="isBackVisible"
       class="back-btn"

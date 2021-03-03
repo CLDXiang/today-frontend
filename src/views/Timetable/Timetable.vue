@@ -111,25 +111,16 @@
         shape="circle"
         @click="showSearchDialog"
       >
-        <a-badge
-          v-if="!selectedCoursesIds.size"
-          dot
-          color="volcano"
+        <f-badge
+          :visible="!selectedCoursesIds.size"
+          offset-x="0.5"
+          offset-y="1"
         >
           <f-icon
             name="search"
             size="24"
           />
-        </a-badge>
-        <span
-          v-else
-          class="ant-badge ant-badge-status ant-badge-dot-status"
-        >
-          <f-icon
-            name="search"
-            size="24"
-          />
-        </span>
+        </f-badge>
       </a-button>
     </div>
   </div>

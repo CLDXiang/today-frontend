@@ -334,7 +334,7 @@ export default defineComponent({
       border-radius: 4px;
       position: sticky;
       top: 0;
-      z-index: 1;
+      z-index: 10;
 
       display: flex;
       justify-content: space-between;

@@ -102,7 +102,7 @@ export default defineComponent({
 
   position: fixed;
   bottom: 0;
-  z-index: 10;
+  z-index: 50;
 
   display: flex;
   flex: 0 1 auto;

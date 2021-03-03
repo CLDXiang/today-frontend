@@ -45,7 +45,7 @@ export default defineComponent({
 .day__column {
   height: 100%;
   position: relative;
-  min-width: $cell-width;
+  min-width: 64px;
 
   flex: 1;
 
@@ -54,9 +54,10 @@ export default defineComponent({
 }
 
 .day__cell {
-  flex: 1 0 $cell-height;
-  @include flex-center;
-
+  flex: 1 0 64px;
+display: flex;
+  justify-content: center;
+  align-items: center;
   // 设定奇/偶行的背景色
   &:nth-of-type(2n) {
     @extend .background-one;

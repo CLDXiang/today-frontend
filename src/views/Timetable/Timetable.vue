@@ -1,5 +1,5 @@
 <template>
-  <div class="timetable">
+  <div class="relative flex flex-col mt-4 mx-auto mb-0 max-w-14xl">
     <a-drawer
       :height="drawerHeight"
       placement="bottom"
@@ -65,16 +65,22 @@
       @click-left="moveSemester(-1)"
       @click-right="moveSemester(1)"
     />
-    <div class="timetable__body">
-      <div class="timetable__day-box">
-        <div class="timetable__time">
-          <div class="time__title" />
+    <div class="flex items-start">
+      <div class="overflow-x-auto flex flex-grow border border-gray-300 rounded-md">
+        <div class="sticky left-0 z-20 pr-1 flex-initial flex-shrink-0 flex flex-col">
+          <div class="flex-grow-0 flex-shrink-0 h-8 flex justify-center items-center py-0 px-1" />
           <div
             v-for="(section, index) in sections"
             :key="index"
-            class="time__cell"
+            :class="
+              'relative flex-grow-0 flex-shrink-0 h-16 ' +
+                'flex justify-center items-center w-8 py-0 px-4 ' +
+                'bg-white bg-opacity-50 text-gray-500 font-semibold'
+            "
           >
-            <span class="time__clock">{{ section.clock }}</span>
+            <span class="absolute top-0 text-gray-400 font-normal text-xs">
+              {{ section.clock }}
+            </span>
             {{ section.name }}
           </div>
         </div>
@@ -87,7 +93,8 @@
       </div>
       <div
         v-if="!isMobileMode"
-        class="timetable__search-bar-box"
+        class="flex-grow-1 max-w-sm my-0 mx-3 flex-auto flex-shrink-0"
+        style="height: 928px"
       >
         <timetable-search-bar
           :is-mobile-mode="isMobileMode"
@@ -105,7 +112,7 @@
 
       <a-button
         v-if="isMobileMode"
-        class="floating-button"
+        class="fixed bottom-20 right-5 w-12 h-12 z-20 flex justify-center items-center"
         type="primary"
         size="small"
         shape="circle"
@@ -282,10 +289,7 @@ export default defineComponent({
       }
       return [...this.selectedCoursesIds].map((lessonId) => {
         const {
-          id,
-          name,
-          teachers,
-          code,
+          id, name, teachers, code,
         } = this.allCourses[lessonId];
         return {
           id,
@@ -324,7 +328,8 @@ export default defineComponent({
       if (step === -1 && this.semesterIndex === 0) {
         this.$message.warn('已经是最后一个学期啦', 0.5);
         return;
-      } if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
+      }
+      if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
         this.$message.warn('已经是最新学期啦', 0.5);
         return;
       }
@@ -642,114 +647,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-@import '@/scss/_timetable';
-
-.timetable {
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  margin: $head-margin auto 0 auto;
-
-  max-width: 2560px;
-}
-
-.timetable__body {
-  display: flex;
-  align-items: flex-start;
-}
-
-.timetable__time {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-
-  padding-right: 4px;
-
-  flex: 0 0 auto;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.time__title {
-  flex: 0 0 $cell-height/2;
-  @include flex-center;
-
-  padding: 0 4px;
-}
-
-.time__cell {
-  position: relative;
-  flex: 0 0 $cell-height;
-  @include flex-center;
-  width: $cell-width / 2;
-
-  padding: 0 4px;
-  background: rgba(255, 255, 255, 0.5);
-
-  color: #69707a;
-  font-weight: 600;
-}
-
-.time__clock {
-  position: absolute;
-  top: 0;
-
-  color: #aaa;
-  font-weight: 400;
-  font-size: 12px;
-}
-
-.timetable__day-box {
-  overflow-x: auto;
-  display: flex;
-  flex: 618;
-
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-.timetable__search-bar-box {
-  flex: 382;
-  // height: 17rem;
-  max-width: 375px;
-  height: $search-bar-height;
-  margin: 0 10px;
-  display: flex;
-}
-
-.timetable__search-bar-footer {
-  display: flex;
-  justify-content: flex-end;
-
-  > button {
-    border-radius: 6px;
-    margin: 0 5px;
-    padding: 0 10px;
-    background-color: #fff;
-
-    color: #69707a;
-    font-size: 14px;
-  }
-}
-
-.floating-button {
-  position: fixed;
-  bottom: 76px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
-  z-index: 2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  > .ant-badge {
-    height: 24px;
-  }
-}
-</style>

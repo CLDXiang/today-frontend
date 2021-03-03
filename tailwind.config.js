@@ -33,7 +33,11 @@ module.exports = {
       pink: colors.pink,
       rose: colors.rose,
     },
-    extend: {},
+    extend: {
+      maxWidth: {
+        '14xl': '160rem',
+      },
+    },
   },
   variants: {
     extend: {},

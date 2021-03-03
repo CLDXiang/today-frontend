@@ -461,7 +461,7 @@ export default defineComponent({
     padding: 13px 15px;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 10;
     background-color: #fff;
     border-bottom: 1px solid #e0e0e0;
   }

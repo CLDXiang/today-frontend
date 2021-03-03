@@ -110,9 +110,10 @@ export default defineComponent({
 }
 
 .day__title {
-  flex: 0 0 $cell-height/2;
-  @include flex-center;
-
+  flex: 0 0 32px;
+display: flex;
+  justify-content: center;
+  align-items: center;
   color: #69707a;
   font-weight: 600;
 }

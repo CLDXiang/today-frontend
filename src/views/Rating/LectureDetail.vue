@@ -6,7 +6,7 @@
     >
       <span class="title">课程评价</span>
     </rating-head-bar>
-    <div class="info-bar">
+    <div class="info-bar flex-shrink-0">
       <div class="info-bar__head">
         <div class="info-bar__head-left">
           <div class="lecture-title">

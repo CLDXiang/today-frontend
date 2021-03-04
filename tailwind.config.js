@@ -34,6 +34,8 @@ module.exports = {
       rose: colors.rose,
     },
     extend: {
+      maxWidth: {
+        '14xl': '160rem',
       boxShadow: {
         popover: '0 2px 8px rgb(0 0 0 / 15%)',
       },

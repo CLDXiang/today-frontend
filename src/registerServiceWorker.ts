@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable */
 import jBox from 'jbox';
 
 import { register } from 'register-service-worker';
@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated() {
       console.log('New content is available; please refresh.');
-      var myModal = new jBox('Modal', {
+      const myModal = new jBox('Modal', {
         width: 300,
         height: 200,
         title: 'My Modal Window',

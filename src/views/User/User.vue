@@ -1,5 +1,8 @@
 <template>
-  <div class="content-box">
+  <div
+    ref="scroll"
+    class="content-box"
+  >
     <div class="profile-card">
       <div
         v-if="isCurrentUser()"
@@ -89,49 +92,52 @@
       </div>
     </div>
 
-    <div class="white-card">
-      <div class="main-box">
-        <f-tabs v-model="activeTab">
-          <f-tab-pane
-            tab="点评"
-            :bottom-offset="500"
-            @on-scroll-to-bottom="handleScrollToBottom"
-          >
-            <rating-list :ratings="ratingList" />
-          </f-tab-pane>
-          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
-          <f-tab-pane
-            v-if="false"
-            tab="回复"
-          >
-            <comment-list :comments="commentList" />
-          </f-tab-pane>
-          <f-tab-pane tab="课程">
-            <lesson-list :lessons="lessonList" />
-          </f-tab-pane>
-          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
-          <f-tab-pane
-            v-if="false"
-            tab="收藏"
-          >
-            <common-list :contents="starList" />
-          </f-tab-pane>
-          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
-          <f-tab-pane
-            v-if="isCurrentUser() && false"
-            tab="关注"
-          >
-            <common-list :contents="watchList" />
-          </f-tab-pane>
-          <!-- FIXME: 下方功能实现后删去 v-if="false" -->
-          <f-tab-pane
-            v-if="isCurrentUser() && false"
-            tab="足迹"
-          >
-            <common-list :contents="historyList" />
-          </f-tab-pane>
-        </f-tabs>
-      </div>
+    <div class="h-full rounded-lg shadow-md bg-white">
+      <f-tabs v-model="activeTab">
+        <f-tab-pane tab="点评">
+          <rating-list :active="activeTab === '点评'" />
+        </f-tab-pane>
+        <!-- FIXME: 下方功能实现后删去 v-if="false" -->
+        <f-tab-pane
+          v-if="false"
+          tab="回复"
+        >
+          <comment-list :active="activeTab === '回复'" />
+        </f-tab-pane>
+        <f-tab-pane tab="课程">
+          <lesson-list :active="activeTab === '课程'" />
+        </f-tab-pane>
+        <!-- FIXME: 下方功能实现后删去 v-if="false" -->
+        <f-tab-pane
+          v-if="false"
+          tab="收藏"
+        >
+          <common-list
+            :active="activeTab === '收藏'"
+            type="收藏"
+          />
+        </f-tab-pane>
+        <!-- FIXME: 下方功能实现后删去 v-if="false" -->
+        <f-tab-pane
+          v-if="isCurrentUser() && false"
+          tab="关注"
+        >
+          <common-list
+            :active="activeTab === '关注'"
+            type="关注"
+          />
+        </f-tab-pane>
+        <!-- FIXME: 下方功能实现后删去 v-if="false" -->
+        <f-tab-pane
+          v-if="isCurrentUser() && false"
+          tab="足迹"
+        >
+          <common-list
+            :active="activeTab === '足迹'"
+            type="足迹"
+          />
+        </f-tab-pane>
+      </f-tabs>
     </div>
 
     <div class="bottom-action-bar" />
@@ -139,29 +145,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters, mapState, mapMutations } from 'vuex';
-
 import {
-  userClient,
-  rateClient,
-  // commentClient,
-  selectClient,
-  starClient,
-  // watchClient,
-  historyClient,
-} from '@/apis';
-
+  computed, defineComponent, provide, ref,
+} from 'vue';
+import { useStore } from 'vuex';
+import { userClient } from '@/apis';
 import { useProcessAvatar } from '@/composables';
-import {
-  CardRatingItem,
-  CardCommentItem,
-  CardLessonItem,
-  CardCommonItem,
-} from '@/components/listCard';
+import { useRouter } from 'vue-router';
 import {
   RatingList, CommentList, LessonList, CommonList,
 } from './components';
+import { CommonTabType } from './types';
+
+type TabType = '点评' | '回复' | '课程' | CommonTabType;
+interface UserProfile {
+  avatar: string;
+  bio: string;
+  name: string;
+  nickname: string;
+  fans: number;
+  watchers: number;
+  watchees: number;
+}
 
 export default defineComponent({
   components: {
@@ -177,15 +182,25 @@ export default defineComponent({
       default: '',
     },
   },
-  setup() {
-    const { processAvatar } = useProcessAvatar();
-    return {
-      processAvatar,
+  setup(props) {
+    const store = useStore();
+    const router = useRouter();
+    const currentUser = computed(() => store.state.user);
+    const userLoggedIn = computed(() => store.getters.userLoggedIn);
+    const isCurrentUser = () => userLoggedIn.value && (props.userId === currentUser.value.id || props.userId === '');
+    const setUserProfile = (profile: UserProfile) => store.commit('setUserProfile', profile);
+
+    const logout = () => {
+      if (userLoggedIn.value) {
+        store.commit('logout');
+        router.replace({ name: 'Timetable' });
+      } else {
+        store.commit('logout');
+        router.replace({ name: 'Login', query: { redirect: '/user' } });
+      }
     };
-  },
-  data: () => ({
-    // 访问的用户数据
-    userProfile: {
+
+    const userProfile = ref<UserProfile>({
       avatar: '',
       bio: '',
       name: '',
@@ -193,90 +208,46 @@ export default defineComponent({
       fans: 0,
       watchers: 0,
       watchees: 0,
-    },
-    activeTab: '点评',
-    /** 点评列表 */
-    ratingList: [] as CardRatingItem[],
-    /** 回复列表 */
-    commentList: [] as CardCommentItem[],
-    /** 课程列表 */
-    lessonList: [] as CardLessonItem[],
-    /** 收藏列表 */
-    starList: [] as CardCommonItem[],
-    /** 关注列表 */
-    watchList: [] as CardCommonItem[],
-    /** 足迹列表 */
-    historyList: [] as CardCommonItem[],
-  }),
-  computed: {
-    // 自己的用户数据
-    ...mapState(['user']),
-    ...mapGetters(['userLoggedIn']),
-  },
-  created() {
-    if (this.isCurrentUser()) {
-      this.userProfile = {
-        avatar: this.user.avatar,
-        bio: this.user.bio,
-        name: this.user.name,
-        nickname: this.user.nickname,
-        fans: this.user.fans,
-        watchers: this.user.watchers,
-        watchees: this.user.watchees,
+    });
+
+    // 读取用户信息
+    if (isCurrentUser()) {
+      userProfile.value = {
+        avatar: currentUser.value.avatar,
+        bio: currentUser.value.bio,
+        name: currentUser.value.name,
+        nickname: currentUser.value.nickname,
+        fans: currentUser.value.fans,
+        watchers: currentUser.value.watchers,
+        watchees: currentUser.value.watchees,
       };
     }
     userClient
-      .getUserInfo({ userId: this.userId || this.user.id })
+      .getUserInfo({ userId: props.userId || currentUser.value.id })
       .then((resp) => {
-        this.userProfile = resp;
-        if (this.isCurrentUser()) {
-          this.setUserProfile(resp);
+        userProfile.value = resp;
+        if (isCurrentUser()) {
+          setUserProfile(resp);
         }
       })
       .catch(() => {
         // 返回到上一页面
-        this.$router.go(-1);
+        router.go(-1);
       });
-    rateClient.getRatingListByUser({ userId: this.user.id }).then((resp) => {
-      this.ratingList = resp.data;
-    });
-    // FIXME: 等待评论实现
-    // commentClient.getCommentList({ userId: this.user.id }).then((resp) => {
-    //   this.commentList = resp.data;
-    // });
-    selectClient.getSelectedLessons({ userId: this.user.id, limit: 20 }).then((resp) => {
-      this.lessonList = resp.data;
-    });
-    // FIXME: 等待收藏实现
-    starClient.getStarList({ userId: this.user.id, limit: 20 }).then((resp) => {
-      this.starList = resp.data;
-    });
-    if (this.isCurrentUser()) {
-      // FIXME: 等待关注实现
-      // watchClient.getWatchList({ userId: this.user.id, limit: 20 }).then((resp) => {
-      //   this.watchList = resp.data;
-      // });
-      // FIXME: 等待历史记录实现
-      historyClient.getHistoryList({ userId: this.user.id, limit: 20 }).then((resp) => {
-        this.historyList = resp.data;
-      });
-    }
-  },
-  methods: {
-    ...mapMutations({ vuexLogout: 'logout', setUserProfile: 'setUserProfile' }),
-    logout(): void {
-      if (this.userLoggedIn) {
-        this.vuexLogout();
-        this.$router.replace({ name: 'Timetable' });
-      } else {
-        this.vuexLogout();
-        this.$router.replace({ name: 'Login', query: { redirect: '/user' } });
-      }
-    },
-    isCurrentUser(): boolean {
-      // 访问的用户 ID == 自己的用户 ID
-      return this.userLoggedIn && (this.userId === this.user.id || this.userId === '');
-    },
+
+    provide<string>('userId', props.userId || currentUser.value.id);
+
+    const { processAvatar } = useProcessAvatar();
+
+    const activeTab = ref<TabType>('点评');
+
+    return {
+      processAvatar,
+      userProfile,
+      activeTab,
+      isCurrentUser,
+      logout,
+    };
   },
 });
 </script>
@@ -440,22 +411,11 @@ export default defineComponent({
       }
     }
   }
-
-  > .white-card {
-    display: flex;
-    background-color: #fff;
-    box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
-    border-radius: 8px;
-    flex: 1;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-  }
 }
 </style>
 
 <style lang="scss">
-.content-box > .white-card > .main-box > .f-tabs {
+.content-box > div > .f-tabs {
   .f-tabs__header {
     height: 29px;
     padding: 13px 15px;
@@ -464,17 +424,6 @@ export default defineComponent({
     z-index: 10;
     background-color: #fff;
     border-bottom: 1px solid #e0e0e0;
-  }
-
-  .f-tabs__tab {
-    padding: 2px 8px 3px 8px;
-    color: #aaadb3;
-    border: 1px solid #e0e0e0;
-    border-radius: 100px;
-
-    &.f-tabs__tab--active {
-      color: #fff;
-    }
   }
 
   .list-card {

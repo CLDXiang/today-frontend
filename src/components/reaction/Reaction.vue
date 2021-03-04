@@ -11,7 +11,7 @@
       :count-style="countStyle"
       @click="handleClickEmojiButton(emojiEntry)"
     />
-    <a-popover
+    <f-popover
       v-if="!readonly && availableEmoji.length"
       v-model:visible="addEmojiVisible"
       trigger="click"
@@ -32,7 +32,7 @@
           :size="16"
         />
       </div>
-    </a-popover>
+    </f-popover>
   </div>
 </template>
 

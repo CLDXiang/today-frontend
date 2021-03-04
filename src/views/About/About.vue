@@ -14,9 +14,13 @@
     </about-section> -->
     <about-section title="联系我们">
       <p>
-        有反馈或建议，或者想要关注我们的项目进展？我们的催更微信群链接将在开学后正式推广时放出，敬请期待
-        💖
+        有反馈或建议，或者想要关注我们的项目进展？快快扫码加群：
       </p>
+      <img
+        class="w-60 mx-auto"
+        src="img/wxpr.jpg"
+        alt="QR"
+      >
     </about-section>
     <about-section title="更新日志">
       <update-log

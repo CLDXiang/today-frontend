@@ -21,7 +21,7 @@
       />
     </div>
     <div
-      class="action-group clickable"
+      class="action-group f-clickable"
       @click="handleClickMenuButton"
     >
       <f-icon
@@ -71,8 +71,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_clickable';
-
 .head-bar {
   width: 100%;
 

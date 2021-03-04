@@ -10,7 +10,7 @@
         @click="handleClickLeft"
       />
       <span class="semester__name">
-        {{ semester }} 你好
+        {{ semester }} 你好世界
       </span>
       <f-icon
         name="right"

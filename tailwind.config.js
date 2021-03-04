@@ -3,7 +3,7 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: ['./src/**/*.{vue,ts}'],
+  purge: ['./src/**/*.{vue,ts,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     /* https://tailwindcss.com/docs/customizing-colors#color-palette-reference */
@@ -33,10 +33,16 @@ module.exports = {
       pink: colors.pink,
       rose: colors.rose,
     },
-    extend: {},
+    extend: {
+      boxShadow: {
+        popover: '0 2px 8px rgb(0 0 0 / 15%)',
+      },
+    },
   },
   variants: {
-    extend: {},
+    extend: {
+      margin: ['first'],
+    },
   },
   plugins: [],
 };

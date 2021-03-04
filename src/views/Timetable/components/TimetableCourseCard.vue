@@ -168,12 +168,12 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  z-index: 1;
+  z-index: 10;
 
   box-sizing: border-box;
   position: absolute;
   width: calc(100% - 2px);
-  min-width: $cell-width - 2px;
+  min-width: 62px;
   left: 1px;
   border-radius: 6px;
   border-bottom: 0.2rem solid;

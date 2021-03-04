@@ -1,15 +1,3 @@
-// flex 布局，水平垂直居中
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-$cell-height: 64px;
-$cell-width: 64px;
-
-$search-bar-height: 14.5 * $cell-height;
-
 .background-one {
   background-color: transparent;
 }

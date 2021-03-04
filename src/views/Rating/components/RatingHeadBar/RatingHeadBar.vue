@@ -50,7 +50,7 @@ export default defineComponent({
   width: 100%;
 
   padding: 0 12px;
-  padding-top: $head-margin;
+  padding-top: 16px;
 
   height: 48px;
   display: flex;

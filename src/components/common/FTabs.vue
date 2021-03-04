@@ -17,7 +17,8 @@
     </div>
     <div
       ref="scrollContent"
-      class="f-tabs__content f-hide-scrollbar"
+      class="f-hide-scrollbar flex-auto flex overflow-x-auto flex-nowrap items-stretch"
+      style="scroll-snap-type: x mandatory;"
       @scroll="handleContentScroll"
     >
       <slot />
@@ -157,13 +158,6 @@ $padding-x: 12px;
         margin-left: 0;
       }
     }
-  }
-
-  > .f-tabs__content {
-    flex: 1;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
   }
 }
 </style>

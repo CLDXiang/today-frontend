@@ -6,15 +6,18 @@ import logger from '@/utils/log';
  * 使得对应 ref 的容器滚动到底部时触发回调函数
  * @param cb 滚动到底部时触发的回调函数
  * @param bottom 距离底部多少 px 时执行回调，默认 0
+ * @param enable 是否生效
  * @param delay 防抖延迟，默认 150
  */
 export const useScrollToBottom: (
   cb: (() => void) | (() => Promise<void>),
   bottom?: number,
+  enable?: boolean,
   delay?: number,
 ) => { scrollRef: Ref<HTMLElement | undefined>; pending: Ref<boolean> } = (
   cb,
   bottom = 0,
+  enable = true,
   delay = 150,
 ) => {
   const scrollRef = ref<HTMLElement>();
@@ -26,7 +29,7 @@ export const useScrollToBottom: (
       el.addEventListener(
         'scroll',
         debounce(async () => {
-          if (!el) {
+          if (!el || !enable) {
             return;
           }
           const { offsetHeight, scrollTop, scrollHeight } = el;

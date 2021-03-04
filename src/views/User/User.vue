@@ -1,9 +1,6 @@
 <template>
-  <div
-    ref="scroll h-full w-full overflow-y-auto max-w-14xl"
-    class="content-box"
-  >
-    <div class="profile-card">
+  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
+    <div class="profile-card flex-shrink-0">
       <div
         v-if="isCurrentUser()"
         class="btn-section"
@@ -92,8 +89,11 @@
       </div>
     </div>
 
-    <div class="h-full rounded-lg shadow-md bg-white">
-      <f-tabs v-model="activeTab">
+    <div class="flex-auto h-0 rounded-lg shadow-md bg-white">
+      <f-tabs
+        v-model="activeTab"
+        class="h-full w-full"
+      >
         <f-tab-pane tab="点评">
           <rating-list :active="activeTab === '点评'" />
         </f-tab-pane>
@@ -139,8 +139,6 @@
         </f-tab-pane>
       </f-tabs>
     </div>
-
-    <div class="bottom-action-bar" />
   </div>
 </template>
 

@@ -6,10 +6,7 @@
     "
   >
     <rating-head-bar />
-    <f-tabs
-      v-model="activeTab"
-      class="flex-auto"
-    >
+    <f-tabs v-model="activeTab">
       <f-tab-pane
         v-for="tabName in ['最新']"
         :key="tabName"

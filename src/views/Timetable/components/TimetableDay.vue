@@ -80,7 +80,9 @@ export default defineComponent({
   methods: {
     /** 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始） */
     parseSections(sectionString: string): number[] {
-      const [sectionStart, sectionEnd] = sectionString.split('-').map((i) => parseInt(i, 10));
+      const [sectionStart, sectionEnd] = sectionString
+        .split('-')
+        .map((i) => parseInt(i, 10));
       const sectionsArray = [];
       for (let i = sectionStart; i <= sectionEnd; i += 1) {
         sectionsArray.push(i - 1);
@@ -111,7 +113,7 @@ export default defineComponent({
 
 .day__title {
   flex: 0 0 32px;
-display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   color: #69707a;

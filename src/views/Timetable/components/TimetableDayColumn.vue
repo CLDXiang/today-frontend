@@ -32,7 +32,9 @@ export default defineComponent({
   },
   computed: {
     sectionList(): SectionInColumn[] {
-      return this.column.filter((item) => typeof item === 'object') as SectionInColumn[];
+      return this.column.filter(
+        (item) => typeof item === 'object',
+      ) as SectionInColumn[];
     },
   },
   methods: {},
@@ -55,7 +57,7 @@ export default defineComponent({
 
 .day__cell {
   flex: 1 0 64px;
-display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   // 设定奇/偶行的背景色

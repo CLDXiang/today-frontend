@@ -29,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
         content: '<i>Update found, refresh me!</i>',
       });
       myModal.open();
+      navigator.serviceWorker.controller?.postMessage({ type: 'SKIP_WAITING' });
     },
     offline() {
       console.log('No internet connection found. App is running in offline mode.');

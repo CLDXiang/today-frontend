@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="scroll"
+    ref="scroll h-full w-full overflow-y-auto max-w-14xl"
     class="content-box"
   >
     <div class="profile-card">
@@ -255,13 +255,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .content-box {
   display: flex;
-  width: 100%;
-  height: 100%;
   background-color: #e3f1f3;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  overflow-y: auto;
 
   .text-dark {
     color: $gray2;
@@ -410,24 +407,6 @@ export default defineComponent({
         }
       }
     }
-  }
-}
-</style>
-
-<style lang="scss">
-.content-box > div > .f-tabs {
-  .f-tabs__header {
-    height: 29px;
-    padding: 13px 15px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  .list-card {
-    margin-bottom: 8px;
   }
 }
 </style>

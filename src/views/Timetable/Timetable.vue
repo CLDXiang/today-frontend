@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col mt-4 mx-auto mb-0 max-w-14xl">
+  <div class="h-full w-full overflow-y-auto max-w-14xl relative flex flex-col pt-4 mx-auto">
     <a-drawer
       :height="drawerHeight"
       placement="bottom"

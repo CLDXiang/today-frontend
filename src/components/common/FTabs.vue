@@ -1,6 +1,6 @@
 <template>
-  <div class="f-tabs h-full">
-    <div class="f-tabs__header f-hide-scrollbar">
+  <div class="f-tabs">
+    <div class="f-tabs__header f-hide-scrollbar py-2 px-4 bg-white">
       <span
         v-for="tabPane in tabPanes"
         :key="tabPane.tab"

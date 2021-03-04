@@ -1,5 +1,5 @@
 <template>
-  <div class="head-bar flex-shrink-0">
+  <div class="head-bar flex-shrink-0 bg-white p-3 pt-4">
     <span
       v-if="isBackVisible"
       class="back-btn"
@@ -48,9 +48,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .head-bar {
   width: 100%;
-
-  padding: 0 12px;
-  padding-top: 16px;
 
   height: 48px;
   display: flex;

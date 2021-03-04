@@ -1,6 +1,6 @@
 <template>
   <main class="h-full w-full flex flex-col">
-    <div class="flex-auto overflow-y-auto overflow-x-hidden">
+    <div class="flex-auto overflow-hidden">
       <router-view />
     </div>
     <bottom-nav v-show="isBottomNavVisible" />

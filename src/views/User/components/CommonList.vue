@@ -1,7 +1,7 @@
 <template>
   <div
     ref="scroll"
-    class="h-full overflow-y-auto"
+    class="h-full overflow-y-auto space-y-2"
   >
     <!-- TODO: 接入后加 skeleton  -->
     <template

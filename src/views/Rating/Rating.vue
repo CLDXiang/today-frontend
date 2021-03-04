@@ -1,8 +1,14 @@
 <template>
-  <div class="content-box">
+  <div
+    :class="
+      'w-full h-full overflow-hidden max-w-14xl text-warm-gray-700 text-sm mx-auto ' +
+        'flex flex-col'
+    "
+  >
     <rating-head-bar />
     <f-tabs
       v-model="activeTab"
+      class="flex-auto"
     >
       <f-tab-pane
         v-for="tabName in ['最新']"
@@ -50,34 +56,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.content-box {
-  height: 100%;
-  width: 100%;
-  color: #444;
-  font-size: 14px;
-  margin: 0 auto;
-  max-width: 2560px;
-  overflow-y: hidden;
-
-  > .head-bar {
-    background-color: #fff;
-  }
-}
-</style>
-
-<style lang="scss">
-.content-box > .f-tabs {
-  height: calc(100vh - 48px - 64px);
-  overflow-y: auto;
-
-  > .f-tabs__header {
-    padding: 15px 15px 6px 15px;
-    background-color: #fff;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-}
-</style>

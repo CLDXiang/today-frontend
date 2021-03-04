@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import jBox from 'jbox';
 
 import { register } from 'register-service-worker';
 
@@ -6,8 +7,8 @@ if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {
       console.log(
-        'App is being served from cache by a service worker.\n'
-          + 'For more details, visit https://goo.gl/AFskqB',
+        'App is being served from cache by a service worker.\n' +
+          'For more details, visit https://goo.gl/AFskqB',
       );
     },
     registered() {
@@ -21,6 +22,13 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated() {
       console.log('New content is available; please refresh.');
+      var myModal = new jBox('Modal', {
+        width: 300,
+        height: 200,
+        title: 'My Modal Window',
+        content: '<i>Update found, refresh me!</i>',
+      });
+      myModal.open();
     },
     offline() {
       console.log('No internet connection found. App is running in offline mode.');

@@ -1,6 +1,6 @@
 <template>
   <div class="f-tabs h-full">
-    <div class="f-tabs__header hide-scrollbar">
+    <div class="f-tabs__header f-hide-scrollbar">
       <span
         v-for="tabPane in tabPanes"
         :key="tabPane.tab"
@@ -17,7 +17,7 @@
     </div>
     <div
       ref="scrollContent"
-      class="f-tabs__content hide-scrollbar"
+      class="f-tabs__content f-hide-scrollbar"
       @scroll="handleContentScroll"
     >
       <slot />

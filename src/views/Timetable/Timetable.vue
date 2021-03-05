@@ -377,10 +377,6 @@ export default defineComponent({
       axios
         .get(filePath)
         .then((response) => {
-          /** TODO: 最好提前把 JSON 文件处理好，不要在前端预处理
-           * 1. 将 teachers 从 time_slots 拉出来整合一下
-           * */
-
           const allCourses = {} as AllCourses;
           response.data.forEach((course: RawCourse) => {
             if (course && course.id) {

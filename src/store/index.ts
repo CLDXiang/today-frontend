@@ -3,8 +3,6 @@ import { localStorage, sessionStorage } from '@/utils/storage';
 import { Sections } from '@/views/Timetable/types';
 import { RateForm } from '@/components/listCard';
 
-import { BreakpointType } from './types';
-
 /** 需要持久化保存的 state */
 const persistedState = {
   localStorage: ['user', 'semester', 'selectedCoursesIds', 'selectedSectionsByDay', 'lastSawChangeLogDate'],
@@ -13,9 +11,6 @@ const persistedState = {
 
 const store = createStore({
   state: {
-    breakpoint: 'xs' as BreakpointType,
-    /** 视窗大小，即 window.innerHeight */
-    innerHeight: 667,
     user: {
       jwtToken: '',
       id: '',
@@ -140,14 +135,6 @@ const store = createStore({
     },
     setHasFetchedSelectedCourses(state) {
       state.hasFetchedSelectedCourses = true;
-    },
-    /** 设置断点 */
-    setBreakpoint(state, newBreakpoint: BreakpointType) {
-      state.breakpoint = newBreakpoint;
-    },
-    /** 设置 innerHeight */
-    setInnerHeight(state, newInnerHeight: number) {
-      state.innerHeight = newInnerHeight;
     },
     /** 设置 ratingForms */
     setRatingForm(state, payload: { lectureId: string, formData: RateForm }) {

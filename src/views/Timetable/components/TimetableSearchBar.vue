@@ -1,8 +1,7 @@
 <template>
   <div class="dialog-container">
     <div
-      v-if="!isMobileMode"
-      class="actions-bar"
+      class="actions-bar hidden md:flex"
     >
       <a-button
         v-show="searchResults.length !== 0"
@@ -21,8 +20,7 @@
       </a-button>
     </div>
     <div
-      v-if="!isMobileMode"
-      class="actions-bar"
+      class="actions-bar hidden md:flex"
     >
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
@@ -52,8 +50,7 @@
       </a-button>
     </div>
     <span
-      v-if="isMobileMode"
-      class="title"
+      class="title md:hidden"
     >搜索课程</span>
     <div
       v-show="!(isSearchResultsVisible && searchResults.length !== 0)"
@@ -201,8 +198,7 @@
       <!-- </v-scroll-y-reverse-transition> -->
     </div>
     <div
-      v-if="isMobileMode"
-      class="actions-bar"
+      class="actions-bar md:hidden"
     >
       <a-button
         v-show="searchResults.length !== 0"
@@ -220,8 +216,7 @@
       </a-button>
     </div>
     <div
-      v-if="isMobileMode"
-      class="actions-bar"
+      class="actions-bar md:hidden"
     >
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
@@ -273,7 +268,6 @@ export default defineComponent({
   props: {
     searchIndex: { type: Array as PropType<SearchIndexItem[]>, required: true },
     isLoadingCourses: Boolean,
-    isMobileMode: Boolean,
   },
   emits: ['hide-search-dialog', 'addcourse'],
   data() {
@@ -530,7 +524,6 @@ export default defineComponent({
 }
 
 .actions-bar {
-  display: flex;
   justify-content: flex-end;
   align-items: center;
   padding: 8px;

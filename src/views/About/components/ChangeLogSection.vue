@@ -1,10 +1,13 @@
 <template>
   <div v-if="items.length">
-    <h3>{{ title }}</h3>
+    <h3 class="text-left font-semibold mt-1">
+      {{ title }}
+    </h3>
     <ul class="pl-3">
       <li
         v-for="item in items"
         :key="item"
+        class="text-left"
       >
         {{ item }}
       </li>
@@ -23,16 +26,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="postcss" scoped>
-h3 {
-  @apply text-left font-semibold mt-1;
-}
-
-ul > li {
-  @apply text-left;
-}
-
-ul > li::marker {
+<style scoped>
+li::marker {
   content: '- ';
 }
 </style>

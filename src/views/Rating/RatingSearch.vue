@@ -1,6 +1,6 @@
 <template>
   <div
-    class="content-box"
+    class="content-box h-full w-full overflow-y-auto max-w-14xl"
   >
     <rating-head-bar
       is-back-visible
@@ -103,15 +103,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content-box {
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #444;
   font-size: 14px;
   margin: 0 auto;
-  max-width: 2560px;
 
   > .title {
     align-self: flex-start;

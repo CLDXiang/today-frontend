@@ -1,5 +1,5 @@
 <template>
-  <div class="content-box">
+  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
     <div class="title">
       注册
     </div>
@@ -212,8 +212,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content-box {
-  height: 100%;
-  width: 100%;
   padding: 30px;
   display: flex;
   flex-direction: column;

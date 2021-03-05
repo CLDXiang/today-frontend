@@ -1,11 +1,10 @@
 <template>
-  <div
-    class="main-container"
-    :style="{ paddingBottom: isBottomNavVisible ? '64px' : '0' }"
-  >
-    <router-view />
-  </div>
-  <bottom-nav v-show="isBottomNavVisible" />
+  <main class="h-full w-full flex flex-col">
+    <div class="flex-auto h-0 overflow-hidden">
+      <router-view />
+    </div>
+    <bottom-nav v-show="isBottomNavVisible" />
+  </main>
 </template>
 
 <script lang="ts">
@@ -92,12 +91,6 @@ body {
 
   height: 100%;
   overflow-y: hidden;
-
-  > .main-container {
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
 }
 
 .ant-btn {
@@ -143,17 +136,5 @@ body {
 
 :focus {
   outline: none;
-}
-
-.hide-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scrollbar-color: transparent transparent;
-  min-width: unset;
-  &::-webkit-scrollbar {
-    display: none;
-    min-width: inherit;
-    background-color: transparent;
-  }
 }
 </style>

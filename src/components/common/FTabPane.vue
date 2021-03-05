@@ -1,7 +1,7 @@
 <template>
   <span
-    class="overflow-y-hidden h-full w-full flex-initial flex-shrink-0"
-    style="scroll-snap-align: start;"
+    class="overflow-y-hidden flex-grow-0 flex-shrink-0"
+    style="scroll-snap-align: start; flex-basis: 100%;"
   >
     <slot />
   </span>

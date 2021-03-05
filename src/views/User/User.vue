@@ -1,9 +1,6 @@
 <template>
-  <div
-    ref="scroll"
-    class="content-box"
-  >
-    <div class="profile-card">
+  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
+    <div class="profile-card flex-shrink-0">
       <div
         v-if="isCurrentUser()"
         class="btn-section"
@@ -92,8 +89,11 @@
       </div>
     </div>
 
-    <div class="h-full rounded-lg shadow-md bg-white">
-      <f-tabs v-model="activeTab">
+    <div class="flex-auto h-0 rounded-lg shadow-md bg-white">
+      <f-tabs
+        v-model="activeTab"
+        class="h-full w-full"
+      >
         <f-tab-pane tab="点评">
           <rating-list :active="activeTab === '点评'" />
         </f-tab-pane>
@@ -139,8 +139,6 @@
         </f-tab-pane>
       </f-tabs>
     </div>
-
-    <div class="bottom-action-bar" />
   </div>
 </template>
 
@@ -255,13 +253,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .content-box {
   display: flex;
-  width: 100%;
-  height: 100%;
   background-color: #e3f1f3;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  overflow-y: auto;
 
   .text-dark {
     color: $gray2;
@@ -410,24 +405,6 @@ export default defineComponent({
         }
       }
     }
-  }
-}
-</style>
-
-<style lang="scss">
-.content-box > div > .f-tabs {
-  .f-tabs__header {
-    height: 29px;
-    padding: 13px 15px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  .list-card {
-    margin-bottom: 8px;
   }
 }
 </style>

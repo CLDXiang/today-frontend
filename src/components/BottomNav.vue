@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-nav">
+  <div class="bottom-nav flex-initial flex-shrink-0">
     <span
       :class="{ 'active-page': activePage === 'timetable' }"
       @click="handleClick('timetable')"
@@ -100,12 +100,7 @@ export default defineComponent({
               0 4px 5px 0 rgba(0,0,0,.14),
               0 1px 10px 0 rgba(0,0,0,.12);
 
-  position: fixed;
-  bottom: 0;
-  z-index: 50;
-
   display: flex;
-  flex: 0 1 auto;
   justify-content: center;
   user-select: none;
 

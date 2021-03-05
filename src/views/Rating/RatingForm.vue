@@ -1,5 +1,5 @@
 <template>
-  <div class="content-box">
+  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
     <rating-head-bar
       is-back-visible
       @click-back="$router.replace(`/rating/lecture/${lectureId}`)"
@@ -347,16 +347,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content-box {
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   color: #444;
   font-size: 14px;
   margin: 0 auto;
-  max-width: 640px;
-  overflow-y: auto;
 
   .title {
     flex: 1;

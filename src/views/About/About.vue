@@ -1,7 +1,10 @@
 <template>
   <main>
     <span
-      class="fixed top-4 left-4 cursor-pointer hover:opacity-80"
+      :class="
+        'h-full w-full overflow-y-auto max-w-14xl' +
+          'fixed top-4 left-4 cursor-pointer hover:opacity-80'
+      "
       @click="$router.replace('/user')"
     >
       <f-icon
@@ -13,9 +16,7 @@
     <!-- <about-section title="关于我们">
     </about-section> -->
     <about-section title="联系我们">
-      <p>
-        有反馈或建议，或者想要关注我们的项目进展？快快扫码加群：
-      </p>
+      <p>有反馈或建议，或者想要关注我们的项目进展？快快扫码加群：</p>
       <img
         class="w-60 mx-auto"
         src="img/wxpr.jpg"

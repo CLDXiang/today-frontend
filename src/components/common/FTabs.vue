@@ -1,6 +1,6 @@
 <template>
-  <div class="f-tabs h-full">
-    <div class="f-tabs__header hide-scrollbar">
+  <div class="f-tabs">
+    <div class="f-tabs__header f-hide-scrollbar py-2 px-4 bg-white">
       <span
         v-for="tabPane in tabPanes"
         :key="tabPane.tab"
@@ -17,7 +17,8 @@
     </div>
     <div
       ref="scrollContent"
-      class="f-tabs__content hide-scrollbar"
+      class="f-hide-scrollbar flex-auto flex overflow-x-auto flex-nowrap items-stretch"
+      style="scroll-snap-type: x mandatory;"
       @scroll="handleContentScroll"
     >
       <slot />
@@ -157,13 +158,6 @@ $padding-x: 12px;
         margin-left: 0;
       }
     }
-  }
-
-  > .f-tabs__content {
-    flex: 1;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
   }
 }
 </style>

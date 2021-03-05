@@ -12,7 +12,6 @@ import BottomNav from '@/components/BottomNav.vue';
 import { defineComponent } from 'vue';
 import { mapMutations } from 'vuex';
 import { HeapPagePathReges } from '@/router';
-import { BreakpointType } from '@/store/types';
 
 export default defineComponent({
   components: {
@@ -21,7 +20,6 @@ export default defineComponent({
 
   data() {
     return {
-      currentBreakpoint: 'xs' as BreakpointType,
       currentInnerHeight: 667,
     };
   },
@@ -45,30 +43,10 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapMutations(['setBreakpoint', 'setInnerHeight']),
+    ...mapMutations(['setInnerHeight']),
     onResize(): void {
-      let newBreakpoint = this.currentBreakpoint;
-      const newWidth = window.innerWidth;
       const newHeight = window.innerHeight;
 
-      if (newWidth < 600) {
-        newBreakpoint = 'xs';
-      } else if (newWidth < 960) {
-        newBreakpoint = 'sm';
-      } else if (newWidth < 1264) {
-        newBreakpoint = 'md';
-      } else if (newWidth < 1904) {
-        newBreakpoint = 'lg';
-      } else if (newWidth >= 1904) {
-        newBreakpoint = 'xl';
-      } else {
-        newBreakpoint = 'xs';
-      }
-
-      if (newBreakpoint !== this.currentBreakpoint) {
-        this.currentBreakpoint = newBreakpoint;
-        this.setBreakpoint(newBreakpoint);
-      }
       if (newHeight !== this.currentInnerHeight) {
         this.currentInnerHeight = newHeight;
         this.setInnerHeight(newHeight);

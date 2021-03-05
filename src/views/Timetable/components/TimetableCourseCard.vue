@@ -150,12 +150,8 @@ export default defineComponent({
   methods: {
     ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId', 'changeDetailPageContent', 'showDetailDialog']),
     handleClickCourseCard() {
-      // only work on mobile mode
       this.changeDetailPageContent(this.section);
       this.showDetailDialog();
-      // if (this.breakpoint === 'xs' || this.breakpoint === 'sm') {
-      //   this.$store.commit('showDetailDialog');
-      // }
     },
   },
 });

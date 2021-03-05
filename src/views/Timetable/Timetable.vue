@@ -30,12 +30,11 @@
       :height="drawerHeight"
       placement="bottom"
       :closable="false"
-      :visible="isMobileMode && isSearchDialogVisible"
+      :visible="isSearchDialogVisible"
+      class="md:hidden"
       @close="hideSearchDialog"
     >
       <timetable-search-bar
-        v-if="isMobileMode"
-        :is-mobile-mode="isMobileMode"
         :search-index="searchIndex"
         :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
@@ -92,12 +91,10 @@
         />
       </div>
       <div
-        v-if="!isMobileMode"
-        class="flex-grow-1 max-w-sm my-0 mx-3 flex-auto flex-shrink-0"
+        class="flex-grow-1 max-w-sm my-0 mx-3 flex-auto flex-shrink-0 hidden md:block"
         style="height: 928px"
       >
         <timetable-search-bar
-          :is-mobile-mode="isMobileMode"
           :search-index="searchIndex"
           :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
@@ -111,8 +108,7 @@
       </div>
 
       <a-button
-        v-if="isMobileMode"
-        class="fixed bottom-20 right-5 w-12 h-12 z-20 flex justify-center items-center"
+        class="fixed bottom-20 right-5 w-12 h-12 z-20 flex justify-center items-center md:hidden"
         type="primary"
         size="small"
         shape="circle"
@@ -247,7 +243,6 @@ export default defineComponent({
       'detailPageCourse',
       'isDetailDialogVisible',
       'hasFetchedSelectedCourses',
-      'breakpoint',
       'innerHeight',
     ]),
     ...mapState({
@@ -256,18 +251,6 @@ export default defineComponent({
       semesterVuex: 'semester',
     }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
-    isMobileMode(): boolean {
-      switch (this.breakpoint) {
-        case 'xs':
-        case 'sm':
-          return true;
-        case 'md':
-        case 'lg':
-        case 'xl':
-        default:
-          return false;
-      }
-    },
     /** 底部抽屉高度 */
     drawerHeight(): string {
       return `${Math.floor(this.innerHeight * 0.9)}px`;

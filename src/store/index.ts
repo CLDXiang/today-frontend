@@ -7,7 +7,7 @@ import { BreakpointType } from './types';
 
 /** 需要持久化保存的 state */
 const persistedState = {
-  localStorage: ['user', 'semester', 'selectedCoursesIds', 'selectedSectionsByDay'],
+  localStorage: ['user', 'semester', 'selectedCoursesIds', 'selectedSectionsByDay', 'lastSawChangeLogDate'],
   sessionStorage: ['ratingForms'],
 };
 
@@ -51,6 +51,9 @@ const store = createStore({
 
     /** 点评表单页缓存 */
     ratingForms: {} as { [lectureId: string]: RateForm },
+
+    /** 最后一次看过的更新日志 date */
+    lastSawChangeLogDate: '',
 
     // storage 中保存的 state
     ...localStorage.getVuexStates(),
@@ -150,6 +153,10 @@ const store = createStore({
     setRatingForm(state, payload: { lectureId: string, formData: RateForm }) {
       const { lectureId, formData } = payload;
       state.ratingForms[lectureId] = formData;
+    },
+    /** 设置 lastSawChangeLogDate */
+    setLastSawChangeLogDate(state, value) {
+      state.lastSawChangeLogDate = value;
     },
   },
   getters: {

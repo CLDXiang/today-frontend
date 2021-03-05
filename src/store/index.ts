@@ -11,8 +11,6 @@ const persistedState = {
 
 const store = createStore({
   state: {
-    /** 视窗大小，即 window.innerHeight */
-    innerHeight: 667,
     user: {
       jwtToken: '',
       id: '',
@@ -137,10 +135,6 @@ const store = createStore({
     },
     setHasFetchedSelectedCourses(state) {
       state.hasFetchedSelectedCourses = true;
-    },
-    /** 设置 innerHeight */
-    setInnerHeight(state, newInnerHeight: number) {
-      state.innerHeight = newInnerHeight;
     },
     /** 设置 ratingForms */
     setRatingForm(state, payload: { lectureId: string, formData: RateForm }) {

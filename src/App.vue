@@ -10,47 +10,16 @@
 <script lang="ts">
 import BottomNav from '@/components/BottomNav.vue';
 import { defineComponent } from 'vue';
-import { mapMutations } from 'vuex';
 import { HeapPagePathReges } from '@/router';
 
 export default defineComponent({
   components: {
     BottomNav,
   },
-
-  data() {
-    return {
-      currentInnerHeight: 667,
-    };
-  },
-
   computed: {
     isBottomNavVisible() {
       const { path } = this.$route;
       return HeapPagePathReges.reduce((pv, reg) => pv || reg.test(path), false);
-    },
-  },
-
-  beforeUnmount() {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', this.onResize);
-    }
-  },
-
-  mounted() {
-    this.onResize();
-    window.addEventListener('resize', this.onResize);
-  },
-
-  methods: {
-    ...mapMutations(['setInnerHeight']),
-    onResize(): void {
-      const newHeight = window.innerHeight;
-
-      if (newHeight !== this.currentInnerHeight) {
-        this.currentInnerHeight = newHeight;
-        this.setInnerHeight(newHeight);
-      }
     },
   },
 });

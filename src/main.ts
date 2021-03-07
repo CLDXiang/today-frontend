@@ -4,14 +4,12 @@ import {
   Button,
   Modal,
   Drawer,
-  Badge,
   Dropdown,
-  Popover,
   Slider,
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import {
-  FIcon, FInput, FSelect, FTabs, FTabPane,
+  FBadge, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton,
 } from '@/components/common';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -44,9 +42,7 @@ app
   .use(Button)
   .use(Modal)
   .use(Drawer)
-  .use(Badge)
   .use(Dropdown)
-  .use(Popover)
   .use(Slider);
 app.config.globalProperties.$message = message;
 declare module '@vue/runtime-core' {
@@ -57,9 +53,12 @@ declare module '@vue/runtime-core' {
 
 // 自定义全局组件
 app
+  .component('FBadge', FBadge)
+  .component('FPopover', FPopover)
   .component('FIcon', FIcon)
   .component('FInput', FInput)
   .component('FSelect', FSelect)
+  .component('FSkeleton', FSkeleton)
   .component('FTabs', FTabs)
   .component('FTabPane', FTabPane);
 

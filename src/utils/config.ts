@@ -26,27 +26,30 @@ interface semesterItem {
 
 // 后端保存的学期名：前端展示的学期名
 export const semesterArray: semesterItem[] = [
-  { key: '2015-2016学年2学期', name: '2015-2016学年2学期', jsonFileName: 'lessons_202_2015-2016_spring.json' },
-  { key: '2015-2016学年暑期学期', name: '2015-2016学年暑期学期', jsonFileName: 'lessons_222_2015-2016_summer.json' },
-  { key: '2016-2017学年1学期', name: '2016-2017学年1学期', jsonFileName: 'lessons_242_2016-2017_fall.json' },
-  { key: '2016-2017学年2学期', name: '2016-2017学年2学期', jsonFileName: 'lessons_243_2016-2017_spring.json' },
-  { key: '2016-2017学年暑期学期', name: '2016-2017学年暑期学期', jsonFileName: 'lessons_262_2016-2017_summer.json' },
-  { key: '2017-2018学年1学期', name: '2017-2018学年1学期', jsonFileName: 'lessons_263_2017-2018_fall.json' },
-  { key: '2017-2018学年2学期', name: '2017-2018学年2学期', jsonFileName: 'lessons_264_2017-2018_spring.json' },
-  { key: '2017-2018学年暑期学期', name: '2017-2018学年暑期学期', jsonFileName: 'lessons_287_2017-2018_summer.json' },
-  { key: '2018-2019学年1学期', name: '2018-2019学年1学期', jsonFileName: 'lessons_284_2018-2019_fall.json' },
-  { key: '2018-2019学年2学期', name: '2018-2019学年2学期', jsonFileName: 'lessons_285_2018-2019_spring.json' },
-  { key: '2018-2019学年暑期学期', name: '2018-2019学年暑期学期', jsonFileName: 'lessons_304_2018-2019_summer.json' },
-  { key: '2019-2020学年1学期', name: '2019-2020学年1学期', jsonFileName: 'lessons_324_2019-2020_fall.json' },
-  { key: '2019-2020学年2学期', name: '2019-2020学年2学期', jsonFileName: 'lessons_325_2019-2020_spring.json' },
-  { key: '2019-2020学年暑期学期', name: '2019-2020学年暑期学期', jsonFileName: 'lessons_327_2019-2020_summer.json' },
-  { key: '2020-2021学年1学期', name: '2020-2021学年1学期', jsonFileName: 'lessons_344_2020-2021_fall.json' },
-  { key: '2020-2021学年2学期', name: '2020-2021学年2学期', jsonFileName: 'lessons_364_2020-2021_spring.json' },
+  { key: '2015-2016学年2学期', name: '2015-2016学年2学期', jsonFileName: 'lessons_202.json' },
+  { key: '2015-2016学年暑期学期', name: '2015-2016学年暑期学期', jsonFileName: 'lessons_222.json' },
+  { key: '2016-2017学年1学期', name: '2016-2017学年1学期', jsonFileName: 'lessons_242.json' },
+  { key: '2016-2017学年2学期', name: '2016-2017学年2学期', jsonFileName: 'lessons_243.json' },
+  { key: '2016-2017学年暑期学期', name: '2016-2017学年暑期学期', jsonFileName: 'lessons_262.json' },
+  { key: '2017-2018学年1学期', name: '2017-2018学年1学期', jsonFileName: 'lessons_263.json' },
+  { key: '2017-2018学年2学期', name: '2017-2018学年2学期', jsonFileName: 'lessons_264.json' },
+  { key: '2017-2018学年暑期学期', name: '2017-2018学年暑期学期', jsonFileName: 'lessons_287.json' },
+  { key: '2018-2019学年1学期', name: '2018-2019学年1学期', jsonFileName: 'lessons_284.json' },
+  { key: '2018-2019学年2学期', name: '2018-2019学年2学期', jsonFileName: 'lessons_285.json' },
+  { key: '2018-2019学年暑期学期', name: '2018-2019学年暑期学期', jsonFileName: 'lessons_304.json' },
+  { key: '2019-2020学年1学期', name: '2019-2020学年1学期', jsonFileName: 'lessons_324.json' },
+  { key: '2019-2020学年2学期', name: '2019-2020学年2学期', jsonFileName: 'lessons_325.json' },
+  { key: '2019-2020学年暑期学期', name: '2019-2020学年暑期学期', jsonFileName: 'lessons_327.json' },
+  { key: '2020-2021学年1学期', name: '2020-2021学年1学期', jsonFileName: 'lessons_344.json' },
+  { key: '2020-2021学年2学期', name: '2020-2021学年2学期', jsonFileName: 'lessons_364.json' },
 ];
 
 // export const semesterNameArray = semesterArray.map((x) => x.name);
 
 // export const jsonNameArray = semesterArray.map((x) => x.jsonFileName);
+
+/** 用作 Tab 页标题的 ratings 类型 */
+export type RatingType = '最新';
 
 /** 用作 Tab 页标题的 lectures 类型 */
 export type LectureType = '七模' | '思政' | '外语' | '体育';

@@ -1,7 +1,7 @@
 <template>
-  <div class="timetable">
+  <div class="h-full w-full overflow-y-auto max-w-14xl relative flex flex-col pt-4 mx-auto">
     <a-drawer
-      :height="drawerHeight"
+      height="90%"
       placement="bottom"
       :closable="false"
       :visible="isDetailDialogVisible"
@@ -13,7 +13,7 @@
       />
     </a-drawer>
     <a-drawer
-      :height="drawerHeight"
+      height="90%"
       placement="bottom"
       :closable="false"
       :visible="isConflictDialogVisible"
@@ -27,15 +27,14 @@
       />
     </a-drawer>
     <a-drawer
-      :height="drawerHeight"
+      height="90%"
       placement="bottom"
       :closable="false"
-      :visible="isMobileMode && isSearchDialogVisible"
+      :visible="isSearchDialogVisible"
+      class="md:hidden"
       @close="hideSearchDialog"
     >
       <timetable-search-bar
-        v-if="isMobileMode"
-        :is-mobile-mode="isMobileMode"
         :search-index="searchIndex"
         :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
@@ -43,7 +42,7 @@
       />
     </a-drawer>
     <a-drawer
-      :height="drawerHeight"
+      height="90%"
       placement="right"
       :closable="false"
       :visible="isSelectedCourseListVisible"
@@ -59,20 +58,28 @@
     </a-drawer>
     <timetable-head-bar
       :semester="semesterName"
+      :hide-left="semesterIndex === 0"
+      :hide-right="semesterIndex === semesterArray.length - 1"
       @click-menu-button="showSelectedCourseList"
       @click-left="moveSemester(-1)"
       @click-right="moveSemester(1)"
     />
-    <div class="timetable__body">
-      <div class="timetable__day-box">
-        <div class="timetable__time">
-          <div class="time__title" />
+    <div class="flex items-start">
+      <div class="overflow-x-auto flex flex-grow border border-gray-300 rounded-md">
+        <div class="sticky left-0 z-20 pr-1 flex-initial flex-shrink-0 flex flex-col">
+          <div class="flex-grow-0 flex-shrink-0 h-8 flex justify-center items-center py-0 px-1" />
           <div
             v-for="(section, index) in sections"
             :key="index"
-            class="time__cell"
+            :class="
+              'relative flex-grow-0 flex-shrink-0 h-16 ' +
+                'flex justify-center items-center w-8 py-0 px-4 ' +
+                'bg-white bg-opacity-50 text-gray-500 font-semibold'
+            "
           >
-            <span class="time__clock">{{ section.clock }}</span>
+            <span class="absolute top-0 text-gray-400 font-normal text-xs">
+              {{ section.clock }}
+            </span>
             {{ section.name }}
           </div>
         </div>
@@ -84,11 +91,10 @@
         />
       </div>
       <div
-        v-if="!isMobileMode"
-        class="timetable__search-bar-box"
+        class="flex-grow-1 max-w-sm my-0 mx-3 flex-auto flex-shrink-0 hidden md:block"
+        style="height: 928px"
       >
         <timetable-search-bar
-          :is-mobile-mode="isMobileMode"
           :search-index="searchIndex"
           :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
@@ -102,32 +108,22 @@
       </div>
 
       <a-button
-        v-if="isMobileMode"
-        class="floating-button"
+        class="fixed bottom-20 right-5 w-12 h-12 z-20 flex justify-center items-center md:hidden"
         type="primary"
         size="small"
         shape="circle"
         @click="showSearchDialog"
       >
-        <a-badge
-          v-if="!selectedCoursesIds.size"
-          dot
-          color="volcano"
+        <f-badge
+          :visible="!selectedCoursesIds.size"
+          offset-x="0.5"
+          offset-y="1"
         >
           <f-icon
             name="search"
             size="24"
           />
-        </a-badge>
-        <span
-          v-else
-          class="ant-badge ant-badge-status ant-badge-dot-status"
-        >
-          <f-icon
-            name="search"
-            size="24"
-          />
-        </span>
+        </f-badge>
       </a-button>
     </div>
   </div>
@@ -194,6 +190,7 @@ export default defineComponent({
       semester: '2020-2021学年2学期',
       semesterIndex: 0,
       semesterJsonName: '',
+      semesterArray,
       isLoadingCourses: false,
       /** 课程数据 */
       allCourses: {} as AllCourses,
@@ -246,8 +243,6 @@ export default defineComponent({
       'detailPageCourse',
       'isDetailDialogVisible',
       'hasFetchedSelectedCourses',
-      'breakpoint',
-      'innerHeight',
     ]),
     ...mapState({
       selectedSectionsByDayVuex: 'selectedSectionsByDay',
@@ -255,22 +250,6 @@ export default defineComponent({
       semesterVuex: 'semester',
     }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
-    isMobileMode(): boolean {
-      switch (this.breakpoint) {
-        case 'xs':
-        case 'sm':
-          return true;
-        case 'md':
-        case 'lg':
-        case 'xl':
-        default:
-          return false;
-      }
-    },
-    /** 底部抽屉高度 */
-    drawerHeight(): string {
-      return `${Math.floor(this.innerHeight * 0.9)}px`;
-    },
     /** 已选课程列表数据 */
     selectedCourses(): SelectedCourse[] {
       if (this.isLoadingCourses) {
@@ -279,19 +258,12 @@ export default defineComponent({
       }
       return [...this.selectedCoursesIds].map((lessonId) => {
         const {
-          id,
-          name,
-          // eslint-disable-next-line camelcase
-          time_slot,
-          code,
+          id, name, teachers, code,
         } = this.allCourses[lessonId];
-        const teachers = [
-          ...new Set(time_slot.reduce((pv, ts) => [...pv, ...ts.teacher], [] as string[])),
-        ];
         return {
           id,
           name,
-          teachers,
+          teachers: teachers.split(','),
           code,
         };
       });
@@ -325,7 +297,8 @@ export default defineComponent({
       if (step === -1 && this.semesterIndex === 0) {
         this.$message.warn('已经是最后一个学期啦', 0.5);
         return;
-      } if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
+      }
+      if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
         this.$message.warn('已经是最新学期啦', 0.5);
         return;
       }
@@ -376,16 +349,12 @@ export default defineComponent({
       }
       this.hideConflictDialog();
     },
-    getCoursesFromJSON(filePathOrigin = 'lessons_344_2020-2021_fall.json') {
+    getCoursesFromJSON(filePathOrigin: string) {
       const filePath = `lessons/${filePathOrigin}`;
       this.isLoadingCourses = true;
       axios
         .get(filePath)
         .then((response) => {
-          /** TODO: 最好提前把 JSON 文件处理好，不要在前端预处理
-           * 1. 将 teachers 从 time_slots 拉出来整合一下
-           * */
-
           const allCourses = {} as AllCourses;
           response.data.forEach((course: RawCourse) => {
             if (course && course.id) {
@@ -490,14 +459,8 @@ export default defineComponent({
       const searchIndex = [] as SearchIndexItem[];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
       Object.entries(this.allCourses).forEach(([courseId, course]) => {
-        const teachers = new Set<string>();
         const timeSlots = [] as SearchIndexItemTimeSlot[];
         course.time_slot.forEach((ts) => {
-          ts.teacher.forEach((teacher) => {
-            if (teacher.trim() !== '') {
-              teachers.add(teacher);
-            }
-          });
           const {
             week, day, section, place,
           } = ts;
@@ -513,22 +476,8 @@ export default defineComponent({
 
         const { name, department } = course;
 
-        // 搜索索引字符串
-        // const index = `${name}|${[...teachers].join(',')}|${department}${timeSlots.reduce(
-        //   (s, ts) =>
-        //     `${s}|${ts.week}周|周${ts.dayText}|星期${ts.dayText}|第${ts.section.join('-')}节|${
-        //       ts.place
-        //     }`,
-        //   '',
-        // )}|${course.code_id}`;
-
-        // const index = `${timeSlots.reduce(
-        //   (s, ts) => `${s}|${ts.week}周|周${ts.day}|星期${ts.day}|第${ts.section}节|${ts.place}`,
-        //   '',
-        // )}`;
-
         // 这里提前处理便于直接显示用，如果未来需要单独使用其中的字段可以注释掉，然后在其他地方处理
-        const teachersText = [...teachers].join(', ');
+        const teachersText = course.teachers || '';
         // TODO: 考虑如何把 week 整进来
         const timeSlotsTexts = timeSlots.map(
           (ts) => `${ts.week}周 周${ts.dayText} ${ts.section.join('-')} ${ts.place}`,
@@ -545,7 +494,7 @@ export default defineComponent({
 
         searchIndex.push({
           name,
-          teachers: [...teachers],
+          teachers: course.teachers.split(','),
           department,
           timeSlots,
           codeId: course.code_id,
@@ -663,114 +612,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-@import '@/scss/_timetable';
-
-.timetable {
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  margin: $head-margin auto 0 auto;
-
-  max-width: 2560px;
-}
-
-.timetable__body {
-  display: flex;
-  align-items: flex-start;
-}
-
-.timetable__time {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-
-  padding-right: 4px;
-
-  flex: 0 0 auto;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.time__title {
-  flex: 0 0 $cell-height/2;
-  @include flex-center;
-
-  padding: 0 4px;
-}
-
-.time__cell {
-  position: relative;
-  flex: 0 0 $cell-height;
-  @include flex-center;
-  width: $cell-width / 2;
-
-  padding: 0 4px;
-  background: rgba(255, 255, 255, 0.5);
-
-  color: #69707a;
-  font-weight: 600;
-}
-
-.time__clock {
-  position: absolute;
-  top: 0;
-
-  color: #aaa;
-  font-weight: 400;
-  font-size: 12px;
-}
-
-.timetable__day-box {
-  overflow-x: auto;
-  display: flex;
-  flex: 618;
-
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-.timetable__search-bar-box {
-  flex: 382;
-  // height: 17rem;
-  max-width: 375px;
-  height: $search-bar-height;
-  margin: 0 10px;
-  display: flex;
-}
-
-.timetable__search-bar-footer {
-  display: flex;
-  justify-content: flex-end;
-
-  > button {
-    border-radius: 6px;
-    margin: 0 5px;
-    padding: 0 10px;
-    background-color: #fff;
-
-    color: #69707a;
-    font-size: 14px;
-  }
-}
-
-.floating-button {
-  position: fixed;
-  bottom: 76px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
-  z-index: 2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  > .ant-badge {
-    height: 24px;
-  }
-}
-</style>

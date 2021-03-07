@@ -1,6 +1,6 @@
 <template>
   <div
-    class="content-box"
+    class="content-box h-full w-full overflow-y-auto max-w-14xl"
   >
     <rating-head-bar
       is-back-visible
@@ -16,7 +16,7 @@
       <card-lecture
         v-for="searchResult in searchResults"
         :key="searchResult.id"
-        class="search-result-list__card clickable"
+        class="search-result-list__card f-clickable"
         :lecture="searchResult"
         @click="$router.push(`/rating/lecture/${searchResult.id}`)"
       />
@@ -60,9 +60,14 @@ export default defineComponent({
     const searchMore = () => {
       // TODO: 传入 lastId
       if (q.value) {
-        rpcClient.search({ q: q.value, limit: 20 }).then((resp) => {
-          searchResults.value = [...searchResults.value, ...resp.data];
-        });
+        rpcClient.search({
+          q: q.value,
+          lastId: searchResults.value[searchResults.value.length - 1].id,
+          limit: 20,
+        })
+          .then((resp) => {
+            searchResults.value = [...searchResults.value, ...resp.data];
+          });
       }
     };
 
@@ -97,18 +102,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_clickable';
-
 .content-box {
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #444;
   font-size: 14px;
   margin: 0 auto;
-  max-width: 2560px;
 
   > .title {
     align-self: flex-start;

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-box">
+  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
     <div class="title">
       忘记密码
     </div>
@@ -18,6 +18,7 @@
         <f-input
           v-model="code"
           label="验证码"
+          hint="若有未使用的码，可直接填写"
           outlined
           required
         />
@@ -182,8 +183,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content-box {
-  height: 100%;
-  width: 100%;
   padding: 30px;
   display: flex;
   flex-direction: column;

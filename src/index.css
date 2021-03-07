@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.f-clickable {
+  @apply cursor-pointer hover:opacity-80 transition-opacity select-none;
+}
+
+.f-hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-color: transparent transparent;
+  min-width: unset;
+}
+
+.f-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  min-width: inherit;
+  background-color: transparent;
+}

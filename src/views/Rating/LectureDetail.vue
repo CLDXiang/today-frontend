@@ -1,16 +1,28 @@
 <template>
-  <div class="content-box">
+  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
     <rating-head-bar
       is-back-visible
       @click-back="$router.replace('/rating')"
     >
       <span class="title">课程评价</span>
     </rating-head-bar>
-    <div class="info-bar">
-      <div class="info-bar__head">
+    <div class="info-bar flex-shrink-0">
+      <div
+        v-if="loading"
+        class="h-16"
+      >
+        <f-skeleton :width="['300px', '144px']" />
+      </div>
+      <div
+        v-else
+        class="info-bar__head"
+      >
         <div class="info-bar__head-left">
           <div class="lecture-title">
-            <span>{{ lectureInfo.name }}</span><span>{{ lectureInfo.taughtBy.join(' ') }}</span>
+            <span class="text-black text-2xl mr-2">
+              {{ lectureInfo.name }}
+            </span>
+            <span class="text-gray-600 text-base">{{ lectureInfo.taughtBy.join(' ') }}</span>
           </div>
           <div class="lecture-recommended-score">
             <five-stars
@@ -67,7 +79,14 @@
           </div>
         </div>
       </div>
-      <div class="info-bar__rating-outline">
+      <div
+        v-if="loading"
+        class="info-bar__rating-outline h-14 animate-pulse"
+      />
+      <div
+        v-else
+        class="info-bar__rating-outline"
+      >
         <div>
           <div>难易程度</div>
           <div>{{ mapScoreToText('difficulty', lectureInfo.difficulty) }}</div>
@@ -81,7 +100,10 @@
           <div>{{ mapScoreToText('workload', lectureInfo.workload) }}</div>
         </div>
       </div>
-      <lecture-detail-info :lecture-info="lectureInfo" />
+      <lecture-detail-info
+        :lecture-info="lectureInfo"
+        :loading="loading"
+      />
     </div>
     <div class="rating-bar">
       <div class="rating-bar__header">
@@ -108,17 +130,32 @@
         </a-button>
       </div>
       <div class="rating-bar__list">
+        <div
+          v-if="loading"
+          class="h-44 bg-white rounded-lg p-4 pb-2 mb-3"
+        >
+          <f-skeleton
+            avatar
+            :width="['180px', '120px']"
+          />
+          <div class="mt-4">
+            <f-skeleton
+              :rows="3"
+              width="50%"
+            />
+          </div>
+        </div>
         <card-reactive-rating
           v-for="rating in ratingList"
           :key="rating.id"
           :rating="rating"
         />
         <div
-          v-if="ratingList.length === 0"
+          v-if="!loading && ratingList.length === 0"
           class="rating-bar__empty"
         >
           你来到了一块空地，来<span
-            class="clickable link-text"
+            class="f-clickable link-text"
             @click="handleClickFormButton"
           >第一个点评</span>吧！
         </div>
@@ -150,7 +187,7 @@ export default defineComponent({
     const { lectureId } = toRefs(props);
 
     // 获取课程信息
-    const { lectureInfo } = useLectureInfo(lectureId);
+    const { lectureInfo, loading } = useLectureInfo(lectureId);
 
     // 获取点评列表
     const { ratingList } = useLectureRatings(lectureId);
@@ -160,6 +197,8 @@ export default defineComponent({
       lectureInfo,
       /** 点评列表 */
       ratingList,
+      /** 正在获取数据 */
+      loading,
     };
   },
 
@@ -190,20 +229,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_clickable';
-
 .content-box {
   background-color: #f2f2f2;
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   color: #444;
   font-size: 14px;
   margin: 0 auto;
-  max-width: 2560px;
-  overflow-y: auto;
 
   > .head-bar {
     background-color: #fff;
@@ -230,21 +263,6 @@ export default defineComponent({
       > .info-bar__head-left {
         display: flex;
         flex-direction: column;
-
-        > .lecture-title {
-          > span:first-child {
-            color: #000;
-            font-size: 24px;
-            line-height: 24px;
-            margin-right: 8px;
-          }
-
-          > span:last-child {
-            color: $gray2;
-            font-size: 16px;
-            line-height: 16px;
-          }
-        }
 
         > .lecture-recommended-score {
           margin: 16px 0 0 2px;
@@ -334,7 +352,7 @@ export default defineComponent({
       border-radius: 4px;
       position: sticky;
       top: 0;
-      z-index: 1;
+      z-index: 10;
 
       display: flex;
       justify-content: space-between;

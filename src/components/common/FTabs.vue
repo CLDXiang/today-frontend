@@ -1,6 +1,6 @@
 <template>
   <div class="f-tabs">
-    <div class="f-tabs__header hide-scrollbar">
+    <div class="f-tabs__header f-hide-scrollbar py-2 px-4 bg-white">
       <span
         v-for="tabPane in tabPanes"
         :key="tabPane.tab"
@@ -17,7 +17,8 @@
     </div>
     <div
       ref="scrollContent"
-      class="f-tabs__content hide-scrollbar"
+      class="f-hide-scrollbar flex-auto flex overflow-x-auto flex-nowrap items-stretch"
+      style="scroll-snap-type: x mandatory;"
       @scroll="handleContentScroll"
     >
       <slot />
@@ -26,7 +27,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import {
+  defineComponent, ref, VNode, isVNode,
+} from 'vue';
+
+const isTabPane = (vNode: VNode) => vNode.props?.tab !== undefined;
 
 export default defineComponent({
   props: {
@@ -35,20 +40,33 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, ctx) {
-    const tabPanes = ref<
-      {
+    const tabPanesInit: {
         tab: string;
         name: string;
-      }[]
-    >([]);
-    tabPanes.value = (ctx.slots.default?.() || [])
-      .filter((vNode) => vNode.props?.tab !== undefined)
-      .map((vNode) => ({
-        tab: vNode.props?.tab || '',
-        name: vNode.props?.name || '',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // children: (vNode.children as any)?.default?.() || null,
-      }));
+      }[] = [];
+
+    /** 一级子节点 */
+    const children = (ctx.slots.default?.() || []);
+    children.forEach((child) => {
+      if (isTabPane(child)) {
+        // 如果是 TabPane，加到列表中
+        tabPanesInit.push({
+          tab: child.props?.tab || '',
+          name: child.props?.name || '',
+        });
+      } else if (child.children?.length && Array.isArray(child.children)) {
+        // 如果有子节点，对二级节点判断是否是 TabPane，如果是则加入到列表中
+        child.children.forEach((c) => {
+          if (isVNode(c) && isTabPane(c)) {
+            tabPanesInit.push({
+              tab: c.props?.tab || '',
+              name: c.props?.name || '',
+            });
+          }
+        });
+      }
+    });
+    const tabPanes = ref(tabPanesInit);
 
     /** scroll-content 元素 */
     const scrollContentRef = ref<HTMLDivElement>();
@@ -139,20 +157,6 @@ $padding-x: 12px;
       &:first-child {
         margin-left: 0;
       }
-    }
-  }
-
-  > .f-tabs__content {
-    flex: 1;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-
-    > .f-tabs__pane {
-      height: 100%;
-      width: 100%;
-      flex: 0 0 auto;
-      scroll-snap-align: start;
     }
   }
 }

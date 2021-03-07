@@ -16,15 +16,13 @@
       />
       <f-input
         v-model="password"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text' : 'password'"
+        type="password"
         label="密码"
         clearable
         outlined
         required
         hint="https 加密传输，后台不会存储明文密码"
         :rules="[(v) => !!v || '密码不能为空']"
-        @click:append="showPassword = !showPassword"
         @keydown="handleKeyDown"
       />
     </div>
@@ -69,7 +67,6 @@ export default defineComponent({
   data: () => ({
     name: '',
     password: '',
-    showPassword: false,
   }),
   computed: {
     ...mapGetters(['userLoggedIn']),

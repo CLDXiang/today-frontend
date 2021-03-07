@@ -49,8 +49,7 @@
       </div>
       <f-input
         v-model="password"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text': 'password'"
+        type="password"
         label="密码"
         clearable
         outlined
@@ -58,12 +57,10 @@
         :rules="[
           (v) => !!v || '密码不能为空',
         ]"
-        @click:append="showPassword = !showPassword"
       />
       <f-input
         v-model="confirmPassword"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text': 'password'"
+        type="password"
         label="确认密码"
         clearable
         outlined
@@ -71,7 +68,6 @@
         :rules="[
           (v) => !!v || '密码不能为空',
         ]"
-        @click:append="showPassword = !showPassword"
       />
     </div>
     <div class="button-box">
@@ -107,7 +103,6 @@ export default defineComponent({
     email: '',
     code: '',
     password: '',
-    showPassword: false,
     confirmPassword: '',
     alertType: 'success',
     alertShown: false,
@@ -148,6 +143,14 @@ export default defineComponent({
       }
       if (this.password === '') {
         this.$message.warn('密码不能为空哦');
+        return;
+      }
+      if (this.password.length < 6) {
+        this.$message.warn('密码长度至少为 6 个字符哦');
+        return;
+      }
+      if (this.password.length > 32) {
+        this.$message.warn('密码长度最多为 32 个字符哦');
         return;
       }
       authClient.register({

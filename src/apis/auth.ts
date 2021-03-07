@@ -54,13 +54,22 @@ const requestCodeForForgotPassword = async (req: { email: string }): Promise<nul
   return null;
 };
 
-const modifyPassword = async (req: {
+const resetPassword = async (req: {
   email: string;
   code: number;
   password: string;
 }): Promise<null> => {
-  log.info('authClient.modifyPassword', req);
+  log.info('authClient.resetPassword', req);
   await API.put<null>('auth/password', req);
+  return null;
+};
+
+const changePassword = async (req: {
+  oldPassword: string;
+  newPassword: string;
+}): Promise<null> => {
+  log.info('authClient.changePassword', req);
+  await API.patch<null>('auth/password', req);
   return null;
 };
 
@@ -73,8 +82,10 @@ const authClient = {
   requestCodeRegister,
   /** 获取验证码（忘记密码） */
   requestCodeForForgotPassword,
+  /** 重置密码 */
+  resetPassword,
   /** 修改密码 */
-  modifyPassword,
+  changePassword,
 };
 
 export default authClient;

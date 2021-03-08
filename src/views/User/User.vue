@@ -1,6 +1,6 @@
 <template>
-  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
-    <div class="profile-card flex-shrink-0">
+  <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
+    <div class="flex-shrink-0 profile-card">
       <div
         v-if="isCurrentUser()"
         class="btn-section"
@@ -45,7 +45,7 @@
       />
       <div class="info-box">
         <img
-          class="avatar flex-shrink-0"
+          class="flex-shrink-0 avatar"
           :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
@@ -95,10 +95,10 @@
       </div>
     </div>
 
-    <div class="flex-auto h-0 rounded-lg shadow-md bg-white">
+    <div class="flex-auto h-0 bg-white rounded-lg shadow-md">
       <f-tabs
         v-model="activeTab"
-        class="h-full w-full"
+        class="w-full h-full"
       >
         <f-tab-pane tab="点评">
           <rating-list :active="activeTab === '点评'" />

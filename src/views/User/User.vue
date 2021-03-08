@@ -271,11 +271,6 @@ export default defineComponent({
       isAboutBadgeVisible,
     };
   },
-  methods: {
-    handleClickCardRating(ratingId: string) {
-      this.$router.push(`/rating/lecture/${ratingId}`);
-    },
-  },
 });
 </script>
 

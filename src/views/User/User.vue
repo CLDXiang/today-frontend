@@ -9,10 +9,16 @@
           class="control-btn"
           @click="$router.push('/about')"
         >
-          <f-icon
-            class="text-light"
-            name="question-circle"
-          />
+          <f-badge
+            :visible="isAboutBadgeVisible"
+            offset-x="0.5"
+            offset-y="0.5"
+          >
+            <f-icon
+              class="text-light"
+              name="question-circle"
+            />
+          </f-badge>
         </div>
         <div
           class="control-btn"
@@ -39,7 +45,7 @@
       />
       <div class="info-box">
         <img
-          class="avatar"
+          class="avatar flex-shrink-0"
           :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
@@ -153,6 +159,7 @@ import { useStore } from 'vuex';
 import { userClient } from '@/apis';
 import { useProcessAvatar } from '@/composables';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 import {
   RatingList, CommentList, LessonList, CommonList,
 } from './components';
@@ -242,12 +249,29 @@ export default defineComponent({
 
     const activeTab = ref<TabType>('点评');
 
+    // 判断是否显示 About 入口小红点的逻辑
+    /** 是否显示 About 入口小红点 */
+    const isAboutBadgeVisible = ref(false);
+
+    /** 最近一次看过的更新日志日期 */
+    const lastSawChangeLogDate = computed(() => store.state.lastSawChangeLogDate);
+
+    axios.get<{ date: string }[]>('changeLog.json')
+      .then(({ data }) => {
+        /** 最新的更新日志日期 */
+        const latestDate = data.map((d) => d.date);
+        if (!latestDate.includes(lastSawChangeLogDate.value)) {
+          isAboutBadgeVisible.value = true;
+        }
+      });
+
     return {
       processAvatar,
       userProfile,
       activeTab,
       isCurrentUser,
       logout,
+      isAboutBadgeVisible,
     };
   },
   methods: {

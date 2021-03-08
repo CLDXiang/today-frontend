@@ -70,7 +70,6 @@
       class="card-reactive-rating__division-bar"
     />
     <div
-      v-if="false"
       class="card-reactive-rating__bottom-icons"
     >
       <span
@@ -94,6 +93,7 @@
         <f-icon
           name="heart"
           size="14"
+          class="f-clickable"
         />
         <span class="card-reactive-rating__statistics">
           {{ rating.starCount }}
@@ -107,6 +107,7 @@
         <f-icon
           name="edit-square"
           size="14"
+          class="f-clickable"
         />
       </span>
       <span
@@ -117,6 +118,7 @@
         <f-icon
           name="delete"
           size="14"
+          class="f-clickable"
         />
       </span>
     </div>
@@ -142,8 +144,8 @@ export default defineComponent({
   props: {
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, default: true },
-    showChat: { type: Boolean, default: true },
-    showLike: { type: Boolean, default: true },
+    showChat: { type: Boolean, default: false },
+    showLike: { type: Boolean, default: false },
     showEdit: { type: Boolean, default: false },
     showDelete: { type: Boolean, default: false },
   },

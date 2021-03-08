@@ -1,12 +1,12 @@
 <template>
-  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
+  <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
     <rating-head-bar
       is-back-visible
       @click-back="$router.replace('/rating')"
     >
       <span class="title">课程评价</span>
     </rating-head-bar>
-    <div class="info-bar flex-shrink-0">
+    <div class="flex-shrink-0 info-bar">
       <div
         v-if="loading"
         class="h-16"
@@ -19,10 +19,10 @@
       >
         <div class="info-bar__head-left">
           <div class="lecture-title">
-            <span class="text-black text-2xl mr-2">
+            <span class="mr-2 text-2xl text-black">
               {{ lectureInfo.name }}
             </span>
-            <span class="text-gray-600 text-base">{{ lectureInfo.taughtBy.join(' ') }}</span>
+            <span class="text-base text-gray-600">{{ lectureInfo.taughtBy.join(' ') }}</span>
           </div>
           <div class="lecture-recommended-score">
             <five-stars
@@ -132,7 +132,7 @@
       <div class="rating-bar__list">
         <div
           v-if="loading"
-          class="h-44 bg-white rounded-lg p-4 pb-2 mb-3"
+          class="p-4 pb-2 mb-3 bg-white rounded-lg h-44"
         >
           <f-skeleton
             avatar
@@ -149,6 +149,8 @@
           v-for="rating in ratingList"
           :key="rating.id"
           :rating="rating"
+          :show-delete="deleteVisible(rating.creator.id)"
+          @click-delete="deleteShow"
         />
         <div
           v-if="!loading && ratingList.length === 0"
@@ -165,6 +167,9 @@
 </template>
 
 <script lang="ts">
+import { Modal } from 'ant-design-vue';
+import store from '@/store';
+import { rateClient } from '@/apis';
 import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
@@ -201,8 +206,13 @@ export default defineComponent({
       loading,
     };
   },
-
   methods: {
+    deleteVisible(creatorId: string) {
+      if (creatorId === store.state.user.id) {
+        return true;
+      }
+      return false;
+    },
     mapScoreToText,
     /** 点击关注按钮 */
     handleClickWatch() {
@@ -223,6 +233,20 @@ export default defineComponent({
     /** 点击点评按钮 */
     handleClickFormButton() {
       this.$router.push(`/rating/lecture/${this.lectureId}/edit-rating`);
+    },
+    deleteShow() {
+      Modal.confirm({
+        title: '确认删除',
+        onOk: this.handleDeleteRating,
+        content: '确定要删除点评嘛？（不可恢复）',
+      });
+    },
+    handleDeleteRating() {
+      rateClient.deleteRating({ lectureId: this.lectureId })
+        .then((resp) => {
+          this.$message.success('删除点评成功');
+          this.ratingList = resp.data;
+        });
     },
   },
 });

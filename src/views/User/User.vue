@@ -1,6 +1,6 @@
 <template>
-  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
-    <div class="profile-card flex-shrink-0">
+  <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
+    <div class="flex-shrink-0 profile-card">
       <div
         v-if="isCurrentUser()"
         class="btn-section"
@@ -89,13 +89,16 @@
       </div>
     </div>
 
-    <div class="flex-auto h-0 rounded-lg shadow-md bg-white">
+    <div class="flex-auto h-0 bg-white rounded-lg shadow-md">
       <f-tabs
         v-model="activeTab"
-        class="h-full w-full"
+        class="w-full h-full"
       >
         <f-tab-pane tab="点评">
-          <rating-list :active="activeTab === '点评'" />
+          <rating-list
+            :active="activeTab === '点评'"
+            @click-card-rating="handleClickCardRating"
+          />
         </f-tab-pane>
         <!-- FIXME: 下方功能实现后删去 v-if="false" -->
         <f-tab-pane
@@ -246,6 +249,11 @@ export default defineComponent({
       isCurrentUser,
       logout,
     };
+  },
+  methods: {
+    handleClickCardRating(ratingId: string) {
+      this.$router.push(`/rating/lecture/${ratingId}`);
+    },
   },
 });
 </script>

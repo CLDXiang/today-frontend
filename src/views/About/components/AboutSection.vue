@@ -1,5 +1,5 @@
 <template>
-  <section class="m-4 text-gray-700">
+  <section class="m-4 text-sm text-gray-600">
     <h1 class="text-lg font-semibold text-gray-500 my-4">
       {{ title }}
     </h1>

@@ -21,7 +21,7 @@
       :key="item.id"
       :rating="item"
       class="f-clickable"
-      @click="$emit('click-card-rating', item.lecture.id)"
+      @click="handleClickCardRating(item.lecture.id)"
     />
   </div>
 </template>
@@ -41,9 +41,6 @@ export default defineComponent({
     /** 当前是否激活 */
     active: { type: Boolean, default: false },
   },
-  emits: [
-    'click-card-rating',
-  ],
   setup(props) {
     /** 正在加载数据 */
     const loading = ref(true);
@@ -96,6 +93,11 @@ export default defineComponent({
       loading,
 
     };
+  },
+  methods: {
+    handleClickCardRating(ratingId: string) {
+      this.$router.push(`/rating/lecture/${ratingId}`);
+    },
   },
 });
 

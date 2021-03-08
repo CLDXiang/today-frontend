@@ -45,7 +45,7 @@
       />
       <div class="info-box">
         <img
-          class="avatar flex-shrink-0"
+          class="flex-shrink-0 avatar"
           :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
@@ -101,10 +101,7 @@
         class="w-full h-full"
       >
         <f-tab-pane tab="点评">
-          <rating-list
-            :active="activeTab === '点评'"
-            @click-card-rating="handleClickCardRating"
-          />
+          <rating-list :active="activeTab === '点评'" />
         </f-tab-pane>
         <!-- FIXME: 下方功能实现后删去 v-if="false" -->
         <f-tab-pane

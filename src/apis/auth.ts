@@ -3,8 +3,8 @@ import store from '@/store';
 import log from '@/utils/log';
 
 const login = async (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户名或邮箱 */
+  nameOrMail: string;
   /** 密码 */
   password: string;
 }): Promise<{

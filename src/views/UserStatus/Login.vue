@@ -5,8 +5,8 @@
     </div>
     <div class="input-box">
       <f-input
-        v-model="name"
-        label="用户名"
+        v-model="nameOrMail"
+        label="用户名或邮箱"
         autofocus
         clearable
         outlined
@@ -65,7 +65,7 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   data: () => ({
-    name: '',
+    nameOrMail: '',
     password: '',
   }),
   computed: {
@@ -89,15 +89,15 @@ export default defineComponent({
         });
     },
     login() {
-      if (!this.name) {
-        this.$message.warn('用户名不能为空');
+      if (!this.nameOrMail) {
+        this.$message.warn('用户名或邮箱不能为空');
         return;
       }
       if (!this.password) {
         this.$message.warn('密码不能为空');
         return;
       }
-      authClient.login({ username: this.name, password: this.password })
+      authClient.login({ nameOrMail: this.nameOrMail, password: this.password })
         .then(() => {
           this.$message.success('登录成功');
           this.getProfile(); // 用户登录向后端请求profile的内容，并装入Vuex

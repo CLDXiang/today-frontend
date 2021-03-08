@@ -1,12 +1,12 @@
 <template>
-  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
+  <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
     <rating-head-bar
       is-back-visible
       @click-back="$router.replace('/rating')"
     >
       <span class="title">课程评价</span>
     </rating-head-bar>
-    <div class="info-bar flex-shrink-0">
+    <div class="flex-shrink-0 info-bar">
       <div
         v-if="loading"
         class="h-16"
@@ -19,10 +19,10 @@
       >
         <div class="info-bar__head-left">
           <div class="lecture-title">
-            <span class="text-black text-2xl mr-2">
+            <span class="mr-2 text-2xl text-black">
               {{ lectureInfo.name }}
             </span>
-            <span class="text-gray-600 text-base">{{ lectureInfo.taughtBy.join(' ') }}</span>
+            <span class="text-base text-gray-600">{{ lectureInfo.taughtBy.join(' ') }}</span>
           </div>
           <div class="lecture-recommended-score">
             <five-stars
@@ -118,7 +118,7 @@
             padding: '0 8px',
             borderRadius: '6px',
           }"
-          @click="handleClickFormButton"
+          @click="handleEditRating"
         >
           <template #icon>
             <f-icon
@@ -132,7 +132,7 @@
       <div class="rating-bar__list">
         <div
           v-if="loading"
-          class="h-44 bg-white rounded-lg p-4 pb-2 mb-3"
+          class="p-4 pb-2 mb-3 bg-white rounded-lg h-44"
         >
           <f-skeleton
             avatar
@@ -149,6 +149,10 @@
           v-for="rating in ratingList"
           :key="rating.id"
           :rating="rating"
+          :show-delete="isCurrentUser(rating.creator.id)"
+          :show-edit="isCurrentUser(rating.creator.id)"
+          @click-delete="deleteShow"
+          @click-edit="handleEditRating"
         />
         <div
           v-if="!loading && ratingList.length === 0"
@@ -156,7 +160,7 @@
         >
           你来到了一块空地，来<span
             class="f-clickable link-text"
-            @click="handleClickFormButton"
+            @click="handleEditRating"
           >第一个点评</span>吧！
         </div>
       </div>
@@ -165,6 +169,9 @@
 </template>
 
 <script lang="ts">
+import { Modal } from 'ant-design-vue';
+import { useStore } from 'vuex';
+import { rateClient } from '@/apis';
 import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
@@ -201,8 +208,14 @@ export default defineComponent({
       loading,
     };
   },
-
   methods: {
+    isCurrentUser(creatorId: string) {
+      const store = useStore();
+      if (creatorId === store.state.user.id) {
+        return true;
+      }
+      return false;
+    },
     mapScoreToText,
     /** 点击关注按钮 */
     handleClickWatch() {
@@ -221,8 +234,24 @@ export default defineComponent({
       }
     },
     /** 点击点评按钮 */
-    handleClickFormButton() {
+    handleEditRating() {
       this.$router.push(`/rating/lecture/${this.lectureId}/edit-rating`);
+    },
+    deleteShow() {
+      Modal.confirm({
+        title: '确认删除',
+        okType: 'danger',
+        okText: '确认',
+        cancelText: '取消',
+        content: '确定要删除点评吗？（不可恢复）',
+        onOk: () => {
+          rateClient.deleteRating({ lectureId: this.lectureId })
+            .then((resp) => {
+              this.$message.success('删除点评成功');
+              this.ratingList = resp.data;
+            });
+        },
+      });
     },
   },
 });

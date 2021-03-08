@@ -7,7 +7,7 @@
       <div
         v-for="i in 3"
         :key="i"
-        class="p-4 pb-3 mb-2 bg-white rounded-lg h-36 shadow-lg"
+        class="p-4 pb-3 mb-2 bg-white rounded-lg shadow-lg h-36"
       >
         <f-skeleton
           avatar
@@ -20,6 +20,8 @@
       v-for="item in items"
       :key="item.id"
       :rating="item"
+      class="f-clickable"
+      @click="handleClickCardRating(item.lecture.id)"
     />
   </div>
 </template>
@@ -91,6 +93,11 @@ export default defineComponent({
       loading,
 
     };
+  },
+  methods: {
+    handleClickCardRating(ratingId: string) {
+      this.$router.push(`/rating/lecture/${ratingId}`);
+    },
   },
 });
 

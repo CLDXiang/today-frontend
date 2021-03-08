@@ -159,22 +159,11 @@ export default defineComponent({
         code: parseInt(this.code, 10),
         password: this.password,
       })
-        .then((resp) => {
-          if (resp.result === 'success') {
-            this.$message.success('注册成功');
-            setTimeout(() => {
-              this.$router.push({ name: 'Login' });
-            }, 500);
-          } else if (resp.result === 'failed') {
-            this.$message.warn('用户名已被注册');
-          } else log.error('Error: Unexpected resp result');
-        })
-        .catch((e) => {
-          const code = e.response.status;
-          if (code === 400) this.$message.warn('姓名或邮箱格式错误');
-          else if (code === 404) this.$message.error(e.response.data.message);
-          else if (code === 409) this.$message.error(e.response.data.message);
-          else log.error('Error: Unexpected reponse', e.response);
+        .then(() => {
+          this.$message.success('注册成功');
+          setTimeout(() => {
+            this.$router.push({ name: 'Login' });
+          }, 500);
         });
     },
     requestCode() {

@@ -118,7 +118,7 @@
             padding: '0 8px',
             borderRadius: '6px',
           }"
-          @click="handleClickFormButton"
+          @click="handleEditRating"
         >
           <template #icon>
             <f-icon
@@ -149,8 +149,10 @@
           v-for="rating in ratingList"
           :key="rating.id"
           :rating="rating"
-          :show-delete="deleteVisible(rating.creator.id)"
+          :show-delete="isCurrentUser(rating.creator.id)"
+          :show-edit="isCurrentUser(rating.creator.id)"
           @click-delete="deleteShow"
+          @click-edit="handleEditRating"
         />
         <div
           v-if="!loading && ratingList.length === 0"
@@ -158,7 +160,7 @@
         >
           你来到了一块空地，来<span
             class="f-clickable link-text"
-            @click="handleClickFormButton"
+            @click="handleEditRating"
           >第一个点评</span>吧！
         </div>
       </div>
@@ -168,7 +170,7 @@
 
 <script lang="ts">
 import { Modal } from 'ant-design-vue';
-import store from '@/store';
+import { useStore } from 'vuex';
 import { rateClient } from '@/apis';
 import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
@@ -207,7 +209,8 @@ export default defineComponent({
     };
   },
   methods: {
-    deleteVisible(creatorId: string) {
+    isCurrentUser(creatorId: string) {
+      const store = useStore();
       if (creatorId === store.state.user.id) {
         return true;
       }
@@ -231,22 +234,24 @@ export default defineComponent({
       }
     },
     /** 点击点评按钮 */
-    handleClickFormButton() {
+    handleEditRating() {
       this.$router.push(`/rating/lecture/${this.lectureId}/edit-rating`);
     },
     deleteShow() {
       Modal.confirm({
         title: '确认删除',
-        onOk: this.handleDeleteRating,
-        content: '确定要删除点评嘛？（不可恢复）',
+        okType: 'danger',
+        okText: '确认',
+        cancelText: '取消',
+        content: '确定要删除点评吗？（不可恢复）',
+        onOk: () => {
+          rateClient.deleteRating({ lectureId: this.lectureId })
+            .then((resp) => {
+              this.$message.success('删除点评成功');
+              this.ratingList = resp.data;
+            });
+        },
       });
-    },
-    handleDeleteRating() {
-      rateClient.deleteRating({ lectureId: this.lectureId })
-        .then((resp) => {
-          this.$message.success('删除点评成功');
-          this.ratingList = resp.data;
-        });
     },
   },
 });

@@ -115,38 +115,41 @@
     <div class="pw-box">
       <div>
         <f-input
+          v-model="oldPassword"
+          type="password"
           label="旧密码"
           dense
           clearable
           outlined
-          disabled
         />
       </div>
       <div>
         <f-input
+          v-model="newPassword"
+          type="password"
           label="新密码"
           dense
           clearable
           outlined
-          disabled
         />
       </div>
       <div>
         <f-input
+          v-model="confirmPassword"
+          type="password"
           label="确认新密码"
           dense
           clearable
           outlined
-          disabled
         />
       </div>
       <a-button
         block
         type="primary"
         shape="round"
-        @click="$router.push('/forgot-password')"
+        @click="handleClickChangePassword"
       >
-        修改密码（开发中，点击前往忘记密码）
+        修改密码
       </a-button>
     </div>
   </div>
@@ -154,7 +157,7 @@
 
 <script lang="ts">
 import { mapMutations, mapState } from 'vuex';
-import { userClient } from '@/apis';
+import { authClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import { defineComponent } from 'vue';
 import { useProcessAvatar } from '@/composables';
@@ -171,6 +174,9 @@ export default defineComponent({
     isInfoModifying: false,
     nickname: '',
     bio: '',
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   }),
   computed: {
     ...mapState(['user']),
@@ -236,6 +242,35 @@ export default defineComponent({
         })
         .finally(() => {
           this.isInfoModifying = false;
+        });
+    },
+    handleClickChangePassword() {
+      if (this.newPassword !== this.confirmPassword) {
+        this.$message.warn('两次输入的新密码不一致哦！');
+        return;
+      }
+      if (this.oldPassword === this.newPassword) {
+        this.$message.warn('新密码和旧密码一样哦！');
+        return;
+      }
+      if (this.newPassword === '') {
+        this.$message.warn('新密码不能为空哦！');
+        return;
+      }
+      if (this.newPassword.length < 6) {
+        this.$message.warn('密码长度至少为 6 个字符哦！');
+        return;
+      }
+      if (this.newPassword.length > 32) {
+        this.$message.warn('密码长度最多为 32 个字符哦！');
+        return;
+      }
+      authClient.changePassword({ oldPassword: this.oldPassword, newPassword: this.newPassword })
+        .then(() => {
+          this.$message.success('修改成功！');
+          this.oldPassword = '';
+          this.newPassword = '';
+          this.confirmPassword = '';
         });
     },
   },

@@ -39,25 +39,21 @@
       </div>
       <f-input
         v-model="password"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text' : 'password'"
+        type="password"
         label="新的密码"
         clearable
         outlined
         required
         :rules="[(v) => !!v || '密码不能为空']"
-        @click:append="showPassword = !showPassword"
       />
       <f-input
         v-model="password2"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text' : 'password'"
+        type="password"
         label="再次输入新密码"
         clearable
         outlined
         required
         :rules="[(v) => !!v || '密码不能为空']"
-        @click:append="showPassword = !showPassword"
       />
     </div>
     <div class="button-box">
@@ -66,9 +62,9 @@
         type="primary"
         size="large"
         shape="round"
-        @click="modifyPassword"
+        @click="resetPassword"
       >
-        修改密码
+        重置密码
       </a-button>
     </div>
     <a-button
@@ -93,8 +89,6 @@ export default defineComponent({
     emailRules: [(v: string) => !!v || '邮箱不能为空', (v: string) => /^\d{11}$/.test(v) || '请输入11位学号'],
     code: '',
 
-    showPassword: false,
-
     password: '',
     passwordRules: [(v: string) => !!v || '密码不能为空'],
     password2: '',
@@ -112,7 +106,7 @@ export default defineComponent({
     },
   },
   methods: {
-    modifyPassword() {
+    resetPassword() {
       if (!/^\d{11}@fudan\.edu\.cn$/.test(this.realEmail)) {
         this.$message.warn('请输入11位学号邮箱');
         return;
@@ -129,8 +123,16 @@ export default defineComponent({
         this.$message.warn('密码不能为空');
         return;
       }
+      if (this.password.length < 6) {
+        this.$message.warn('密码长度至少为 6 个字符哦');
+        return;
+      }
+      if (this.password.length > 32) {
+        this.$message.warn('密码长度最多为 32 个字符哦');
+        return;
+      }
       authClient
-        .modifyPassword({
+        .resetPassword({
           email: this.realEmail,
           code: parseInt(this.code, 10),
           password: this.password,

@@ -13,8 +13,10 @@ const login = async (req: {
   email: string;
   name: string;
 }> => {
-  log.info('authClient.login', req);
-  const { data } = await API.post('auth/login', req);
+  /** 因为后端的限制，这里的参数名必须为 username 和 password */
+  const payload = { username: req.nameOrMail, password: req.password };
+  log.info('authClient.login', payload);
+  const { data } = await API.post('auth/login', payload);
   const { access_token: jwtToken, email, name } = data;
   if (jwtToken) {
     store.commit('setJwtToken', jwtToken);

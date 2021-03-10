@@ -1,10 +1,10 @@
 <template>
   <div
-    class="content-box h-full w-full overflow-y-auto max-w-14xl"
+    class="w-full h-full overflow-y-auto content-box max-w-14xl"
   >
     <rating-head-bar
       is-back-visible
-      @click-back="$router.replace('/rating')"
+      @click-back="routerBack('/rating')"
     />
     <div class="title">
       “{{ parsedQ }}”的搜索结果
@@ -30,7 +30,7 @@ import {
 } from 'vue';
 import { rpcClient } from '@/apis';
 import { CardLectureItem, CardLecture } from '@/components/listCard';
-import { useScrollToBottom } from '@/composables';
+import { useScrollToBottom, useRouterBack } from '@/composables';
 import { RatingHeadBar } from './components';
 
 export default defineComponent({
@@ -88,6 +88,9 @@ export default defineComponent({
 
       /** 搜索结果列表 */
       searchResults,
+
+      /** 路由回退 */
+      routerBack: useRouterBack(),
     };
   },
   computed: {

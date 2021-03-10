@@ -2,7 +2,7 @@
   <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
     <rating-head-bar
       is-back-visible
-      @click-back="$router.replace('/rating')"
+      @click-back="routerBack('/rating')"
     >
       <span class="title">课程评价</span>
     </rating-head-bar>
@@ -172,6 +172,7 @@
 import { Modal } from 'ant-design-vue';
 import { useStore } from 'vuex';
 import { rateClient } from '@/apis';
+import { useRouterBack } from '@/composables';
 import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
@@ -206,6 +207,8 @@ export default defineComponent({
       ratingList,
       /** 正在获取数据 */
       loading,
+      /** 路由回退 */
+      routerBack: useRouterBack(),
     };
   },
   methods: {

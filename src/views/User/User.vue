@@ -256,8 +256,8 @@ export default defineComponent({
     axios.get<{ date: string }[]>('changeLog.json')
       .then(({ data }) => {
         /** 最新的更新日志日期 */
-        const latestDate = data.map((d) => d.date);
-        if (!latestDate.includes(lastSawChangeLogDate.value)) {
+        const latestDate = data.map((d) => d.date).sort((a, b) => (a < b ? 1 : -1))[0];
+        if (latestDate !== lastSawChangeLogDate.value) {
           isAboutBadgeVisible.value = true;
         }
       });

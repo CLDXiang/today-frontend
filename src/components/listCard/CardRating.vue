@@ -1,6 +1,6 @@
 <template>
   <div class="card-rating py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
-    <div class="flex mt-3">
+    <div class="flex mt-1 mb-2">
       <div
         class="flex-shrink-0 w-10"
         @click.stop="handleClickAvatar"
@@ -13,12 +13,13 @@
       <div class="flex-grow ml-2">
         <div class="flex justify-between">
           <span
-            class=""
+            :style="primaryColor"
+            class="font-extrabold"
             @click.stop="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
           </span>
-          <span class="text-sm text-gray-400 card-rating__top-datetime">
+          <span class="text-xs text-gray-400 card-rating__top-datetime">
             {{ timeDiff }}
           </span>
         </div>
@@ -29,8 +30,8 @@
     </div>
     <div class="flex justify-between mt-1">
       <div
-        :class="courseCardColor"
-        class="text-sm"
+        :style="courseCardColor"
+        class="text-xs rounded-2xl py-1 px-2"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </div>
@@ -85,6 +86,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { useProcessAvatar } from '@/composables';
+import { colors, primaryColor } from '@/utils/colors';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -97,6 +99,7 @@ export default defineComponent({
     const { processAvatar } = useProcessAvatar();
     return {
       processAvatar,
+      primaryColor,
     };
   },
   computed: {
@@ -107,9 +110,9 @@ export default defineComponent({
     starColor(): string {
       return this.rating.starred ? '#ef755a' : '';
     },
-    courseCardColor(): string {
+    courseCardColor(): Record<string, unknown> {
       // TODO: 有实际分类意义的配色
-      return `color-${parseInt(this.rating.lecture.id, 10) % 96 || 0}`;
+      return colors[parseInt(this.rating.lecture.id, 10) % 96 || 0];
     },
   },
   methods: {

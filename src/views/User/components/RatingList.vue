@@ -23,6 +23,15 @@
       class="f-clickable"
       @click="handleClickCardRating(item.lecture.id)"
     />
+    <template v-if="fetchingMore">
+      <div class="p-4 pb-3 mb-2 bg-white rounded-lg shadow-lg h-36">
+        <f-skeleton
+          avatar
+          :rows="4"
+          :width="['80px', '100%', '100%', '144px']"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -44,6 +53,7 @@ export default defineComponent({
   setup(props) {
     /** 正在加载数据 */
     const loading = ref(true);
+    const fetchingMore = ref(true);
     const userId = inject<string>('userId') as string;
 
     const items = ref<CardRatingItem[]>([]);
@@ -60,12 +70,14 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      fetchingMore.value = true;
       rateClient.getRatingListByUser({
         userId,
         lastId: items.value[items.value.length - 1].id,
         limit: 20,
       }).then((resp) => {
         items.value = [...items.value, ...resp.data];
+        fetchingMore.value = false;
       });
     };
 
@@ -91,7 +103,7 @@ export default defineComponent({
       items,
       scroll,
       loading,
-
+      fetchingMore,
     };
   },
   methods: {

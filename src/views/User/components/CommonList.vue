@@ -59,6 +59,7 @@ export default defineComponent({
   setup(props) {
     /** 正在加载数据 */
     const loading = ref(true);
+    const fetchingMore = ref(true);
     const userId = inject<string>('userId') as string;
 
     const items = ref<CardCommonItem[]>([]);
@@ -94,6 +95,7 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      fetchingMore.value = true;
       // TODO: API 实现后确认 lastId 字段是否正确使用
       switch (props.type) {
         case '收藏':
@@ -103,6 +105,7 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
+            fetchingMore.value = false;
           });
           break;
         case '关注':
@@ -112,6 +115,7 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
+            fetchingMore.value = false;
           });
           break;
         case '足迹':
@@ -121,6 +125,7 @@ export default defineComponent({
             limit: 20,
           }).then((resp) => {
             items.value = [...items.value, ...resp.data];
+            fetchingMore.value = false;
           });
           break;
         default: break;
@@ -152,6 +157,7 @@ export default defineComponent({
       items,
       scroll,
       loading,
+      fetchingMore,
     };
   },
 });

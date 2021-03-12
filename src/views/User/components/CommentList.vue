@@ -31,6 +31,7 @@ export default defineComponent({
   setup(props) {
     /** 正在加载数据 */
     const loading = ref(true);
+    const fetchingMore = ref(true);
     const userId = inject<string>('userId');
 
     const items = ref<CardCommentItem[]>([]);
@@ -47,12 +48,14 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      fetchingMore.value = true;
       commentClient.getCommentList({
         userId,
         lastId: items.value[items.value.length - 1].id,
         limit: 20,
       }).then((resp) => {
         items.value = [...items.value, ...resp.data];
+        fetchingMore.value = false;
       });
     };
 
@@ -78,6 +81,7 @@ export default defineComponent({
       items,
       scroll,
       loading,
+      fetchingMore,
     };
   },
 });

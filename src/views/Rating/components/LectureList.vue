@@ -19,6 +19,11 @@
       :lecture="item"
       @click="$router.push(`/rating/lecture/${item.id}`)"
     />
+    <template v-if="fetchingMore">
+      <div class="p-4 pb-3 mb-2 bg-white rounded-lg h-18 shadow-lg">
+        <f-skeleton :width="['100%', '50%']" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -45,6 +50,8 @@ export default defineComponent({
     const items = ref<CardLectureItem[]>([]);
     /** 正在加载数据 */
     const loading = ref(true);
+    /** 正在拉取更多数据 */
+    const fetchingMore = ref(true);
 
     /** 拉取并覆盖当前列表 */
     const fetchList = () => {
@@ -60,6 +67,7 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      fetchingMore.value = true;
       lectureClient
         .getLectureList({
           categories: lectureType2Categories(props.type),
@@ -68,6 +76,7 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
+          fetchingMore.value = false;
         });
     };
 
@@ -96,6 +105,7 @@ export default defineComponent({
       items,
       scroll,
       loading,
+      fetchingMore,
     };
   },
 });

@@ -17,6 +17,11 @@
       :key="item.id"
       :lesson="item"
     />
+    <template v-if="fetchingMore">
+      <div class="p-4 pb-3 mb-2 bg-white rounded-lg shadow-lg h-18">
+        <f-skeleton :width="['100%', '50%']" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -38,6 +43,8 @@ export default defineComponent({
   setup(props) {
     /** 正在加载数据 */
     const loading = ref(true);
+    /** 正在拉取更多数据 */
+    const fetchingMore = ref(false);
     const userId = inject<string>('userId');
 
     const items = ref<CardLessonItem[]>([]);
@@ -54,11 +61,13 @@ export default defineComponent({
 
     /** 拉取并将结果附加在当前列表后 */
     const fetchMore = () => {
+      fetchingMore.value = true;
       selectClient.getSelectedLessons({
         userId,
         lastId: items.value[items.value.length - 1].id,
         limit: 20,
       }).then((resp) => {
+        fetchingMore.value = false;
         items.value = [...items.value, ...resp.data];
       });
     };
@@ -85,6 +94,7 @@ export default defineComponent({
       items,
       scroll,
       loading,
+      fetchingMore,
     };
   },
 });

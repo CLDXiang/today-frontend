@@ -1,8 +1,8 @@
 <template>
-  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
+  <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
     <rating-head-bar
       is-back-visible
-      @click-back="$router.replace(`/rating/lecture/${lectureId}`)"
+      @click-back="routerBack(`/rating/lecture/${lectureId}`)"
     >
       <span class="title">撰写点评</span>
     </rating-head-bar>
@@ -107,6 +107,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRouterBack } from '@/composables';
 import FiveStars from '@/components/FiveStars.vue';
 import { rateClient, lectureClient, rateDraftClient } from '@/apis';
 import { mapMutations, mapState } from 'vuex';
@@ -122,6 +123,12 @@ export default defineComponent({
   props: {
     /** 课程 Id */
     lectureId: { type: String, required: true },
+  },
+  setup() {
+    return {
+      /** 路由回退 */
+      routerBack: useRouterBack(),
+    };
   },
   data() {
     return {
@@ -335,7 +342,7 @@ export default defineComponent({
         .then(() => {
           this.savedRate = { ...this.formData };
           this.$message.success('发布点评成功！');
-          this.$router.replace(`/rating/lecture/${this.lectureId}`);
+          this.routerBack(`/rating/lecture/${this.lectureId}`);
         })
         .finally(() => {
           this.isLoading = false;

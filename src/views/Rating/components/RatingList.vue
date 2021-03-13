@@ -3,7 +3,7 @@
     ref="scroll"
     class="bg-gray-100 pt-2 h-full overflow-y-auto"
   >
-    <template v-if="loading">
+    <template v-if="fetching">
       <div
         v-for="i in 3"
         :key="i"
@@ -41,7 +41,7 @@ import {
 } from 'vue';
 import { CardRatingItem, CardRating } from '@/components/listCard';
 import { rateClient } from '@/apis';
-import { useScrollToBottom } from '@/composables';
+import { useFetchListData, useScrollToBottom } from '@/composables';
 
 export default defineComponent({
   components: {
@@ -53,34 +53,22 @@ export default defineComponent({
   },
   setup(props) {
     const items = ref<CardRatingItem[]>([]);
-    /** 正在加载数据 */
-    const loading = ref(true);
-    /** 正在拉取更多数据 */
-    const fetchingMore = ref(true);
-
-    /** 拉取并覆盖当前列表 */
-    const fetchList = () => {
-      loading.value = true;
-      rateClient.getRatingList({ limit: 20 }).then(({ data }) => {
-        items.value = data;
-      }).finally(() => {
-        loading.value = false;
-      });
-    };
-
-    /** 拉取并将结果附加在当前列表后 */
-    const fetchMore = () => {
-      fetchingMore.value = true;
-      rateClient
+    const {
+      fetching, fetchingMore, fetchList, fetchMore,
+    } = useFetchListData(
+      async () => rateClient
+        .getRatingList({ limit: 20 }).then(({ data }) => {
+          items.value = data;
+        }),
+      async () => rateClient
         .getRatingList({
           lastId: items.value[items.value.length - 1].id,
           limit: 20,
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
-          fetchingMore.value = false;
-        });
-    };
+        }),
+    );
 
     watch(() => props.active, (value) => {
       // activeTab 改变时，若当前 tab 无数据则重新拉数据
@@ -103,7 +91,7 @@ export default defineComponent({
     return {
       items,
       scroll,
-      loading,
+      fetching,
       fetchingMore,
     };
   },

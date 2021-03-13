@@ -90,16 +90,16 @@ export default defineComponent({
     },
     login() {
       if (!this.nameOrMail) {
-        this.$message.warn('用户名或邮箱不能为空');
+        this.$message.warn('用户名或邮箱不能为空', 1.5);
         return;
       }
       if (!this.password) {
-        this.$message.warn('密码不能为空');
+        this.$message.warn('密码不能为空', 1.5);
         return;
       }
       authClient.login({ nameOrMail: this.nameOrMail, password: this.password })
         .then(() => {
-          this.$message.success('登录成功');
+          this.$message.success('登录成功', 1);
           this.getProfile(); // 用户登录向后端请求profile的内容，并装入Vuex
           this.$router.push('/timetable');
         })

@@ -295,11 +295,11 @@ export default defineComponent({
     ]),
     moveSemester(step: -1 | 1) {
       if (step === -1 && this.semesterIndex === 0) {
-        this.$message.warn('已经是最后一个学期啦', 0.5);
+        this.$message.warn('已经是最后一个学期啦', 1);
         return;
       }
       if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
-        this.$message.warn('已经是最新学期啦', 0.5);
+        this.$message.warn('已经是最新学期啦', 1);
         return;
       }
       this.semesterIndex += step;
@@ -337,12 +337,16 @@ export default defineComponent({
           .then(() => {
             // TODO: 根据后端响应进行处理
             hide();
-            this.$message.success({ content: '数据同步成功!', key: messageKey });
+            this.$message.success({ content: '数据同步成功!', key: messageKey, duration: 1 });
           })
           .catch((e) => {
             hide();
             if (e.response.status !== 401) {
-              this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
+              this.$message.error({
+                content: '数据同步失败！进入离线模式',
+                key: messageKey,
+                duration: 1.5,
+              });
             }
             this.isOffline = true;
           });
@@ -410,16 +414,20 @@ export default defineComponent({
           this.setHasFetchedSelectedCourses();
           hide();
           if (!Array.isArray(res)) {
-            this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
+            this.$message.error({
+              content: '数据同步失败！进入离线模式',
+              key: messageKey,
+              duration: 1.5,
+            });
             this.isOffline = true;
           }
           this.selectedCoursesIdsFromDatabase = new Set(res);
           if (this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)) {
-            this.$message.success({ content: '数据同步成功！', key: messageKey });
+            this.$message.success({ content: '数据同步成功！', key: messageKey, duration: 1 });
           } else if (this.selectedCoursesIds.size === 0) {
             // 如果本地没有数据，则默认拉取服务器数据
             this.onConflictResolved(this.selectedCoursesIdsFromDatabase, true, false);
-            this.$message.success({ content: '数据同步成功！', key: messageKey });
+            this.$message.success({ content: '数据同步成功！', key: messageKey, duration: 1 });
           } else {
             // 冲突解决
             this.isConflictDialogVisible = true;
@@ -428,7 +436,11 @@ export default defineComponent({
         .catch((err) => {
           hide();
           if (!err.response || err.response.status !== 401) {
-            this.$message.error({ content: '数据同步失败！进入离线模式', key: messageKey });
+            this.$message.error({
+              content: '数据同步失败！进入离线模式',
+              key: messageKey,
+              duration: 1.5,
+            });
           }
           this.isOffline = true;
         });
@@ -518,7 +530,7 @@ export default defineComponent({
           })
           .catch((err) => {
             if (!err.response || err.response.status !== 401) {
-              this.$message.error('数据同步失败！进入离线模式');
+              this.$message.error('数据同步失败！进入离线模式', 1.5);
             }
             this.isOffline = true;
           });
@@ -544,7 +556,7 @@ export default defineComponent({
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
-      this.$message.success('已将课程加入课表');
+      this.$message.success('已将课程加入课表', 1);
     },
     removeSelectedCourse(courseId: number) {
       // if (!this.selectedCoursesIds.has(courseId)) {
@@ -559,7 +571,7 @@ export default defineComponent({
           })
           .catch((err) => {
             if (!err.response || err.response.status !== 401) {
-              this.$message.error('数据同步失败！进入离线模式');
+              this.$message.error('数据同步失败！进入离线模式', 1.5);
             }
             this.isOffline = true;
           });
@@ -582,7 +594,7 @@ export default defineComponent({
         selectedCoursesIds: this.selectedCoursesIds,
         selectedSectionsByDay,
       });
-      this.$message.success('已将课程移出课表');
+      this.$message.success('已将课程移出课表', 1);
     },
     replaceSelectedCourses(courseIds: Set<number>) {
       this.selectedCoursesIds = new Set(courseIds);

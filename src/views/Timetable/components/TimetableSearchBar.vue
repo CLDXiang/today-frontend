@@ -436,7 +436,7 @@ export default defineComponent({
 
         if (this.searchResults.length > 0) {
           this.searchBarStatus = 'success';
-          this.$message.success(`找到 ${this.searchResults.length} 门课程`);
+          this.$message.success(`找到 ${this.searchResults.length} 门课程`, 1);
           // 主要针对移动端，使键盘收回
           // FIXME: 修复下面这部分功能
           // this.$refs.textfield1.blur();
@@ -446,7 +446,7 @@ export default defineComponent({
           // this.$refs.textfield5.blur();
         } else {
           this.searchBarStatus = 'error';
-          this.$message.error('没有找到符合条件的课程');
+          this.$message.error('没有找到符合条件的课程', 1.5);
         }
 
         this.isLoadingSearchResults = false;

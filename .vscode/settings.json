@@ -1,4 +1,18 @@
 {
+  "editor.tabSize": 2,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "vetur.format.defaultFormatter.js": "prettier-eslint",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "css.validate": false,
   "cSpell.words": [
     "Vuex",
@@ -17,10 +31,10 @@
     "typescript",
     "typescriptreact",
     "javascript",
-    "javascriptreact",
+    "javascriptreact"
   ],
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  },
+  }
 }

@@ -213,18 +213,15 @@ export default defineComponent({
     /** 当前选择学期 */
     const semester = ref('2020-2021学年2学期');
     /** 当前学期在学期数组的索引值 */
-    const semesterIndex = ref(0);
+    const semesterIndex = computed<number>(
+      () => semesterArray.findIndex((sem) => sem.key === semester.value),
+    );
     /** 展示的学期名 */
     const semesterName = computed(() => semesterArray[semesterIndex.value].name);
-    /** 当前学期对应 JSON 文件名 */
-    const semesterJsonName = ref('');
 
     onMounted(() => {
       // 从 Vuex 中读取用户上一次选取的学期来初始化
       semester.value = store.state.semester;
-      // 根据配置文件初始化一些学期相关的变量 TODO: 改为 computed
-      semesterIndex.value = semesterArray.findIndex((sem) => sem.key === semester.value);
-      semesterJsonName.value = semesterArray[semesterIndex.value].jsonFileName;
     });
 
     // 选课
@@ -566,7 +563,7 @@ export default defineComponent({
     };
     onMounted(() => {
       // 读取课程信息
-      getCoursesFromJSON(semesterJsonName.value);
+      getCoursesFromJSON(semesterArray[semesterIndex.value].jsonFileName);
     });
 
     /** 变更学期 */
@@ -579,8 +576,7 @@ export default defineComponent({
         message.warn('已经是最新学期啦', 1);
         return;
       }
-      semesterIndex.value += step;
-      semester.value = semesterArray[semesterIndex.value].key;
+      semester.value = semesterArray[semesterIndex.value + step].key;
       selectedCoursesIds.value = new Set(store.state.selectedCoursesIds[semester.value]);
       selectedSectionsByDay.value = [{}, {}, {}, {}, {}, {}, {}];
       getCoursesFromJSON(semesterArray[semesterIndex.value].jsonFileName);
@@ -625,7 +621,6 @@ export default defineComponent({
       semester,
       semesterIndex,
       semesterName,
-      semesterJsonName,
       semesterArray,
       moveSemester,
 

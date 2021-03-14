@@ -131,11 +131,16 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent, ref } from 'vue';
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import {
+  computed, defineComponent, onMounted, ref,
+} from 'vue';
+import {
+  mapState, mapGetters, mapMutations, useStore,
+} from 'vuex';
 import { selectClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import { semesterArray } from '@/utils/config';
+
 import {
   TimetableDay,
   TimetableDetailDialogContent,
@@ -163,35 +168,61 @@ export default defineComponent({
     TimetableSelectedCourseList,
   },
   setup() {
-    /** 是否显示已选课程列表抽屉 */
-    const isSelectedCourseListVisible = ref<boolean>(false);
+    const store = useStore();
 
+    // UI
+
+    /** 是否显示已选课程列表抽屉 */
+    const isSelectedCourseListVisible = ref(false);
+    /** 是否正在读取课程数据 */
+    const isLoadingCourses = ref(true);
     /** 显示已选课程列表抽屉 */
     const showSelectedCourseList = () => {
       isSelectedCourseListVisible.value = true;
     };
-
     /** 隐藏已选课程列表抽屉 */
     const hideSelectedCourseList = () => {
       isSelectedCourseListVisible.value = false;
     };
 
+    /** FIXME: 施工开始 */
+
+    // 学期
+
+    /** 当前选择学期 */
+    const semester = ref('2020-2021学年2学期');
+    /** 当前学期在学期数组的索引值 */
+    const semesterIndex = ref(0);
+    /** 展示的学期名 */
+    const semesterName = computed(() => semesterArray[semesterIndex.value].name);
+    /** 当前学期对应 JSON 文件名 */
+    const semesterJsonName = ref('');
+
+    onMounted(() => {
+      // 从 Vuex 中读取用户上一次选取的学期来初始化
+      semester.value = store.state.semester;
+      // 根据配置文件初始化一些学期相关的变量 TODO: 改为 computed
+      semesterIndex.value = semesterArray.findIndex((sem) => sem.key === semester.value);
+      semesterJsonName.value = semesterArray[semesterIndex.value].jsonFileName;
+    });
+
+    /** FIXME: 施工结束 */
+
     return {
-      /** 是否显示已选课程列表抽屉 */
+      isLoadingCourses,
       isSelectedCourseListVisible,
-      /** 显示已选课程列表抽屉 */
       showSelectedCourseList,
-      /** 隐藏已选课程列表抽屉 */
       hideSelectedCourseList,
+
+      semester,
+      semesterIndex,
+      semesterName,
+      semesterJsonName,
+      semesterArray,
     };
   },
   data() {
     return {
-      semester: '2020-2021学年2学期',
-      semesterIndex: 0,
-      semesterJsonName: '',
-      semesterArray,
-      isLoadingCourses: false,
       /** 课程数据 */
       allCourses: {} as AllCourses,
       /** 搜索索引 */
@@ -247,7 +278,6 @@ export default defineComponent({
     ...mapState({
       selectedSectionsByDayVuex: 'selectedSectionsByDay',
       selectedCoursesIdsVuex: 'selectedCoursesIds',
-      semesterVuex: 'semester',
     }),
     ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
     /** 已选课程列表数据 */
@@ -268,15 +298,8 @@ export default defineComponent({
         };
       });
     },
-    /** 展示的学期名 */
-    semesterName(): string {
-      return semesterArray[this.semesterIndex].name;
-    },
   },
   mounted() {
-    this.semester = this.semesterVuex;
-    this.semesterIndex = semesterArray.findIndex((semester) => semester.key === this.semester);
-    this.semesterJsonName = semesterArray[this.semesterIndex].jsonFileName;
     this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
     this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
     // 读取课程信息

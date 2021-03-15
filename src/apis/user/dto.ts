@@ -8,17 +8,15 @@ export interface PostUsersForgetReqDto {
 
 /** GET users/:id Resp */
 export interface GetUsersIdRespDto {
-  data: {
-    id: string;
-    email: string;
-    name: string;
-    nickname: string;
-    avatar: string;
-    bio: string;
-    fans: number;
-    watchers: number;
-    watchees: number;
-  }
+  id: number;
+  email: string;
+  name: string;
+  nickname: string;
+  avatar: string;
+  bio: string;
+  fans: number;
+  watchers: number;
+  watchees: number;
 }
 
 /** PATCH users/:id Req */
@@ -35,12 +33,10 @@ export interface PatchUsersIdReqDto {
 
 /** PATCH users/:id Resp */
 export interface PatchUsersIdRespDto {
-  data: {
-    id: string;
-    email: string;
-    name: string;
-    nickname?: string;
-    avatar: string;
-    bio?: string;
-  }
+  id: number;
+  email: string;
+  name: string;
+  nickname?: string;
+  avatar: string;
+  bio?: string;
 }

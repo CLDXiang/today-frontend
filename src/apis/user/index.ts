@@ -32,8 +32,8 @@ const getUserInfo = async (req: {
 }> => {
   log.info('userClient.getUserInfo', req);
   // TODO: 检查是否存在未登录却缺省 userId 调用该方法的情况，如果有，考虑如何规避发送该无效请求
-  const { data: { data } } = await API.get<GetUsersIdRespDto>(`users/${req.userId || getCurrentUserId() || ''}`);
-  return data;
+  const { data } = await API.get<GetUsersIdRespDto>(`users/${req.userId || getCurrentUserId() || ''}`);
+  return { ...data, id: data.id.toString() };
 };
 
 /** 修改用户信息 */
@@ -63,8 +63,8 @@ const editUserInfo = async (req: {
   bio?: string;
 }> => {
   log.info('userClient.editUserInfo', req);
-  const { data: { data } } = await API.patch<PatchUsersIdRespDto>(`users/${req.uid || ''}`, req as PatchUsersIdReqDto);
-  return data;
+  const { data } = await API.patch<PatchUsersIdRespDto>(`users/${req.uid || ''}`, req as PatchUsersIdReqDto);
+  return { ...data, id: data.id.toString() };
 };
 
 /** 修改用户头像 */

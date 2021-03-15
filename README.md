@@ -67,3 +67,11 @@ yarn dev
 
 该项目已配置完整的 CICD 流，PR 合入 master 分支后会自动发布到线上
 
+## 开源准备
+
+- [ ] 选取开源协议
+- [ ] 课程数据 JSON 文件交给后端，并且清除 Git 中所有巨大文件的 history
+- [ ] 重写 README，着重关注贡献流程指南
+- [ ] 整理 Issues 和 PR tags
+- [ ] 整理 branches
+- [ ] 代码安全性审查

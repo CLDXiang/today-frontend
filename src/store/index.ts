@@ -125,7 +125,7 @@ const store = createStore({
       },
     ) {
       state.selectedSectionsByDay = payload.selectedSectionsByDay;
-      state.selectedCoursesIds[payload.semester] = [...payload.selectedCoursesIds];
+      state.selectedCoursesIds[payload.semester] = payload.selectedCoursesIds;
     },
     setHoveredCourseId(state, courseId) {
       state.hoveredCourseId = courseId;

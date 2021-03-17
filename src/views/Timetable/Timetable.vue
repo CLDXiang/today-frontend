@@ -7,10 +7,7 @@
       :visible="isDetailDialogVisible"
       @close="hideDetailDialog"
     >
-      <timetable-detail-dialog-content
-        :course="detailPageCourse"
-        @delete-course="removeSelectedCourse(detailPageCourse.id)"
-      />
+      <timetable-detail-dialog-content @delete-course="(id) => removeSelectedCourse(id)" />
     </a-drawer>
     <a-drawer
       height="90%"
@@ -32,13 +29,13 @@
       :closable="false"
       :visible="isSearchDialogVisible"
       class="md:hidden"
-      @close="hideSearchDialog"
+      @close="isSearchDialogVisible = false"
     >
       <timetable-search-bar
         :search-index="searchIndex"
         :is-loading-courses="isLoadingCourses"
         @addcourse="addSelectedCourse"
-        @hide-search-dialog="hideSearchDialog"
+        @hide-search-dialog="isSearchDialogVisible = false"
       />
     </a-drawer>
     <a-drawer
@@ -69,7 +66,22 @@
         <div class="sticky left-0 z-20 pr-1 flex-initial flex-shrink-0 flex flex-col">
           <div class="flex-grow-0 flex-shrink-0 h-8 flex justify-center items-center py-0 px-1" />
           <div
-            v-for="(section, index) in sections"
+            v-for="(section, index) in [
+              { name: '1', clock: '08:00' },
+              { name: '2', clock: '08:55' },
+              { name: '3', clock: '09:55' },
+              { name: '4', clock: '10:50' },
+              { name: '5', clock: '11:45' },
+              { name: '6', clock: '13:30' },
+              { name: '7', clock: '14:25' },
+              { name: '8', clock: '15:25' },
+              { name: '9', clock: '16:20' },
+              { name: '10', clock: '17:15' },
+              { name: '11', clock: '18:30' },
+              { name: '12', clock: '19:25' },
+              { name: '13', clock: '20:20' },
+              { name: '14', clock: '21:15' },
+            ]"
             :key="index"
             :class="
               'relative flex-grow-0 flex-shrink-0 h-16 ' +
@@ -86,7 +98,7 @@
         <timetable-day
           v-for="(sectionsByDay, index) in selectedSectionsByDay"
           :key="index"
-          :title="titles[index]"
+          :title="['周一', '周二', '周三', '周四', '周五', '周六', '周日'][index]"
           :sections="sectionsByDay"
         />
       </div>
@@ -98,7 +110,7 @@
           :search-index="searchIndex"
           :is-loading-courses="isLoadingCourses"
           @addcourse="addSelectedCourse"
-          @hide-search-dialog="hideSearchDialog"
+          @hide-search-dialog="isSearchDialogVisible = false"
         />
         <!-- <timetable-search-bar
           :search-index="searchIndex"
@@ -112,7 +124,7 @@
         type="primary"
         size="small"
         shape="circle"
-        @click="showSearchDialog"
+        @click="isSearchDialogVisible = true"
       >
         <f-badge
           :visible="!selectedCoursesIds.size"
@@ -131,11 +143,16 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent, ref } from 'vue';
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import {
+  computed, defineComponent, onMounted, ref,
+} from 'vue';
+import { useStore } from 'vuex';
 import { selectClient, userClient } from '@/apis';
 import log from '@/utils/log';
 import { semesterArray } from '@/utils/config';
+import { message } from 'ant-design-vue';
+import { areSetsSame, mapDay } from './utils';
+
 import {
   TimetableDay,
   TimetableDetailDialogContent,
@@ -163,103 +180,72 @@ export default defineComponent({
     TimetableSelectedCourseList,
   },
   setup() {
-    /** 是否显示已选课程列表抽屉 */
-    const isSelectedCourseListVisible = ref<boolean>(false);
+    // TODO: 重命名 course 为 lesson
+    // Vuex
+    const store = useStore();
 
+    /** 当前用户是否已登录 */
+    const isUserLoggedIn = computed<boolean>(() => store.getters.userLoggedIn);
+    /** 课程详情卡片是否显示 */
+    const isDetailDialogVisible = computed<boolean>(() => store.state.isDetailDialogVisible);
+    const setSelectedCourses = (payload: {
+      semester: string;
+      selectedCoursesIds: number[];
+      selectedSectionsByDay: Sections[];
+    }) => store.commit('setSelectedCourses', payload);
+    const hideDetailDialog = () => store.commit('hideDetailDialog');
+
+    // UI
+
+    /** 是否显示已选课程列表抽屉 */
+    const isSelectedCourseListVisible = ref(false);
     /** 显示已选课程列表抽屉 */
     const showSelectedCourseList = () => {
       isSelectedCourseListVisible.value = true;
     };
-
     /** 隐藏已选课程列表抽屉 */
     const hideSelectedCourseList = () => {
       isSelectedCourseListVisible.value = false;
     };
 
-    return {
-      /** 是否显示已选课程列表抽屉 */
-      isSelectedCourseListVisible,
-      /** 显示已选课程列表抽屉 */
-      showSelectedCourseList,
-      /** 隐藏已选课程列表抽屉 */
-      hideSelectedCourseList,
-    };
-  },
-  data() {
-    return {
-      semester: '2020-2021学年2学期',
-      semesterIndex: 0,
-      semesterJsonName: '',
-      semesterArray,
-      isLoadingCourses: false,
-      /** 课程数据 */
-      allCourses: {} as AllCourses,
-      /** 搜索索引 */
-      searchIndex: [] as SearchIndexItem[],
-      titles: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      sections: [
-        { name: '1', clock: '08:00' },
-        { name: '2', clock: '08:55' },
-        { name: '3', clock: '09:55' },
-        { name: '4', clock: '10:50' },
-        { name: '5', clock: '11:45' },
-        { name: '6', clock: '13:30' },
-        { name: '7', clock: '14:25' },
-        { name: '8', clock: '15:25' },
-        { name: '9', clock: '16:20' },
-        { name: '10', clock: '17:15' },
-        { name: '11', clock: '18:30' },
-        { name: '12', clock: '19:25' },
-        { name: '13', clock: '20:20' },
-        { name: '14', clock: '21:15' },
-      ],
-      /** 关于 selectedCoursesIds 的设计
-       * 一开始我的想法是将不同课程的所有信息按不同 Day 来存储，但是考虑到多课时的课程的互动可能需要一次操作多个课时，
-       * 最终还是将所有已选课程数据放到同一个 data 项中
-       * TODO: 后续若引入了学期，在各个涉及到该状态的方法中还需要注意根据学期过滤
-       * 这个变量仅保存当前学期的内容，其他的都放到 vuex 中
-       * */
-      selectedCoursesIds: new Set<number>(),
-      selectedCoursesIdsFromDatabase: new Set<number>(),
-      /** 关于 selectedSectionsByDay 的设计
-       * 为何不使用依赖 selectedCoursesIds 的计算/侦听属性？主要是考虑到增删时的性能问题，
-       * 如果使用计算/侦听属性，每次修改 selectedCoursesIds 时就需要重新处理所有已选择的课程，
-       * 所以我认为如此设计会更好：初始化时根据 selectedCoursesIds 的初始值计算一次，
-       * 此后每次增删仅仅针对增删的那一门课程来操作 selectedSectionsByDay
-       * TODO: 按需过滤字段
-       * */
-      selectedSectionsByDay: [{}, {}, {}, {}, {}, {}, {}] as Sections[],
-      // /**
-      //  * 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正
-      //  */
-      isOffline: false,
-      isConflictDialogVisible: false,
+    // 学期
 
-      isSearchDialogVisible: false,
-    };
-  },
-  computed: {
-    ...mapState([
-      'detailPageCourse',
-      'isDetailDialogVisible',
-      'hasFetchedSelectedCourses',
-    ]),
-    ...mapState({
-      selectedSectionsByDayVuex: 'selectedSectionsByDay',
-      selectedCoursesIdsVuex: 'selectedCoursesIds',
-      semesterVuex: 'semester',
-    }),
-    ...mapGetters({ isUserLoggedIn: 'userLoggedIn' }),
+    /** 当前选择学期 */
+    const semester = ref('2020-2021学年2学期');
+    /** 当前学期在学期数组的索引值 */
+    const semesterIndex = computed<number>(
+      () => semesterArray.findIndex((sem) => sem.key === semester.value),
+    );
+    /** 展示的学期名 */
+    const semesterName = computed(() => semesterArray[semesterIndex.value].name);
+
+    onMounted(() => {
+      // 从 Vuex 中读取用户上一次选取的学期来初始化
+      semester.value = store.state.semester;
+    });
+
+    // 选课
+
+    /** 在与后端交互失败后进入离线模式，在下一次进入页面时再尝试修正 */
+    const isOffline = ref(false);
+    /** 是否正在读取课程数据 */
+    const isLoadingCourses = ref(true);
+    /** 课程数据 */
+    const allCourses = ref<AllCourses>({});
+    /** 当前学期已加入课程 Id */
+    const selectedCoursesIds = ref(new Set<number>());
+    /** 按周一到周日划分的 sections 数据 */
+    const selectedSectionsByDay = ref<Sections[]>([{}, {}, {}, {}, {}, {}, {}]);
     /** 已选课程列表数据 */
-    selectedCourses(): SelectedCourse[] {
-      if (this.isLoadingCourses) {
+    const selectedCourses = computed<SelectedCourse[]>(() => {
+      if (isLoadingCourses.value) {
         // 还没加载好 JSON
         return [];
       }
-      return [...this.selectedCoursesIds].map((lessonId) => {
+      return [...selectedCoursesIds.value].map((lessonId) => {
         const {
           id, name, teachers, code,
-        } = this.allCourses[lessonId];
+        } = allCourses.value[lessonId];
         return {
           id,
           name,
@@ -267,210 +253,121 @@ export default defineComponent({
           code,
         };
       });
-    },
-    /** 展示的学期名 */
-    semesterName(): string {
-      return semesterArray[this.semesterIndex].name;
-    },
-  },
-  mounted() {
-    this.semester = this.semesterVuex;
-    this.semesterIndex = semesterArray.findIndex((semester) => semester.key === this.semester);
-    this.semesterJsonName = semesterArray[this.semesterIndex].jsonFileName;
-    this.selectedSectionsByDay = this.selectedSectionsByDayVuex;
-    this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
-    // 读取课程信息
-    this.getCoursesFromJSON(this.semesterJsonName);
-    // 注意，任何需要用到课程信息的初始化方法，请在 this.getCoursesFromJSON() 的 resolve 回调中而非此处调用
-  },
-  methods: {
-    ...mapMutations([
-      'setHasFetchedSelectedCourses',
-      'setUserProfile',
-      'setSelectedCourses',
-      'hideDetailDialog',
-      'changeDetailPageContent',
-      'showDetailDialog',
-      'setSemester',
-    ]),
-    moveSemester(step: -1 | 1) {
-      if (step === -1 && this.semesterIndex === 0) {
-        this.$message.warn('已经是最后一个学期啦', 1);
-        return;
-      }
-      if (step === 1 && this.semesterIndex === semesterArray.length - 1) {
-        this.$message.warn('已经是最新学期啦', 1);
-        return;
-      }
-      this.semesterIndex += step;
-      this.semester = semesterArray[this.semesterIndex].key;
-      this.selectedCoursesIds = new Set(this.selectedCoursesIdsVuex[this.semester]);
-      this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
-      this.getCoursesFromJSON(semesterArray[this.semesterIndex].jsonFileName);
-      this.fetchSelectedCourses(true);
-
-      this.setSemester(this.semester);
-    },
-    areSetsSame(set1: Set<number>, set2: Set<number>) {
-      if (set1.size !== set2.size) return false;
-      const intersect = [...set1].filter((item) => set2.has(item));
-      return intersect.length === set1.size;
-    },
-    onConflictResolved(
-      selectedCoursesIds: Set<number>,
-      changeLocal: boolean,
-      changeRemote: boolean,
-    ) {
-      const messageKey = 'conflict-resolved';
-      // 得到用户选择保留的 Id 列表
-      if (changeLocal) {
-        this.replaceSelectedCourses(selectedCoursesIds);
-      }
-      if (changeRemote) {
-        const hide = this.$message.loading({
-          content: '正在向服务器同步数据...',
-          key: messageKey,
-          duration: 0,
-        });
-        selectClient
-          .replaceSelectedLessons([...selectedCoursesIds], this.semester)
-          .then(() => {
-            // TODO: 根据后端响应进行处理
-            hide();
-            this.$message.success({ content: '数据同步成功!', key: messageKey, duration: 1 });
-          })
-          .catch((e) => {
-            hide();
-            if (e.response.status !== 401) {
-              this.$message.error({
-                content: '数据同步失败！进入离线模式',
-                key: messageKey,
-                duration: 1.5,
-              });
-            }
-            this.isOffline = true;
-          });
-      }
-      this.hideConflictDialog();
-    },
-    getCoursesFromJSON(filePathOrigin: string) {
-      const filePath = `lessons/${filePathOrigin}`;
-      this.isLoadingCourses = true;
-      axios
-        .get(filePath)
-        .then((response) => {
-          const allCourses = {} as AllCourses;
-          response.data.forEach((course: RawCourse) => {
-            if (course && course.id) {
-              allCourses[course.id] = course;
-            }
-          });
-          this.allCourses = allCourses;
-
-          // 初始化
-          this.initSelectedSectionsByDay();
-          this.initSearchIndex();
-          this.isLoadingCourses = false;
-
-          // 若用户已登录，从后端同步所选课程 Id 列表
-          if (this.isUserLoggedIn && !this.hasFetchedSelectedCourses) {
-            this.fetchSelectedCourses();
-            // 顺便更新用户信息
-            userClient
-              .getUserInfo({})
-              .then((profile) => {
-                this.setUserProfile(profile);
-              })
-              .catch((err) => {
-                log.error(err);
-              });
-          }
-        })
-        .catch((err) => {
-          this.$message.error('拉取课程数据失败，请尝试刷新页面', 1.5);
-          throw err;
-        });
-    },
-    /** 同步数据
-     * @param isPassive - 非用户主动触发
-     */
-    fetchSelectedCourses(isPassive?: boolean) {
-      const messageKey = 'fetch-selected-courses';
-      this.isOffline = false; // 触发拉数据，重新上线
-      if (!this.isUserLoggedIn) {
-        if (!isPassive) {
-          this.$message.warn('需要登录才能进行云同步');
-        }
-        return;
-      }
-      const hide = this.$message.loading({
-        content: '正在与服务器同步数据',
-        key: messageKey,
-        duration: 0,
-      });
-      selectClient
-        .getSelectedLessonIds(this.semester)
-        .then((res: number[]) => {
-          this.setHasFetchedSelectedCourses();
-          hide();
-          if (!Array.isArray(res)) {
-            this.$message.error({
-              content: '数据同步失败！进入离线模式',
-              key: messageKey,
-              duration: 1.5,
-            });
-            this.isOffline = true;
-          }
-          this.selectedCoursesIdsFromDatabase = new Set(res);
-          if (this.areSetsSame(this.selectedCoursesIdsFromDatabase, this.selectedCoursesIds)) {
-            this.$message.success({ content: '数据同步成功！', key: messageKey, duration: 1 });
-          } else if (this.selectedCoursesIds.size === 0) {
-            // 如果本地没有数据，则默认拉取服务器数据
-            this.onConflictResolved(this.selectedCoursesIdsFromDatabase, true, false);
-            this.$message.success({ content: '数据同步成功！', key: messageKey, duration: 1 });
-          } else {
-            // 冲突解决
-            this.isConflictDialogVisible = true;
-          }
-        })
-        .catch((err) => {
-          hide();
-          if (!err.response || err.response.status !== 401) {
-            this.$message.error({
-              content: '数据同步失败！进入离线模式',
-              key: messageKey,
-              duration: 1.5,
-            });
-          }
-          this.isOffline = true;
-        });
-    },
-    initSelectedSectionsByDay() {
-      const selectedSectionsByDay = [...this.selectedSectionsByDay];
-      this.selectedCoursesIds.forEach((courseId) => {
-        const course = this.allCourses[courseId];
+    });
+    onMounted(() => {
+      // 从 Vuex 中读取选课信息缓存
+      selectedSectionsByDay.value = store.state.selectedSectionsByDay;
+      selectedCoursesIds.value = new Set(store.state.selectedCoursesIds[semester.value]);
+    });
+    /** 根据 selectedCoursesIds 初始化 selectedSectionsByDay */
+    const initSelectedSectionsByDay = () => {
+      const selectedSectionsByDayCache = [...selectedSectionsByDay.value];
+      selectedCoursesIds.value.forEach((courseId) => {
+        const course = allCourses.value[courseId];
 
         // 对每个时间段，将该课程信息加入对应天
         course.time_slot.forEach((ts, i) => {
-          const sections = { ...selectedSectionsByDay[ts.day - 1] };
+          const sections = { ...selectedSectionsByDayCache[ts.day - 1] };
           sections[`${courseId}-${i}`] = {
             ...course,
             currentSlot: ts,
           };
-          selectedSectionsByDay[ts.day - 1] = sections;
+          selectedSectionsByDayCache[ts.day - 1] = sections;
         });
       });
-      this.selectedSectionsByDay = selectedSectionsByDay;
-      this.setSelectedCourses({
-        semester: this.semester,
-        selectedCoursesIds: this.selectedCoursesIds,
-        selectedSectionsByDay,
+      selectedSectionsByDay.value = selectedSectionsByDayCache;
+      setSelectedCourses({
+        semester: semester.value,
+        selectedCoursesIds: [...selectedCoursesIds.value],
+        selectedSectionsByDay: selectedSectionsByDay.value,
       });
-    },
-    initSearchIndex() {
-      const searchIndex = [] as SearchIndexItem[];
+    };
+    /** 将一门课加入课表 */
+    const addSelectedCourse = (courseId: number) => {
+      // 若用户已登录，向后端发送请求
+      if (isUserLoggedIn.value && !isOffline.value && !selectedCoursesIds.value.has(courseId)) {
+        selectClient
+          .addSelectedLesson(courseId, semester.value)
+          .then(() => {
+            // TODO: 后端应该返回有效响应
+          })
+          .catch((err) => {
+            if (!err.response || err.response.status !== 401) {
+              message.error('数据同步失败！进入离线模式', 1.5);
+            }
+            isOffline.value = true;
+          });
+      }
+
+      const selectedSectionsByDayCache = [...selectedSectionsByDay.value];
+      const course = allCourses.value[courseId];
+
+      // 对每个时间段，将该课程信息加入对应天
+      course.time_slot.forEach((ts, i) => {
+        const sections = { ...selectedSectionsByDayCache[ts.day - 1] };
+        sections[`${courseId}-${i}`] = {
+          ...course,
+          currentSlot: ts,
+        };
+        selectedSectionsByDayCache[ts.day - 1] = sections;
+      });
+      selectedSectionsByDay.value = selectedSectionsByDayCache;
+      selectedCoursesIds.value.add(courseId);
+
+      setSelectedCourses({
+        semester: semester.value,
+        selectedCoursesIds: [...selectedCoursesIds.value],
+        selectedSectionsByDay: selectedSectionsByDay.value,
+      });
+      message.success('已将课程加入课表', 1);
+    };
+    /** 将一门课从课表删除 */
+    const removeSelectedCourse = (courseId: number) => {
+      // 若用户已登录，向后端发送请求
+      if (isUserLoggedIn.value && !isOffline.value && selectedCoursesIds.value.has(courseId)) {
+        selectClient
+          .removeSelectedLesson(courseId, semester.value)
+          .then(() => {
+            // TODO: 后端应该返回有效响应
+          })
+          .catch((err) => {
+            if (!err.response || err.response.status !== 401) {
+              message.error('数据同步失败！进入离线模式', 1.5);
+            }
+            isOffline.value = true;
+          });
+      }
+
+      const selectedSectionsByDayCache = [...selectedSectionsByDay.value];
+      const course = allCourses.value[courseId];
+
+      // 对每个时间段，将该对应天的课程信息删除
+      course.time_slot.forEach((ts, i) => {
+        const sections = { ...selectedSectionsByDayCache[ts.day - 1] };
+
+        delete sections[`${courseId}-${i}`];
+        selectedSectionsByDayCache[ts.day - 1] = sections;
+      });
+      selectedSectionsByDay.value = selectedSectionsByDayCache;
+      selectedCoursesIds.value.delete(courseId);
+      setSelectedCourses({
+        semester: semester.value,
+        selectedCoursesIds: [...selectedCoursesIds.value],
+        selectedSectionsByDay: selectedSectionsByDay.value,
+      });
+      message.success('已将课程移出课表', 1);
+    };
+
+    // 课程搜索索引
+    /** 是否显示搜索对话框 */
+    const isSearchDialogVisible = ref(false);
+    /** 搜索索引 */
+    const searchIndex = ref<SearchIndexItem[]>([]);
+    /** 初始化搜索索引 */
+    const initSearchIndex = () => {
+      const searchIndexCache = [] as SearchIndexItem[];
       // TODO: searchIndex 的构建应当提前做好并放到 JSON 中
-      Object.entries(this.allCourses).forEach(([courseId, course]) => {
+      Object.entries(allCourses.value).forEach(([courseId, course]) => {
         const timeSlots = [] as SearchIndexItemTimeSlot[];
         course.time_slot.forEach((ts) => {
           const {
@@ -482,7 +379,7 @@ export default defineComponent({
             day, // 注意此处的对应关系，day 1 对应 周一，而非索引
             section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
             place,
-            dayText: this.mapDay(day),
+            dayText: mapDay(day),
           });
         });
 
@@ -490,7 +387,6 @@ export default defineComponent({
 
         // 这里提前处理便于直接显示用，如果未来需要单独使用其中的字段可以注释掉，然后在其他地方处理
         const teachersText = course.teachers || '';
-        // TODO: 考虑如何把 week 整进来
         const timeSlotsTexts = timeSlots.map(
           (ts) => `${ts.week}周 周${ts.dayText} ${ts.section.join('-')} ${ts.place}`,
         );
@@ -504,7 +400,7 @@ export default defineComponent({
         courseId: 不作为搜索字段
         */
 
-        searchIndex.push({
+        searchIndexCache.push({
           name,
           teachers: course.teachers.split(','),
           department,
@@ -515,112 +411,221 @@ export default defineComponent({
           timeSlotsTexts,
         });
       });
-      this.searchIndex = searchIndex;
-    },
-    addSelectedCourse(courseId: number) {
-      // if (this.selectedCoursesIds.has(courseId)) {
-      //   return;
-      // }
-      // 若用户已登录，向后端发送请求
-      if (this.isUserLoggedIn && !this.isOffline && !this.selectedCoursesIds.has(courseId)) {
-        selectClient
-          .addSelectedLesson(courseId, this.semester)
-          .then(() => {
-            // TODO: 后端应该返回有效响应
-          })
-          .catch((err) => {
-            if (!err.response || err.response.status !== 401) {
-              this.$message.error('数据同步失败！进入离线模式', 1.5);
-            }
-            this.isOffline = true;
-          });
-      }
+      searchIndex.value = searchIndexCache;
+    };
 
-      const selectedSectionsByDay = [...this.selectedSectionsByDay];
-      const course = this.allCourses[courseId];
-
-      // 对每个时间段，将该课程信息加入对应天
-      course.time_slot.forEach((ts, i) => {
-        const sections = { ...selectedSectionsByDay[ts.day - 1] };
-        sections[`${courseId}-${i}`] = {
-          ...course,
-          currentSlot: ts,
-        };
-        selectedSectionsByDay[ts.day - 1] = sections;
-      });
-      this.selectedSectionsByDay = selectedSectionsByDay;
-      this.selectedCoursesIds.add(courseId);
-
-      this.setSelectedCourses({
-        semester: this.semester,
-        selectedCoursesIds: this.selectedCoursesIds,
-        selectedSectionsByDay,
-      });
-      this.$message.success('已将课程加入课表', 1);
-    },
-    removeSelectedCourse(courseId: number) {
-      // if (!this.selectedCoursesIds.has(courseId)) {
-      //   return;
-      // }
-      // 若用户已登录，向后端发送请求
-      if (this.isUserLoggedIn && !this.isOffline && this.selectedCoursesIds.has(courseId)) {
-        selectClient
-          .removeSelectedLesson(courseId, this.semester)
-          .then(() => {
-            // TODO: 后端应该返回有效响应
-          })
-          .catch((err) => {
-            if (!err.response || err.response.status !== 401) {
-              this.$message.error('数据同步失败！进入离线模式', 1.5);
-            }
-            this.isOffline = true;
-          });
-      }
-
-      const selectedSectionsByDay = [...this.selectedSectionsByDay];
-      const course = this.allCourses[courseId];
-
-      // 对每个时间段，将该对应天的课程信息删除
-      course.time_slot.forEach((ts, i) => {
-        const sections = { ...selectedSectionsByDay[ts.day - 1] };
-
-        delete sections[`${courseId}-${i}`];
-        selectedSectionsByDay[ts.day - 1] = sections;
-      });
-      this.selectedSectionsByDay = selectedSectionsByDay;
-      this.selectedCoursesIds.delete(courseId);
-      this.setSelectedCourses({
-        semester: this.semester,
-        selectedCoursesIds: this.selectedCoursesIds,
-        selectedSectionsByDay,
-      });
-      this.$message.success('已将课程移出课表', 1);
-    },
-    replaceSelectedCourses(courseIds: Set<number>) {
-      this.selectedCoursesIds = new Set(courseIds);
-      this.selectedSectionsByDay = [{}, {}, {}, {}, {}, {}, {}];
+    // 云同步
+    /** 服务端同步数据 */
+    const selectedCoursesIdsFromDatabase = ref(new Set<number>());
+    /** 冲突解决对话框是否显示 */
+    const isConflictDialogVisible = ref(false);
+    /** 替换所选课程列表 */
+    const replaceSelectedCourses = (courseIds: Set<number>) => {
+      selectedCoursesIds.value = new Set(courseIds);
+      selectedSectionsByDay.value = [{}, {}, {}, {}, {}, {}, {}];
 
       // 重新加入每一门课
-      this.initSelectedSectionsByDay();
-    },
-    hideConflictDialog() {
-      this.isConflictDialogVisible = false;
-    },
-    showSearchDialog() {
-      this.isSearchDialogVisible = true;
-    },
-    hideSearchDialog() {
-      this.isSearchDialogVisible = false;
-    },
-    mapDay(day: number) {
-      return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
-    },
+      initSelectedSectionsByDay();
+    };
+    /** 同步冲突解决流程 */
+    const onConflictResolved = (
+      finalCoursesIds: Set<number>,
+      changeLocal: boolean,
+      changeRemote: boolean,
+    ) => {
+      const messageKey = 'conflict-resolved';
+      // 得到用户选择保留的 Id 列表
+      if (changeLocal) {
+        replaceSelectedCourses(finalCoursesIds);
+      }
+      if (changeRemote) {
+        const hide = message.loading({
+          content: '正在向服务器同步数据...',
+          key: messageKey,
+          duration: 0,
+        });
+        selectClient
+          .replaceSelectedLessons([...finalCoursesIds], semester.value)
+          .then(() => {
+            // TODO: 根据后端响应进行处理
+            hide();
+            message.success({ content: '数据同步成功!', key: messageKey, duration: 1 });
+          })
+          .catch((e) => {
+            hide();
+            if (e.response.status !== 401) {
+              message.error({
+                content: '数据同步失败！进入离线模式',
+                key: messageKey,
+                duration: 1.5,
+              });
+            }
+            isOffline.value = true;
+          });
+      }
+      isConflictDialogVisible.value = false;
+    };
+    /** 同步数据
+     * @param isPassive - 非用户主动触发
+     */
+    const fetchSelectedCourses = (isPassive?: boolean) => {
+      const messageKey = 'fetch-selected-courses';
+      isOffline.value = false; // 触发拉数据，重新上线
+      if (!isUserLoggedIn.value) {
+        if (!isPassive) {
+          message.warn('需要登录才能进行云同步');
+        }
+        return;
+      }
+      const hide = message.loading({
+        content: '正在与服务器同步数据',
+        key: messageKey,
+        duration: 0,
+      });
+      selectClient
+        .getSelectedLessonIds(semester.value)
+        .then((res: number[]) => {
+          store.commit('setHasFetchedSelectedCourses');
+          hide();
+          if (!Array.isArray(res)) {
+            message.error({
+              content: '数据同步失败！进入离线模式',
+              key: messageKey,
+              duration: 1.5,
+            });
+            isOffline.value = true;
+          }
+          selectedCoursesIdsFromDatabase.value = new Set(res);
+          if (areSetsSame(selectedCoursesIdsFromDatabase.value, selectedCoursesIds.value)) {
+            message.success({ content: '数据同步成功！', key: messageKey, duration: 1 });
+          } else if (selectedCoursesIds.value.size === 0) {
+            // 如果本地没有数据，则默认拉取服务器数据
+            onConflictResolved(selectedCoursesIdsFromDatabase.value, true, false);
+            message.success({ content: '数据同步成功！', key: messageKey, duration: 1 });
+          } else {
+            // 冲突解决
+            isConflictDialogVisible.value = true;
+          }
+        })
+        .catch((err) => {
+          hide();
+          if (!err.response || err.response.status !== 401) {
+            message.error({
+              content: '数据同步失败！进入离线模式',
+              key: messageKey,
+              duration: 1.5,
+            });
+          }
+          isOffline.value = true;
+        });
+    };
+
+    // 课程数据读取
+
+    /** 从 JSON 中读取课程数据 */
+    const getCoursesFromJSON = (JSONFileName: string) => {
+      const filePath = `lessons/${JSONFileName}`;
+      isLoadingCourses.value = true;
+      axios
+        .get(filePath)
+        .then((resp) => {
+          const allCoursesCache = {} as AllCourses;
+          resp.data.forEach((course: RawCourse) => {
+            if (course && course.id) {
+              allCoursesCache[course.id] = course;
+            }
+          });
+          allCourses.value = allCoursesCache;
+
+          // 初始化
+          initSelectedSectionsByDay();
+          initSearchIndex();
+          isLoadingCourses.value = false;
+
+          // 若用户已登录，从后端同步所选课程 Id 列表
+          if (isUserLoggedIn.value && !store.state.hasFetchedSelectedCourses) {
+            fetchSelectedCourses();
+            // 顺便更新用户信息
+            userClient
+              .getUserInfo({})
+              .then((profile) => {
+                store.commit('setUserProfile', profile);
+              })
+              .catch((err) => {
+                log.error(err);
+              });
+          }
+        })
+        .catch((err) => {
+          message.error('拉取课程数据失败，请尝试刷新页面', 1.5);
+          throw err;
+        });
+    };
+    onMounted(() => {
+      // 读取课程信息
+      getCoursesFromJSON(semesterArray[semesterIndex.value].jsonFileName);
+    });
+
+    /** 变更学期 */
+    const moveSemester = (step: -1 | 1) => {
+      if (step === -1 && semesterIndex.value === 0) {
+        message.warn('已经是最后一个学期啦', 1);
+        return;
+      }
+      if (step === 1 && semesterIndex.value === semesterArray.length - 1) {
+        message.warn('已经是最新学期啦', 1);
+        return;
+      }
+      semester.value = semesterArray[semesterIndex.value + step].key;
+      selectedCoursesIds.value = new Set(store.state.selectedCoursesIds[semester.value]);
+      selectedSectionsByDay.value = [{}, {}, {}, {}, {}, {}, {}];
+      getCoursesFromJSON(semesterArray[semesterIndex.value].jsonFileName);
+      fetchSelectedCourses(true);
+
+      store.commit('setSemester', semester.value);
+    };
+
     /** 根据 lesson id 显示详情页 */
-    handleShowDetail(courseId: number) {
-      this.hideSelectedCourseList();
-      this.changeDetailPageContent(this.allCourses[courseId]);
-      this.showDetailDialog();
-    },
+    const handleShowDetail = (courseId: number) => {
+      hideSelectedCourseList();
+      store.commit('changeDetailPageContent', allCourses.value[courseId]);
+      store.commit('showDetailDialog');
+    };
+
+    return {
+      isUserLoggedIn,
+      isDetailDialogVisible,
+      hideDetailDialog,
+
+      isSelectedCourseListVisible,
+      showSelectedCourseList,
+      hideSelectedCourseList,
+
+      selectedCoursesIds,
+      selectedSectionsByDay,
+      selectedCourses,
+      addSelectedCourse,
+      removeSelectedCourse,
+
+      isSearchDialogVisible,
+      searchIndex,
+
+      selectedCoursesIdsFromDatabase,
+      isConflictDialogVisible,
+      onConflictResolved,
+      fetchSelectedCourses,
+
+      allCourses,
+      isLoadingCourses,
+
+      semester,
+      semesterIndex,
+      semesterName,
+      semesterArray,
+      moveSemester,
+
+      handleShowDetail,
+    };
   },
 });
 </script>

@@ -104,17 +104,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { mapMutations } from 'vuex';
+import { computed, defineComponent } from 'vue';
+import { mapMutations, useStore } from 'vuex';
 import { RawCourse, RawTimeSlot, CourseDetailInfo } from '../types';
 
 export default defineComponent({
-  props: {
-    course: { type: Object as PropType<RawCourse>, required: true },
-  },
   emits: ['delete-course'],
-  data() {
-    return {};
+  setup() {
+    const store = useStore();
+    const course = computed<RawCourse>(() => store.state.detailPageCourse);
+    return {
+      course,
+    };
   },
   computed: {
     courseInfo(): CourseDetailInfo {
@@ -162,7 +163,7 @@ export default defineComponent({
     },
     handleClickDeleteButton() {
       this.hideDetailDialog();
-      this.$emit('delete-course');
+      this.$emit('delete-course', this.course.id);
       this.onDeleteDetailPageCourse();
     },
     handleClickCloseButton() {

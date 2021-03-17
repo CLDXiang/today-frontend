@@ -15,7 +15,7 @@ fdxk.info 是一款服务复旦大学生的 Web 应用，主要面向移动端�
 * 北大 [pkuhelper](https://pkuhelper.pku.edu.cn/hole/) 树洞非常有人气，已经获得官方支持，需要登录查看
 * 北大 [品质校园](https://courses.pinzhixiaoyuan.com/) 同为民间匿名评课平台，从 pkuhelper 引流，暂时不是非常活跃，访问速度感人
 
-关于具体的技术细节，请看[Wiki 页面](https://github.com/CLDXiang/today-frontend/wiki)，同时页面还在书写中，欢迎贡献（在比较了解项目之后）。
+关于具体的技术细节，请看 [Wiki 页面](https://github.com/CLDXiang/today-frontend/wiki)；页面还在书写中，欢迎在详细了解项目后贡献。
 
 ## 开发技术栈
 

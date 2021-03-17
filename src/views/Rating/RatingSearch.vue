@@ -6,7 +6,7 @@
       is-back-visible
       @click-back="routerBack('/rating')"
     />
-    <div class="self-start mt-2 mr-0 mb-2 ml-4 text-base text-gray-200">
+    <div class="self-start my-2 mr-0 ml-4 text-base text-gray-200">
       “{{ parsedQ }}”的搜索结果
     </div>
     <div
@@ -16,7 +16,7 @@
       <card-lecture
         v-for="searchResult in searchResults"
         :key="searchResult.id"
-        class="mt-1.5 mr-0 ml-0 mb-1 f-clickable "
+        class="mt-1.5 mx-0 mb-1 f-clickable "
         :lecture="searchResult"
         @click="$router.push(`/rating/lecture/${searchResult.id}`)"
       />

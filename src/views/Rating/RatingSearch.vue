@@ -1,22 +1,22 @@
 <template>
   <div
-    class="w-full h-full overflow-y-auto content-box max-w-14xl"
+    class="w-full h-full overflow-y-auto flex flex-col items-center text-gray-600 text-sm mx-auto my-0 max-w-14xl"
   >
     <rating-head-bar
       is-back-visible
       @click-back="routerBack('/rating')"
     />
-    <div class="title">
+    <div class="self-start my-2 mr-0 ml-4 text-base text-gray-200">
       “{{ parsedQ }}”的搜索结果
     </div>
     <div
       ref="scroll"
-      class="search-result-list"
+      class="bg-gray-100 overflow-auto flex flex-1 flex-col self-stretch"
     >
       <card-lecture
         v-for="searchResult in searchResults"
         :key="searchResult.id"
-        class="search-result-list__card f-clickable"
+        class="mt-1.5 mx-0 mb-1 f-clickable "
         :lecture="searchResult"
         @click="$router.push(`/rating/lecture/${searchResult.id}`)"
       />
@@ -103,35 +103,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.content-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #444;
-  font-size: 14px;
-  margin: 0 auto;
-
-  > .title {
-    align-self: flex-start;
-    margin: 9px 0 8px 15px;
-    font-size: 16px;
-    line-height: 22px;
-    color: $gray3;
-  }
-
-  > .search-result-list {
-    background-color: #f2f2f2;
-    overflow: auto;
-    align-self: stretch;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    > .search-result-list__card {
-      margin: 6px 0 2px;
-    }
-  }
-}
-</style>

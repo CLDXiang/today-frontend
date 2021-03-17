@@ -1,6 +1,9 @@
 <template>
   <div
-    class="w-full h-full overflow-y-auto flex flex-col items-center text-gray-600 text-sm mx-auto my-0 max-w-14xl"
+    :class="
+      'w-full h-full overflow-y-auto max-w-14xl' +
+        'flex flex-col items-center text-gray-600 text-sm mx-auto my-0'
+    "
   >
     <rating-head-bar
       is-back-visible
@@ -16,7 +19,7 @@
       <card-lecture
         v-for="searchResult in searchResults"
         :key="searchResult.id"
-        class="mt-1.5 mx-0 mb-1 f-clickable "
+        class="mt-1.5 mx-0 mb-1 f-clickable"
         :lecture="searchResult"
         @click="$router.push(`/rating/lecture/${searchResult.id}`)"
       />
@@ -60,11 +63,12 @@ export default defineComponent({
     const searchMore = () => {
       // TODO: 传入 lastId
       if (q.value) {
-        rpcClient.search({
-          q: q.value,
-          lastId: searchResults.value[searchResults.value.length - 1].id,
-          limit: 20,
-        })
+        rpcClient
+          .search({
+            q: q.value,
+            lastId: searchResults.value[searchResults.value.length - 1].id,
+            limit: 20,
+          })
           .then((resp) => {
             searchResults.value = [...searchResults.value, ...resp.data];
           });

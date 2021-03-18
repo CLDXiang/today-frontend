@@ -1,5 +1,5 @@
 <template>
-  <div class="card-lecture py-2.5 px-3 rounded-lg bg-white mb-2">
+  <div class="card-lecture py-2.5 px-3 rounded-lg bg-white mb-2 shadow-lg">
     <div class="flex flex-row justify-between mt-1 h-7">
       <div class="overflow-hidden text-lg whitespace-nowrap overflow-ellipsis">
         {{ lecture.name }}
@@ -74,7 +74,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.card-lecture {
-    box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
-}
 </style>

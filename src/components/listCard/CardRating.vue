@@ -23,7 +23,10 @@
             {{ timeDiff }}
           </span>
         </div>
-        <div class="pt-2 overflow-hidden text-left break-all whitespace-pre-wrap max-h-20 overflow-ellipsis line-limit">
+        <div
+          :class="'pt-2 overflow-hidden text-left break-all whitespace-pre-wrap'
+            + ' max-h-20 overflow-ellipsis line-limit'"
+        >
           {{ rating.form.content }}
         </div>
       </div>
@@ -124,9 +127,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.card-rating {
-  box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
-}
 .line-limit {
   display: -webkit-box;
   -webkit-line-clamp: 3; /* number of lines to show */

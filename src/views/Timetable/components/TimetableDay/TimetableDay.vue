@@ -18,8 +18,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import TimetableDayColumn from './TimetableDayColumn.vue';
-import { Sections, Column } from '../types';
+import TimetableDayColumn from './components/TimetableDayColumn.vue';
+import { Sections } from '../../types';
+import { Column } from './types';
 
 export default defineComponent({
   components: {

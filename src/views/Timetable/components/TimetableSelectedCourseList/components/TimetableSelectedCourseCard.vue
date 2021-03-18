@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { SelectedCourse } from '../types';
+import { SelectedCourse } from '../../../types';
 
 export default defineComponent({
   props: {

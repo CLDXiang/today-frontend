@@ -43,12 +43,12 @@
       placement="right"
       :closable="false"
       :visible="isSelectedCourseListVisible"
-      @close="hideSelectedCourseList"
+      @close="isSelectedCourseListVisible = false"
     >
       <timetable-selected-course-list
         :courses="selectedCourses"
         @click-cloud="fetchSelectedCourses"
-        @click-back="hideSelectedCourseList"
+        @click-back="isSelectedCourseListVisible = false"
         @delete-course="(courseId) => removeSelectedCourse(courseId)"
         @show-detail="handleShowDetail"
       />
@@ -57,7 +57,7 @@
       :semester="semesterName"
       :hide-left="semesterIndex === 0"
       :hide-right="semesterIndex === semesterArray.length - 1"
-      @click-menu-button="showSelectedCourseList"
+      @click-menu-button="isSelectedCourseListVisible = true"
       @click-left="moveSemester(-1)"
       @click-right="moveSemester(1)"
     />
@@ -195,19 +195,6 @@ export default defineComponent({
     }) => store.commit('setSelectedCourses', payload);
     const hideDetailDialog = () => store.commit('hideDetailDialog');
 
-    // UI
-
-    /** 是否显示已选课程列表抽屉 */
-    const isSelectedCourseListVisible = ref(false);
-    /** 显示已选课程列表抽屉 */
-    const showSelectedCourseList = () => {
-      isSelectedCourseListVisible.value = true;
-    };
-    /** 隐藏已选课程列表抽屉 */
-    const hideSelectedCourseList = () => {
-      isSelectedCourseListVisible.value = false;
-    };
-
     // 学期
 
     /** 当前选择学期 */
@@ -254,6 +241,8 @@ export default defineComponent({
         };
       });
     });
+    /** 是否显示已选课程列表抽屉 */
+    const isSelectedCourseListVisible = ref(false);
     onMounted(() => {
       // 从 Vuex 中读取选课信息缓存
       selectedSectionsByDay.value = store.state.selectedSectionsByDay;
@@ -587,7 +576,7 @@ export default defineComponent({
 
     /** 根据 lesson id 显示详情页 */
     const handleShowDetail = (courseId: number) => {
-      hideSelectedCourseList();
+      isSelectedCourseListVisible.value = false;
       store.commit('changeDetailPageContent', allCourses.value[courseId]);
       store.commit('showDetailDialog');
     };
@@ -598,8 +587,6 @@ export default defineComponent({
       hideDetailDialog,
 
       isSelectedCourseListVisible,
-      showSelectedCourseList,
-      hideSelectedCourseList,
 
       selectedCoursesIds,
       selectedSectionsByDay,

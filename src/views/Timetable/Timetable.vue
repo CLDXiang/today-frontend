@@ -34,7 +34,7 @@
       <timetable-search-bar
         :search-index="searchIndex"
         :is-loading-courses="isLoadingCourses"
-        @addcourse="addSelectedCourse"
+        @add-course="addSelectedCourse"
         @hide-search-dialog="isSearchDialogVisible = false"
       />
     </a-drawer>
@@ -109,14 +109,9 @@
         <timetable-search-bar
           :search-index="searchIndex"
           :is-loading-courses="isLoadingCourses"
-          @addcourse="addSelectedCourse"
+          @add-course="addSelectedCourse"
           @hide-search-dialog="isSearchDialogVisible = false"
         />
-        <!-- <timetable-search-bar
-          :search-index="searchIndex"
-          :is-loading-courses="isLoadingCourses"
-          @addcourse="addSelectedCourse"
-        /> -->
       </div>
 
       <a-button

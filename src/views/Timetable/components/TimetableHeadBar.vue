@@ -22,7 +22,7 @@
     </div>
     <div
       class="action-group f-clickable"
-      @click="handleClickMenuButton"
+      @click="$emit('click-menu-button')"
     >
       <f-icon
         name="menu-button"
@@ -46,26 +46,19 @@ export default defineComponent({
     hideRight: { type: Boolean, default: false },
   },
   emits: ['click-menu-button', 'click-left', 'click-right'],
-  data() {
+  setup(props, ctx) {
     return {
-      /** 同步冷却 */
-      cooldownCnt: 0,
+      handleClickLeft: () => {
+        if (!props.hideLeft) {
+          ctx.emit('click-left');
+        }
+      },
+      handleClickRight: () => {
+        if (!props.hideRight) {
+          ctx.emit('click-right');
+        }
+      },
     };
-  },
-  methods: {
-    handleClickMenuButton() {
-      this.$emit('click-menu-button');
-    },
-    handleClickLeft() {
-      if (!this.hideLeft) {
-        this.$emit('click-left');
-      }
-    },
-    handleClickRight() {
-      if (!this.hideRight) {
-        this.$emit('click-right');
-      }
-    },
   },
 });
 </script>

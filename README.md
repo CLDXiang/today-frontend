@@ -27,6 +27,8 @@ fdxk.info 是一款服务复旦大学生的 Web 应用，主要面向移动端�
 * TailwindCSS
 * Ant Design Vue（正在逐步移除）
 
+后端
+
 * TypeScript
 * Nest.js
 * MySQL

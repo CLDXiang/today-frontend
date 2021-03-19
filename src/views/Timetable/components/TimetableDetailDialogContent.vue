@@ -105,70 +105,69 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { mapMutations, useStore } from 'vuex';
+import { useStore } from 'vuex';
 import { RawCourse, RawTimeSlot, CourseDetailInfo } from '../types';
+import { mapDay } from '../utils';
 
 export default defineComponent({
   emits: ['delete-course'],
-  setup() {
+  setup(_, ctx) {
     const store = useStore();
     const course = computed<RawCourse>(() => store.state.detailPageCourse);
-    return {
-      course,
-    };
-  },
-  computed: {
-    courseInfo(): CourseDetailInfo {
+
+    const courseInfo = computed<CourseDetailInfo>(() => {
       // 处理为便于展示的形式
-      const courseInfo: CourseDetailInfo = {
-        codeId: this.course.code_id || '',
-        name: this.course.name || '',
-        credit: this.course.credit || 0,
-        sectionCount: this.course.week_hour || 0,
-        maxStudent: this.course.max_student || 0,
-        department: this.course.department || '',
-        campus: this.course.campus || '',
-        remark: this.course.remark || '',
-        examTime: this.course.exam_time || '',
-        examType: this.course.exam_type || '',
-        drop: this.course.drop ? '是' : '否',
+      const courseInfoCache: CourseDetailInfo = {
+        codeId: course.value.code_id || '',
+        name: course.value.name || '',
+        credit: course.value.credit || 0,
+        sectionCount: course.value.week_hour || 0,
+        maxStudent: course.value.max_student || 0,
+        department: course.value.department || '',
+        campus: course.value.campus || '',
+        remark: course.value.remark || '',
+        examTime: course.value.exam_time || '',
+        examType: course.value.exam_type || '',
+        drop: course.value.drop ? '是' : '否',
         timeSlots: [],
-        teachers: this.course.teachers || '',
+        teachers: course.value.teachers || '',
       };
-      if (this.course.time_slot) {
-        this.course.time_slot.forEach((ts: RawTimeSlot) => {
+      if (course.value.time_slot) {
+        course.value.time_slot.forEach((ts: RawTimeSlot) => {
           const {
             week, day, section, place,
           } = ts;
           const [sectionStart, sectionEnd] = section.split('-').map((i) => parseInt(i, 10));
 
-          if (!courseInfo.sectionCount) {
-            courseInfo.sectionCount += sectionEnd - sectionStart + 1;
+          if (!courseInfoCache.sectionCount) {
+            courseInfoCache.sectionCount += sectionEnd - sectionStart + 1;
           }
-          courseInfo.timeSlots.push({
+          courseInfoCache.timeSlots.push({
             week,
-            day: this.mapDay(day), // 注意此处的对应关系，day 1 对应 周一，而非索引
+            day: mapDay(day), // 注意此处的对应关系，day 1 对应 周一，而非索引
             section: [sectionStart, sectionEnd], // 注意此处也是对应汉字的节数，而非索引
             place,
           });
         });
       }
-      return courseInfo;
-    },
-  },
-  methods: {
-    ...mapMutations(['hideDetailDialog', 'onDeleteDetailPageCourse']),
-    mapDay(day: number) {
-      return ['一', '二', '三', '四', '五', '六', '日'][day - 1];
-    },
-    handleClickDeleteButton() {
-      this.hideDetailDialog();
-      this.$emit('delete-course', this.course.id);
-      this.onDeleteDetailPageCourse();
-    },
-    handleClickCloseButton() {
-      this.hideDetailDialog();
-    },
+      return courseInfoCache;
+    });
+
+    const handleClickDeleteButton = () => {
+      store.commit('hideDetailDialog');
+      ctx.emit('delete-course', course.value.id);
+      store.commit('onDeleteDetailPageCourse');
+    };
+
+    const handleClickCloseButton = () => {
+      store.commit('hideDetailDialog');
+    };
+
+    return {
+      courseInfo,
+      handleClickDeleteButton,
+      handleClickCloseButton,
+    };
   },
 });
 </script>

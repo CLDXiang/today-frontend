@@ -48,12 +48,12 @@ export default defineComponent({
   emits: ['click-menu-button', 'click-left', 'click-right'],
   setup(props, ctx) {
     return {
-      handleClickLeft: () => {
+      handleClickLeft() {
         if (!props.hideLeft) {
           ctx.emit('click-left');
         }
       },
-      handleClickRight: () => {
+      handleClickRight() {
         if (!props.hideRight) {
           ctx.emit('click-right');
         }

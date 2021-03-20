@@ -22,31 +22,45 @@
       <div class="info-card-text">
         <div v-if="courseInfo.teachers">
           <div>主讲老师</div>
-          <div>{{ courseInfo.teachers }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.teachers }}
+          </div>
         </div>
         <div v-if="courseInfo.department">
           <div>开课院系</div>
-          <div>{{ courseInfo.department }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.department }}
+          </div>
         </div>
         <div v-if="courseInfo.campus">
           <div>校区</div>
-          <div>{{ courseInfo.campus }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.campus }}
+          </div>
         </div>
         <div v-if="courseInfo.examType">
           <div>考试形式</div>
-          <div>{{ courseInfo.examType }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.examType }}
+          </div>
         </div>
         <div v-if="courseInfo.examTime">
           <div>考试时间</div>
-          <div>{{ courseInfo.examTime }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.examTime }}
+          </div>
         </div>
         <div v-if="courseInfo.drop">
           <div>是否允许期中退课</div>
-          <div>{{ courseInfo.drop }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.drop }}
+          </div>
         </div>
         <div v-if="courseInfo.remark">
           <div>备注</div>
-          <div>{{ courseInfo.remark }}</div>
+          <div class="text-gray-500">
+            {{ courseInfo.remark }}
+          </div>
         </div>
       </div>
       <div class="info-card-ts">
@@ -266,7 +280,6 @@ export default defineComponent({
         > div:last-child {
           font-size: 14px;
           line-height: 14px;
-          color: $gray3;
         }
       }
 

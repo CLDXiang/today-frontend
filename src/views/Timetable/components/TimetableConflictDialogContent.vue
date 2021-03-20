@@ -33,7 +33,9 @@
               <div class="text-gray-600">
                 {{ course.name }}
               </div>
-              <div>{{ course.codeId }}</div>
+              <div class="text-gray-500">
+                {{ course.codeId }}
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +74,9 @@
               <div class="text-gray-600">
                 {{ course.name }}
               </div>
-              <div>{{ course.codeId }}</div>
+              <div class="text-gray-500">
+                {{ course.codeId }}
+              </div>
             </div>
           </div>
         </div>
@@ -238,7 +242,6 @@ export default defineComponent({
             > div:last-child {
               font-size: 12px;
               line-height: 12px;
-              color: $gray3;
             }
           }
         }

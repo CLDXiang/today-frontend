@@ -13,15 +13,15 @@
       v-else
       class="lecture-info__content"
     >
-      <span>所属模块：{{ lectureInfo.category }}</span>
-      <span>学分：{{ lectureInfo.detailInfo.credit }}</span>
-      <span>开课院系：{{ lectureInfo.detailInfo.department }}</span>
-      <span>校区：{{ lectureInfo.detailInfo.campus }}</span>
+      <span class="text-gray-500">所属模块：{{ lectureInfo.category }}</span>
+      <span class="text-gray-500">学分：{{ lectureInfo.detailInfo.credit }}</span>
+      <span class="text-gray-500">开课院系：{{ lectureInfo.detailInfo.department }}</span>
+      <span class="text-gray-500">校区：{{ lectureInfo.detailInfo.campus }}</span>
       <template v-if="isAllLectureInfoVisible">
-        <span>主讲老师：{{ lectureInfo.taughtBy.join(' ') }}</span>
-        <span>考试时间：{{ lectureInfo.detailInfo.examTime }}</span>
-        <span>考试形式：{{ lectureInfo.detailInfo.examType }}</span>
-        <span>是否允许期中退课：{{ withdrawable }}</span>
+        <span class="text-gray-500">主讲老师：{{ lectureInfo.taughtBy.join(' ') }}</span>
+        <span class="text-gray-500">考试时间：{{ lectureInfo.detailInfo.examTime }}</span>
+        <span class="text-gray-500">考试形式：{{ lectureInfo.detailInfo.examType }}</span>
+        <span class="text-gray-500">是否允许期中退课：{{ withdrawable }}</span>
       </template>
     </div>
     <div
@@ -86,7 +86,6 @@ export default defineComponent({
 
     > span {
       margin-top: 10px;
-      color: $gray3;
       font-size: 12px;
       line-height: 12px;
       text-align: left;

@@ -30,7 +30,7 @@
               :size="18"
               :spacing="3"
             />
-            <span>
+            <span class="text-gray-500">
               {{ lectureInfo.recommended.toFixed(1) }}
             </span>
           </div>
@@ -309,7 +309,6 @@ export default defineComponent({
           > span {
             margin-left: 8px;
             font-size: 16px;
-            color: $gray3;
           }
         }
       }

@@ -183,13 +183,13 @@
           <div
             v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
             :key="tsIndex"
-            class="result-line result-line--ts"
+            class="result-line result-line--ts text-gray-500"
           >
             {{ ts }}
           </div>
           <div
             v-if="item.timeSlotsTexts.length > 3"
-            class="result-line result-line--ts"
+            class="result-line result-line--ts text-gray-500"
           >
             ……
           </div>
@@ -602,6 +602,5 @@ export default defineComponent({
 
 .result-line--ts {
   font-size: 12px;
-  color: $gray3;
 }
 </style>

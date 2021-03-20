@@ -15,7 +15,7 @@
             offset-y="0.5"
           >
             <f-icon
-              class="text-light"
+              class="text-gray-500"
               name="question-circle"
             />
           </f-badge>
@@ -25,7 +25,7 @@
           @click="$router.push('/user/edit')"
         >
           <f-icon
-            class="text-light"
+            class="text-gray-500"
             name="pencil-square"
           />
         </div>
@@ -34,7 +34,7 @@
           @click="logout"
         >
           <f-icon
-            class="text-light"
+            class="text-gray-500"
             name="door-open"
           />
         </div>
@@ -62,7 +62,7 @@
               <span class="text-gray-600"> ＋&nbsp;关注 </span>
             </span>
           </div>
-          <span class="bio text-light">
+          <span class="bio text-gray-500">
             {{
               userProfile.bio || ''
             }}
@@ -78,19 +78,19 @@
           <span class="follow-number text-gray-600">
             {{ userProfile.watchers || 0 }}
           </span>
-          <span class="follow-text text-light"> 关注 </span>
+          <span class="follow-text text-gray-500"> 关注 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-gray-600">
             {{ userProfile.watchees || 0 }}
           </span>
-          <span class="follow-text text-light"> 粉丝 </span>
+          <span class="follow-text text-gray-500"> 粉丝 </span>
         </div>
         <div class="follow-section">
           <span class="follow-number text-gray-600">
             {{ userProfile.fans || 0 }}
           </span>
-          <span class="follow-text text-light"> 被收藏数 </span>
+          <span class="follow-text text-gray-500"> 被收藏数 </span>
         </div>
       </div>
     </div>
@@ -281,10 +281,6 @@ export default defineComponent({
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-
-  .text-light {
-    color: $gray3;
-  }
 
   > .profile-card {
     display: flex;

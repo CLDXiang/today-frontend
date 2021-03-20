@@ -4,7 +4,10 @@
     :class="{ 'text-primary emoji-button--active': active }"
   >
     <span :style="emojiStyle">{{ emoji }}</span>
-    <span :style="countStyle">{{ count }}</span>
+    <span
+      :style="countStyle"
+      class="text-gray-500"
+    >{{ count }}</span>
   </div>
 </template>
 
@@ -50,7 +53,6 @@ export default defineComponent({
     font-size: 12px;
     zoom: 0.83;
     line-height: 12px;
-    color: $gray3;
   }
 
   &:active {

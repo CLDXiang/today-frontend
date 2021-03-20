@@ -471,8 +471,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .dialog-container {
   display: flex;
   flex-direction: column;

@@ -3,7 +3,7 @@
     :style="{ flexGrow: sectionsByColumns.length }"
     class="timetable__day"
   >
-    <div class="day__title background-one">
+    <div class="day__title bg-transparent">
       {{ title }}
     </div>
     <div class="day__column-box">
@@ -95,8 +95,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .timetable__day {
   height: 100%;
   border-right: 1px solid #ddd;

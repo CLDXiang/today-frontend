@@ -93,6 +93,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { useProcessAvatar } from '@/composables';
+import { hashColorClassNames } from '@/utils/colors';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -117,7 +118,7 @@ export default defineComponent({
     },
     courseCardColor(): string {
       // TODO: 有实际分类意义的配色
-      return `color-${parseInt(this.rating.lecture.id, 10) % 96 || 0}`;
+      return hashColorClassNames(parseInt(this.rating.lecture.id, 10) % 96 || 0);
     },
   },
   methods: {
@@ -129,8 +130,6 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
-@import '@/scss/_timetable';
-
 .card-rating {
   padding: 16px 16px 10px 16px;
 }

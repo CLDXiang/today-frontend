@@ -47,6 +47,7 @@ module.exports = {
   variants: {
     extend: {
       margin: ['first'],
+      backgroundColor: ['odd', 'even'],
     },
   },
   plugins: [],

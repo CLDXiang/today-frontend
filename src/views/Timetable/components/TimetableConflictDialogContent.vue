@@ -56,14 +56,14 @@
           >
             <div
               :class="[
-                `color-${
+                hashColorClassNames(
                   (course.codeId &&
                     parseInt(
                       course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3),
                       10,
                     ) % 96) ||
-                  0
-                }`,
+                    0
+                ),
               ]"
             />
             <div>
@@ -97,6 +97,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
+import { hashColorClassNames } from '@/utils/colors';
 import { AllCourses } from '../types';
 
 interface SelectedCourseInfo {
@@ -113,6 +114,8 @@ export default defineComponent({
   emits: ['conflict-resolved'],
   setup(props, ctx) {
     return {
+      hashColorClassNames,
+
       /** （展示用）仅存在于本地的课程列表 */
       selectedCoursesOnlyInLocal: computed<SelectedCourseInfo[]>(() =>
         [...props.selectedCoursesIds]
@@ -150,8 +153,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .content-box {
   min-height: 80vh;
   background-color: #fff;

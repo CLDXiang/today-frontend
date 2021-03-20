@@ -50,6 +50,7 @@ module.exports = {
     extend: {
       margin: ['first'],
       backgroundColor: ['odd', 'even'],
+      borderWidth: ['last'],
     },
   },
   plugins: [],

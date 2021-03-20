@@ -1,7 +1,7 @@
 <template>
   <div
     class="emoji-button"
-    :class="{ 'emoji-button--active': active }"
+    :class="{ 'text-primary emoji-button--active': active }"
   >
     <span :style="emojiStyle">{{ emoji }}</span>
     <span :style="countStyle">{{ count }}</span>
@@ -62,6 +62,5 @@ export default defineComponent({
 
 .emoji-button.emoji-button--active {
   background-color: #e3f1f3;
-  border-color: #60bdca;
 }
 </style>

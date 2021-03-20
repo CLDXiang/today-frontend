@@ -45,7 +45,7 @@
       />
       <div class="info-box">
         <img
-          class="flex-shrink-0 avatar"
+          class="flex-shrink-0 avatar border-2 border-primary"
           :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
@@ -57,7 +57,7 @@
             <!-- TODO: 实现关注功能 -->
             <span
               v-if="!isCurrentUser()"
-              class="follow-btn"
+              class="follow-btn bg-primary"
             >
               <span class="text-dark"> ＋&nbsp;关注 </span>
             </span>
@@ -331,7 +331,6 @@ export default defineComponent({
       > .avatar {
         width: 75px;
         height: 75px;
-        border: 3px solid $primary-color;
         border-radius: 50px;
         background-color: #fff;
         box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
@@ -365,7 +364,6 @@ export default defineComponent({
             float: right;
             width: 60px;
             height: 24px;
-            background-color: $primary-color;
             border-radius: 100px;
             transition-duration: 0.2s;
 

@@ -9,18 +9,20 @@
   >
     <div
       class="f-input__container"
+      :class="{ 'text-primary': isFocused, 'border-red-500' : !obeyRules }"
       @click="handleClickTextField"
     >
       <div class="f-input__text-field">
         <span
           v-if="label !== undefined"
           class="f-input__label"
-          :class="{ 'f-input__label--floating': shouldLabelFloating }"
+          :class="{ 'f-input__label--floating': shouldLabelFloating, 'text-primary': isFocused }"
         >
           {{ label }}
         </span>
         <input
           ref="input"
+          :class="{ 'text-red-500': !obeyRules }"
           :value="modelValue"
           :type="type"
           :autofocus="autofocus"
@@ -42,7 +44,7 @@
       <transition name="hint">
         <span
           v-show="isHintVisible || !obeyRules"
-          :class="obeyRules ? 'f-input__hint' : 'f-input__warning'"
+          :class="obeyRules ? 'f-input__hint' : 'text-red-500'"
         >
           {{ obeyRules ? hint : warningMessage }}
         </span>
@@ -203,14 +205,8 @@ $height: 40px;
 // focus 态
 .f-input--focus {
   > .f-input__container {
-    color: $primary-color;
     border: solid 2px currentColor;
     padding: 0 8px;
-    > .f-input__text-field {
-      > .f-input__label {
-        color: $primary-color;
-      }
-    }
   }
 }
 
@@ -220,19 +216,6 @@ $height: 40px;
   > .f-input__text-field > input {
     cursor: not-allowed;
   }
-}
-
-// warning 态
-.f-input.f-input--warning > .f-input__container {
-  border-color: $color-red;
-  > .f-input__text-field > span,
-  input {
-    color: $color-red;
-  }
-}
-
-.f-input__warning {
-  color: $color-red;
 }
 
 .f-input:not(.f-input__disabled) .f-input__details {

@@ -34,6 +34,8 @@ module.exports = {
       fuchsia: colors.fuchsia,
       pink: colors.pink,
       rose: colors.rose,
+      /* FIXME: 切换主题色到 Tailwind 色板 */
+      primary: '#60bdca',
     },
     extend: {
       maxWidth: {

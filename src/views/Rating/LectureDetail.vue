@@ -159,7 +159,7 @@
           class="rating-bar__empty"
         >
           你来到了一块空地，来<span
-            class="f-clickable link-text"
+            class="f-clickable text-primary"
             @click="handleEditRating"
           >第一个点评</span>吧！
         </div>
@@ -399,9 +399,6 @@ export default defineComponent({
         padding: 12px;
         border-radius: 8px;
         background-color: #fff;
-        .link-text {
-          color: $primary-color;
-        }
       }
     }
   }

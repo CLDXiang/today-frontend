@@ -26,7 +26,7 @@
     </div>
     <div
       v-if="!loading && !isAllLectureInfoVisible"
-      class="lecture-info__more"
+      class="lecture-info__more text-primary"
       @click="isAllLectureInfoVisible = true"
     >
       更多
@@ -96,7 +96,6 @@ export default defineComponent({
   }
 
   > .lecture-info__more {
-    color: $primary-color;
     font-size: 12px;
     line-height: 12px;
     margin-top: 12px;

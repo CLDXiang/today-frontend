@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-nav flex-initial flex-shrink-0">
     <span
-      :class="{ 'active-page': activePage === 'timetable' }"
+      :class="{ 'text-primary': activePage === 'timetable' }"
       @click="handleClick('timetable')"
     >
       <f-icon
@@ -12,7 +12,7 @@
     </span>
 
     <span
-      :class="{ 'active-page': activePage === 'rating' }"
+      :class="{ 'text-primary': activePage === 'rating' }"
       @click="handleClick('rating')"
     >
       <f-icon
@@ -23,7 +23,7 @@
     </span>
 
     <span
-      :class="{ 'active-page': activePage === 'status' }"
+      :class="{ 'text-primary': activePage === 'status' }"
       @click="handleClick('status')"
     >
       <f-icon
@@ -119,10 +119,6 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
     cursor: pointer;
-
-    &.active-page {
-      color: $primary-color;
-    }
 
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
   }

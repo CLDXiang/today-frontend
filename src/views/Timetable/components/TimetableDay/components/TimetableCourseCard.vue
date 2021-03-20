@@ -50,7 +50,7 @@ export default defineComponent({
     classCourseCard(): string[] {
       return [
         hashColorClassNames((this.section.code
-            && parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96)
+            && parseInt(this.section.code.slice(this.section.code.length - 3), 10))
           || 0),
         this.hoveredCourseId === this.section.id ? 'f-hovered' : '',
       ];

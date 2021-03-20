@@ -44,7 +44,7 @@ export default defineComponent({
       return [
         hashColorClassNames(
           (this.course.code
-            && parseInt(this.course.code.slice(this.course.code.length - 3), 10) % 96)
+            && parseInt(this.course.code.slice(this.course.code.length - 3), 10))
           || 0,
         ),
       ];

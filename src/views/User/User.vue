@@ -51,7 +51,7 @@
         >
         <div class="info-section">
           <div>
-            <span class="user-name text-dark">
+            <span class="user-name text-gray-600">
               {{ userProfile.nickname || userProfile.name }}
             </span>
             <!-- TODO: 实现关注功能 -->
@@ -59,7 +59,7 @@
               v-if="!isCurrentUser()"
               class="follow-btn bg-primary"
             >
-              <span class="text-dark"> ＋&nbsp;关注 </span>
+              <span class="text-gray-600"> ＋&nbsp;关注 </span>
             </span>
           </div>
           <span class="bio text-light">
@@ -75,19 +75,19 @@
         class="follow-box"
       >
         <div class="follow-section">
-          <span class="follow-number text-dark">
+          <span class="follow-number text-gray-600">
             {{ userProfile.watchers || 0 }}
           </span>
           <span class="follow-text text-light"> 关注 </span>
         </div>
         <div class="follow-section">
-          <span class="follow-number text-dark">
+          <span class="follow-number text-gray-600">
             {{ userProfile.watchees || 0 }}
           </span>
           <span class="follow-text text-light"> 粉丝 </span>
         </div>
         <div class="follow-section">
-          <span class="follow-number text-dark">
+          <span class="follow-number text-gray-600">
             {{ userProfile.fans || 0 }}
           </span>
           <span class="follow-text text-light"> 被收藏数 </span>
@@ -281,10 +281,6 @@ export default defineComponent({
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-
-  .text-dark {
-    color: $gray2;
-  }
 
   .text-light {
     color: $gray3;

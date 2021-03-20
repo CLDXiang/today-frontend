@@ -61,7 +61,7 @@
               type="primary"
               shape="round"
               size="small"
-              class="info-bar__watch-button"
+              class="info-bar__watch-button text-gray-600"
               :class="{ 'info-bar__watch-button--watched': lectureInfo.watched }"
               @click="handleClickWatch"
             >
@@ -88,15 +88,21 @@
         class="info-bar__rating-outline"
       >
         <div>
-          <div>难易程度</div>
+          <div class="text-gray-600">
+            难易程度
+          </div>
           <div>{{ mapScoreToText('difficulty', lectureInfo.difficulty) }}</div>
         </div>
         <div>
-          <div>给分好坏</div>
+          <div class="text-gray-600">
+            给分好坏
+          </div>
           <div>{{ mapScoreToText('nice', lectureInfo.nice) }}</div>
         </div>
         <div>
-          <div>工作量</div>
+          <div class="text-gray-600">
+            工作量
+          </div>
           <div>{{ mapScoreToText('workload', lectureInfo.workload) }}</div>
         </div>
       </div>
@@ -333,7 +339,6 @@ export default defineComponent({
 
           > .info-bar__watch-button {
             background-color: #e3f1f3;
-            color: $gray2;
             border-color: #e3f1f3;
             padding: 0 8px;
             &.info-bar__watch-button--watched {
@@ -358,7 +363,6 @@ export default defineComponent({
         flex-direction: column;
 
         > div:first-child {
-          color: $gray2;
           font-size: 14px;
           line-height: 14px;
         }

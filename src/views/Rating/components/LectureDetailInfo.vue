@@ -1,6 +1,6 @@
 <template>
   <div class="lecture-info">
-    <div class="lecture-info__title">
+    <div class="lecture-info__title text-gray-600">
       课程信息
     </div>
     <div
@@ -76,7 +76,6 @@ export default defineComponent({
   padding: 0 8px;
 
   > .lecture-info__title {
-    color: $gray2;
     font-size: 16px;
     line-height: 16px;
     align-self: flex-start;

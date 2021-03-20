@@ -3,12 +3,12 @@
     <div class="title">
       课表云同步
     </div>
-    <div class="sub-title">
+    <div class="sub-title text-gray-600">
       本地数据与服务器不一致，需要进行同步
     </div>
     <div class="column-box">
       <div>
-        <div class="column-title">
+        <div class="column-title text-gray-600">
           本地新增课程
         </div>
         <div class="card-box">
@@ -30,7 +30,9 @@
               ]"
             />
             <div>
-              <div>{{ course.name }}</div>
+              <div class="text-gray-600">
+                {{ course.name }}
+              </div>
               <div>{{ course.codeId }}</div>
             </div>
           </div>
@@ -45,7 +47,7 @@
         </div>
       </div>
       <div>
-        <div class="column-title">
+        <div class="column-title text-gray-600">
           云端新增课程
         </div>
         <div class="card-box">
@@ -67,7 +69,9 @@
               ]"
             />
             <div>
-              <div>{{ course.name }}</div>
+              <div class="text-gray-600">
+                {{ course.name }}
+              </div>
               <div>{{ course.codeId }}</div>
             </div>
           </div>
@@ -177,7 +181,6 @@ export default defineComponent({
     align-self: center;
     font-size: 14px;
     line-height: 14px;
-    color: $gray2;
 
     margin-bottom: 24px;
   }
@@ -196,7 +199,6 @@ export default defineComponent({
 
       > .column-title {
         align-self: center;
-        color: $gray2;
         font-size: 14px;
         font-weight: bold;
         margin-bottom: 6px;
@@ -230,7 +232,6 @@ export default defineComponent({
             > div:first-child {
               font-size: 14px;
               line-height: 14px;
-              color: $gray2;
               margin-bottom: 10px;
             }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-nav flex-initial flex-shrink-0">
+  <div class="bottom-nav flex-initial flex-shrink-0 text-gray-600">
     <span
       :class="{ 'text-primary': activePage === 'timetable' }"
       @click="handleClick('timetable')"
@@ -104,7 +104,6 @@ export default defineComponent({
   justify-content: center;
   user-select: none;
 
-  color: $gray2;
   font-size: 14px;
 
   > span {

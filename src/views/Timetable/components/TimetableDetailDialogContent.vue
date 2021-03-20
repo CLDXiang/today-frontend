@@ -8,15 +8,15 @@
       <div class="info-card-num">
         <span>
           <div>学分</div>
-          <div>{{ courseInfo.credit }}</div>
+          <div class="text-gray-600">{{ courseInfo.credit }}</div>
         </span>
         <span>
           <div>周学时</div>
-          <div>{{ courseInfo.sectionCount }}</div>
+          <div class="text-gray-600">{{ courseInfo.sectionCount }}</div>
         </span>
         <span>
           <div>人数上限</div>
-          <div>{{ courseInfo.maxStudent }}</div>
+          <div class="text-gray-600">{{ courseInfo.maxStudent }}</div>
         </span>
       </div>
       <div class="info-card-text">
@@ -235,7 +235,6 @@ export default defineComponent({
         > div:last-child {
           font-size: 14px;
           line-height: 14px;
-          color: $gray2;
         }
       }
     }

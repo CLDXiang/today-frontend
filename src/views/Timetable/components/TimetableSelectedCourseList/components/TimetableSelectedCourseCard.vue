@@ -1,15 +1,33 @@
 <template>
-  <div class="selected-course-card">
+  <div
+    :class="[
+      'h-16 mt-2 rounded-lg bg-white',
+      'select-none hover:shadow-lg flex items-stretch transition-shadow',
+    ]"
+  >
     <span
-      class="selected-course-color"
+      class="flex-initial flex-shrink-0 w-4 rounded-l-lg"
       :class="classCourseCard"
     />
-    <span class="selected-course-content">
-      <div class="card-name">{{ course.name }}</div>
-      <div class="card-subline">
-        <span class="card-teachers">{{ course.teachers.join(',') }}</span>
-        <span class="card-action">
+    <span
+      class="flex flex-col p-2"
+      style="width: calc(100% - 16px)"
+    >
+      <div
+        :class="[
+          'font-bold text-base text-gray-600',
+          'overflow-hidden overflow-ellipsis whitespace-nowrap',
+        ]"
+      >
+        {{ course.name }}
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-500 text-sm overflow-hidden overflow-ellipsis whitespace-nowrap">{{
+          course.teachers.join(',')
+        }}</span>
+        <span class="flex">
           <a-button
+            class="ml-1 rounded-md py-0 px-1.5"
             type="primary"
             size="small"
             @click.stop="handleClickDetailButton"
@@ -17,6 +35,7 @@
             <span>详情</span>
           </a-button>
           <a-button
+            class="ml-1 rounded-md py-0 px-1.5"
             type="danger"
             size="small"
             @click.stop="handleClickDeleteButton"
@@ -43,9 +62,8 @@ export default defineComponent({
     classCourseCard(): string[] {
       return [
         hashColorClassNames(
-          (this.course.code
-            && parseInt(this.course.code.slice(this.course.code.length - 3), 10))
-          || 0,
+          (this.course.code && parseInt(this.course.code.slice(this.course.code.length - 3), 10))
+            || 0,
         ),
       ];
     },
@@ -63,70 +81,9 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.selected-course-card {
-  height: 60px;
-  margin-top: 8px;
-  border-radius: 8px;
-  background-color: #fff;
-  user-select: none;
-  cursor: pointer;
-  &:hover {
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-  }
-  display: flex;
-  align-items: stretch;
-  transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-
-  > .selected-course-color {
-    flex: 0 0 auto;
-    width: 15px;
-    border-radius: 8px 0 0 8px;
-  }
-
-  > .selected-course-content {
-    width: calc(100% - 15px);
-    display: flex;
-    flex-direction: column;
-    padding: 10px 7px 8px;
-
-    > .card-name {
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 16px;
-      color: #4f4f4f;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    > .card-subline {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      > .card-teachers {
-        color: #828282;
-        font-size: 14px;
-        line-height: 14px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      > .card-action {
-        display: flex;
-        > .ant-btn {
-          margin-left: 5px;
-          border-radius: 6px;
-          padding: 0 6px;
-
-          &.ant-btn-two-chinese-chars > *:not(.anticon) {
-            margin-right: 0;
-            letter-spacing: normal;
-          }
-        }
-      }
-    }
-  }
+<style scoped>
+.ant-btn.ant-btn-two-chinese-chars > *:not(.anticon) {
+  margin-right: 0;
+  letter-spacing: normal;
 }
 </style>

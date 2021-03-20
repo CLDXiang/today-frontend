@@ -2,7 +2,7 @@
   <div
     :class="classCourseCard"
     :style="styleCourseCard"
-    class="course-card hoverable"
+    class="course-card f-clickable"
     @click="handleClickCourseCard"
     @mouseenter="setHoveredCourseId(section.id)"
     @mouseleave="resetHoveredCourseId"
@@ -28,6 +28,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { mapState, mapMutations } from 'vuex';
+import { hashColorClassNames } from '@/utils/colors';
 import { SectionInColumn } from '../types';
 
 export default defineComponent({
@@ -48,12 +49,10 @@ export default defineComponent({
     ...mapState(['hoveredCourseId']),
     classCourseCard(): string[] {
       return [
-        `color-${
-          (this.section.code
+        hashColorClassNames((this.section.code
             && parseInt(this.section.code.slice(this.section.code.length - 3), 10) % 96)
-          || 0
-        }`,
-        this.hoveredCourseId === this.section.id ? 'hover' : '',
+          || 0),
+        this.hoveredCourseId === this.section.id ? 'f-hovered' : '',
       ];
     },
     styleCourseCard(): Record<string, string> {
@@ -158,8 +157,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .course-card {
   display: flex;
   flex-direction: column;

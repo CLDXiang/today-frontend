@@ -33,7 +33,7 @@
     </div>
     <div class="flex justify-between mt-1">
       <div
-        :style="courseCardColor"
+        :class="courseCardColor"
         class="text-xs rounded-2xl py-1 px-2"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
@@ -89,7 +89,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { useProcessAvatar } from '@/composables';
-import { colors, primaryColor } from '@/utils/colors';
+import { hashColorClassNames, primaryColor } from '@/utils/colors';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -113,9 +113,9 @@ export default defineComponent({
     starColor(): string {
       return this.rating.starred ? '#ef755a' : '';
     },
-    courseCardColor(): Record<string, unknown> {
+    courseCardColor(): string {
       // TODO: 有实际分类意义的配色
-      return colors[parseInt(this.rating.lecture.id, 10) % 96 || 0];
+      return hashColorClassNames(parseInt(this.rating.lecture.id, 10) || 0);
     },
   },
   methods: {

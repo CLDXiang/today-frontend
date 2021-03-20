@@ -3,8 +3,8 @@ import store from '@/store';
 import log from '@/utils/log';
 
 const login = async (req: {
-  /** 用户名 */
-  username: string;
+  /** 用户名或邮箱 */
+  nameOrMail: string;
   /** 密码 */
   password: string;
 }): Promise<{
@@ -13,8 +13,10 @@ const login = async (req: {
   email: string;
   name: string;
 }> => {
-  log.info('authClient.login', req);
-  const { data } = await API.post('auth/login', req);
+  /** 因为后端的限制，这里的参数名必须为 username 和 password */
+  const payload = { username: req.nameOrMail, password: req.password };
+  log.info('authClient.login', payload);
+  const { data } = await API.post('auth/login', payload);
   const { access_token: jwtToken, email, name } = data;
   if (jwtToken) {
     store.commit('setJwtToken', jwtToken);
@@ -54,13 +56,22 @@ const requestCodeForForgotPassword = async (req: { email: string }): Promise<nul
   return null;
 };
 
-const modifyPassword = async (req: {
+const resetPassword = async (req: {
   email: string;
   code: number;
   password: string;
 }): Promise<null> => {
-  log.info('authClient.modifyPassword', req);
+  log.info('authClient.resetPassword', req);
   await API.put<null>('auth/password', req);
+  return null;
+};
+
+const changePassword = async (req: {
+  oldPassword: string;
+  newPassword: string;
+}): Promise<null> => {
+  log.info('authClient.changePassword', req);
+  await API.patch<null>('auth/password', req);
   return null;
 };
 
@@ -73,8 +84,10 @@ const authClient = {
   requestCodeRegister,
   /** 获取验证码（忘记密码） */
   requestCodeForForgotPassword,
+  /** 重置密码 */
+  resetPassword,
   /** 修改密码 */
-  modifyPassword,
+  changePassword,
 };
 
 export default authClient;

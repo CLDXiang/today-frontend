@@ -3,7 +3,7 @@
     :style="{ flexGrow: sectionsByColumns.length }"
     class="timetable__day"
   >
-    <div class="day__title background-one">
+    <div class="day__title bg-transparent">
       {{ title }}
     </div>
     <div class="day__column-box">
@@ -18,8 +18,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import TimetableDayColumn from './TimetableDayColumn.vue';
-import { Sections, Column } from '../types';
+import TimetableDayColumn from './components/TimetableDayColumn.vue';
+import { Sections } from '../../types';
+import { Column } from './types';
 
 export default defineComponent({
   components: {
@@ -94,8 +95,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .timetable__day {
   height: 100%;
   border-right: 1px solid #ddd;

@@ -38,7 +38,7 @@
         <div class="btn-box">
           <a-button
             shape="round"
-            @click="handleChooseLocal"
+            @click="() => handleChoosen('local')"
           >
             使用本地课表
           </a-button>
@@ -56,14 +56,14 @@
           >
             <div
               :class="[
-                `color-${
+                hashColorClassNames(
                   (course.codeId &&
                     parseInt(
                       course.codeId.slice(course.codeId.length - 6, course.codeId.length - 3),
                       10,
                     ) % 96) ||
-                  0
-                }`,
+                    0
+                ),
               ]"
             />
             <div>
@@ -76,7 +76,7 @@
           <a-button
             shape="round"
             depressed
-            @click="handleChooseDatabase"
+            @click="() => handleChoosen('cloud')"
           >
             使用云端课表
           </a-button>
@@ -87,7 +87,7 @@
       <a-button
         shaple="round"
         type="primary"
-        @click="handleChooseBoth"
+        @click="() => handleChoosen('both')"
       >
         合并
       </a-button>
@@ -96,7 +96,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
+import { hashColorClassNames } from '@/utils/colors';
 import { AllCourses } from '../types';
 
 interface SelectedCourseInfo {
@@ -111,45 +112,47 @@ export default defineComponent({
     courses: { type: Object as PropType<AllCourses>, required: true },
   },
   emits: ['conflict-resolved'],
-  computed: {
-    selectedCoursesOnlyInLocal(): SelectedCourseInfo[] {
-      return [...this.selectedCoursesIds]
-        .filter((x) => !this.selectedCoursesIdsFromDatabase.has(x))
-        .map((courseId) => ({
-          codeId: this.courses[courseId].code_id,
-          name: this.courses[courseId].name,
-        }));
-    },
-    selectedCoursesOnlyInDataBase(): SelectedCourseInfo[] {
-      return [...this.selectedCoursesIdsFromDatabase]
-        .filter((x) => !this.selectedCoursesIds.has(x))
-        .map((courseId) => ({
-          codeId: this.courses[courseId].code_id,
-          name: this.courses[courseId].name,
-        }));
-    },
-  },
-  methods: {
-    handleChooseBoth() {
-      const combinedSelectedCoursesIds = new Set([
-        ...this.selectedCoursesIds,
-        ...this.selectedCoursesIdsFromDatabase,
-      ]);
-      this.$emit('conflict-resolved', combinedSelectedCoursesIds, true, true);
-    },
-    handleChooseDatabase() {
-      this.$emit('conflict-resolved', this.selectedCoursesIdsFromDatabase, true, false);
-    },
-    handleChooseLocal() {
-      this.$emit('conflict-resolved', this.selectedCoursesIds, false, true);
-    },
+  setup(props, ctx) {
+    return {
+      hashColorClassNames,
+
+      /** （展示用）仅存在于本地的课程列表 */
+      selectedCoursesOnlyInLocal: computed<SelectedCourseInfo[]>(() =>
+        [...props.selectedCoursesIds]
+          .filter((x) => !props.selectedCoursesIdsFromDatabase.has(x))
+          .map((courseId) => ({
+            codeId: props.courses[courseId].code_id,
+            name: props.courses[courseId].name,
+          }))),
+      /** （展示用）仅存在于服务端的课程列表 */
+      selectedCoursesOnlyInDataBase: computed<SelectedCourseInfo[]>(() =>
+        [...props.selectedCoursesIdsFromDatabase]
+          .filter((x) => !props.selectedCoursesIds.has(x))
+          .map((courseId) => ({
+            codeId: props.courses[courseId].code_id,
+            name: props.courses[courseId].name,
+          }))),
+
+      /** 解决冲突回调 */
+      handleChoosen(choice: 'both' | 'local' | 'cloud') {
+        if (choice === 'both') {
+          const combinedSelectedCoursesIds = new Set([
+            ...props.selectedCoursesIds,
+            ...props.selectedCoursesIdsFromDatabase,
+          ]);
+          ctx.emit('conflict-resolved', combinedSelectedCoursesIds, true, true);
+        } else if (choice === 'local') {
+          ctx.emit('conflict-resolved', props.selectedCoursesIds, false, true);
+        } else if (choice === 'cloud') {
+          ctx.emit('conflict-resolved', props.selectedCoursesIdsFromDatabase, true, false);
+        }
+      },
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .content-box {
   min-height: 80vh;
   background-color: #fff;

@@ -9,7 +9,7 @@
         :type="isSearchResultsVisible ? 'primary' : undefined"
         shape="round"
         size="large"
-        @click="handleChangeResultsVisible"
+        @click="isSearchResultsVisible = !isSearchResultsVisible"
       >
         <f-icon
           :style="isSearchResultsVisible ? 'color: #fff' : undefined"
@@ -26,7 +26,7 @@
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
         size="large"
-        @click="handleClickResetButton"
+        @click="resetSearchQuery"
       >
         <f-icon
           name="undo"
@@ -40,7 +40,7 @@
         type="primary"
         shape="round"
         size="large"
-        @click="handleClickSearchButton"
+        @click="search"
       >
         <f-icon
           name="search"
@@ -139,7 +139,7 @@
       <div class="search-bar__content-line">
         <f-select
           v-model="searchQuery.day"
-          :options="dayLabels"
+          :options="['全部', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']"
           :disabled="isLoadingSearchResults || isLoadingCourses"
           :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
           :error="searchBarStatus === 'error' && searchQuery.day !== '全部'"
@@ -172,7 +172,7 @@
           v-for="item in searchResults"
           :key="item.courseId"
           class="search-bar__result"
-          @click.stop="handleClickSearchResult(item.courseId)"
+          @click.stop="$emit('add-course', item.courseId)"
         >
           <div class="result-line">
             {{ `${item.codeId} ${item.name}` }}
@@ -205,7 +205,7 @@
         :type="isSearchResultsVisible ? 'primary' : undefined"
         shape="round"
         size="large"
-        @click="handleChangeResultsVisible"
+        @click="isSearchResultsVisible = !isSearchResultsVisible"
       >
         <f-icon
           :style="isSearchResultsVisible ? 'color: #fff' : undefined"
@@ -222,7 +222,7 @@
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
         size="large"
-        @click="handleClickResetButton"
+        @click="resetSearchQuery"
       >
         <f-icon
           name="undo"
@@ -234,7 +234,7 @@
         :disabled="isLoadingSearchResults"
         shape="round"
         size="large"
-        @click="handleClickCloseButton"
+        @click="$emit('hide-search-dialog')"
       >
         <f-icon
           name="arrawsalt"
@@ -248,7 +248,7 @@
         type="primary"
         shape="round"
         size="large"
-        @click="handleClickSearchButton"
+        @click="search"
       >
         <f-icon
           name="search"
@@ -261,7 +261,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { message } from 'ant-design-vue';
+import {
+  computed, defineComponent, PropType, ref, watch,
+} from 'vue';
 import { SearchIndexItem } from '../types';
 
 export default defineComponent({
@@ -269,108 +272,97 @@ export default defineComponent({
     searchIndex: { type: Array as PropType<SearchIndexItem[]>, required: true },
     isLoadingCourses: Boolean,
   },
-  emits: ['hide-search-dialog', 'addcourse'],
-  data() {
-    return {
-      searchQuery: {
-        name: '',
-        teachers: '',
-        department: '',
-        day: '全部',
-        sectionRange: [0, 13],
-        place: '',
-        codeId: '',
-      },
+  emits: ['hide-search-dialog', 'add-course'],
+  setup(props) {
+    /** 搜索表单字串 */
+    const searchQuery = ref({
+      name: '',
+      teachers: '',
+      department: '',
+      day: '全部',
+      sectionRange: [0, 13] as [number, number],
+      place: '',
+      codeId: '',
+    });
 
-      dayLabels: ['全部', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
-
-      isSearchResultsVisible: false,
-      /** 搜索结果
-       * TODO: 后续可能还需要在 value 中加入一些状态：是否已选等
-       */
-      searchResults: [] as SearchIndexItem[],
-      isLoadingSearchResults: false,
-      searchBarStatus: 'normal',
-    };
-  },
-  computed: {
-    sectionLabels() {
+    /** 节次滑条标签数组 */
+    const sectionLabels = computed(() => {
       const res = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
       const marks: Record<number, string> = {};
       res.forEach((item, index) => {
         if (
           index === 0
           || index === res.length - 1
-          || index === this.searchQuery.sectionRange[0]
-          || index === this.searchQuery.sectionRange[1]
+          || index === searchQuery.value.sectionRange[0]
+          || index === searchQuery.value.sectionRange[1]
         ) {
           marks[index] = item;
         }
       });
       return marks;
-    },
-    isSearchQueryEmpty(): boolean {
-      const sq = this.searchQuery;
+    });
+    /** 搜索结果为空 */
+    const isSearchQueryEmpty = computed(() => {
+      const sq = searchQuery.value;
       return (
         sq.name.trim() === ''
         && sq.teachers.trim() === ''
         && sq.department.trim() === ''
-        // sq.dayRange[0] === 0 &&
-        // sq.dayRange[1] === 6 &&
         && sq.day === '全部'
         && sq.sectionRange[0] === 0
         && sq.sectionRange[1] === 13
         && sq.place.trim() === ''
         && sq.codeId.trim() === ''
       );
-    },
-  },
-  watch: {
-    searchQuery: {
-      handler() {
-        if (this.searchBarStatus !== '') {
-          this.searchBarStatus = '';
-        }
-        if (this.searchResults.length > 0) {
-          this.searchResults = [];
-        }
-      },
-      deep: true,
-    },
-  },
-  methods: {
-    handleChangeResultsVisible() {
-      this.isSearchResultsVisible = !this.isSearchResultsVisible;
-    },
-    handleClickSearchResult(courseId: number) {
-      this.$emit('addcourse', courseId);
-    },
-    handleClickResetButton() {
-      this.searchQuery.name = '';
-      this.searchQuery.teachers = '';
-      this.searchQuery.department = '';
-      // this.searchQuery.dayRange = [0, 6];
-      this.searchQuery.day = '全部';
-      this.searchQuery.sectionRange = [0, 13];
-      this.searchQuery.place = '';
-      this.searchQuery.codeId = '';
-    },
-    handleClickCloseButton() {
-      this.$emit('hide-search-dialog');
-    },
-    handleClickSearchButton() {
-      this.isLoadingSearchResults = true;
+    });
+
+    /** 重置 searchQuery */
+    const resetSearchQuery = () => {
+      searchQuery.value = {
+        name: '',
+        teachers: '',
+        department: '',
+        day: '全部',
+        sectionRange: [0, 13] as [number, number],
+        place: '',
+        codeId: '',
+      };
+    };
+
+    /** 搜索结果 */
+    const searchResults = ref<SearchIndexItem[]>([]);
+    /** 搜索栏状态 */
+    const searchBarStatus = ref<'normal' | 'success' | 'error'>('normal');
+
+    watch(searchQuery, () => {
+      if (searchBarStatus.value !== 'normal') {
+        searchBarStatus.value = 'normal';
+      }
+      if (searchResults.value.length > 0) {
+        searchResults.value = [];
+      }
+    }, { deep: true });
+
+    /** 搜索结果是否显示 */
+    const isSearchResultsVisible = ref(false);
+
+    /** 是否正在搜索 */
+    const isLoadingSearchResults = ref(false);
+
+    /** 搜索课程 */
+    const search = () => {
+      isLoadingSearchResults.value = true;
 
       // 防止还未渲染 loading 状态就卡住
       setTimeout(() => {
-        if (this.isSearchQueryEmpty) {
-          this.isSearchResultsVisible = false;
-          this.isLoadingSearchResults = false;
+        if (isSearchQueryEmpty.value) {
+          isSearchResultsVisible.value = false;
+          isLoadingSearchResults.value = false;
           return;
         }
 
         // 过滤结果
-        const sq = this.searchQuery;
+        const sq = searchQuery.value;
         // 对可能出现英文的采用正则匹配以支持大小写，teachers 除外
         const nameReg = new RegExp(sq.name, 'i');
         const placeReg = new RegExp(sq.place, 'i');
@@ -387,7 +379,7 @@ export default defineComponent({
         const sectionRangeStart = sq.sectionRange[0] + 1;
         const sectionRangeEnd = sq.sectionRange[1] + 1;
 
-        this.searchResults = this.searchIndex.filter(
+        searchResults.value = props.searchIndex.filter(
           ({
             name, teachers, department, timeSlots, codeId,
           }) => {
@@ -434,9 +426,9 @@ export default defineComponent({
           },
         );
 
-        if (this.searchResults.length > 0) {
-          this.searchBarStatus = 'success';
-          this.$message.success(`找到 ${this.searchResults.length} 门课程`);
+        if (searchResults.value.length > 0) {
+          searchBarStatus.value = 'success';
+          message.success(`找到 ${searchResults.value.length} 门课程`, 1);
           // 主要针对移动端，使键盘收回
           // FIXME: 修复下面这部分功能
           // this.$refs.textfield1.blur();
@@ -445,28 +437,40 @@ export default defineComponent({
           // this.$refs.textfield4.blur();
           // this.$refs.textfield5.blur();
         } else {
-          this.searchBarStatus = 'error';
-          this.$message.error('没有找到符合条件的课程');
+          searchBarStatus.value = 'error';
+          message.error('没有找到符合条件的课程', 1.5);
         }
 
-        this.isLoadingSearchResults = false;
-        this.isSearchResultsVisible = true;
+        isLoadingSearchResults.value = false;
+        isSearchResultsVisible.value = true;
       }, 0);
-    },
-    handleKeyDown(e: KeyboardEvent) {
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
       // TODO: 如何在移动端监听键盘“完成”按钮？
       // 监听回车键
       if (e.key === 'Enter') {
-        this.handleClickSearchButton();
+        search();
       }
-    },
+    };
+
+    return {
+      searchQuery,
+      isSearchResultsVisible,
+      searchResults,
+      isLoadingSearchResults,
+      searchBarStatus,
+      sectionLabels,
+      isSearchQueryEmpty,
+      resetSearchQuery,
+      search,
+      handleKeyDown,
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .dialog-container {
   display: flex;
   flex-direction: column;

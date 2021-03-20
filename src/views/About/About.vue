@@ -1,8 +1,8 @@
 <template>
-  <main class="h-full w-full overflow-y-auto max-w-14xl relative">
+  <main class="relative w-full h-full overflow-y-auto max-w-14xl">
     <span
-      class="absolute top-4 left-4 cursor-pointer hover:opacity-80"
-      @click="$router.replace('/user')"
+      class="absolute cursor-pointer top-4 left-4 hover:opacity-80"
+      @click="routerBack('/user')"
     >
       <f-icon
         name="back"
@@ -15,7 +15,7 @@
     <about-section title="联系我们">
       <p>有反馈或建议，或者想要关注我们的项目进展？快快扫码加群：</p>
       <img
-        class="w-60 mx-auto"
+        class="mx-auto w-60"
         src="img/wxpr.jpg"
         alt="QR"
       >
@@ -38,6 +38,7 @@
 import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { message } from 'ant-design-vue';
+import { useRouterBack } from '@/composables';
 import { useStore } from 'vuex';
 import { AboutSection, ChangeLog } from './components';
 import { ChangeLogType } from './type';
@@ -69,6 +70,8 @@ export default defineComponent({
     return {
       loading,
       changeLogs,
+      /** 路由回退 */
+      routerBack: useRouterBack(),
     };
   },
 });

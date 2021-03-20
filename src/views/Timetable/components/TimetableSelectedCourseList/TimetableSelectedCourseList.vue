@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { SelectedCourse } from '../types';
-import TimetableSelectedCourseCard from './TimetableSelectedCourseCard.vue';
+import { SelectedCourse } from '../../types';
+import TimetableSelectedCourseCard from './components/TimetableSelectedCourseCard.vue';
 
 export default defineComponent({
   components: {

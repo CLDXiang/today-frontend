@@ -13,19 +13,19 @@
       <div class="list-card__content-field">
         <div class="list-card__top-field">
           <span
-            class="card-rating__top-nickname"
+            class="card-rating__top-nickname text-primary"
             @click.stop="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
           </span>
-          <span class="card-rating__top-datetime">
+          <span class="card-rating__top-datetime text-gray-500">
             {{ timeDiff }}
           </span>
         </div>
         <div
           class="list-card__middle-field"
         >
-          <span class="card-rating__content">
+          <span class="card-rating__content text-gray-600">
             {{ rating.form.content }}
           </span>
         </div>
@@ -36,11 +36,11 @@
     >
       <span
         :class="courseCardColor"
-        class="card-rating__bottom-class-info"
+        class="card-rating__bottom-class-info text-gray-600"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </span>
-      <span class="card-rating__bottom-icon-field">
+      <span class="card-rating__bottom-icon-field text-gray-500">
         <!-- FIXME: 实现 reaction 后显示 -->
         <span
           v-if="false"
@@ -136,19 +136,15 @@ export default defineComponent({
 
 .card-rating {
   .card-rating__top-nickname {
-    color: $primary-color;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
   }
   .card-rating__top-datetime {
-    color: $gray3;
     font-size: 12px;
   }
   .card-rating__content {
-    color: #979797;
     text-align: left;
-    color: $gray2;
     font-size: 14px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -165,14 +161,12 @@ export default defineComponent({
     font-size: 12px;
     border-radius: 20px;
     padding: 2px 9px;
-    color: $gray2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .card-rating__bottom-icon-field {
     display: flex;
-    color: $gray3;
     .card-rating__bottom-icon {
       margin-left: 10px;
       display: flex;

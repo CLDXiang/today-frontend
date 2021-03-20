@@ -14,7 +14,7 @@
         <div class="card-reactive-rating__top-right-first">
           <div class="card-reactive-rating__top-right-first-up">
             <span
-              class="card-reactive-rating__top-nickname"
+              class="card-reactive-rating__top-nickname text-primary"
               @click.stop="handleClickAvatar"
             >
               {{ rating.creator.nickname }}
@@ -24,11 +24,11 @@
               size="12"
               style="display: inline-flex"
             />
-            <span class="card-reactive-rating__five-stars-score">
+            <span class="card-reactive-rating__five-stars-score text-gray-500">
               {{ rating.form.recommended.toFixed(1) }}
             </span>
           </div>
-          <span class="card-reactive-rating__five-stars-hints">
+          <span class="card-reactive-rating__five-stars-hints text-gray-500">
             <span class="card-reactive-rating__hints-contents">
               {{ mapScoreToText('difficulty', rating.form.difficulty) }}
             </span>
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div
-      class="card-reactive-rating__content"
+      class="card-reactive-rating__content text-gray-600"
     >
       {{ rating.form.content }}
     </div>
@@ -70,7 +70,7 @@
       class="card-reactive-rating__division-bar"
     />
     <div
-      class="card-reactive-rating__bottom-icons"
+      class="card-reactive-rating__bottom-icons text-gray-500"
     >
       <span
         v-if="showChat"
@@ -240,7 +240,6 @@ export default defineComponent({
         > .card-reactive-rating__five-stars-hints {
           text-align: left;
           font-size: 10px;
-          color: $gray3;
           > .card-reactive-rating__hints-contents {
             margin-right: 5px;
           }
@@ -251,7 +250,6 @@ export default defineComponent({
   .card-reactive-rating__content {
     margin-top: 7px;
     text-align: left;
-    color: $gray2;
     font-size: 14px;
     // display: -webkit-box;
     // -webkit-line-clamp: 3;
@@ -266,7 +264,6 @@ export default defineComponent({
     height: 33px;
   }
   .card-reactive-rating__top-nickname {
-    color: $primary-color;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
@@ -276,7 +273,6 @@ export default defineComponent({
     font-size: 12px;
   }
   .card-reactive-rating__five-stars-score {
-    color: $gray3;
     margin-left: 4px;
   }
   .card-reactive-rating__division-bar {
@@ -288,7 +284,6 @@ export default defineComponent({
   .card-reactive-rating__bottom-icons {
     display: flex;
     justify-content: space-around;
-    color: $gray3;
     height: 14px;
     > .card-reactive-rating__icon {
       display: flex;

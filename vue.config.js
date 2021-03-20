@@ -42,9 +42,6 @@ module.exports = {
           javascriptEnabled: true,
         },
       },
-      scss: {
-        prependData: '@import "~@/scss/common.scss";',
-      },
     },
   },
 };

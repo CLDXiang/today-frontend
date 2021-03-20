@@ -30,7 +30,7 @@
               :size="18"
               :spacing="3"
             />
-            <span>
+            <span class="text-gray-500">
               {{ lectureInfo.recommended.toFixed(1) }}
             </span>
           </div>
@@ -61,7 +61,7 @@
               type="primary"
               shape="round"
               size="small"
-              class="info-bar__watch-button"
+              class="info-bar__watch-button text-gray-600"
               :class="{ 'info-bar__watch-button--watched': lectureInfo.watched }"
               @click="handleClickWatch"
             >
@@ -88,15 +88,21 @@
         class="info-bar__rating-outline"
       >
         <div>
-          <div>难易程度</div>
+          <div class="text-gray-600">
+            难易程度
+          </div>
           <div>{{ mapScoreToText('difficulty', lectureInfo.difficulty) }}</div>
         </div>
         <div>
-          <div>给分好坏</div>
+          <div class="text-gray-600">
+            给分好坏
+          </div>
           <div>{{ mapScoreToText('nice', lectureInfo.nice) }}</div>
         </div>
         <div>
-          <div>工作量</div>
+          <div class="text-gray-600">
+            工作量
+          </div>
           <div>{{ mapScoreToText('workload', lectureInfo.workload) }}</div>
         </div>
       </div>
@@ -159,7 +165,7 @@
           class="rating-bar__empty"
         >
           你来到了一块空地，来<span
-            class="f-clickable link-text"
+            class="f-clickable text-primary"
             @click="handleEditRating"
           >第一个点评</span>吧！
         </div>
@@ -303,7 +309,6 @@ export default defineComponent({
           > span {
             margin-left: 8px;
             font-size: 16px;
-            color: $gray3;
           }
         }
       }
@@ -333,7 +338,6 @@ export default defineComponent({
 
           > .info-bar__watch-button {
             background-color: #e3f1f3;
-            color: $gray2;
             border-color: #e3f1f3;
             padding: 0 8px;
             &.info-bar__watch-button--watched {
@@ -358,7 +362,6 @@ export default defineComponent({
         flex-direction: column;
 
         > div:first-child {
-          color: $gray2;
           font-size: 14px;
           line-height: 14px;
         }
@@ -399,9 +402,6 @@ export default defineComponent({
         padding: 12px;
         border-radius: 8px;
         background-color: #fff;
-        .link-text {
-          color: $primary-color;
-        }
       }
     }
   }

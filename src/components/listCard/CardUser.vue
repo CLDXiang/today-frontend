@@ -9,7 +9,7 @@
       </div>
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-user__user-name">
+          <span class="card-user__user-name text-primary">
             {{ user.name }}
           </span>
         </div>
@@ -44,7 +44,6 @@ export default defineComponent({
 
 <style lang='scss' scoped>
 .card-user__user-name {
-  color: $primary-color;
   font-weight: bold;
   font-size: 16px;
 }

@@ -10,13 +10,14 @@
     >
       <div
         class="f-select__container"
+        :class="{ 'text-primary': isFocused }"
         @click="handleClickTextField"
       >
         <div class="f-select__text-field">
           <span
             v-if="label !== undefined"
             class="f-select__label"
-            :class="{ 'f-select__label--floating': shouldLabelFloating }"
+            :class="{ 'f-select__label--floating': shouldLabelFloating, 'text-primary': isFocused }"
           >
             {{ label }}
           </span>
@@ -42,7 +43,10 @@
               v-for="option in options"
               :key="option"
               class="f-select__option"
-              :class="{ 'f-select__option--selected': option === modelValue }"
+              :class="{
+                'f-select__option--selected text-primary bg-primary bg-opacity-10':
+                  option === modelValue,
+              }"
               @click="changeValue(option)"
             >
               {{ option }}
@@ -144,16 +148,16 @@ $height: 40px;
 
 .f-select__container {
   box-sizing: border-box;
-    cursor: pointer;
-    border-radius: 4px;
-    color: $gray;
-    border: solid 1px currentColor;
-    padding: 1px 9px;
-    margin-bottom: 4px;
-    font-size: 16px;
-    line-height: 20px;
-    height: $height;
-    transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+  border-radius: 4px;
+  color: $gray;
+  border: solid 1px currentColor;
+  padding: 1px 9px;
+  margin-bottom: 4px;
+  font-size: 16px;
+  line-height: 20px;
+  height: $height;
+  transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
 
   > .f-select__text-field {
     height: 100%;
@@ -177,7 +181,7 @@ $height: 40px;
       padding: 0 4px;
 
       &.f-select__label--floating {
-        transform: translateY(-$height/2 + 4px) scale(.75);
+        transform: translateY(-$height/2 + 4px) scale(0.75);
         background-color: #fff;
       }
     }
@@ -195,15 +199,9 @@ $height: 40px;
 // focus 态
 .f-select--focus {
   .f-select__container {
-    color: $primary-color;
     border: solid 2px currentColor;
     padding: 0 8px;
-    > .f-select__text-field {
-
-    > .f-select__label {
-      color: $primary-color;
-    }
-  }}
+  }
 }
 
 // disable 态
@@ -233,9 +231,8 @@ $height: 40px;
 
 .f-select__option-bar {
   border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2),
-              0 8px 10px 1px rgba(0,0,0,.14),
-              0 3px 14px 2px rgba(0,0,0,.12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 60vh;
@@ -253,11 +250,6 @@ $height: 40px;
       align-items: center;
       flex: 1 1 100%;
       padding: 0 16px;
-
-      &.f-select__option--selected {
-        color: $primary-color;
-        background-color: rgba($primary-color, 0.1);
-      }
 
       &:hover:not(.f-select__option--selected) {
         background-color: rgba(#000, 0.05);

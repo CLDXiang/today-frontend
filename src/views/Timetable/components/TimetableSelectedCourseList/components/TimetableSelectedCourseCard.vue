@@ -11,7 +11,7 @@
     />
     <span
       class="flex flex-col p-2"
-      style="width: calc(100% - 16px)"
+      style="width: calc(100% - 1rem)"
     >
       <div
         :class="[

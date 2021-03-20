@@ -1,8 +1,12 @@
 <template>
   <div
-    :class="classCourseCard"
+    :class="[
+      ...classCourseCard,
+      'flex flex-col justify-start z-10 box-border absolute',
+      'rounded-md border-b-4 p-1 transition-colors cursor-pointer select-none f-clickable',
+    ]"
     :style="styleCourseCard"
-    class="course-card f-clickable"
+    style="width: calc(100% - 0.125rem); left: 0.0625rem"
     @click="handleClickCourseCard"
     @mouseenter="setHoveredCourseId(section.id)"
     @mouseleave="resetHoveredCourseId"
@@ -10,18 +14,27 @@
     @touchend="resetHoveredCourseId"
   >
     <span
-      class="course-name"
-      :style="{'-webkit-line-clamp': lines.name }"
-    >{{ section.name }}</span>
+      class="break-all overflow-ellipsis overflow-hidden text-xs font-semibold"
+      style="display: -webkit-box; -webkit-box-orient: vertical;"
+      :style="{ '-webkit-line-clamp': lines.name }"
+    >{{
+      section.name
+    }}</span>
     <span
       v-if="lines.code > 0"
-      class="course-code"
-      :style="{'-webkit-line-clamp': lines.code }"
-    >{{ `(${section.code_id})` }}</span>
+      class="break-all overflow-ellipsis overflow-hidden text-xxs"
+      style="display: -webkit-box; -webkit-box-orient: vertical;"
+      :style="{ '-webkit-line-clamp': lines.code }"
+    >{{
+      `(${section.code_id})`
+    }}</span>
     <span
-      class="course-place"
-      :style="{'-webkit-line-clamp': lines.place }"
-    >{{ `(${section.currentSlot.week})${section.currentSlot.place}` }}</span>
+      class="break-all overflow-ellipsis overflow-hidden text-xxs"
+      style="display: -webkit-box; -webkit-box-orient: vertical;"
+      :style="{ '-webkit-line-clamp': lines.place }"
+    >{{
+      `(${section.currentSlot.week})${section.currentSlot.place}`
+    }}</span>
   </div>
 </template>
 
@@ -49,9 +62,11 @@ export default defineComponent({
     ...mapState(['hoveredCourseId']),
     classCourseCard(): string[] {
       return [
-        hashColorClassNames((this.section.code
+        hashColorClassNames(
+          (this.section.code
             && parseInt(this.section.code.slice(this.section.code.length - 3), 10))
-          || 0),
+            || 0,
+        ),
         this.hoveredCourseId === this.section.id ? 'f-hovered' : '',
       ];
     },
@@ -147,7 +162,12 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapMutations(['setHoveredCourseId', 'resetHoveredCourseId', 'changeDetailPageContent', 'showDetailDialog']),
+    ...mapMutations([
+      'setHoveredCourseId',
+      'resetHoveredCourseId',
+      'changeDetailPageContent',
+      'showDetailDialog',
+    ]),
     handleClickCourseCard() {
       this.changeDetailPageContent(this.section);
       this.showDetailDialog();
@@ -155,49 +175,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.course-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  z-index: 10;
-
-  box-sizing: border-box;
-  position: absolute;
-  width: calc(100% - 2px);
-  min-width: 62px;
-  left: 1px;
-  border-radius: 6px;
-  border-bottom: 0.2rem solid;
-  padding: 0.3rem;
-  transition: background-color 0.195s cubic-bezier(0, 0, 0.2, 1);
-
-  cursor: pointer;
-  user-select: none;
-}
-
-.course-name,
-.course-code,
-.course-place {
-  // word-wrap: break-word;
-  word-break: break-all;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: -webkit-box;
-  // -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.course-name {
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 14px;
-}
-
-.course-code,
-.course-place {
-  font-size: 10px;
-  line-height: 12px;
-}
-</style>

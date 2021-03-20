@@ -44,6 +44,9 @@ module.exports = {
       boxShadow: {
         popover: '0 2px 8px rgb(0 0 0 / 15%)',
       },
+      fontSize: {
+        xxs: ['0.625rem', '0.75rem'],
+      },
     },
   },
   variants: {

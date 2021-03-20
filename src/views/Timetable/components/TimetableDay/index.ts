@@ -1,3 +1,1 @@
-import TimetableDay from './TimetableDay.vue';
-
-export default TimetableDay;
+export { default } from './TimetableDay.vue';

@@ -1,3 +1,1 @@
-import TimetableSelectedCourseList from './TimetableSelectedCourseList.vue';
-
-export default TimetableSelectedCourseList;
+export { default } from './TimetableSelectedCourseList.vue';

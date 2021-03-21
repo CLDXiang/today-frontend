@@ -3,7 +3,7 @@
     <div class="list-card__main-field">
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-lesson__top-lesson-name">
+          <span class="card-lesson__top-lesson-name text-gray-600">
             {{ lesson.name }}
           </span>
           <div class="card-lesson__top-right">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="list-card__bottom-field">
-      <span class="card-lesson__teacher-name">
+      <span class="card-lesson__teacher-name text-gray-500">
         {{ lesson.teachers.join(' ') }}
       </span>
       <div class="card-lesson__smester">
@@ -51,7 +51,6 @@ export default defineComponent({
     margin-top: 10px;
   }
   .card-lesson__top-lesson-name {
-    color: $gray2;
     font-size: 18px;
     white-space: nowrap;
     overflow: hidden;
@@ -61,12 +60,7 @@ export default defineComponent({
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: $gray3;
     font-size: 14px;
-  }
-  .card-lesson__semester {
-    display: flex;
-    color: $gray3;
   }
 }
 </style>

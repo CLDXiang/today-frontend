@@ -3,7 +3,7 @@
     <div
       v-for="(_, index) in cellNumbers"
       :key="'cell-' + index"
-      class="day__cell"
+      class="day__cell even:bg-transparent odd:bg-gray-100"
     />
     <timetable-course-card
       v-for="(section, index) in sectionList"
@@ -42,8 +42,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .day__column {
   height: 100%;
   position: relative;
@@ -60,13 +58,6 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  // 设定奇/偶行的背景色
-  &:nth-of-type(2n) {
-    @extend .background-one;
-  }
-  &:nth-of-type(2n + 1) {
-    @extend .background-two;
-  }
 
   user-select: none;
 }

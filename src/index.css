@@ -6,6 +6,10 @@
   @apply cursor-pointer hover:opacity-80 transition-opacity select-none;
 }
 
+.f-hovered {
+  @apply opacity-80
+}
+
 .f-hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

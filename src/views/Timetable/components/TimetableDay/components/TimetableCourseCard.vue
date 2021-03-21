@@ -33,9 +33,7 @@
 </template>
 
 <script lang="ts">
-import {
-  computed, defineComponent, PropType,
-} from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import { mapMutations, useStore } from 'vuex';
 import { hashColorClassNames } from '@/utils/colors';
 import { SectionInColumn } from '../types';
@@ -48,9 +46,10 @@ export default defineComponent({
     const store = useStore();
     const hoveredCourseId = computed(() => store.state.hoveredCourseId);
 
-    const placeString = computed(
-      () => `${props.section.place}(${props.section.weeksArray.join(',')})`,
-    );
+    const placeString = computed(() =>
+      Object.entries(props.section.place2WeeksArray)
+        .map(([place, weeksArray]) => `${place}(${weeksArray.join(',')})`)
+        .join('\n'));
 
     const lines = computed<{
       name: number;

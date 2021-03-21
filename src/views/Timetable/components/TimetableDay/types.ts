@@ -1,5 +1,7 @@
+import { Section } from '../../types';
+
 /** 课时数据（Column 用） */
-export interface SectionInColumn {
+export interface SectionInColumn extends Section {
   /** 课程 Id */
   id: number;
   /** 课程代码 */
@@ -10,10 +12,8 @@ export interface SectionInColumn {
   name: string;
   /** 节次数组 */
   sectionsArray: number[];
-  /** 上课地点 */
-  place: string;
-  /** 上课周数组 */
-  weeksArray: string[];
+  /** 上课地点及对应上课周 */
+  place2WeeksArray: Record<string, string[]>;
 }
 
 /** 列数据 */

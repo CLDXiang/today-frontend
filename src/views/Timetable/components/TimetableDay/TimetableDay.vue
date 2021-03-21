@@ -60,12 +60,22 @@ export default defineComponent({
           const existingSectionStart = columns[currentColumnIndex][sectionsArray[0]];
           if (
             typeof existingSectionStart === 'object'
-            && existingSectionStart.place === section.currentSlot.place
+            && existingSectionStart.id === section.id
             && existingSectionStart.sectionsArray.length === sectionsArray.length
           ) {
-            // 如果上课时间和上课地点相同，只有上课周不同，则合并到同一列的卡片中
-            if (!existingSectionStart.weeksArray.includes(section.currentSlot.week)) {
-              existingSectionStart.weeksArray.push(section.currentSlot.week);
+            // 如果上课节次相同，则合并到同一列的卡片中
+            if (!existingSectionStart.place2WeeksArray[section.currentSlot.place]?.length) {
+              existingSectionStart.place2WeeksArray[section.currentSlot.place] = [
+                section.currentSlot.week,
+              ];
+            } else if (
+              !existingSectionStart.place2WeeksArray[section.currentSlot.place].includes(
+                section.currentSlot.week,
+              )
+            ) {
+              existingSectionStart.place2WeeksArray[section.currentSlot.place].push(
+                section.currentSlot.week,
+              );
             }
             insertOK = true;
           } else {
@@ -78,15 +88,17 @@ export default defineComponent({
               }
             });
             if (canBeInsertedHere) {
-            // 若可以插入，则将课程信息插入第一格，并将剩余格置 1
+              // 若可以插入，则将课程信息插入第一格，并将剩余格置 1
               const sectionInserted: SectionInColumn = {
+                ...section,
                 id: section.id,
                 code: section.code,
                 codeId: section.code_id,
                 name: section.name,
                 sectionsArray,
-                place: section.currentSlot.place,
-                weeksArray: [section.currentSlot.week],
+                place2WeeksArray: {
+                  [section.currentSlot.place]: [section.currentSlot.week],
+                },
               };
               columns[currentColumnIndex][sectionsArray[0]] = sectionInserted;
               // eslint-disable-next-line no-loop-func
@@ -95,7 +107,7 @@ export default defineComponent({
               });
               insertOK = true;
             } else {
-            // 若不可以插入，则尝试插入下一行
+              // 若不可以插入，则尝试插入下一行
               currentColumnIndex += 1;
             }
           }

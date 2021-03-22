@@ -1,35 +1,33 @@
 <template>
-  <div class="list-card card-comment">
-    <div class="list-card__main-field">
+  <div class="rounded-lg bg-white shadow-lg py-2.5 px-3">
+    <div class="flex mt-1 mb-2">
       <div
-        class="list-card__avatar-field"
+        class="flex-shrink-0 w-10"
         @click.stop="handleClickAvatar"
       >
         <img
-          class="avatar"
+          class="w-10 h-10 rounded-full"
           :src="processAvatar(comment.creator.avatar)"
         >
       </div>
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
+      <div class="flex flex-grow ml-2">
+        <div class="flex justify-between">
           <span
-            class="card-comment__user-name text-primary"
+            class="font-extrabold cursor-pointer text-primary"
             @click.stop="handleClickAvatar"
           >
             {{ comment.creator.nickname }}
           </span>
-          <span class="card-comment__time-diff text-gray-500">
+          <span class="text-xs text-gray-400">
             {{ timeDiff }}
           </span>
         </div>
-        <div class="list-card__middle-field">
-          <span class="card-comment__comment-content text-gray-600">
-            {{ comment.content }}
-          </span>
+        <div class="mt-2 mb-2 text-sm text-left text-gray-600 whitespace-pre-wrap">
+          {{ comment.content }}
         </div>
       </div>
     </div>
-    <div class="card-comment__reactions">
+    <div>
       <reaction
         :value="mockReaction"
         :readonly="false"
@@ -37,26 +35,28 @@
         @delete="handleDeleteReaction"
       />
     </div>
-    <div class="list-card__bottom-field">
-      <span />
-      <span class="card-comment__icon-field">
+    <div>
+      <span class="flex items-center">
         <f-icon
           name="edit"
+          class="ml-4 cursor-pointer"
           size="14"
           @click.stop="handleClickStar"
         />
         <f-icon
           name="delete"
+          class="ml-4 cursor-pointer"
           size="14"
           @click.stop="handleClickStar"
         />
         <f-icon
           :style="{color: starColor}"
           :name="comment.starred ? 'heart-fill' : 'heart'"
+          class="ml-4 cursor-pointer"
           size="14"
           @click.stop="handleClickStar"
         />
-        <span class="card-comment__statistics text-gray-500">
+        <span class="ml-1 text-xs text-gray-500">
           {{ comment.starCount }}
         </span>
       </span>
@@ -103,31 +103,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang='scss' scoped>
-.card-comment {
-  .card-comment__user-name {
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .card-comment__time-diff {
-    font-size: 12px;
-  }
-  .card-comment__comment-content {
-    word-break: break-all;
-    font-size: 14px;
-  }
-  .card-comment__icon-field {
-    display: flex;
-    align-items: center;
-    > svg {
-      cursor: pointer;
-      margin-left: 18px;
-    }
-    > .card-comment__statistics {
-      margin-left: 4px;
-      font-size: 12px;
-    }
-  }
-}
-</style>

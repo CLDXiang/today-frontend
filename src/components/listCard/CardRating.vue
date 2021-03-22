@@ -1,50 +1,46 @@
 <template>
-  <div class="list-card card-rating">
-    <div class="list-card__main-field">
+  <div class="py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
+    <div class="flex mt-1 mb-2">
       <div
-        class="list-card__avatar-field"
+        class="flex-shrink-0 w-10"
         @click.stop="handleClickAvatar"
       >
         <img
-          class="avatar"
           :src="processAvatar(rating.creator.avatar)"
+          class="w-10 h-10 rounded-full"
         >
       </div>
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
+      <div class="flex-grow ml-2">
+        <div class="flex justify-between">
           <span
-            class="card-rating__top-nickname text-primary"
+            class="font-extrabold text-primary"
             @click.stop="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
           </span>
-          <span class="card-rating__top-datetime text-gray-500">
+          <span class="text-xs text-gray-400">
             {{ timeDiff }}
           </span>
         </div>
         <div
-          class="list-card__middle-field"
+          :class="['pt-2 overflow-hidden text-left break-all whitespace-pre-wrap',
+                   'max-h-20 overflow-ellipsis line-limit']"
         >
-          <span class="card-rating__content text-gray-600">
-            {{ rating.form.content }}
-          </span>
+          {{ rating.form.content }}
         </div>
       </div>
     </div>
-    <div
-      class="list-card__bottom-field"
-    >
-      <span
+    <div class="flex justify-between mt-1">
+      <div
         :class="courseCardColor"
-        class="card-rating__bottom-class-info text-gray-600"
+        class="px-2 py-1 overflow-hidden text-xs rounded-2xl whitespace-nowrap overflow-ellipsis"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
-      </span>
-      <span class="card-rating__bottom-icon-field text-gray-500">
+      </div>
+      <div>
         <!-- FIXME: 实现 reaction 后显示 -->
         <span
           v-if="false"
-          class="card-rating__bottom-icon"
         >
           <span>
             <f-icon
@@ -52,40 +48,34 @@
               size="14"
             />
           </span>
-          <span
-            class="card-rating__bottom-statistics"
-          >
+          <span class="ml-1 text-xs text-gray-400">
             {{ rating.reaction.count }}
           </span>
         </span>
         <!-- FIXME: 实现评论后显示 -->
-        <span
-          v-if="false"
-          class="card-rating__bottom-icon"
-        >
+        <span v-if="false">
           <f-icon
             name="chat"
             size="14"
           />
-          <span class="card-rating__bottom-statistics">
+          <span class="ml-1 text-xs text-gray-400">
             {{ rating.commentCount }}
           </span>
         </span>
         <!-- FIXME: 实现收藏后显示 -->
         <span
           v-if="false"
-          class="card-rating__bottom-icon"
         >
           <f-icon
             :style="{color: starColor}"
             :name="rating.starred ? 'heart-fill' : 'heart'"
             size="14"
           />
-          <span class="card-rating__bottom-statistics">
+          <span class="ml-1 text-xs text-gray-400">
             {{ rating.starCount }}
           </span>
         </span>
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -118,7 +108,7 @@ export default defineComponent({
     },
     courseCardColor(): string {
       // TODO: 有实际分类意义的配色
-      return hashColorClassNames(parseInt(this.rating.lecture.id, 10) % 96 || 0);
+      return hashColorClassNames(parseInt(this.rating.lecture.id, 10) || 0);
     },
   },
   methods: {
@@ -129,53 +119,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang='scss' scoped>
-.card-rating {
-  padding: 16px 16px 10px 16px;
-}
-
-.card-rating {
-  .card-rating__top-nickname {
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  .card-rating__top-datetime {
-    font-size: 12px;
-  }
-  .card-rating__content {
-    text-align: left;
-    font-size: 14px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    white-space: pre-wrap;
-  }
-  > .list-card__main-field .list-card__content-field .list-card__middle-field {
-    margin-bottom: 10px;
-  }
-  .card-rating__bottom-class-info {
-    font-size: 12px;
-    border-radius: 20px;
-    padding: 2px 9px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .card-rating__bottom-icon-field {
-    display: flex;
-    .card-rating__bottom-icon {
-      margin-left: 10px;
-      display: flex;
-      align-items: flex-start;
-      .card-rating__bottom-statistics {
-        margin-left: 4px;
-        font-size: 12px;
-      }
-    }
-  }
+<style scoped>
+.line-limit {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
 }
 </style>

@@ -1,61 +1,62 @@
 <template>
-  <div class="list-card card-reactive-rating">
-    <div class="card-reactive-rating__top-field">
+  <div class="py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
+    <div class="flex justify-start h-10">
       <div
-        class="card-reactive-rating__top-left"
+        class="w-10"
         @click.stop="handleClickAvatar"
       >
         <img
-          class="avatar"
+          class="w-10 h-10 rounded-full"
           :src="processAvatar(rating.creator.avatar)"
         >
       </div>
-      <div class="card-reactive-rating__top-right">
-        <div class="card-reactive-rating__top-right-first">
-          <div class="card-reactive-rating__top-right-first-up">
-            <span
-              class="card-reactive-rating__top-nickname text-primary"
-              @click.stop="handleClickAvatar"
-            >
-              {{ rating.creator.nickname }}
-            </span>
-            <five-stars
-              :score="rating.form.recommended"
-              size="12"
-              style="display: inline-flex"
-            />
-            <span class="card-reactive-rating__five-stars-score text-gray-500">
-              {{ rating.form.recommended.toFixed(1) }}
-            </span>
+      <div class="flex-grow ml-1">
+        <div class="flex flex-col">
+          <div class="flex justify-between flex-grow">
+            <div>
+              <span
+                class="font-extrabold cursor-pointer text-primary"
+                @click.stop="handleClickAvatar"
+              >
+                {{ rating.creator.nickname }}
+              </span>
+              <five-stars
+                :score="rating.form.recommended"
+                size="12"
+                class="inline ml-1"
+                style="display: inline-flex"
+              />
+              <span class="ml-1 text-gray-500">
+                {{ rating.form.recommended.toFixed(1) }}
+              </span>
+            </div>
+            <div class="text-xs text-gray-400">
+              {{ timeDiff }}
+            </div>
           </div>
-          <span class="card-reactive-rating__five-stars-hints text-gray-500">
-            <span class="card-reactive-rating__hints-contents">
+          <div class="text-left">
+            <span class="mr-1 text-xs text-gray-500">
               {{ mapScoreToText('difficulty', rating.form.difficulty) }}
             </span>
-            <span class="card-reactive-rating__hints-contents">
+            <span class="mr-1 text-xs text-gray-500">
               {{ mapScoreToText('nice', rating.form.nice) }}
             </span>
-            <span class="card-reactive-rating__hints-contents">
+            <span class="mr-1 text-xs text-gray-500">
               {{ mapScoreToText('workload', rating.form.workload) }}
             </span>
-          </span>
-        </div>
-        <div class="card-reactive-rating__top-right-second">
-          <span class="card-reactive-rating__top-datetime">
-            {{ timeDiff }}
-          </span>
+          </div>
         </div>
       </div>
     </div>
     <div
-      class="card-reactive-rating__content text-gray-600"
+      class="mt-2 mb-2 text-sm text-left text-gray-600 whitespace-pre-wrap"
     >
       {{ rating.form.content }}
     </div>
     <!-- FIXME: 实现 reaction 后显示 -->
     <div
       v-if="false"
-      class="card-reactive-rating__reactions"
+      class="h-9"
     >
       <reaction
         :value="mockReaction"
@@ -67,27 +68,25 @@
     <!-- FIXME: 实现对点评的评论、收藏后显示 -->
     <div
       v-if="false"
-      class="card-reactive-rating__division-bar"
+      class="w-screen h-1"
     />
     <div
-      class="card-reactive-rating__bottom-icons text-gray-500"
+      class="flex justify-around h-3 text-gray-500"
     >
       <span
         v-if="showChat"
-        class="card-reactive-rating__icon"
         @click.stop="handleClickChat"
       >
         <f-icon
           name="chat"
           size="14"
         />
-        <span class="card-reactive-rating__statistics">
+        <span class="ml-1 text-xs">
           {{ rating.commentCount }}
         </span>
       </span>
       <span
         v-if="showLike"
-        class="card-reactive-rating__icon"
         @click.stop="handleClickLike"
       >
         <f-icon
@@ -95,13 +94,12 @@
           size="14"
           class="f-clickable"
         />
-        <span class="card-reactive-rating__statistics">
+        <span class="ml-1 text-xs">
           {{ rating.starCount }}
         </span>
       </span>
       <span
         v-if="showEdit"
-        class="card-reactive-rating__icon"
         @click.stop="handleClickEdit"
       >
         <f-icon
@@ -112,7 +110,6 @@
       </span>
       <span
         v-if="showDelete"
-        class="card-reactive-rating__icon"
         @click.stop="handleClickDelete"
       >
         <f-icon
@@ -215,89 +212,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang='scss' scoped>
-.card-reactive-rating {
-  padding: 16px 16px 7px 16px;
-}
-
-.card-reactive-rating {
-  .card-reactive-rating__top-field {
-    display: flex;
-    justify-content: flex-start;
-    height: 36px;
-    > .card-reactive-rating__top-left {
-      flex: 1;
-      max-width: 40px;
-    }
-    > .card-reactive-rating__top-right {
-      flex: 9;
-      display: flex;
-      justify-content: space-between;
-      > .card-reactive-rating__top-right-first {
-        display: flex;
-        flex-direction: column;
-        > .card-reactive-rating__five-stars-hints {
-          text-align: left;
-          font-size: 10px;
-          > .card-reactive-rating__hints-contents {
-            margin-right: 5px;
-          }
-        }
-      }
-    }
-  }
-  .card-reactive-rating__content {
-    margin-top: 7px;
-    text-align: left;
-    font-size: 14px;
-    // display: -webkit-box;
-    // -webkit-line-clamp: 3;
-    // -webkit-box-orient: vertical;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // word-break: break-all;
-    white-space: pre-wrap;
-    margin-bottom: 10px;
-  }
-  .card-reactive-rating__reactions {
-    height: 33px;
-  }
-  .card-reactive-rating__top-nickname {
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  .card-reactive-rating__top-datetime {
-    color: #c4c4c4;
-    font-size: 12px;
-  }
-  .card-reactive-rating__five-stars-score {
-    margin-left: 4px;
-  }
-  .card-reactive-rating__division-bar {
-    height: 2px;
-    width: 100vw;
-    margin: 0 0 7px -16px;
-    background-color: #f2f2f2;
-  }
-  .card-reactive-rating__bottom-icons {
-    display: flex;
-    justify-content: space-around;
-    height: 14px;
-    > .card-reactive-rating__icon {
-      display: flex;
-      align-items: center;
-      > .card-reactive-rating__statistics {
-        margin-left: 6px;
-        font-size: 12px;
-      }
-    }
-  }
-}
-
-.five-stars {
-  display: inline;
-  margin-left: 5px;
-}
-</style>

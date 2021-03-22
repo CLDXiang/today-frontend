@@ -1,5 +1,5 @@
 <template>
-  <div class="card-lesson py-2.5 px-3 rounded-lg shadow-lg">
+  <div class="py-2.5 px-3 rounded-lg shadow-lg">
     <div class="flex flex-row justify-between mt-1 h-7">
       <div class="overflow-hidden text-lg whitespace-nowrap overflow-ellipsis">
         {{ lesson.name }}
@@ -30,6 +30,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-</style>

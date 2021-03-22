@@ -1,5 +1,5 @@
 <template>
-  <div class="card-rating py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
+  <div class="py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
     <div class="flex mt-1 mb-2">
       <div
         class="flex-shrink-0 w-10"
@@ -49,22 +49,17 @@
               size="14"
             />
           </span>
-          <span
-            class=""
-          >
+          <span>
             {{ rating.reaction.count }}
           </span>
         </span>
         <!-- FIXME: 实现评论后显示 -->
-        <span
-          v-if="false"
-          class=""
-        >
+        <span v-if="false">
           <f-icon
             name="chat"
             size="14"
           />
-          <span class="">
+          <span>
             {{ rating.commentCount }}
           </span>
         </span>
@@ -77,7 +72,7 @@
             :name="rating.starred ? 'heart-fill' : 'heart'"
             size="14"
           />
-          <span class="">
+          <span>
             {{ rating.starCount }}
           </span>
         </span>

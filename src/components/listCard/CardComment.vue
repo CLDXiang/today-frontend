@@ -13,7 +13,7 @@
       <div class="flex flex-grow ml-2">
         <div class="flex justify-between">
           <span
-            class="text-primary"
+            class="font-extrabold cursor-pointer text-primary"
             @click.stop="handleClickAvatar"
           >
             {{ comment.creator.nickname }}
@@ -22,10 +22,9 @@
             {{ timeDiff }}
           </span>
         </div>
-        <div
-          :class="['pt-2 overflow-hidden text-left break-all whitespace-pre-wrap',
-                   'max-h-20 overflow-ellipsis line-limit']"
-        />
+        <div class="mt-2 mb-2 text-sm text-left text-gray-600 whitespace-pre-wrap">
+          {{ comment.content }}
+        </div>
       </div>
     </div>
     <div>
@@ -37,20 +36,23 @@
       />
     </div>
     <div>
-      <span class="flex align-middle">
+      <span class="flex items-center">
         <f-icon
           name="edit"
+          class="ml-4 cursor-pointer"
           size="14"
           @click.stop="handleClickStar"
         />
         <f-icon
           name="delete"
+          class="ml-4 cursor-pointer"
           size="14"
           @click.stop="handleClickStar"
         />
         <f-icon
           :style="{color: starColor}"
           :name="comment.starred ? 'heart-fill' : 'heart'"
+          class="ml-4 cursor-pointer"
           size="14"
           @click.stop="handleClickStar"
         />

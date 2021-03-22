@@ -1,5 +1,3 @@
-import './listCard.scss';
-
 export { default as CardRating } from './CardRating.vue';
 export { default as CardComment } from './CardComment.vue';
 export { default as CardLecture } from './CardLecture.vue';

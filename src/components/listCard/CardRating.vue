@@ -13,8 +13,7 @@
       <div class="flex-grow ml-2">
         <div class="flex justify-between">
           <span
-            :style="primaryColor"
-            class="font-extrabold"
+            class="font-extrabold text-primary"
             @click.stop="handleClickAvatar"
           >
             {{ rating.creator.nickname }}
@@ -34,7 +33,7 @@
     <div class="flex justify-between mt-1">
       <div
         :class="courseCardColor"
-        class="px-2 py-1 text-xs rounded-2xl"
+        class="px-2 py-1 overflow-hidden text-xs rounded-2xl whitespace-nowrap overflow-ellipsis"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </div>
@@ -49,7 +48,7 @@
               size="14"
             />
           </span>
-          <span>
+          <span class="ml-1 text-xs text-gray-400">
             {{ rating.reaction.count }}
           </span>
         </span>
@@ -59,7 +58,7 @@
             name="chat"
             size="14"
           />
-          <span>
+          <span class="ml-1 text-xs text-gray-400">
             {{ rating.commentCount }}
           </span>
         </span>
@@ -72,7 +71,7 @@
             :name="rating.starred ? 'heart-fill' : 'heart'"
             size="14"
           />
-          <span>
+          <span class="ml-1 text-xs text-gray-400">
             {{ rating.starCount }}
           </span>
         </span>
@@ -84,7 +83,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { useProcessAvatar } from '@/composables';
-import { hashColorClassNames, primaryColor } from '@/utils/colors';
+import { hashColorClassNames } from '@/utils/colors';
 import { CardRatingItem } from './types';
 
 export default defineComponent({
@@ -97,7 +96,6 @@ export default defineComponent({
     const { processAvatar } = useProcessAvatar();
     return {
       processAvatar,
-      primaryColor,
     };
   },
   computed: {

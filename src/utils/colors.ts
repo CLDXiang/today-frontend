@@ -27,9 +27,4 @@ export const hashColorClassNames = (value: string | number) => {
   return colorClassNames[parsedValue % colorNumber];
 };
 
-/** FIXME: 选定主色后用 TailwindCSS 替代 */
-export const primaryColor = {
-  color: '#60bdca',
-};
-
 export default colorClassNames;

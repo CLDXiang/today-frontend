@@ -1,6 +1,6 @@
 <template>
   <div class="py-2.5 px-3 rounded-lg bg-white mb-2 shadow-lg">
-    <div class="flex flex-row justify-between mt-1 h-7">
+    <div class="flex justify-between mt-1 h-7">
       <div class="overflow-hidden text-lg whitespace-nowrap overflow-ellipsis">
         {{ lecture.name }}
       </div>
@@ -14,12 +14,12 @@
         </span>
       </div>
     </div>
-    <div class="flex flex-row justify-between h-6 mt-2">
+    <div class="flex justify-between h-6 mt-2">
       <div class="overflow-hidden text-gray-400 overflow-ellipsis whitespace-nowrap">
         {{ lecture.teachers.join(' ') }}
       </div>
-      <!-- TODO: 实现 reactoin 后显示 -->
       <div class="flex">
+        <!-- FIXME: 实现 reaction 后显示 -->
         <div
           v-if="false"
           class="ml-4"
@@ -28,7 +28,11 @@
             name="reaction"
             size="14"
           />
+          <span class="ml-1 text-xs">
+            {{ lecture.reactionCount }}
+          </span>
         </div>
+        <!-- FIXME: 实现收藏课程后显示 -->
         <div
           v-if="false"
           class="ml-2"
@@ -37,9 +41,12 @@
             name="heart"
             size="14"
           />
+          <span class="ml-1 text-xs">
+            {{ lecture.likeCount }}
+          </span>
         </div>
         <div class="flex ml-2 text-gray-400">
-          <div class="flex flex-col ">
+          <div class="flex flex-col">
             <!-- HACK: 加上一个 div 实现 SVG 居中 -->
             <div class="h-0.5" />
             <f-icon
@@ -48,7 +55,7 @@
               size="14"
             />
           </div>
-          <span class="ml-1 ">
+          <span class="ml-1">
             {{ lecture.ratingCount }}
           </span>
         </div>

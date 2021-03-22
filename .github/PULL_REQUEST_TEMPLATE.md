@@ -24,3 +24,4 @@
 - [ ] （如有必要）更新了更新日志文件 `public/changeLog.json`
 - [ ] 在看板中同步了该 PR 的状态
 - [ ] 在 Slack 中通知了 reviewers
+- [ ] PR 分配了 assignees, labels 和 reviewrs (非 WIP 时)

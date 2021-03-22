@@ -1,7 +1,7 @@
 <template>
-  <div class="head-bar">
+  <div class="w-full py-0 px-3 mb-3 h-9 flex justify-between items-center text-gray-800">
     <side-avatar />
-    <div class="semester">
+    <div class="text-lg flex items-baseline">
       <f-icon
         name="left"
         :height="16"
@@ -9,7 +9,7 @@
         :class="`text-primary ${hideLeft ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickLeft"
       />
-      <span class="semester__name">
+      <span class="w-56">
         {{ semester }}
       </span>
       <f-icon
@@ -21,7 +21,7 @@
       />
     </div>
     <div
-      class="action-group f-clickable text-primary"
+      class="flex items-center f-clickable text-primary"
       @click="$emit('click-menu-button')"
     >
       <f-icon
@@ -62,32 +62,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.head-bar {
-  width: 100%;
-
-  padding: 0 12px;
-  margin-bottom: 12px;
-  height: 36px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #333;
-
-  > .semester {
-    font-size: 18px;
-    display: flex;
-    align-items: baseline;
-    > .semester__name {
-      width: 220px;
-    }
-  }
-
-  > .action-group {
-    display: flex;
-    align-items: center;
-  }
-}
-</style>

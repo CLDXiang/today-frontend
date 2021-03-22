@@ -1,12 +1,17 @@
 <template>
   <div
     :style="{ flexGrow: sectionsByColumns.length }"
-    class="timetable__day"
+    class="h-full border-r last:border-0 border-gray-200 flex-auto flex-shrink-0 flex flex-col"
   >
-    <div class="day__title bg-transparent">
+    <div
+      :class="[
+        'flex-initial flex-shrink-0 h-8',
+        'flex justify-center items-center text-gray-500 font-semibold bg-transparent',
+      ]"
+    >
       {{ title }}
     </div>
-    <div class="day__column-box">
+    <div class="flex">
       <timetable-day-column
         v-for="(column, index) in sectionsByColumns"
         :key="index"
@@ -81,9 +86,7 @@ export default defineComponent({
   methods: {
     /** 将 "3-5" 格式的字符串节数转为 [2, 3, 4] 索引数组（从 0 开始） */
     parseSections(sectionString: string): number[] {
-      const [sectionStart, sectionEnd] = sectionString
-        .split('-')
-        .map((i) => parseInt(i, 10));
+      const [sectionStart, sectionEnd] = sectionString.split('-').map((i) => parseInt(i, 10));
       const sectionsArray = [];
       for (let i = sectionStart; i <= sectionEnd; i += 1) {
         sectionsArray.push(i - 1);
@@ -93,33 +96,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.timetable__day {
-  height: 100%;
-  border-right: 1px solid #ddd;
-
-  flex: 1 0 auto;
-
-  display: flex;
-  flex-direction: column;
-
-  // 最后一列不需要右边界
-  &:last-of-type {
-    border-right: 0;
-  }
-}
-
-.day__title {
-  flex: 0 0 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #69707a;
-  font-weight: 600;
-}
-
-.day__column-box {
-  display: flex;
-}
-</style>

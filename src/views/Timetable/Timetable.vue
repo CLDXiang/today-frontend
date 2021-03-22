@@ -83,11 +83,11 @@
               { name: '14', clock: '21:15' },
             ]"
             :key="index"
-            :class="
-              'relative flex-grow-0 flex-shrink-0 h-16 ' +
-                'flex justify-center items-center w-8 py-0 px-4 ' +
-                'bg-white bg-opacity-50 text-gray-500 font-semibold'
-            "
+            :class="[
+              'relative flex-grow-0 flex-shrink-0 h-16',
+              'flex justify-center items-center w-8 py-0 px-4',
+              'bg-white bg-opacity-50 text-gray-500 font-semibold',
+            ]"
           >
             <span class="absolute top-0 text-gray-400 font-normal text-xs">
               {{ section.clock }}

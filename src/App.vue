@@ -77,8 +77,8 @@ body {
 }
 
 .ant-btn-danger {
-  @apply bg-red-500;
-  @apply border-red-500;
+  @apply bg-red-400;
+  @apply border-red-400;
 }
 
 :focus {

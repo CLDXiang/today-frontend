@@ -4,7 +4,7 @@
     :class="{ 'search-input--disable': disabled }"
   >
     <div
-      class="search-input__container"
+      class="search-input__container text-gray-500"
       @click="handleClickTextField"
     >
       <div class="search-input__text-field">
@@ -86,7 +86,6 @@ export default defineComponent({
   box-sizing: border-box;
   cursor: text;
   border-radius: 16px;
-  color: $gray3;
   background-color: #f2f2f2;
   padding: 0 10px;
   font-size: 16px;

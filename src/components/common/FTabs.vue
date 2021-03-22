@@ -1,6 +1,6 @@
 <template>
   <div class="f-tabs">
-    <div class="f-tabs__header f-hide-scrollbar py-2 px-4 bg-white">
+    <div class="f-tabs__header f-hide-scrollbar py-2 px-4 bg-white text-gray-500">
       <span
         v-for="tabPane in tabPanes"
         :key="tabPane.tab"
@@ -134,7 +134,6 @@ $padding-x: 12px;
     height: 28px;
     font-size: $font-size;
     line-height: 22px;
-    color: $gray3;
 
     position: relative;
 

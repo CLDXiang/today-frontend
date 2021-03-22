@@ -10,7 +10,7 @@
           :size="20"
         />
         <span class="ml-1 text-gray-400">
-          {{ (lecture.score ?? 3).toFixed(1) }}
+          {{ (lecture.score || 3).toFixed(1) }}
         </span>
       </div>
     </div>

@@ -19,13 +19,13 @@
           >
             {{ rating.creator.nickname }}
           </span>
-          <span class="text-xs text-gray-400 card-rating__top-datetime">
+          <span class="text-xs text-gray-400">
             {{ timeDiff }}
           </span>
         </div>
         <div
-          :class="'pt-2 overflow-hidden text-left break-all whitespace-pre-wrap'
-            + ' max-h-20 overflow-ellipsis line-limit'"
+          :class="['pt-2 overflow-hidden text-left break-all whitespace-pre-wrap',
+                   'max-h-20 overflow-ellipsis line-limit']"
         >
           {{ rating.form.content }}
         </div>
@@ -34,7 +34,7 @@
     <div class="flex justify-between mt-1">
       <div
         :class="courseCardColor"
-        class="text-xs rounded-2xl py-1 px-2"
+        class="px-2 py-1 text-xs rounded-2xl"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </div>

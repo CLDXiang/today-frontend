@@ -1,9 +1,12 @@
 <template>
-  <div class="day__column">
+  <div class="h-full relative w-16 flex-auto flex-shrink-0 flex flex-col">
     <div
       v-for="(_, index) in cellNumbers"
       :key="'cell-' + index"
-      class="day__cell even:bg-transparent odd:bg-gray-100"
+      :class="[
+        'h-16 flex-auto flex-shrink-0 justify-center items-center',
+        'select-none even:bg-transparent odd:bg-gray-100',
+      ]"
     />
     <timetable-course-card
       v-for="(section, index) in sectionList"
@@ -32,33 +35,9 @@ export default defineComponent({
   },
   computed: {
     sectionList(): SectionInColumn[] {
-      return this.column.filter(
-        (item) => typeof item === 'object',
-      ) as SectionInColumn[];
+      return this.column.filter((item) => typeof item === 'object') as SectionInColumn[];
     },
   },
   methods: {},
 });
 </script>
-
-<style lang="scss" scoped>
-.day__column {
-  height: 100%;
-  position: relative;
-  min-width: 64px;
-
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.day__cell {
-  flex: 1 0 64px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  user-select: none;
-}
-</style>

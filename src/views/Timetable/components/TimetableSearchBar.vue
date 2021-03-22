@@ -1,8 +1,6 @@
 <template>
-  <div class="dialog-container">
-    <div
-      class="actions-bar hidden md:flex"
-    >
+  <div class="flex flex-col h-full w-full">
+    <div class="justify-end items-center p-2 hidden md:flex space-x-2">
       <a-button
         v-show="searchResults.length !== 0"
         block
@@ -13,15 +11,13 @@
       >
         <f-icon
           :style="isSearchResultsVisible ? 'color: #fff' : undefined"
-          :name="isSearchResultsVisible ? 'contract' : 'expand' "
+          :name="isSearchResultsVisible ? 'contract' : 'expand'"
           size="20"
         />
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
       </a-button>
     </div>
-    <div
-      class="actions-bar hidden md:flex"
-    >
+    <div class="justify-end items-center p-2 hidden md:flex space-x-2">
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
@@ -50,29 +46,36 @@
       </a-button>
     </div>
     <span
-      class="title md:hidden"
-    >搜索课程</span>
+      :class="[
+        'mt-7 mx-0 mb-5 text-xl flex-initial flex-shrink-0',
+        'flex justify-center text-gray-800 md:hidden',
+      ]"
+    >
+      搜索课程
+    </span>
     <div
       v-show="!(isSearchResultsVisible && searchResults.length !== 0)"
-      class="timetable__search-bar"
+      class="flex flex-col justify-start relative w-full h-full flex-grow"
     >
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         <f-input
           ref="textfield1"
           v-model="searchQuery.name"
           :disabled="isLoadingSearchResults || isLoadingCourses"
-          :success-messages="searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []"
+          :success-messages="
+            searchBarStatus === 'success' ? `找到 ${searchResults.length} 门课程` : []
+          "
           :error-messages="searchBarStatus === 'error' ? '没有找到符合条件的课程' : []"
           label="课程名"
           hint="e.g. 文学（不分大小写）"
           outlined
           dense
           autocomplete="off"
-          class="search-bar__text-field"
+          class="flex-grow"
           @keydown="handleKeyDown"
         />
       </div>
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         <f-input
           ref="textfield4"
           v-model="searchQuery.codeId"
@@ -84,11 +87,11 @@
           outlined
           dense
           autocomplete="off"
-          class="search-bar__text-field"
+          class="flex-grow"
           @keydown="handleKeyDown"
         />
       </div>
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         <f-input
           ref="textfield2"
           v-model="searchQuery.teachers"
@@ -100,11 +103,11 @@
           outlined
           dense
           autocomplete="off"
-          class="search-bar__text-field"
+          class="flex-grow"
           @keydown="handleKeyDown"
         />
       </div>
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         <f-input
           ref="textfield5"
           v-model="searchQuery.place"
@@ -116,11 +119,11 @@
           outlined
           dense
           autocomplete="off"
-          class="search-bar__text-field"
+          class="flex-grow"
           @keydown="handleKeyDown"
         />
       </div>
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         <f-input
           ref="textfield3"
           v-model="searchQuery.department"
@@ -132,13 +135,14 @@
           outlined
           dense
           autocomplete="off"
-          class="search-bar__text-field"
+          class="flex-grow"
           @keydown="handleKeyDown"
         />
       </div>
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         <f-select
           v-model="searchQuery.day"
+          class="flex-grow"
           :options="['全部', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']"
           :disabled="isLoadingSearchResults || isLoadingCourses"
           :success="searchBarStatus === 'success' && searchQuery.day !== '全部'"
@@ -147,10 +151,11 @@
           autocomplete="off"
         />
       </div>
-      <div class="search-bar__content-line">
+      <div class="w-full h-16 py-0 px-4 flex items-center">
         节次
         <a-slider
           v-model:value="searchQuery.sectionRange"
+          class="flex-grow ml-2"
           range
           dots
           :marks="sectionLabels"
@@ -161,35 +166,37 @@
     </div>
     <div
       v-show="isSearchResultsVisible && searchResults.length !== 0"
-      class="search-bar__results-box"
+      class="flex-auto overflow-y-auto mt-3 bg-gray-100"
     >
       <!-- <v-scroll-y-reverse-transition> -->
       <div
         v-show="isSearchResultsVisible && searchResults.length !== 0"
-        class="search-bar__results"
+        class="w-full h-full rounded-b overflow-auto"
       >
         <div
           v-for="item in searchResults"
           :key="item.courseId"
-          class="search-bar__result"
+          class="f-clickable bg-white mt-2 shadow-md p-5 rounded-lg text-sm text-gray-500"
           @click.stop="$emit('add-course', item.courseId)"
         >
-          <div class="result-line text-gray-600">
+          <div class="text-lg text-gray-600">
             {{ `${item.codeId} ${item.name}` }}
           </div>
-          <div class="result-line cut text-gray-600">
+          <div
+            class="whitespace-nowrap overflow-hidden overflow-ellipsis text-sm text-gray-600"
+          >
             {{ item.teachersText }}
           </div>
           <div
             v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
             :key="tsIndex"
-            class="result-line result-line--ts text-gray-500"
+            class="text-xs text-gray-500"
           >
             {{ ts }}
           </div>
           <div
             v-if="item.timeSlotsTexts.length > 3"
-            class="result-line result-line--ts text-gray-500"
+            class="text-xs text-gray-500"
           >
             ……
           </div>
@@ -197,9 +204,7 @@
       </div>
       <!-- </v-scroll-y-reverse-transition> -->
     </div>
-    <div
-      class="actions-bar md:hidden"
-    >
+    <div class="justify-end items-center p-2 md:hidden space-x-2">
       <a-button
         v-show="searchResults.length !== 0"
         :type="isSearchResultsVisible ? 'primary' : undefined"
@@ -209,15 +214,13 @@
       >
         <f-icon
           :style="isSearchResultsVisible ? 'color: #fff' : undefined"
-          :name="isSearchResultsVisible ? 'contract' : 'expand' "
+          :name="isSearchResultsVisible ? 'contract' : 'expand'"
           size="20"
         />
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
       </a-button>
     </div>
-    <div
-      class="actions-bar md:hidden"
-    >
+    <div class="justify-end items-center p-2 md:hidden space-x-2">
       <a-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         shape="round"
@@ -334,14 +337,18 @@ export default defineComponent({
     /** 搜索栏状态 */
     const searchBarStatus = ref<'normal' | 'success' | 'error'>('normal');
 
-    watch(searchQuery, () => {
-      if (searchBarStatus.value !== 'normal') {
-        searchBarStatus.value = 'normal';
-      }
-      if (searchResults.value.length > 0) {
-        searchResults.value = [];
-      }
-    }, { deep: true });
+    watch(
+      searchQuery,
+      () => {
+        if (searchBarStatus.value !== 'normal') {
+          searchBarStatus.value = 'normal';
+        }
+        if (searchResults.value.length > 0) {
+          searchResults.value = [];
+        }
+      },
+      { deep: true },
+    );
 
     /** 搜索结果是否显示 */
     const isSearchResultsVisible = ref(false);
@@ -469,138 +476,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-
-.title {
-  margin: 36px 0 20px;
-  font-size: 20px;
-  line-height: 20px;
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: center;
-  color: #333;
-}
-
-.timetable__search-bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-
-  position: relative;
-  // min-width: 320px;
-  width: 100%;
-  height: 100%;
-
-  flex: 1;
-  display: flex;
-
-  > .search-bar__text-field {
-    position: relative;
-    flex: 0;
-  }
-
-  > .search-bar__content-line {
-    width: 100%;
-    height: 66px;
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-
-    > .f-input,
-    > .f-select {
-      flex: 1;
-    }
-
-    > .ant-select,
-    > .ant-slider {
-      margin-left: 8px;
-      flex: 1;
-    }
-
-  }
-}
-
-.actions-bar {
-  justify-content: flex-end;
-  align-items: center;
-  padding: 8px;
-
-  > button {
-    margin-left: 8px;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
-}
-
-.search-bar__search-button {
-  margin-top: -4px;
-}
-
-.search-bar__results-box {
-  backface-visibility: hidden;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  margin-top: 12px;
-  background-color: #f2f2f2;
-}
-
-.search-bar__results {
-  width: 100%;
-
-  // max-height: 13.5rem;
-  height: 100%;
-  border-radius: 0 0 0.25rem 0.25rem;
-
-  overflow: auto;
-}
-
-.search-bar__result {
-  background-color: #fff;
-  margin-top: 10px;
-  // height: 120px;
-  filter: drop-shadow(0px 4px 4px rgba(141, 141, 141, 0.3));
-
-  cursor: pointer;
-
-  padding: 20px;
-  border-radius: 8px;
-
-  font-size: 0.9rem;
-  color: #69707a;
-
-  &:hover,
-  &.hover {
-    background-color: #f3f5f8;
-  }
-}
-
-.result-line {
-  line-height: 22px;
-}
-
-.result-line:first-child {
-  font-size: 18px;
-}
-
-.result-line.cut {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
-}
-
-.result-line--ts {
-  font-size: 12px;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <div class="lecture-info">
-    <div class="lecture-info__title">
+    <div class="lecture-info__title text-gray-600">
       课程信息
     </div>
     <div
@@ -13,20 +13,20 @@
       v-else
       class="lecture-info__content"
     >
-      <span>所属模块：{{ lectureInfo.category }}</span>
-      <span>学分：{{ lectureInfo.detailInfo.credit }}</span>
-      <span>开课院系：{{ lectureInfo.detailInfo.department }}</span>
-      <span>校区：{{ lectureInfo.detailInfo.campus }}</span>
+      <span class="text-gray-500">所属模块：{{ lectureInfo.category }}</span>
+      <span class="text-gray-500">学分：{{ lectureInfo.detailInfo.credit }}</span>
+      <span class="text-gray-500">开课院系：{{ lectureInfo.detailInfo.department }}</span>
+      <span class="text-gray-500">校区：{{ lectureInfo.detailInfo.campus }}</span>
       <template v-if="isAllLectureInfoVisible">
-        <span>主讲老师：{{ lectureInfo.taughtBy.join(' ') }}</span>
-        <span>考试时间：{{ lectureInfo.detailInfo.examTime }}</span>
-        <span>考试形式：{{ lectureInfo.detailInfo.examType }}</span>
-        <span>是否允许期中退课：{{ withdrawable }}</span>
+        <span class="text-gray-500">主讲老师：{{ lectureInfo.taughtBy.join(' ') }}</span>
+        <span class="text-gray-500">考试时间：{{ lectureInfo.detailInfo.examTime }}</span>
+        <span class="text-gray-500">考试形式：{{ lectureInfo.detailInfo.examType }}</span>
+        <span class="text-gray-500">是否允许期中退课：{{ withdrawable }}</span>
       </template>
     </div>
     <div
       v-if="!loading && !isAllLectureInfoVisible"
-      class="lecture-info__more"
+      class="lecture-info__more text-primary"
       @click="isAllLectureInfoVisible = true"
     >
       更多
@@ -76,7 +76,6 @@ export default defineComponent({
   padding: 0 8px;
 
   > .lecture-info__title {
-    color: $gray2;
     font-size: 16px;
     line-height: 16px;
     align-self: flex-start;
@@ -87,7 +86,6 @@ export default defineComponent({
 
     > span {
       margin-top: 10px;
-      color: $gray3;
       font-size: 12px;
       line-height: 12px;
       text-align: left;
@@ -96,7 +94,6 @@ export default defineComponent({
   }
 
   > .lecture-info__more {
-    color: $primary-color;
     font-size: 12px;
     line-height: 12px;
     margin-top: 12px;

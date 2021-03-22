@@ -5,7 +5,7 @@
     <div class="list-card__main-field">
       <div class="list-card__content-field">
         <div class="list-card__top-field">
-          <span class="card-lecture__top-lecture-name">
+          <span class="card-lecture__top-lecture-name text-gray-600">
             {{ lecture.name }}
           </span>
           <div class="card-lecture__top-right">
@@ -15,7 +15,7 @@
                 :size="20"
               />
             </span>
-            <span class="card-lecture__top-rating-number">
+            <span class="card-lecture__top-rating-number text-gray-500">
               {{ (lecture.score ?? 3).toFixed(1) }}
             </span>
           </div>
@@ -23,10 +23,10 @@
       </div>
     </div>
     <div class="list-card__bottom-field">
-      <span class="card-lecture__teacher-name">
+      <span class="card-lecture__teacher-name text-gray-500">
         {{ lecture.teachers.join(' ') }}
       </span>
-      <div class="card-lecture__bottom-icon-field">
+      <div class="card-lecture__bottom-icon-field text-gray-500">
         <!-- FIXME: 实现 reaction 后显示 -->
         <span
           v-if="false"
@@ -98,7 +98,6 @@ export default defineComponent({
     margin-top: 10px;
   }
   .card-lecture__top-lecture-name {
-    color: $gray2;
     font-size: 18px;
     white-space: nowrap;
     overflow: hidden;
@@ -106,18 +105,15 @@ export default defineComponent({
   }
   .card-lecture__top-rating-number {
     margin-left: 6px;
-    color: $gray3;
   }
   .card-lecture__teacher-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: $gray3;
     font-size: 14px;
   }
   .card-lecture__bottom-icon-field {
     display: flex;
-    color: $gray3;
     .card-lecture__bottom-icon {
       margin-left: 10px;
       display: flex;

@@ -6,7 +6,7 @@
         name="left"
         :height="16"
         :width="12"
-        :class="`icon ${hideLeft ? 'opacity-0' : 'cursor-pointer'}`"
+        :class="`text-primary ${hideLeft ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickLeft"
       />
       <span class="semester__name">
@@ -16,12 +16,12 @@
         name="right"
         :height="16"
         :width="12"
-        :class="`icon ${hideRight ? 'opacity-0' : 'cursor-pointer'}`"
+        :class="`text-primary ${hideRight ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickRight"
       />
     </div>
     <div
-      class="action-group f-clickable"
+      class="action-group f-clickable text-primary"
       @click="$emit('click-menu-button')"
     >
       <f-icon
@@ -80,9 +80,6 @@ export default defineComponent({
     font-size: 18px;
     display: flex;
     align-items: baseline;
-    > .icon {
-      color: $primary-color;
-    }
     > .semester__name {
       width: 220px;
     }
@@ -91,7 +88,6 @@ export default defineComponent({
   > .action-group {
     display: flex;
     align-items: center;
-    color: $primary-color;
   }
 }
 </style>

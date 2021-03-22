@@ -174,22 +174,22 @@
           class="search-bar__result"
           @click.stop="$emit('add-course', item.courseId)"
         >
-          <div class="result-line">
+          <div class="result-line text-gray-600">
             {{ `${item.codeId} ${item.name}` }}
           </div>
-          <div class="result-line cut">
+          <div class="result-line cut text-gray-600">
             {{ item.teachersText }}
           </div>
           <div
             v-for="(ts, tsIndex) in item.timeSlotsTexts.slice(0, 3)"
             :key="tsIndex"
-            class="result-line result-line--ts"
+            class="result-line result-line--ts text-gray-500"
           >
             {{ ts }}
           </div>
           <div
             v-if="item.timeSlotsTexts.length > 3"
-            class="result-line result-line--ts"
+            class="result-line result-line--ts text-gray-500"
           >
             ……
           </div>
@@ -471,8 +471,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .dialog-container {
   display: flex;
   flex-direction: column;
@@ -593,7 +591,6 @@ export default defineComponent({
 
 .result-line:first-child {
   font-size: 18px;
-  color: $gray2;
 }
 
 .result-line.cut {
@@ -601,11 +598,9 @@ export default defineComponent({
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  color: $gray2;
 }
 
 .result-line--ts {
   font-size: 12px;
-  color: $gray3;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="head-bar flex-shrink-0 bg-white p-3 pt-4">
     <span
       v-if="isBackVisible"
-      class="back-btn"
+      class="back-btn hover:text-primary"
       @click="handleClickBack"
     >
       <f-icon
@@ -59,10 +59,6 @@ export default defineComponent({
   > .back-btn {
     cursor: pointer;
     height: 24px;
-
-    &:hover {
-      color: $primary-color;
-    }
   }
 }
 </style>

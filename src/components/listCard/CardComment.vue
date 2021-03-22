@@ -13,17 +13,17 @@
       <div class="list-card__content-field">
         <div class="list-card__top-field">
           <span
-            class="card-comment__user-name"
+            class="card-comment__user-name text-primary"
             @click.stop="handleClickAvatar"
           >
             {{ comment.creator.nickname }}
           </span>
-          <span class="card-comment__time-diff">
+          <span class="card-comment__time-diff text-gray-500">
             {{ timeDiff }}
           </span>
         </div>
         <div class="list-card__middle-field">
-          <span class="card-comment__comment-content">
+          <span class="card-comment__comment-content text-gray-600">
             {{ comment.content }}
           </span>
         </div>
@@ -56,7 +56,7 @@
           size="14"
           @click.stop="handleClickStar"
         />
-        <span class="card-comment__statistics">
+        <span class="card-comment__statistics text-gray-500">
           {{ comment.starCount }}
         </span>
       </span>
@@ -107,18 +107,15 @@ export default defineComponent({
 <style lang='scss' scoped>
 .card-comment {
   .card-comment__user-name {
-    color: $primary-color;
     font-weight: bold;
     cursor: pointer;
   }
   .card-comment__time-diff {
-    color: $gray3;
     font-size: 12px;
   }
   .card-comment__comment-content {
     word-break: break-all;
     font-size: 14px;
-    color: $gray2;
   }
   .card-comment__icon-field {
     display: flex;
@@ -129,7 +126,6 @@ export default defineComponent({
     }
     > .card-comment__statistics {
       margin-left: 4px;
-      color: $gray3;
       font-size: 12px;
     }
   }

@@ -4,7 +4,7 @@
       <span>
         <span>已选课程列表</span>
         <span
-          class="icon-cloud f-clickable"
+          class="icon-cloud f-clickable text-primary"
           @click="handleClickCloud"
         >
           <f-icon
@@ -113,7 +113,6 @@ $header-height: 55px;
       align-items: center;
       > .icon-cloud {
         margin-left: 8px;
-        color: $primary-color;
         height: 20px;
       }
     }

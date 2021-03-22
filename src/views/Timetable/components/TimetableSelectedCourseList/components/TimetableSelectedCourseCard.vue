@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { hashColorClassNames } from '@/utils/colors';
 import { SelectedCourse } from '../../../types';
 
 export default defineComponent({
@@ -41,11 +42,11 @@ export default defineComponent({
   computed: {
     classCourseCard(): string[] {
       return [
-        `color-${
+        hashColorClassNames(
           (this.course.code
             && parseInt(this.course.code.slice(this.course.code.length - 3), 10) % 96)
-          || 0
-        }`,
+          || 0,
+        ),
       ];
     },
   },
@@ -63,8 +64,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_timetable';
-
 .selected-course-card {
   height: 60px;
   margin-top: 8px;

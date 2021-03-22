@@ -7,11 +7,11 @@
       <span class="title">撰写点评</span>
     </rating-head-bar>
     <div class="lecture-title">
-      <span>{{ lectureName }}</span>
+      <span class="text-gray-600">{{ lectureName }}</span>
     </div>
     <div class="star-box">
       <div class="star-box__item">
-        <span>难易程度</span>
+        <span class="text-gray-600">难易程度</span>
         <five-stars
           v-model="formData.difficulty"
           clickable
@@ -21,7 +21,7 @@
         />
       </div>
       <div class="star-box__item">
-        <span>给分好坏</span>
+        <span class="text-gray-600">给分好坏</span>
         <five-stars
           v-model="formData.nice"
           clickable
@@ -31,7 +31,7 @@
         />
       </div>
       <div class="star-box__item">
-        <span>工作量</span>
+        <span class="text-gray-600">工作量</span>
         <five-stars
           v-model="formData.workload"
           clickable
@@ -41,7 +41,7 @@
         />
       </div>
       <div class="star-box__item">
-        <span>综合推荐指数</span>
+        <span class="text-gray-600">综合推荐指数</span>
         <five-stars
           v-model="formData.recommended"
           clickable
@@ -54,6 +54,7 @@
     <div class="textarea-box">
       <textarea
         v-model="formData.content"
+        class="text-gray-600"
         placeholder="请输入具体点评内容"
         maxlength="5000"
       />
@@ -61,7 +62,7 @@
     <div class="action-box">
       <span class="action-box__left">
         <a-button
-          class="button-gray"
+          class="button-gray text-gray-600"
           shape="round"
           size="large"
           @click="handleClickReset"
@@ -80,7 +81,7 @@
             恢复草稿
           </a-button>
           <a-button
-            :class="{ 'button-gray': isRateDraftEdited }"
+            :class="{ 'button-gray text-gray-600': isRateDraftEdited }"
             shape="round"
             size="large"
             :disabled="!isRateDraftEdited"
@@ -374,7 +375,6 @@ export default defineComponent({
 
     > span {
       font-weight: bold;
-      color: $gray2;
       font-size: 22px;
       line-height: 24px;
       margin-right: 8px;
@@ -394,7 +394,6 @@ export default defineComponent({
 
       > span:first-child {
         font-size: 18px;
-        color: $gray2;
       }
     }
   }
@@ -416,7 +415,6 @@ export default defineComponent({
       box-sizing: border-box;
       border-radius: 8px;
       padding: 20px 23px;
-      color: $gray2;
     }
   }
 
@@ -432,7 +430,6 @@ export default defineComponent({
     .button-gray {
       background-color: #f2f2f2;
       border-color: #f2f2f2;
-      color: $gray2;
     }
   }
 }

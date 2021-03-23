@@ -65,6 +65,7 @@ export default defineComponent({
           ) {
             // 如果上课节次相同，则合并到同一列的卡片中
             if (!existingSectionStart.place2WeeksArray[section.currentSlot.place]?.length) {
+              // 若当前上课地点对应周数数组为空，则用当前上课周初始化数组
               existingSectionStart.place2WeeksArray[section.currentSlot.place] = [
                 section.currentSlot.week,
               ];
@@ -73,6 +74,7 @@ export default defineComponent({
                 section.currentSlot.week,
               )
             ) {
+              // 若前上课地点对应周数数组不为空，则将当前上课周加入到数组末尾
               existingSectionStart.place2WeeksArray[section.currentSlot.place].push(
                 section.currentSlot.week,
               );

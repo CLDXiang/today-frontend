@@ -5,9 +5,10 @@
         v-if="isCurrentUser()"
         class="btn-section"
       >
-        <div
+        <router-link
           class="control-btn"
-          @click="$router.push('/about')"
+          to="/about"
+          title="关于我们"
         >
           <f-badge
             :visible="isAboutBadgeVisible"
@@ -19,18 +20,20 @@
               name="question-circle"
             />
           </f-badge>
-        </div>
-        <div
+        </router-link>
+        <router-link
           class="control-btn"
-          @click="$router.push('/user/edit')"
+          to="/user/edit"
+          title="编辑资料"
         >
           <f-icon
             class="text-gray-500"
             name="pencil-square"
           />
-        </div>
+        </router-link>
         <div
           class="control-btn"
+          title="退出登录"
           @click="logout"
         >
           <f-icon

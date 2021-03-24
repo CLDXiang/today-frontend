@@ -1,8 +1,8 @@
 <template>
-  <div class="content-box h-full w-full overflow-y-auto max-w-14xl">
-    <div class="title-box">
+  <div class="p-7 flex flex-col justify-start items-stretch h-full w-full overflow-y-auto max-w-14xl">
+    <div class="flex justify-center items-center h-6 mt-2 mb-4 mx-0">
       <span
-        class="back-btn"
+        class="absolute left-5"
         @click="$router.push('/user')"
       >
         <f-icon
@@ -11,11 +11,11 @@
           :height="24"
         />
       </span>
-      <span class="title">修改个人信息</span>
+      <span class="text-gray-800 text-xl">修改个人信息</span>
     </div>
-    <div class="avatar-box">
+    <div class="w-full max-w-sm self-center flex items-end mb-4">
       <img
-        class="avatar"
+        class="bg-gray-100 w-16 h-16 rounded-full mr-5"
         :src="processAvatar(user.avatar)"
         alt="avatar"
       >
@@ -41,7 +41,7 @@
         修改头像
       </a-button>
     </div>
-    <div class="info-box">
+    <div class="w-full max-w-sm self-center mb-4">
       <div>
         <f-input
           v-model="nickname"
@@ -75,7 +75,7 @@
         </a-button>
       </div>
     </div>
-    <div class="email-box">
+    <div class="w-full max-w-sm self-center mb-4">
       <div>
         <f-input
           dense
@@ -86,7 +86,7 @@
           suffix="@fudan.edu.cn"
         />
       </div>
-      <div class="email-validate-box">
+      <div class="flex">
         <f-input
           dense
           label="验证码"
@@ -112,7 +112,7 @@
         </a-button>
       </div>
     </div>
-    <div class="pw-box">
+    <div class="w-full max-w-sm self-center">
       <div>
         <f-input
           v-model="oldPassword"
@@ -277,84 +277,84 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.content-box {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
+// <style lang="scss" scoped>
+// .content-box {
+//   padding: 30px;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: flex-start;
+//   align-items: stretch;
 
-  > .title-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 24px;
-    margin: 8px 0 18px 0;
+//   > .title-box {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     height: 24px;
+//     margin: 8px 0 18px 0;
 
-    > .back-btn {
-      position: absolute;
-      left: 20px;
-    }
+//     > .back-btn {
+//       position: absolute;
+//       left: 20px;
+//     }
 
-    > .title {
-      color: #333;
-      font-size: 24px;
-    }
-  }
+//     > .title {
+//       color: #333;
+//       font-size: 24px;
+//     }
+//   }
 
-  > .avatar-box {
-    width: 100%;
-    max-width: 375px;
-    align-self: center;
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 18px;
+//   > .avatar-box {
+//     width: 100%;
+//     max-width: 375px;
+//     align-self: center;
+//     display: flex;
+//     align-items: flex-end;
+//     margin-bottom: 18px;
 
-    > .avatar {
-      background-color: #fff;
-      width: 64px;
-      height: 64px;
-      border-radius: 32px;
-      margin-right: 20px;
-    }
+//     > .avatar {
+//       background-color: #fff;
+//       width: 64px;
+//       height: 64px;
+//       border-radius: 32px;
+//       margin-right: 20px;
+//     }
 
-    > .ant-btn {
-      flex: 1;
-    }
-  }
+//     > .ant-btn {
+//       flex: 1;
+//     }
+//   }
 
-  > .info-box {
-    width: 100%;
-    max-width: 375px;
-    align-self: center;
-    margin-bottom: 18px;
-  }
+//   > .info-box {
+//     width: 100%;
+//     max-width: 375px;
+//     align-self: center;
+//     margin-bottom: 18px;
+//   }
 
-  > .email-box {
-    width: 100%;
-    max-width: 375px;
-    align-self: center;
-    margin-bottom: 18px;
-    > .email-validate-box {
-      display: flex;
+//   > .email-box {
+//     width: 100%;
+//     max-width: 375px;
+//     align-self: center;
+//     margin-bottom: 18px;
+//     > .email-validate-box {
+//       display: flex;
 
-      > .f-input {
-        max-width: 226px;
-        margin-right: 12px;
-      }
+//       > .f-input {
+//         max-width: 226px;
+//         margin-right: 12px;
+//       }
 
-      > .ant-btn {
-        margin-top: 2px;
-        width: 92px;
-      }
-    }
-  }
+//       > .ant-btn {
+//         margin-top: 2px;
+//         width: 92px;
+//       }
+//     }
+//   }
 
-  > .pw-box {
-    width: 100%;
-    max-width: 375px;
-    align-self: center;
-  }
-}
-</style>
+//   > .pw-box {
+//     width: 100%;
+//     max-width: 375px;
+//     align-self: center;
+//   }
+// }
+// </style>

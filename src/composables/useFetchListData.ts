@@ -16,6 +16,9 @@ export function useFetchListData(
   };
 
   const fetchMore = async () => {
+    if (fetching.value || fetchingMore.value) {
+      return;
+    }
     fetchingMore.value = true;
     await fetchMoreMethod();
     fetchingMore.value = false;

@@ -22,5 +22,6 @@ module.exports = {
     'import/prefer-default-export': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     'linebreak-style': 0,
+    'no-param-reassign': ['error', { props: false }],
   },
 };

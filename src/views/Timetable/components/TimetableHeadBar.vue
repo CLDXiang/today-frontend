@@ -1,28 +1,28 @@
 <template>
-  <div class="head-bar">
+  <div class="w-full py-0 px-3 mb-3 h-9 flex justify-between items-center text-gray-800">
     <side-avatar />
-    <div class="semester">
+    <div class="text-lg flex items-baseline">
       <f-icon
         name="left"
         :height="16"
         :width="12"
-        :class="`icon ${hideLeft ? 'opacity-0' : 'cursor-pointer'}`"
+        :class="`text-primary ${hideLeft ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickLeft"
       />
-      <span class="semester__name">
+      <span class="w-56">
         {{ semester }}
       </span>
       <f-icon
         name="right"
         :height="16"
         :width="12"
-        :class="`icon ${hideRight ? 'opacity-0' : 'cursor-pointer'}`"
+        :class="`text-primary ${hideRight ? 'opacity-0' : 'cursor-pointer'}`"
         @click="handleClickRight"
       />
     </div>
     <div
-      class="action-group f-clickable"
-      @click="handleClickMenuButton"
+      class="flex items-center f-clickable text-primary"
+      @click="$emit('click-menu-button')"
     >
       <f-icon
         name="menu-button"
@@ -46,59 +46,19 @@ export default defineComponent({
     hideRight: { type: Boolean, default: false },
   },
   emits: ['click-menu-button', 'click-left', 'click-right'],
-  data() {
+  setup(props, ctx) {
     return {
-      /** 同步冷却 */
-      cooldownCnt: 0,
+      handleClickLeft() {
+        if (!props.hideLeft) {
+          ctx.emit('click-left');
+        }
+      },
+      handleClickRight() {
+        if (!props.hideRight) {
+          ctx.emit('click-right');
+        }
+      },
     };
-  },
-  methods: {
-    handleClickMenuButton() {
-      this.$emit('click-menu-button');
-    },
-    handleClickLeft() {
-      if (!this.hideLeft) {
-        this.$emit('click-left');
-      }
-    },
-    handleClickRight() {
-      if (!this.hideRight) {
-        this.$emit('click-right');
-      }
-    },
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.head-bar {
-  width: 100%;
-
-  padding: 0 12px;
-  margin-bottom: 12px;
-  height: 36px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #333;
-
-  > .semester {
-    font-size: 18px;
-    display: flex;
-    align-items: baseline;
-    > .icon {
-      color: $primary-color;
-    }
-    > .semester__name {
-      width: 220px;
-    }
-  }
-
-  > .action-group {
-    display: flex;
-    align-items: center;
-    color: $primary-color;
-  }
-}
-</style>

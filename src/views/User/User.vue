@@ -5,9 +5,10 @@
         v-if="isCurrentUser()"
         class="btn-section"
       >
-        <div
+        <router-link
           class="control-btn"
-          @click="$router.push('/about')"
+          to="/about"
+          title="关于我们"
         >
           <f-badge
             :visible="isAboutBadgeVisible"
@@ -15,26 +16,28 @@
             offset-y="0.5"
           >
             <f-icon
-              class="text-light"
+              class="text-gray-500"
               name="question-circle"
             />
           </f-badge>
-        </div>
-        <div
+        </router-link>
+        <router-link
           class="control-btn"
-          @click="$router.push('/user/edit')"
+          to="/user/edit"
+          title="编辑资料"
         >
           <f-icon
-            class="text-light"
+            class="text-gray-500"
             name="pencil-square"
           />
-        </div>
+        </router-link>
         <div
           class="control-btn"
+          title="退出登录"
           @click="logout"
         >
           <f-icon
-            class="text-light"
+            class="text-gray-500"
             name="door-open"
           />
         </div>
@@ -45,24 +48,24 @@
       />
       <div class="info-box">
         <img
-          class="flex-shrink-0 avatar"
+          class="flex-shrink-0 avatar border-2 border-primary"
           :src="processAvatar(userProfile.avatar)"
           alt="avatar"
         >
         <div class="info-section">
           <div>
-            <span class="user-name text-dark">
+            <span class="user-name text-gray-600">
               {{ userProfile.nickname || userProfile.name }}
             </span>
             <!-- TODO: 实现关注功能 -->
             <span
               v-if="!isCurrentUser()"
-              class="follow-btn"
+              class="follow-btn bg-primary"
             >
-              <span class="text-dark"> ＋&nbsp;关注 </span>
+              <span class="text-gray-600"> ＋&nbsp;关注 </span>
             </span>
           </div>
-          <span class="bio text-light">
+          <span class="bio text-gray-500">
             {{
               userProfile.bio || ''
             }}
@@ -75,22 +78,22 @@
         class="follow-box"
       >
         <div class="follow-section">
-          <span class="follow-number text-dark">
+          <span class="follow-number text-gray-600">
             {{ userProfile.watchers || 0 }}
           </span>
-          <span class="follow-text text-light"> 关注 </span>
+          <span class="follow-text text-gray-500"> 关注 </span>
         </div>
         <div class="follow-section">
-          <span class="follow-number text-dark">
+          <span class="follow-number text-gray-600">
             {{ userProfile.watchees || 0 }}
           </span>
-          <span class="follow-text text-light"> 粉丝 </span>
+          <span class="follow-text text-gray-500"> 粉丝 </span>
         </div>
         <div class="follow-section">
-          <span class="follow-number text-dark">
+          <span class="follow-number text-gray-600">
             {{ userProfile.fans || 0 }}
           </span>
-          <span class="follow-text text-light"> 被收藏数 </span>
+          <span class="follow-text text-gray-500"> 被收藏数 </span>
         </div>
       </div>
     </div>
@@ -282,14 +285,6 @@ export default defineComponent({
   justify-content: flex-start;
   align-items: stretch;
 
-  .text-dark {
-    color: $gray2;
-  }
-
-  .text-light {
-    color: $gray3;
-  }
-
   > .profile-card {
     display: flex;
     padding: 15px 5%;
@@ -331,7 +326,6 @@ export default defineComponent({
       > .avatar {
         width: 75px;
         height: 75px;
-        border: 3px solid $primary-color;
         border-radius: 50px;
         background-color: #fff;
         box-shadow: 0px 4px 5px 2px rgba(130, 155, 170, 0.19);
@@ -365,7 +359,6 @@ export default defineComponent({
             float: right;
             width: 60px;
             height: 24px;
-            background-color: $primary-color;
             border-radius: 100px;
             transition-duration: 0.2s;
 

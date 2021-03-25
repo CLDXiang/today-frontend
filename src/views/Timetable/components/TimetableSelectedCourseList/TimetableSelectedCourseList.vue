@@ -1,10 +1,15 @@
 <template>
-  <div class="selected-course-list-box">
-    <div class="selected-course-list__header">
-      <span>
+  <div class="bg-blue-50 h-full rounded-l-lg flex flex-col">
+    <div
+      :class="[
+        'flex-shrink-0 h-14 bg-white flex justify-between items-center',
+        'p-3 font-bold text-lg text-gray-600',
+      ]"
+    >
+      <span class="flex items-center">
         <span>已选课程列表</span>
         <span
-          class="icon-cloud f-clickable"
+          class="ml-2 h-5 f-clickable text-primary"
           @click="handleClickCloud"
         >
           <f-icon
@@ -15,7 +20,7 @@
         </span>
       </span>
       <span
-        class="icon-right f-clickable"
+        class="justify-self-end text-gray-500 h-4 f-clickable"
         @click="$emit('click-back')"
       >
         <f-icon
@@ -25,7 +30,7 @@
         />
       </span>
     </div>
-    <div class="selected-course-list">
+    <div class="pt-1 px-2 pb-3 flex-grow overflow-y-auto">
       <timetable-selected-course-card
         v-for="course in courses"
         :key="course.id"
@@ -40,8 +45,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { SelectedCourse } from '../types';
-import TimetableSelectedCourseCard from './TimetableSelectedCourseCard.vue';
+import { SelectedCourse } from '../../types';
+import TimetableSelectedCourseCard from './components/TimetableSelectedCourseCard.vue';
 
 export default defineComponent({
   components: {
@@ -84,51 +89,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-$header-height: 55px;
-
-.selected-course-list-box {
-  background-color: #e3f1f3;
-  height: 100%;
-  border-radius: 16px 0 0 16px;
-  display: flex;
-  flex-direction: column;
-
-  > .selected-course-list__header {
-    flex-shrink: 0;
-    height: $header-height;
-    background-color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 18px;
-    color: #4f4f4f;
-
-    > span:first-child {
-      display: flex;
-      align-items: center;
-      > .icon-cloud {
-        margin-left: 8px;
-        color: $primary-color;
-        height: 20px;
-      }
-    }
-
-    > .icon-right {
-      justify-self: flex-end;
-      color: #828282;
-      height: 16px;
-    }
-  }
-
-  > .selected-course-list {
-    padding: 4px 8px 12px 10px;
-    flex: 1;
-    overflow-y: auto;
-  }
-}
-</style>

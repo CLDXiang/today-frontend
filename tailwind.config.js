@@ -34,6 +34,8 @@ module.exports = {
       fuchsia: colors.fuchsia,
       pink: colors.pink,
       rose: colors.rose,
+      /* FIXME: 切换主题色到 Tailwind 色板 */
+      primary: '#60bdca',
     },
     extend: {
       maxWidth: {
@@ -42,11 +44,16 @@ module.exports = {
       boxShadow: {
         popover: '0 2px 8px rgb(0 0 0 / 15%)',
       },
+      fontSize: {
+        xxs: ['0.625rem', '0.75rem'],
+      },
     },
   },
   variants: {
     extend: {
       margin: ['first'],
+      backgroundColor: ['odd', 'even'],
+      borderWidth: ['last'],
     },
   },
   plugins: [],

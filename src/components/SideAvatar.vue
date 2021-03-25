@@ -1,7 +1,7 @@
 <template>
   <img
     v-if="userLoggedIn"
-    class="avatar"
+    class="w-9 h-9 rounded-full border-primary border-2"
     :src="processAvatar(user.avatar)"
     alt="avatar"
   >
@@ -31,12 +31,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 18px;
-  border: solid 2px $primary-color;
-}
-</style>

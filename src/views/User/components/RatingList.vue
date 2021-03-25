@@ -54,6 +54,7 @@ export default defineComponent({
     const userId = inject<string>('userId') as string;
 
     const items = ref<CardRatingItem[]>([]);
+    const enable = ref<boolean>(true);
     const {
       fetching, fetchingMore, fetchList, fetchMore,
     } = useFetchListData(
@@ -67,6 +68,9 @@ export default defineComponent({
         limit: 20,
       }).then((resp) => {
         items.value = [...items.value, ...resp.data];
+        if (resp.data.length === 0) {
+          enable.value = false;
+        }
       }),
     );
 
@@ -86,6 +90,7 @@ export default defineComponent({
     const { scrollRef: scroll } = useScrollToBottom(
       () => fetchMore(),
       500,
+      enable,
     );
 
     return {

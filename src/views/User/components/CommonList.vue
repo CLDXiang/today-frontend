@@ -60,6 +60,7 @@ export default defineComponent({
     const userId = inject<string>('userId') as string;
 
     const items = ref<CardCommonItem[]>([]);
+    const enable = ref<boolean>(true);
     const {
       fetching, fetchingMore, fetchList, fetchMore,
     } = useFetchListData(
@@ -90,6 +91,9 @@ export default defineComponent({
               limit: 20,
             }).then((resp) => {
               items.value = [...items.value, ...resp.data];
+              if (resp.data.length === 0) {
+                enable.value = false;
+              }
             });
           case '关注':
             return watchClient.getWatchList({
@@ -98,6 +102,9 @@ export default defineComponent({
               limit: 20,
             }).then((resp) => {
               items.value = [...items.value, ...resp.data];
+              if (resp.data.length === 0) {
+                enable.value = false;
+              }
             });
           case '足迹':
             return historyClient.getHistoryList({
@@ -106,6 +113,9 @@ export default defineComponent({
               limit: 20,
             }).then((resp) => {
               items.value = [...items.value, ...resp.data];
+              if (resp.data.length === 0) {
+                enable.value = false;
+              }
             });
           default: return undefined;
         }
@@ -131,6 +141,7 @@ export default defineComponent({
     const { scrollRef: scroll } = useScrollToBottom(
       () => fetchMore(),
       500,
+      enable,
     );
 
     return {

@@ -48,6 +48,7 @@ export default defineComponent({
   },
   setup(props) {
     const items = ref<CardLectureItem[]>([]);
+    const enable = ref<boolean>(true);
     const {
       fetching, fetchingMore, fetchList, fetchMore,
     } = useFetchListData(
@@ -64,6 +65,9 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
+          if (data.length === 0) {
+            enable.value = false;
+          }
         }),
     );
 
@@ -86,6 +90,7 @@ export default defineComponent({
     const { scrollRef: scroll } = useScrollToBottom(
       () => fetchMore(),
       500,
+      enable,
     );
 
     return {

@@ -3,7 +3,7 @@
     ref="scroll"
     class="bg-gray-100 pt-2 h-full overflow-y-auto"
   >
-    <template v-if="loading">
+    <template v-if="fetching">
       <div
         v-for="i in 6"
         :key="i"
@@ -19,6 +19,11 @@
       :lecture="item"
       @click="$router.push(`/rating/lecture/${item.id}`)"
     />
+    <template v-if="fetchingMore">
+      <div class="p-4 pb-3 mb-2 bg-white rounded-lg h-18 shadow-lg">
+        <f-skeleton :width="['100%', '50%']" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -29,7 +34,7 @@ import {
 import { CardLectureItem, CardLecture } from '@/components/listCard';
 import { LectureType, lectureType2Categories } from '@/utils/config';
 import { lectureClient } from '@/apis';
-import { useScrollToBottom } from '@/composables';
+import { useFetchListData, useScrollToBottom } from '@/composables';
 
 export default defineComponent({
   components: {
@@ -43,24 +48,16 @@ export default defineComponent({
   },
   setup(props) {
     const items = ref<CardLectureItem[]>([]);
-    /** 正在加载数据 */
-    const loading = ref(true);
-
-    /** 拉取并覆盖当前列表 */
-    const fetchList = () => {
-      loading.value = true;
-      lectureClient
+    const enable = ref<boolean>(true);
+    const {
+      fetching, fetchingMore, fetchList, fetchMore,
+    } = useFetchListData(
+      async () => lectureClient
         .getLectureList({ categories: lectureType2Categories(props.type), limit: 20 })
         .then(({ data }) => {
           items.value = data;
-        }).finally(() => {
-          loading.value = false;
-        });
-    };
-
-    /** 拉取并将结果附加在当前列表后 */
-    const fetchMore = () => {
-      lectureClient
+        }),
+      async () => lectureClient
         .getLectureList({
           categories: lectureType2Categories(props.type),
           limit: 20,
@@ -68,8 +65,11 @@ export default defineComponent({
         })
         .then(({ data }) => {
           items.value = [...items.value, ...data];
-        });
-    };
+          if (data.length === 0) {
+            enable.value = false;
+          }
+        }),
+    );
 
     watch(
       () => props.active,
@@ -90,12 +90,14 @@ export default defineComponent({
     const { scrollRef: scroll } = useScrollToBottom(
       () => fetchMore(),
       500,
+      enable,
     );
 
     return {
       items,
       scroll,
-      loading,
+      fetching,
+      fetchingMore,
     };
   },
 });

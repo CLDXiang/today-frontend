@@ -3,7 +3,7 @@
     ref="scroll"
     class="h-full overflow-y-auto space-y-2"
   >
-    <template v-if="loading">
+    <template v-if="fetching">
       <div
         v-for="i in 3"
         :key="i"
@@ -23,6 +23,15 @@
       class="f-clickable"
       @click="handleClickCardRating(item.lecture.id)"
     />
+    <template v-if="fetchingMore">
+      <div class="p-4 pb-3 mb-2 bg-white rounded-lg shadow-lg h-36">
+        <f-skeleton
+          avatar
+          :rows="4"
+          :width="['80px', '100%', '100%', '144px']"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -31,7 +40,7 @@ import {
   defineComponent, inject, ref, watch,
 } from 'vue'; import { CardRatingItem, CardRating } from '@/components/listCard';
 import { rateClient } from '@/apis';
-import { useScrollToBottom } from '@/composables';
+import { useFetchListData, useScrollToBottom } from '@/composables';
 
 export default defineComponent({
   components: {
@@ -42,32 +51,28 @@ export default defineComponent({
     active: { type: Boolean, default: false },
   },
   setup(props) {
-    /** 正在加载数据 */
-    const loading = ref(true);
     const userId = inject<string>('userId') as string;
 
     const items = ref<CardRatingItem[]>([]);
-
-    /** 拉取并覆盖当前列表 */
-    const fetchList = () => {
-      loading.value = true;
-      rateClient.getRatingListByUser({ userId, limit: 20 }).then((resp) => {
-        items.value = resp.data;
-      }).finally(() => {
-        loading.value = false;
-      });
-    };
-
-    /** 拉取并将结果附加在当前列表后 */
-    const fetchMore = () => {
-      rateClient.getRatingListByUser({
+    const enable = ref<boolean>(true);
+    const {
+      fetching, fetchingMore, fetchList, fetchMore,
+    } = useFetchListData(
+      async () => rateClient
+        .getRatingListByUser({ userId, limit: 20 }).then((resp) => {
+          items.value = resp.data;
+        }),
+      async () => rateClient.getRatingListByUser({
         userId,
         lastId: items.value[items.value.length - 1].id,
         limit: 20,
       }).then((resp) => {
         items.value = [...items.value, ...resp.data];
-      });
-    };
+        if (resp.data.length === 0) {
+          enable.value = false;
+        }
+      }),
+    );
 
     watch(() => props.active, (value) => {
       // activeTab 改变时，若当前 tab 无数据则重新拉数据
@@ -85,13 +90,14 @@ export default defineComponent({
     const { scrollRef: scroll } = useScrollToBottom(
       () => fetchMore(),
       500,
+      enable,
     );
 
     return {
       items,
       scroll,
-      loading,
-
+      fetching,
+      fetchingMore,
     };
   },
   methods: {

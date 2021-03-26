@@ -1,5 +1,8 @@
 <template>
-  <div class="p-7 flex flex-col justify-start items-stretch h-full w-full overflow-y-auto max-w-14xl">
+  <div
+    :class="['p-7 flex flex-col justify-start items-stretch',
+             'h-full w-full overflow-y-auto max-w-14xl']"
+  >
     <div class="flex justify-center items-center h-6 mt-2 mb-4 mx-0">
       <span
         class="absolute left-5"
@@ -32,6 +35,7 @@
         "
       >
       <a-button
+        class="flex-1"
         type="primary"
         shape="round"
         :disabled="isAvatarUploading"
@@ -94,6 +98,7 @@
           disabled
         />
         <a-button
+          class="mt-0.5 w-24"
           type="primary"
           shape="round"
           disabled
@@ -276,85 +281,3 @@ export default defineComponent({
   },
 });
 </script>
-
-// <style lang="scss" scoped>
-// .content-box {
-//   padding: 30px;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: flex-start;
-//   align-items: stretch;
-
-//   > .title-box {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     height: 24px;
-//     margin: 8px 0 18px 0;
-
-//     > .back-btn {
-//       position: absolute;
-//       left: 20px;
-//     }
-
-//     > .title {
-//       color: #333;
-//       font-size: 24px;
-//     }
-//   }
-
-//   > .avatar-box {
-//     width: 100%;
-//     max-width: 375px;
-//     align-self: center;
-//     display: flex;
-//     align-items: flex-end;
-//     margin-bottom: 18px;
-
-//     > .avatar {
-//       background-color: #fff;
-//       width: 64px;
-//       height: 64px;
-//       border-radius: 32px;
-//       margin-right: 20px;
-//     }
-
-//     > .ant-btn {
-//       flex: 1;
-//     }
-//   }
-
-//   > .info-box {
-//     width: 100%;
-//     max-width: 375px;
-//     align-self: center;
-//     margin-bottom: 18px;
-//   }
-
-//   > .email-box {
-//     width: 100%;
-//     max-width: 375px;
-//     align-self: center;
-//     margin-bottom: 18px;
-//     > .email-validate-box {
-//       display: flex;
-
-//       > .f-input {
-//         max-width: 226px;
-//         margin-right: 12px;
-//       }
-
-//       > .ant-btn {
-//         margin-top: 2px;
-//         width: 92px;
-//       }
-//     }
-//   }
-
-//   > .pw-box {
-//     width: 100%;
-//     max-width: 375px;
-//     align-self: center;
-//   }
-// }
-// </style>

@@ -1,28 +1,32 @@
 <template>
-  <div
-    class="f-input"
-    :class="{
-      'f-input--focus': isFocused,
-      'f-input--disable': disabled,
-      'f-input--warning': !obeyRules,
-    }"
-  >
+  <div class="f-input">
     <div
-      class="f-input__container"
-      :class="{ 'text-primary': isFocused, 'border-red-500' : !obeyRules }"
+      class="box-border cursor-text rounded text-gray-400 border-current"
+      :class="{
+        'py-1 px-2 mb-1 text-base h-10 transition-colors': true,
+        'border': !isFocused,
+        'text-primary border-2': isFocused,
+        'border-red-500': !obeyRules,
+        'cursor-not-allowed': disabled,
+      }"
       @click="handleClickTextField"
     >
-      <div class="f-input__text-field">
+      <div class="h-full relative flex items-center cursor-text hover:text-gray-700">
         <span
           v-if="label !== undefined"
-          class="f-input__label"
-          :class="{ 'f-input__label--floating': shouldLabelFloating, 'text-primary': isFocused }"
+          class="text-gray-400 transition-all absolute left-0 origin-top-left py-0 px-1 transform"
+          :class="{
+            'bg-white': true,
+            '-translate-y-4 scale-75': shouldLabelFloating,
+            'text-primary': isFocused,
+          }"
         >
           {{ label }}
         </span>
         <input
           ref="input"
-          :class="{ 'text-red-500': !obeyRules }"
+          class="border-none outline-none text-gray-700 w-full"
+          :class="{ 'text-red-500': !obeyRules, 'cursor-not-allowed': disabled }"
           :value="modelValue"
           :type="type"
           :autofocus="autofocus"
@@ -34,17 +38,27 @@
         >
         <span
           v-if="suffix !== undefined"
-          class="f-input__suffix"
+          class="text-gray-700"
         >
           {{ suffix }}
         </span>
       </div>
     </div>
-    <div class="f-input__details">
-      <transition name="hint">
+    <div
+      :class="{
+        'flex justify-between items-center py-0 px-3': !disabled,
+        'h-3 text-xs break-words text-gray-500': !disabled,
+      }"
+    >
+      <transition
+        enter-active-class="transition-all ease-out transform duration-300"
+        enter-from-class="-translate-y-2 opacity-0"
+        leave-active-class="transition-all ease-out transform duration-300"
+        leave-to-class="-translate-y-2 opacity-0"
+      >
         <span
           v-show="isHintVisible || !obeyRules"
-          :class="obeyRules ? 'f-input__hint' : 'text-red-500'"
+          :class="{ 'text-red-500': !obeyRules }"
         >
           {{ obeyRules ? hint : warningMessage }}
         </span>
@@ -139,113 +153,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-$gray: #00000061;
-$black: #000000de;
-
-$height: 40px;
-
-.f-input__container {
-  box-sizing: border-box;
-  cursor: text;
-  border-radius: 4px;
-  color: $gray;
-  border: solid 1px currentColor;
-  padding: 1px 9px;
-  margin-bottom: 4px;
-  font-size: 16px;
-  line-height: 20px;
-  height: $height;
-  transition: 0.3s color cubic-bezier(0.25, 0.8, 0.25, 1),
-              0.3s border-color cubic-bezier(0.25, 0.8, 0.25, 1);
-
-  > .f-input__text-field {
-    height: 100%;
-
-    position: relative;
-
-    display: flex;
-    align-items: center;
-
-    cursor: text;
-
-    &:hover {
-      color: $black;
-    }
-
-    > .f-input__label {
-      color: $gray;
-      transition: 0.3s all cubic-bezier(0.25, 0.8, 0.5, 1);
-      position: absolute;
-      left: 0;
-
-      transform-origin: top left;
-      padding: 0 4px;
-
-      &.f-input__label--floating {
-        transform: translateY(-$height/2 + 4px) scale(0.75);
-        background-color: #fff;
-      }
-    }
-
-    > input {
-      border: none;
-      outline: none;
-      color: $black;
-      width: 100%;
-    }
-
-    > .f-input__suffix {
-      color: $black;
-    }
-  }
-}
-
-// focus 态
-.f-input--focus {
-  > .f-input__container {
-    border: solid 2px currentColor;
-    padding: 0 8px;
-  }
-}
-
-// disable 态
-.f-input.f-input--disable > .f-input__container {
-  cursor: not-allowed;
-  > .f-input__text-field > input {
-    cursor: not-allowed;
-  }
-}
-
-.f-input:not(.f-input__disabled) .f-input__details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0 12px;
-  height: 14px;
-
-  line-height: 12px;
-  font-size: 12px;
-  word-break: break-word;
-  word-wrap: break-word;
-
-  hyphens: auto;
-  color: #0009;
-}
-
-.hint-enter-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-}
-
-.hint-leave-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-}
-
-.hint-enter-from,
-.hint-leave-to {
-  transform: translateY(-8px);
-  opacity: 0;
-}
-</style>

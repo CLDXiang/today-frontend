@@ -3,6 +3,7 @@
 import {
   Fragment, Comment, Text, VNode, cloneVNode,
 } from 'vue';
+import { AnimationType } from './types';
 
 /** 判断 VNode 是否为空 */
 function isEmptyElement(c: VNode) {
@@ -41,4 +42,54 @@ export function cloneElement(vNode?: VNode, nodeProps = {}, mergeRef = false) {
 
   node.props = { ...node.props, ...nodeProps };
   return node;
+}
+
+/** Transition 所用动画类名 */
+export function mapAnimationToTransitionClassNames(animation: AnimationType): {
+  enterActive: string;
+  enterFrom: string;
+  enterTo: string;
+  leaveActive: string;
+  leaveFrom: string;
+  leaveTo: string;
+} {
+  switch (animation) {
+    case 'scale':
+      return {
+        enterActive: 'transition ease-out duration-150 transform',
+        enterFrom: 'opacity-0 scale-50',
+        enterTo: 'opacity-100 scale-100',
+        leaveActive: 'transition ease-in duration-100 transform',
+        leaveFrom: 'opacity-100 scale-100',
+        leaveTo: 'opacity-0 scale-50',
+      };
+    case 'expandFromTop':
+      return {
+        enterActive: 'transition ease-out duration-150 transform origin-top',
+        enterFrom: 'opacity-0 scale-y-50',
+        enterTo: 'opacity-100 scale-y-100',
+        leaveActive: 'transition ease-in duration-100 transform origin-top',
+        leaveFrom: 'opacity-100 scale-100',
+        leaveTo: 'opacity-0 scale-50',
+      };
+    case 'expandFromBottom':
+      return {
+        enterActive: 'transition ease-out duration-150 transform origin-bottom',
+        enterFrom: 'opacity-0 scale-y-50',
+        enterTo: 'opacity-100 scale-y-100',
+        leaveActive: 'transition ease-in duration-100 transform origin-bottom',
+        leaveFrom: 'opacity-100 scale-100',
+        leaveTo: 'opacity-0 scale-50',
+      };
+    default: {
+      return {
+        enterActive: '',
+        enterFrom: '',
+        enterTo: '',
+        leaveActive: '',
+        leaveFrom: '',
+        leaveTo: '',
+      };
+    }
+  }
 }

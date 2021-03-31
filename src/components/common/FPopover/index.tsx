@@ -12,8 +12,8 @@ import {
 } from 'vue';
 import log from '@/utils/log';
 import { addEventListener } from '@/utils/dom';
-import { cloneElement } from './utils';
-import { PlacementType } from './types';
+import { cloneElement, mapAnimationToTransitionClassNames } from './utils';
+import { PlacementType, AnimationType } from './types';
 import { ContentWrapper } from './components';
 
 export default defineComponent({
@@ -25,6 +25,13 @@ export default defineComponent({
     placement: {
       type: String as PropType<PlacementType>,
       default: 'top',
+    },
+    /** 对于超出视口边界的情况，是否尽量通过调整位置限制在视口内 */
+    adjustPlacement: { type: Boolean, default: true },
+    /** 显隐动画效果 */
+    animation: {
+      type: String as PropType<AnimationType>,
+      default: 'scale',
     },
   },
   emits: ['update:visible'],
@@ -83,12 +90,16 @@ export default defineComponent({
       clearOutsideHandler();
     });
 
+    /** 用于 Transition 的类名 */
+    const transitionClassNames = mapAnimationToTransitionClassNames(props.animation);
+
     return {
       isVisible,
       setIsVisible,
       clearOutsideHandler,
       handleUpdate,
       defaultRef,
+      transitionClassNames,
     };
   },
   render() {
@@ -115,18 +126,19 @@ export default defineComponent({
         {triggerNode}
         <Teleport to="body">
           <Transition
-            enter-active-class="transition ease-out duration-150 transform"
-            enter-from-class="opacity-0 scale-50"
-            enter-to-class="opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-100 transform"
-            leave-from-class="opacity-100 scale-100"
-            leave-to-class="opacity-0 scale-50"
+            enter-active-class={this.transitionClassNames.enterActive}
+            enter-from-class={this.transitionClassNames.enterFrom}
+            enter-to-class={this.transitionClassNames.enterTo}
+            leave-active-class={this.transitionClassNames.leaveActive}
+            leave-from-class={this.transitionClassNames.leaveFrom}
+            leave-to-class={this.transitionClassNames.leaveTo}
           >
             <ContentWrapper
               visible={this.isVisible}
               content={this.$slots.content?.() as VNode | undefined}
               target={this.defaultRef}
               placement={this.placement}
+              adjustPlacement={this.adjustPlacement}
             />
           </Transition>
         </Teleport>

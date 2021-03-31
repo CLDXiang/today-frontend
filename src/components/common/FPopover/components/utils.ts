@@ -6,12 +6,14 @@ import { PlacementType, Position } from '../types';
  * @param target 定位点元素
  * @param position 相对位置类型
  * @param offset 悬浮元素与定位点元素距离
+ * @param adjustPlacement 对于超出视口边界的情况，是否尽量通过调整位置限制在视口内
  */
 export function calculatePosition(
   current: HTMLElement | undefined,
   target: HTMLElement | undefined,
   placement: PlacementType,
   offset = 8,
+  adjustPlacement = true,
 ): Position {
   if (!target) {
     return {
@@ -95,17 +97,19 @@ export function calculatePosition(
   }
 
   // 视口边界处理
-  if (x < 0) {
-    x = 0;
-  }
-  if (y < 0) {
-    y = 0;
-  }
-  if (x > document.body.clientWidth - currentBox.width) {
-    x = document.body.clientWidth - currentBox.width;
-  }
-  if (y > document.body.clientHeight - currentBox.height) {
-    y = document.body.clientHeight - currentBox.height;
+  if (adjustPlacement) {
+    if (x < 0) {
+      x = 0;
+    }
+    if (y < 0) {
+      y = 0;
+    }
+    if (x > document.body.clientWidth - currentBox.width) {
+      x = document.body.clientWidth - currentBox.width;
+    }
+    if (y > document.body.clientHeight - currentBox.height) {
+      y = document.body.clientHeight - currentBox.height;
+    }
   }
 
   return {

@@ -19,6 +19,8 @@ export const ContentWrapper = defineComponent({
       type: String as PropType<PlacementType>,
       required: true,
     },
+    /** 对于超出视口边界的情况，是否尽量通过调整位置限制在视口内 */
+    adjustPlacement: { type: Boolean, default: true },
   },
   setup(props) {
     const contentRef = ref<HTMLElement | undefined>(undefined);

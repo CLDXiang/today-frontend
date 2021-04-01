@@ -1,29 +1,37 @@
 <template>
-  <div
-    class="f-select"
-    :class="{ 'f-select--focus': isFocused, 'f-select--disable': disabled }"
-  >
+  <div class="f-select">
     <a-dropdown
       :disabled="disabled"
       :trigger="['click']"
       @visibleChange="handleVisibleChange"
     >
       <div
-        class="f-select__container"
-        :class="{ 'text-primary': isFocused }"
+        class="box-border cursor-pointer rounded text-gray-400 border-current"
+        :class="{
+          'py-1 px-2 mb-1 text-base h-10 transition-colors': true,
+          'border': !isFocused,
+          'text-primary border-2': isFocused,
+          'cursor-not-allowed': disabled,
+        }"
         @click="handleClickTextField"
       >
-        <div class="f-select__text-field">
+        <div class="h-full relative flex items-center hover:text-gray-700">
           <span
             v-if="label !== undefined"
-            class="f-select__label"
-            :class="{ 'f-select__label--floating': shouldLabelFloating, 'text-primary': isFocused }"
+            class="text-gray-400 transition-all absolute left-0 origin-top-left py-0 px-1 transform"
+            :class="{
+              'bg-white': true,
+              '-translate-y-4 scale-75': shouldLabelFloating,
+              'text-primary': isFocused,
+            }"
           >
             {{ label }}
           </span>
 
           <input
             ref="input"
+            class="border-none outline-none cursor-pointer text-gray-700 w-full"
+            :class="{ 'cursor-not-allowed': disabled }"
             :value="modelValue"
             type="text"
             readonly="readonly"
@@ -37,15 +45,16 @@
         </div>
       </div>
       <template #overlay>
-        <div class="f-select__option-bar">
-          <div class="f-select__option-list">
+        <div class="rounded shadow-lg overflow-y-auto overflow-x-hidden max-h-screen">
+          <div class="bg-white py-2 px-0">
             <div
               v-for="option in options"
               :key="option"
-              class="f-select__option"
+              class="h-10 cursor-pointer select-none flex items-center flex-auto py-0 px-4"
               :class="{
-                'f-select__option--selected text-primary bg-primary bg-opacity-10':
+                'text-primary bg-primary bg-opacity-10':
                   option === modelValue,
+                ' hover:bg-gray-100': option !== modelValue,
               }"
               @click="changeValue(option)"
             >
@@ -56,11 +65,20 @@
       </template>
     </a-dropdown>
 
-    <div class="f-select__details">
-      <transition name="hint">
+    <div
+      :class="{
+        'flex justify-between items-center py-0 px-3': !disabled,
+        'h-3 text-xs break-words text-gray-500': !disabled,
+      }"
+    >
+      <transition
+        enter-active-class="transition-all ease-out transform duration-300"
+        enter-from-class="-translate-y-2 opacity-0"
+        leave-active-class="transition-all ease-out transform duration-300"
+        leave-to-class="-translate-y-2 opacity-0"
+      >
         <span
           v-show="isHintVisible"
-          class="f-select__hint"
         >
           {{ hint }}
         </span>
@@ -139,136 +157,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-$gray: #00000061;
-$black: #000000de;
-
-$height: 40px;
-
-.f-select__container {
-  box-sizing: border-box;
-  cursor: pointer;
-  border-radius: 4px;
-  color: $gray;
-  border: solid 1px currentColor;
-  padding: 1px 9px;
-  margin-bottom: 4px;
-  font-size: 16px;
-  line-height: 20px;
-  height: $height;
-  transition: 0.3s color, border-width cubic-bezier(0.25, 0.8, 0.25, 1);
-
-  > .f-select__text-field {
-    height: 100%;
-
-    position: relative;
-
-    display: flex;
-    align-items: center;
-
-    &:hover {
-      color: $black;
-    }
-
-    > .f-select__label {
-      color: $gray;
-      transition: 0.3s all cubic-bezier(0.25, 0.8, 0.5, 1);
-      position: absolute;
-      left: 0;
-
-      transform-origin: top left;
-      padding: 0 4px;
-
-      &.f-select__label--floating {
-        transform: translateY(-$height/2 + 4px) scale(0.75);
-        background-color: #fff;
-      }
-    }
-
-    input {
-      border: none;
-      outline: none;
-      color: $black;
-      cursor: pointer;
-      width: 100%;
-    }
-  }
-}
-
-// focus 态
-.f-select--focus {
-  .f-select__container {
-    border: solid 2px currentColor;
-    padding: 0 8px;
-  }
-}
-
-// disable 态
-.f-select.f-select--disable .f-select__container {
-  cursor: not-allowed;
-  > .f-select__text-field input {
-    cursor: not-allowed;
-  }
-}
-
-.f-select__details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0 12px;
-  height: 14px;
-
-  line-height: 12px;
-  font-size: 12px;
-  word-break: break-word;
-  word-wrap: break-word;
-
-  hyphens: auto;
-  color: #0009;
-}
-
-.f-select__option-bar {
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 60vh;
-
-  > .f-select__option-list {
-    background-color: #fff;
-    padding: 8px 0;
-
-    > .f-select__option {
-      min-height: 40px;
-      cursor: pointer;
-      user-select: none;
-
-      display: flex;
-      align-items: center;
-      flex: 1 1 100%;
-      padding: 0 16px;
-
-      &:hover:not(.f-select__option--selected) {
-        background-color: rgba(#000, 0.05);
-      }
-    }
-  }
-}
-
-.hint-enter-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-}
-
-.hint-leave-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-}
-
-.hint-enter-from,
-.hint-leave-to {
-  transform: translateY(-8px);
-  opacity: 0;
-}
-</style>

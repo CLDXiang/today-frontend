@@ -4,7 +4,6 @@ import {
   Button,
   Modal,
   Drawer,
-  Dropdown,
   Slider,
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
@@ -42,7 +41,6 @@ app
   .use(Button)
   .use(Modal)
   .use(Drawer)
-  .use(Dropdown)
   .use(Slider);
 app.config.globalProperties.$message = message;
 declare module '@vue/runtime-core' {

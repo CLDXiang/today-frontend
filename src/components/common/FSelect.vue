@@ -1,8 +1,10 @@
 <template>
   <div class="f-select">
-    <a-dropdown
+    <f-popover
       :disabled="disabled"
-      :trigger="['click']"
+      trigger="click"
+      placement="bottomLeft"
+      animation="expandFromTop"
       @visibleChange="handleVisibleChange"
     >
       <div
@@ -44,7 +46,7 @@
           >
         </div>
       </div>
-      <template #overlay>
+      <template #content>
         <div class="rounded shadow-lg overflow-y-auto overflow-x-hidden max-h-screen">
           <div class="bg-white py-2 px-0">
             <div
@@ -63,7 +65,7 @@
           </div>
         </div>
       </template>
-    </a-dropdown>
+    </f-popover>
 
     <div
       :class="{

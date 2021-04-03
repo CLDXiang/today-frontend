@@ -26,6 +26,8 @@ export default defineComponent({
       type: String as PropType<PlacementType>,
       default: 'top',
     },
+    /** 是否禁用 */
+    disabled: { type: Boolean, default: false },
     /** 对于超出视口边界的情况，是否尽量通过调整位置限制在视口内 */
     adjustPlacement: { type: Boolean, default: true },
     /** 显隐动画效果 */
@@ -34,13 +36,18 @@ export default defineComponent({
       default: 'scale',
     },
   },
-  emits: ['update:visible'],
+  emits: ['update:visible', 'visibleChange'],
   setup(props, { emit }) {
     /** 是否可见 */
     const isVisible = ref(props.visible ?? false);
     const setIsVisible = (value: boolean) => {
+      if (value === isVisible.value || props.disabled) {
+        return;
+      }
+      // 如果禁用，则总是返回 false
       isVisible.value = value;
       emit('update:visible', value);
+      emit('visibleChange', value);
     };
 
     const clickOutsideHandler = ref<{ remove:() => void } | null>(null);
@@ -114,7 +121,13 @@ export default defineComponent({
     };
 
     if (this.$props.trigger === 'click') {
-      defaultSlotsProps.onClick = () => this.setIsVisible(!this.isVisible);
+      defaultSlotsProps.onMousedown = (e: MouseEvent) => {
+        this.setIsVisible(!this.isVisible);
+        e.stopPropagation();
+      };
+      defaultSlotsProps.onTouchstart = (e: MouseEvent) => {
+        e.stopPropagation();
+      };
     } else if (this.$props.trigger === 'hover') {
       defaultSlotsProps.onMouseenter = () => this.setIsVisible(true);
       defaultSlotsProps.onMouseleave = () => this.setIsVisible(false);

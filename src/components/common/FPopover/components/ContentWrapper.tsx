@@ -65,6 +65,7 @@ export const ContentWrapper = defineComponent({
         style={{
           left: `${this.position.x}px`,
           top: `${this.position.y}px`,
+          zIndex: 23333,
         }}
       >
         <div

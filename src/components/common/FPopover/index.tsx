@@ -41,8 +41,11 @@ export default defineComponent({
     /** 是否可见 */
     const isVisible = ref(props.visible ?? false);
     const setIsVisible = (value: boolean) => {
+      if (value === isVisible.value || props.disabled) {
+        return;
+      }
       // 如果禁用，则总是返回 false
-      isVisible.value = props.disabled ? false : value;
+      isVisible.value = value;
       emit('update:visible', value);
       emit('visibleChange', value);
     };
@@ -120,6 +123,9 @@ export default defineComponent({
     if (this.$props.trigger === 'click') {
       defaultSlotsProps.onMousedown = (e: MouseEvent) => {
         this.setIsVisible(!this.isVisible);
+        e.stopPropagation();
+      };
+      defaultSlotsProps.onTouchstart = (e: MouseEvent) => {
         e.stopPropagation();
       };
     } else if (this.$props.trigger === 'hover') {

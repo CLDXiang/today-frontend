@@ -23,17 +23,6 @@
     </span>
 
     <span
-      :class="{ 'text-primary': activePage === 'status' }"
-      @click="handleClick('status')"
-    >
-      <f-icon
-        name="my"
-        size="20"
-      />
-      <span>{{ userLoggedIn ? '我的' : '登录' }}</span>
-    </span>
-
-    <span
       :class="{ 'text-primary': activePage === 'forum' }"
       @click="handleClick('forum')"
     >
@@ -42,6 +31,17 @@
         size="20"
       />
       <span> 论坛 </span>
+    </span>
+
+    <span
+      :class="{ 'text-primary': activePage === 'status' }"
+      @click="handleClick('status')"
+    >
+      <f-icon
+        name="my"
+        size="20"
+      />
+      <span>{{ userLoggedIn ? '我的' : '登录' }}</span>
     </span>
   </div>
 </template>

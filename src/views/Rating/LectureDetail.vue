@@ -1,4 +1,4 @@
-<datatemplate>
+<template>
   <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
     <rating-head-bar
       is-back-visible

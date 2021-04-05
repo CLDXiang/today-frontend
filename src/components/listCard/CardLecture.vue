@@ -18,11 +18,10 @@
       <div class="overflow-hidden text-gray-400 overflow-ellipsis whitespace-nowrap">
         {{ lecture.teachers.join(' ') }}
       </div>
-      <div class="flex">
+      <div class="flex ml-1 space-x-2 items-center text-gray-500">
         <!-- FIXME: 实现 reaction 后显示 -->
         <div
-          v-if="false"
-          class="ml-4"
+          class="flex"
         >
           <f-icon
             name="reaction"
@@ -34,8 +33,7 @@
         </div>
         <!-- FIXME: 实现收藏课程后显示 -->
         <div
-          v-if="false"
-          class="ml-2"
+          class="flex"
         >
           <f-icon
             name="heart"
@@ -45,7 +43,7 @@
             {{ lecture.likeCount }}
           </span>
         </div>
-        <div class="flex ml-2 text-gray-400">
+        <div class="flex">
           <div class="flex flex-col">
             <!-- HACK: 加上一个 div 实现 SVG 居中 -->
             <div class="h-0.5" />

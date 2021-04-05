@@ -25,11 +25,11 @@ export const mockHistories: CardCommonItem[] = [
       name: '鲁迅与中国现代文化',
       teachers: ['郜元宝'],
     },
-    commentCount: 323,
-    starCount: 213,
+    commentCount: 2,
+    starCount: 12,
     starred: true,
     reaction: {
-      count: 123,
+      count: 2,
       emoji: {
         smile: [
           { id: '235', nickname: '小红' },

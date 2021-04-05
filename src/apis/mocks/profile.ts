@@ -8,7 +8,7 @@ export const mockProfiles: CardUserItem[] = [
     name: 'xiao_ming',
     nickname: '小明',
     avatar: '/default_avatar.png',
-    bio: '个性签名个性签名个性签名个性签名个性签名',
+    bio: '努力学习中，课友请联系我！！',
   },
   {
     id: '2',
@@ -17,6 +17,6 @@ export const mockProfiles: CardUserItem[] = [
     name: 'xiao_ming',
     nickname: '小明',
     avatar: '/default_avatar.png',
-    bio: '个性签名个性签名个性签名个性签名个性签名',
+    bio: '努力学习中，课友请联系我！！',
   },
 ];

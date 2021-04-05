@@ -1,6 +1,6 @@
 <template>
   <div
-    class="emoji-button"
+    class="emoji-button f-clickable"
     :class="{ 'text-primary emoji-button--active': active }"
   >
     <span :style="emojiStyle">{{ emoji }}</span>

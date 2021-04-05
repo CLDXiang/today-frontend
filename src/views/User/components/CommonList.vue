@@ -11,18 +11,22 @@
       <card-rating
         v-if="item.type === 'rating'"
         :rating="item"
+        class="f-clickable"
       />
       <card-comment
         v-else-if="item.type === 'comment'"
         :comment="item"
+        class="f-clickable"
       />
       <card-lecture
         v-else-if="item.type === 'lecture'"
         :lecture="item"
+        class="f-clickable"
       />
       <card-user
         v-else-if="item.type === 'user'"
         :user="item"
+        class="f-clickable"
       />
     </template>
   </div>

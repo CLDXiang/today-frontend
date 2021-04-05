@@ -16,6 +16,7 @@
       v-for="item in items"
       :key="item.id"
       :lesson="item"
+      class="f-clickable"
     />
     <template v-if="fetchingMore">
       <div class="p-4 pb-3 mb-2 bg-white rounded-lg shadow-lg h-18">

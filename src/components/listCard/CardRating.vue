@@ -30,18 +30,16 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-between mt-1">
+    <div class="flex justify-between mt-1 items-center">
       <div
         :class="courseCardColor"
         class="px-2 py-1 overflow-hidden text-xs rounded-2xl whitespace-nowrap overflow-ellipsis"
       >
         {{ `${rating.lecture.name} ${rating.lecture.teachers.join(' ')}` }}
       </div>
-      <div>
+      <div class="flex space-x-2 ml-1 text-gray-500">
         <!-- FIXME: 实现 reaction 后显示 -->
-        <span
-          v-if="false"
-        >
+        <span class="flex">
           <span>
             <f-icon
               name="reaction"
@@ -53,7 +51,7 @@
           </span>
         </span>
         <!-- FIXME: 实现评论后显示 -->
-        <span v-if="false">
+        <span class="flex">
           <f-icon
             name="chat"
             size="14"
@@ -63,9 +61,7 @@
           </span>
         </span>
         <!-- FIXME: 实现收藏后显示 -->
-        <span
-          v-if="false"
-        >
+        <span class="flex">
           <f-icon
             :style="{color: starColor}"
             :name="rating.starred ? 'heart-fill' : 'heart'"

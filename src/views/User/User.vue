@@ -74,22 +74,21 @@
       </div>
       <!-- FIXME: 实现用户的关注、粉丝、被收藏数统计功能后按照实现的部分显示 -->
       <div
-        v-if="false"
         class="follow-box"
       >
-        <div class="follow-section">
+        <div class="follow-section f-clickable">
           <span class="follow-number text-gray-600">
             {{ userProfile.watchers || 0 }}
           </span>
           <span class="follow-text text-gray-500"> 关注 </span>
         </div>
-        <div class="follow-section">
+        <div class="follow-section f-clickable">
           <span class="follow-number text-gray-600">
             {{ userProfile.watchees || 0 }}
           </span>
           <span class="follow-text text-gray-500"> 粉丝 </span>
         </div>
-        <div class="follow-section">
+        <div class="follow-section f-clickable">
           <span class="follow-number text-gray-600">
             {{ userProfile.fans || 0 }}
           </span>
@@ -108,7 +107,6 @@
         </f-tab-pane>
         <!-- FIXME: 下方功能实现后删去 v-if="false" -->
         <f-tab-pane
-          v-if="false"
           tab="回复"
         >
           <comment-list :active="activeTab === '回复'" />
@@ -118,7 +116,6 @@
         </f-tab-pane>
         <!-- FIXME: 下方功能实现后删去 v-if="false" -->
         <f-tab-pane
-          v-if="false"
           tab="收藏"
         >
           <common-list
@@ -128,7 +125,7 @@
         </f-tab-pane>
         <!-- FIXME: 下方功能实现后删去 v-if="false" -->
         <f-tab-pane
-          v-if="isCurrentUser() && false"
+          v-if="isCurrentUser()"
           tab="关注"
         >
           <common-list
@@ -138,7 +135,7 @@
         </f-tab-pane>
         <!-- FIXME: 下方功能实现后删去 v-if="false" -->
         <f-tab-pane
-          v-if="isCurrentUser() && false"
+          v-if="isCurrentUser()"
           tab="足迹"
         >
           <common-list
@@ -225,15 +222,20 @@ export default defineComponent({
         bio: currentUser.value.bio,
         name: currentUser.value.name,
         nickname: currentUser.value.nickname,
-        fans: currentUser.value.fans,
-        watchers: currentUser.value.watchers,
-        watchees: currentUser.value.watchees,
+        fans: currentUser.value.fans || 3,
+        watchers: currentUser.value.watchers || 12,
+        watchees: currentUser.value.watchees || 5,
       };
     }
     userClient
       .getUserInfo({ userId: props.userId || currentUser.value.id })
       .then((resp) => {
-        userProfile.value = resp;
+        userProfile.value = {
+          ...resp,
+          fans: 3,
+          watchers: 12,
+          watchees: 5,
+        };
         if (isCurrentUser()) {
           setUserProfile(resp);
         }

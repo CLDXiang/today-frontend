@@ -9,7 +9,7 @@ export const mockHistories: CardCommonItem[] = [
     name: 'xiao_ming',
     nickname: '小明',
     avatar: '/default_avatar.png',
-    bio: '个性签名个性签名个性签名个性签名个性签名',
+    bio: '努力学习中，课友请联系我！！',
   },
   {
     id: '233',
@@ -21,15 +21,15 @@ export const mockHistories: CardCommonItem[] = [
     },
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     lecture: {
-      id: 'COMP233333.3',
-      name: '思修',
-      teachers: ['老师1', '老师2'],
+      id: 'CHIN1190113',
+      name: '鲁迅与中国现代文化',
+      teachers: ['郜元宝'],
     },
-    commentCount: 323,
-    starCount: 213,
+    commentCount: 2,
+    starCount: 12,
     starred: true,
     reaction: {
-      count: 123,
+      count: 2,
       emoji: {
         smile: [
           { id: '235', nickname: '小红' },
@@ -42,7 +42,7 @@ export const mockHistories: CardCommonItem[] = [
       nice: 4,
       workload: 4,
       recommended: 4,
-      content: '点评内容点评内容点评内容点评内容点评内容',
+      content: '老师很有趣',
     },
   },
 ];

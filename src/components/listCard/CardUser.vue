@@ -1,22 +1,30 @@
 <template>
-  <div class="list-card card-user">
-    <div class="list-card__main-field">
-      <div class="list-card__avatar-field">
+  <div class="py-2.5 px-3 rounded-lg shadow-lg bg-white mb-2">
+    <div class="flex mt-1 mb-2">
+      <div
+        class="flex-shrink-0 w-10"
+      >
         <img
-          class="avatar"
           :src="processAvatar(user.avatar)"
+          class="w-10 h-10 rounded-full"
         >
       </div>
-      <div class="list-card__content-field">
-        <div class="list-card__top-field">
-          <span class="card-user__user-name text-primary">
-            {{ user.name }}
+      <div class="flex-grow ml-2">
+        <div class="flex justify-between">
+          <span
+            class="font-extrabold text-primary"
+          >
+            {{ user.nickname }}
+          </span>
+          <span class="text-xs text-gray-400">
+            3 个月前
           </span>
         </div>
-        <div class="list-card__middle-field">
-          <span class="card-user__user-signature">
-            {{ user.bio }}
-          </span>
+        <div
+          :class="['pt-2 overflow-hidden text-left break-all whitespace-pre-wrap',
+                   'max-h-20 overflow-ellipsis line-limit']"
+        >
+          {{ user.bio }}
         </div>
       </div>
     </div>

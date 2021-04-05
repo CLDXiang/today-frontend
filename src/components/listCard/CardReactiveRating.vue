@@ -55,7 +55,6 @@
     </div>
     <!-- FIXME: 实现 reaction 后显示 -->
     <div
-      v-if="false"
       class="h-9"
     >
       <reaction
@@ -67,7 +66,6 @@
     </div>
     <!-- FIXME: 实现对点评的评论、收藏后显示 -->
     <div
-      v-if="false"
       class="w-screen h-1"
     />
     <div
@@ -75,6 +73,7 @@
     >
       <span
         v-if="showChat"
+        class="f-clickable flex"
         @click.stop="handleClickChat"
       >
         <f-icon
@@ -87,6 +86,7 @@
       </span>
       <span
         v-if="showLike"
+        class="f-clickable flex"
         @click.stop="handleClickLike"
       >
         <f-icon
@@ -100,6 +100,7 @@
       </span>
       <span
         v-if="showEdit"
+        class="f-clickable flex"
         @click.stop="handleClickEdit"
       >
         <f-icon
@@ -110,6 +111,7 @@
       </span>
       <span
         v-if="showDelete"
+        class="f-clickable flex"
         @click.stop="handleClickDelete"
       >
         <f-icon
@@ -141,8 +143,8 @@ export default defineComponent({
   props: {
     /** 点评数据项 */
     rating: { type: Object as PropType<CardRatingItem>, default: true },
-    showChat: { type: Boolean, default: false },
-    showLike: { type: Boolean, default: false },
+    showChat: { type: Boolean, default: true },
+    showLike: { type: Boolean, default: true },
     showEdit: { type: Boolean, default: false },
     showDelete: { type: Boolean, default: false },
   },

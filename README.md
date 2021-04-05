@@ -35,6 +35,8 @@ fdxk.info 是一款服务复旦大学生的 Web 应用，主要面向移动端�
 
 ## 如何开始
 
+参与贡献前，请**详细阅读** [Wiki](https://github.com/CLDXiang/today-frontend/wiki) 中“开发规约与建议”和“Commit 规范”的内容。
+
 ### 前置需求
 
 需要有 Node.js 14+ 运行环境

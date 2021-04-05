@@ -69,6 +69,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/forum',
     name: 'Forum',
     component: Forum,
+    children: [
+      {
+        path: 'channel/:id',
+        component: () =>
+          import(
+            /* webpackChunkName: "user-state" */
+            '@/views/Forum/components/PostsList.vue'
+          ),
+        props: (route) => ({ channelId: route.params.id }),
+      },
+    ],
   },
   { path: '/*', component: Timetable },
 ];

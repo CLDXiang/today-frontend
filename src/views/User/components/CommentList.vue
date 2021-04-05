@@ -8,6 +8,7 @@
       v-for="item in items"
       :key="item.id"
       :comment="item"
+      class="f-clickable"
     />
   </div>
 </template>

@@ -98,7 +98,7 @@
           disabled
         />
         <a-button
-          class="mt-0.5 w-24"
+          class="mt-0.5 w-24 ml-3"
           type="primary"
           shape="round"
           disabled

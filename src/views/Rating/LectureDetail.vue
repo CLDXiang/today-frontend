@@ -1,4 +1,4 @@
-<template>
+<datatemplate>
   <div class="w-full h-full overflow-y-auto content-box max-w-14xl">
     <rating-head-bar
       is-back-visible
@@ -61,7 +61,7 @@
               type="primary"
               shape="round"
               size="small"
-              class="info-bar__watch-button text-gray-600"
+              class="text-gray-600 info-bar__watch-button"
               :class="{ 'info-bar__watch-button--watched': lectureInfo.watched }"
               @click="handleClickWatch"
             >

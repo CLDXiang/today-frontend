@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-12 pb-8 mt-4 border-b-2 f-clickable"
+    class="h-12 pb-8 mt-4 border-b-2"
     @click="$emit('click-list-ul')"
   >
     <div class="flex">
@@ -8,7 +8,7 @@
         <f-icon
           name="list-ul"
           size="24"
-          class="ml-4 mr-2"
+          class="ml-4 mr-2 f-clickable"
         />
       </div>
       <div class="pt-1 mr-2">

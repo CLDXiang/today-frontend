@@ -11,9 +11,11 @@
     :visible="isChannelsVisible"
     @close="isChannelsVisible = false"
   >
-    <forum-channels-list class="bg-gray-200" />
+    <forum-channels-list
+      class="bg-gray-200"
+    />
   </a-drawer>
-  <posts-list />
+  <posts-list class="px-2" />
   <!-- rich text editor -->
 </template>
 <script lang="ts">

@@ -12,12 +12,12 @@ import logger from '@/utils/log';
 export const useScrollToBottom: (
   cb: (() => void) | (() => Promise<void>),
   bottom?: number,
-  enable?: boolean,
+  enable?: Ref<boolean>,
   delay?: number,
 ) => { scrollRef: Ref<HTMLElement | undefined>; pending: Ref<boolean> } = (
   cb,
   bottom = 0,
-  enable = true,
+  enable = ref<boolean>(true),
   delay = 150,
 ) => {
   const scrollRef = ref<HTMLElement>();
@@ -29,7 +29,7 @@ export const useScrollToBottom: (
       el.addEventListener(
         'scroll',
         debounce(async () => {
-          if (!el || !enable) {
+          if (!el || !enable.value) {
             return;
           }
           const { offsetHeight, scrollTop, scrollHeight } = el;

@@ -1,5 +1,4 @@
 <template>
-  FORUM
   <forum-head-bar
     channel-name="general"
     channel-description="this is a channel"
@@ -28,7 +27,7 @@ export default defineComponent({
     PostsList,
   },
   setup() {
-    const isChannelsVisible = ref(true);
+    const isChannelsVisible = ref(false);
     return {
       isChannelsVisible,
     };

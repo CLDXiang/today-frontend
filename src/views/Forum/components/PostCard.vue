@@ -18,7 +18,7 @@
         {{ post.content }}
       </div>
     </div>
-    <div> arsoint</div>
+    <div> {{ timeDiff }}</div>
   </div>
 </template>
 <script lang="ts">
@@ -28,6 +28,12 @@ import { Post } from '../types';
 export default defineComponent({
   props: {
     post: { type: Object as PropType<Post>, default: {} },
+  },
+  computed: {
+    timeDiff() {
+      const res: string = this.post.createdAt.fromNow();
+      return res;
+    },
   },
 });
 </script>

@@ -2,6 +2,7 @@
   <div
     :class="['px-2 pt-2 mb-2 border-b-2 border-gray-100',
              'grid grid-cols-7 gap-1 min-h-28 f-clickable sm:w-160']"
+    @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
   >
     <div>
       <img

@@ -71,13 +71,24 @@ const routes: Array<RouteRecordRaw> = [
     component: Forum,
     children: [
       {
-        path: 'channel/:id',
+        path: 'channel/:channelid',
         component: () =>
           import(
             /* webpackChunkName: "user-state" */
             '@/views/Forum/components/PostsList.vue'
           ),
-        props: (route) => ({ channelId: route.params.id }),
+        props: (route) => ({ channelId: route.params.channelid }),
+        children: [
+          {
+            path: 'reply/:replyid',
+            component: () =>
+              import(
+                /* webpackChunkName: "user-state" */
+                '@/views/Forum/components/RepliesList.vue'
+              ),
+            props: (route) => ({ replyId: route.params.replyid }),
+          },
+        ],
       },
     ],
   },

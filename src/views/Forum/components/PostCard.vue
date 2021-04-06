@@ -1,5 +1,8 @@
 <template>
-  <div class="mb-2 grid grid-cols-7 gap-1">
+  <div
+    :class="['px-2 pt-2 mb-2 border-b-2 border-gray-100',
+             'grid grid-cols-7 gap-1 min-h-28 f-clickable sm:w-160']"
+  >
     <div>
       <img
         class="rounded-full w-9 h-9 border-primary"
@@ -7,8 +10,13 @@
         alt="avatar"
       >
     </div>
-    <div class="col-span-5">
-      {{ post.content }}
+    <div class="text-left col-span-5">
+      <div class="text-lg font-bold h-9">
+        {{ post.title }}
+      </div>
+      <div>
+        {{ post.content }}
+      </div>
     </div>
     <div> arsoint</div>
   </div>

@@ -1,25 +1,28 @@
 <template>
-  <forum-head-bar
-    channel-name="general"
-    channel-description="this is a channel"
-    @click-list-ul="isChannelsVisible = true"
-  />
-  <a-drawer
-    height="90%"
-    placement="left"
-    :closable="false"
-    :visible="isChannelsVisible"
-    @close="isChannelsVisible = false"
-  >
-    <forum-channels-list
-      class="bg-gray-200"
+  <div class="flex flex-col h-full">
+    <forum-head-bar
+      :channel-name="channel.name"
+      :channel-description="channel.description"
+      @click-list-ul="isChannelsVisible = true"
     />
-  </a-drawer>
-  <posts-list class="px-2" />
+    <a-drawer
+      height="90%"
+      placement="left"
+      :closable="false"
+      :visible="isChannelsVisible"
+      @close="isChannelsVisible = false"
+    >
+      <forum-channels-list
+        class="bg-gray-200"
+      />
+    </a-drawer>
+    <posts-list :posts="mockPosts" />
   <!-- rich text editor -->
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { mockPosts } from '@/apis/mocks/posts';
 import { ForumHeadBar, ForumChannelsList, PostsList } from './components';
 
 export default defineComponent({
@@ -28,10 +31,23 @@ export default defineComponent({
     ForumChannelsList,
     PostsList,
   },
+  props: {
+    channelId: { type: Number, default: 1 },
+  },
   setup() {
     const isChannelsVisible = ref(false);
+    // TODO: api: 根据 channelId (props) 获取 posts
+    // TODO: api: 根据 channelId (props) 获取 channel 信息
+
+    const channel = {
+      name: 'general',
+      description: 'this is a channel',
+    };
+
     return {
       isChannelsVisible,
+      mockPosts, // FIXME: 接入 api 后替换
+      channel, // FIXME: 接入 api 后替换
     };
   },
 });

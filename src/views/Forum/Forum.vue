@@ -56,9 +56,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.ant-drawer-wrapper-body {
-  @apply bg-gray-200;
-}
-</style>

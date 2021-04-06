@@ -1,4 +1,14 @@
 <template>
+  <div class="flex mb-4 f-clickable">
+    <div class="pt-1">
+      <f-icon
+        name="chat-square-quote"
+        size="16"
+        class="mr-2"
+      />
+    </div>
+    <div>树洞</div>
+  </div>
   <div
     v-for="channelGroup in mockChannelGroups"
     :key="channelGroup.id"

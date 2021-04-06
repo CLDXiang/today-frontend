@@ -68,27 +68,21 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/forum',
     name: 'Forum',
+    redirect: '/forum/channel/1',
+  },
+  {
+    path: '/forum/channel/:channelid',
     component: Forum,
+    props: (route) => ({ channelId: route.params.channelid }),
     children: [
       {
-        path: 'channel/:channelid',
+        path: '/forum/channel/:channelid/reply/:replyid',
         component: () =>
           import(
             /* webpackChunkName: "user-state" */
-            '@/views/Forum/components/PostsList.vue'
+            '@/views/Forum/components/RepliesList.vue'
           ),
-        props: (route) => ({ channelId: route.params.channelid }),
-        children: [
-          {
-            path: 'reply/:replyid',
-            component: () =>
-              import(
-                /* webpackChunkName: "user-state" */
-                '@/views/Forum/components/RepliesList.vue'
-              ),
-            props: (route) => ({ replyId: route.params.replyid }),
-          },
-        ],
+        props: (route) => ({ replyId: route.params.replyid }),
       },
     ],
   },
@@ -106,7 +100,7 @@ export const HeapPagePathReges = [
   /\/forgot-password$/,
   /\/register$/,
   /\/about$/,
-  /\/forum/,
+  /\/forum.*$/,
 ];
 
 const router = createRouter({

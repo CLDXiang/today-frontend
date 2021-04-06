@@ -44,7 +44,6 @@
 import { defineComponent } from 'vue';
 import { FIcon } from '@/components/common';
 import { mockChannelGroups } from '@/apis/mocks/forum';
-// TODO: 接入后端 api 拉取 channels
 
 export default defineComponent({
   components: {

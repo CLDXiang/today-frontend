@@ -11,7 +11,7 @@
           class="ml-4 mr-2 f-clickable"
         />
       </div>
-      <div class="pt-1 mr-2">
+      <div class="pt-1 ml-20 mr-2">
         <f-icon
           name="number-sign"
           size="24"

@@ -16,7 +16,11 @@
         class="bg-gray-200"
       />
     </a-drawer>
-    <posts-list :posts="mockPosts" />
+    <router-view />
+    <posts-list
+      v-if="$router.currentRoute._rawValue.matched.length === 1"
+      :posts="mockPosts"
+    />
   <!-- rich text editor -->
   </div>
 </template>

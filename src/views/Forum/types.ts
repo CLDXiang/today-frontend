@@ -30,6 +30,8 @@ export interface Post {
   title: string;
   /** 创建时间 */
   createdAt: Dayjs;
+  /** 属于哪一个 channel */
+  channelId: number;
   /** 发布者信息 */
   creator: {
     /** 发布者用户 ID */

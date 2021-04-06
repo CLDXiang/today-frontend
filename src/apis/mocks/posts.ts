@@ -8,6 +8,7 @@ export const mockPosts: Post[] = [
     content: '这是有史以来第一篇帖子',
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
+    replyCount: 13,
     creator: {
       id: '234',
       nickname: '张陆洋',
@@ -18,6 +19,7 @@ export const mockPosts: Post[] = [
     id: 2,
     title: '第二篇帖子',
     content: '这是有史以来第二篇帖子',
+    replyCount: 24,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -30,6 +32,7 @@ export const mockPosts: Post[] = [
     id: 3,
     title: '第三篇帖子',
     content: '这是有史以来第三篇帖子',
+    replyCount: 1,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -42,6 +45,7 @@ export const mockPosts: Post[] = [
     id: 4,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 7,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -54,6 +58,7 @@ export const mockPosts: Post[] = [
     id: 5,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 14,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -66,6 +71,7 @@ export const mockPosts: Post[] = [
     id: 6,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 10,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -78,6 +84,7 @@ export const mockPosts: Post[] = [
     id: 7,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 0,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -90,6 +97,7 @@ export const mockPosts: Post[] = [
     id: 8,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 0,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -102,6 +110,7 @@ export const mockPosts: Post[] = [
     id: 9,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 2,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {
@@ -114,6 +123,7 @@ export const mockPosts: Post[] = [
     id: 10,
     title: '第四篇帖子',
     content: '这是有史以来第四篇帖子',
+    replyCount: 5,
     createdAt: dayjs('Wed Oct 14 2020 00:09:33 GMT+0800 (中国标准时间)'),
     channelId: 1,
     creator: {

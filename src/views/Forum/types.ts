@@ -29,6 +29,8 @@ export interface Post {
   content: string;
   /** 帖子标题 */
   title?: string;
+  /** 回复数量 */
+  replyCount?: number;
   /** 创建时间 */
   createdAt: Dayjs;
   /** 属于哪一个 channel */

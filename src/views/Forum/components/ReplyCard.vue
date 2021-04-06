@@ -6,17 +6,12 @@
     <div>
       <img
         class="rounded-full w-9 h-9 border-primary"
-        :src="post.creator.avatar"
+        :src="reply.creator.avatar"
         alt="avatar"
       >
     </div>
     <div class="text-left col-span-5">
-      <div class="text-lg font-bold h-9">
-        {{ post.title }}
-      </div>
-      <div>
-        {{ post.content }}
-      </div>
+      {{ reply.content }}
     </div>
     <div> {{ timeDiff }}</div>
   </div>
@@ -29,11 +24,11 @@ import { Post } from '../types';
 
 export default defineComponent({
   props: {
-    post: { type: Object as PropType<Post>, default: {} },
+    reply: { type: Object as PropType<Post>, default: {} },
   },
   computed: {
     timeDiff() {
-      const res: string = this.post.createdAt.fromNow();
+      const res: string = this.reply.createdAt.fromNow();
       return res;
     },
   },

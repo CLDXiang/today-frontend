@@ -31,6 +31,8 @@ export interface Post {
   title?: string;
   /** 回复数量 */
   replyCount?: number;
+  /** 赞的数量 */
+  thumbupCount: number;
   /** 创建时间 */
   createdAt: Dayjs;
   /** 属于哪一个 channel */

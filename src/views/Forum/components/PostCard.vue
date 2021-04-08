@@ -34,8 +34,27 @@
         <div class="text-lg font-bold h-9">
           {{ post.title }}
         </div>
-        <div>
+        <div class="mb-3 line-limit">
           {{ post.content }}
+        </div>
+        <div class="flex">
+          <f-icon
+            name="hand-thumbs-up"
+            size="16"
+            class="mr-1"
+          />
+          <div class="mr-3">
+            {{ post.thumbupCount }}
+          </div>
+          <div
+            class="pt-0.5 mr-2 f-clickable"
+          >
+            <f-icon
+              name="share"
+              size="16"
+            />
+          </div>
+          Share
         </div>
       </div>
       <div
@@ -75,3 +94,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.line-limit {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+</style>

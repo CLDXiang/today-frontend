@@ -18,11 +18,26 @@
         {{ channelDescription }}
       </div>
     </div>
+    <div
+      v-if="isBackVisible"
+      class="flex-auto flex justify-end mr-2"
+    >
+      <a-button
+        size="small"
+        type="link"
+        @click="$router.back()"
+      >
+        返回上页
+      </a-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
+import {
+  defineComponent, onMounted, ref, watch,
+} from 'vue';
 
 export default defineComponent({
   props: {
@@ -30,5 +45,29 @@ export default defineComponent({
     channelDescription: { type: String, required: true },
   },
   emits: ['click-list-ul'],
+  setup() {
+    const route = useRoute();
+    const isBackVisible = ref(false);
+
+    const handleRoute = () => {
+      if (route.path.includes('/reply/')) {
+        isBackVisible.value = true;
+      } else {
+        isBackVisible.value = false;
+      }
+    };
+
+    onMounted(() => {
+      handleRoute();
+    });
+
+    watch(() => route.path, () => {
+      handleRoute();
+    });
+
+    return {
+      isBackVisible,
+    };
+  },
 });
 </script>

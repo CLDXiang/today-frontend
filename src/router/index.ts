@@ -7,7 +7,7 @@ const Notification = () =>
   import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
 const About = () => import(/* webpackChunkName: "about" */ '@/views/About/About.vue');
 const User = () => import(/* webpackChunkName: "user" */ '@/views/User/User.vue');
-const Forum = () => import(/* webpackChunkName: "user" */ '@/views/Forum/Forum.vue');
+const Forum = () => import(/* webpackChunkName: "forum" */ '@/views/Forum/Forum.vue');
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/timetable' },
@@ -75,7 +75,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/forum/channel/:channelid/reply/:postid',
         component: () =>
           import(
-            /* webpackChunkName: "user-state" */
+            /* webpackChunkName: "forum" */
             '@/views/Forum/components/RepliesList.vue'
           ),
         props: (route) => ({ postId: route.params.postid }),
@@ -84,7 +84,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/forum/channel/:channelid',
         component: () =>
           import(
-            /* webpackChunkName: "user-state" */
+            /* webpackChunkName: "forum" */
             '@/views/Forum/components/PostsList.vue'
           ),
         props: (route) => ({ channelId: route.params.channelid }),

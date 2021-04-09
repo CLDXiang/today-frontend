@@ -12,7 +12,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '张陆洋',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=zly',
     },
   },
   {
@@ -24,7 +24,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '吴蚝田',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=wht',
     },
   },
   {
@@ -36,7 +36,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '张银时',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=zys',
     },
   },
   {
@@ -48,7 +48,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
   {
@@ -60,7 +60,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
   {
@@ -72,7 +72,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
   {
@@ -84,7 +84,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
   {
@@ -96,7 +96,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
   {
@@ -108,7 +108,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
   {
@@ -120,7 +120,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random',
+      avatar: 'https://source.unsplash.com/random?q=ll',
     },
   },
 ];

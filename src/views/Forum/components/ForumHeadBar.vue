@@ -1,26 +1,20 @@
 <template>
   <div
-    class="h-12 pb-8 mt-4 border-b-2"
+    class="h-14 flex items-center flex-shrink-0"
   >
-    <div class="flex">
-      <div class="mt-1">
-        <f-icon
-          name="list-ul"
-          size="24"
-          class="ml-4 mr-2 f-clickable"
-          @click="$emit('click-list-ul')"
-        />
-      </div>
-      <div class="pt-1 ml-20 mr-2">
-        <f-icon
-          name="number-sign"
-          size="24"
-        />
-      </div>
-      <div class="pb-4 mr-2 text-lg font-bold">
+    <div>
+      <f-icon
+        name="list-ul"
+        size="24"
+        class="ml-4 mr-2 f-clickable"
+        @click="$emit('click-list-ul')"
+      />
+    </div>
+    <div class="flex-auto flex flex-col items-start ml-1">
+      <div class="text-lg font-bold">
         {{ channelName }}
       </div>
-      <div class="pt-1 text-base">
+      <div class="text-xs text-gray-500">
         {{ channelDescription }}
       </div>
     </div>

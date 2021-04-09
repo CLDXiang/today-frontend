@@ -69,7 +69,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/forum',
     name: 'Forum',
     component: Forum,
-    redirect: '/forum/channel/1',
+    redirect: '/forum/channel/0',
     children: [
       {
         path: '/forum/channel/:channelId/reply/:postId',

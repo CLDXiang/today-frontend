@@ -21,7 +21,7 @@
 <script lang="ts">
 import { useRoute } from 'vue-router';
 import {
-  computed, defineComponent, onUpdated, ref, watch,
+  computed, defineComponent, ref, watch,
 } from 'vue';
 import { mockChannelGroups } from '@/apis/mocks/forum';
 import { ForumHeadBar, ForumChannelsList } from './components';

@@ -37,7 +37,7 @@
           {{ post.title }}
         </div>
         <div
-          class="mb-3 line-limit f-clickable"
+          class="mb-3 line-limit f-clickable white-space-pre-wrap overflow-hidden"
           @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
         >
           {{ post.content }}
@@ -49,7 +49,7 @@
             class="mr-1"
           />
           <div class="mr-3">
-            {{ post.thumbupCount }}
+            {{ post.thumbUpCount }}
           </div>
           <div
             class="pt-0.5 mr-2 f-clickable"

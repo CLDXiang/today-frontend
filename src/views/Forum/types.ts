@@ -20,7 +20,7 @@ export interface ChannelGroup {
   channels: Channel[];
 }
 
-/** 帖子与回复本质上一样，知识多了 title */
+/** 帖子与回复本质上一样，只是多了 title */
 /** 帖子 */
 export interface Post {
   /** 帖子 ID */
@@ -32,11 +32,9 @@ export interface Post {
   /** 回复数量 */
   replyCount?: number;
   /** 赞的数量 */
-  thumbupCount: number;
+  thumbUpCount: number;
   /** 创建时间 */
   createdAt: Dayjs;
-  /** 属于哪一个 channel */
-  channelId: number;
   /** 发布者信息 */
   creator: {
     /** 发布者用户 ID */

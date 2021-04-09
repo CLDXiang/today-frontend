@@ -55,7 +55,7 @@ export const mockChannels3: Channel[] = [
   {
     id: 4,
     name: '求职攻略',
-    description: '一切关于实习和工作的攻略，帮助你更清晰地规划自己的职业生涯',
+    description: '一切关于实习和工作的攻略',
   },
 ];
 

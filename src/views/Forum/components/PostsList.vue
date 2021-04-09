@@ -25,7 +25,7 @@
     ref="scrollBottom"
     class="overflow-y-auto"
   >
-    <post-card
+    <thread-card
       v-for="post in posts"
       :key="post.id"
       :post="post"
@@ -38,12 +38,13 @@ import {
   defineComponent, watch, ref, onMounted,
 } from 'vue';
 import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
-import { PostCard } from './index';
+import { PostCard, ThreadCard } from './index';
 import { Post } from '../types';
 
 export default defineComponent({
   components: {
     PostCard,
+    ThreadCard,
   },
   props: {
     channelId: { type: String, default: '1-1' },

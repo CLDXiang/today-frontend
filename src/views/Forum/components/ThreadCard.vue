@@ -1,49 +1,31 @@
 <template>
   <div
-    class="p-2 border-b-2 border-gray-100 min-h-28"
+    class="p-2 border-b-2 border-gray-100 flex"
     @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
   >
-    <div class="flex mb-1">
-      <img
-        class="mr-2 rounded-full w-8 h-8 border-primary"
-        :src="post.creator.avatar"
-        alt="avatar"
-      >
-      <span class="flex flex-col items-start">
-        <div class="text-sm font-bold text-gray-700">{{ post.creator.nickname }}</div>
-        <div class="text-xs text-gray-500">{{ timeDiff }}</div>
-      </span>
-      <span class="flex-auto flex justify-end items-center text-gray-500 text-sm">
-        <span class="flex">
-          <f-icon
-            name="hand-thumbs-up"
-            size="16"
-            class="mr-1"
-          />
-          <div class="mr-3">
-            {{ post.thumbUpCount }}
-          </div></span>
-        <span class="flex">
-          <f-icon
-            name="chat"
-            size="16"
-            class="mr-1"
-          />
-          <div class="mr-3">
-            {{ post.replyCount }}
-          </div>
-        </span>
-      </span>
-    </div>
-    <div class="text-left">
-      <div
-        v-if="post.title"
-        class="font-bold text-base"
-      >
-        {{ post.title }}
+    <img
+      v-if="post.creator.avatar"
+      class="mr-2 rounded-lg w-8 h-8 border-primary flex-shrink-0"
+      :src="post.creator.avatar"
+      alt="avatar"
+    >
+    <div class="flex flex-col items-stretch text-left flex-auto">
+      <div class="flex justify-between items-center">
+        <span class="font-bold text-gray-700 mr-2">{{ post.creator.nickname }}</span>
+        <span class="text-xs text-gray-500">{{ timeDiff }}</span>
       </div>
-      <div class="line-limit overflow-hidden text-sm whitespace-pre-wrap">
+      <div class="text-sm whitespace-pre-wrap">
         {{ post.content }}
+      </div>
+      <div class="self-end flex items-center text-xs text-primary mt-1">
+        <f-icon
+          name="chat"
+          size="16"
+          class="mr-1"
+        />
+        <div>
+          {{ post.replyCount }} 条回复
+        </div>
       </div>
     </div>
   </div>

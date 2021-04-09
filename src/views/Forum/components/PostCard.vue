@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-2 border-b-2 border-gray-100 min-h-28"
+    class="p-2 border-b-2 border-gray-100"
     @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
   >
     <div class="flex mb-1">

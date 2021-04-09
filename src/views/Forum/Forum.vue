@@ -20,7 +20,9 @@
 </template>
 <script lang="ts">
 import { useRoute } from 'vue-router';
-import { computed, defineComponent, ref } from 'vue';
+import {
+  computed, defineComponent, onUpdated, ref, watch,
+} from 'vue';
 import { mockChannelGroups } from '@/apis/mocks/forum';
 import { ForumHeadBar, ForumChannelsList } from './components';
 
@@ -34,8 +36,6 @@ export default defineComponent({
   },
   setup() {
     const isChannelsVisible = ref(false);
-    // TODO: api: 根据 channelId (props) 获取 posts
-    // TODO: api: 根据 channelId (props) 获取 channel 信息
 
     const route = useRoute();
 
@@ -54,6 +54,11 @@ export default defineComponent({
         name: channelInfo?.name || '',
         description: channelInfo?.description || '',
       };
+    });
+
+    watch(channel, () => {
+      // 切路由时关闭抽屉
+      isChannelsVisible.value = false;
     });
 
     return {

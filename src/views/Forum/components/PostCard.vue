@@ -16,7 +16,7 @@
       </span>
       <span class="flex-auto flex justify-end items-center text-gray-500 text-sm">
         <span
-          v-if="post.thumbUpCount"
+          v-if="post.thumbUpCount !== undefined"
           class="flex"
         >
           <f-icon
@@ -27,7 +27,10 @@
           <div class="mr-3">
             {{ post.thumbUpCount }}
           </div></span>
-        <span class="flex">
+        <span
+          v-if="post.replyCount !== undefined"
+          class="flex"
+        >
           <f-icon
             name="chat"
             size="16"

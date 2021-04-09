@@ -1,5 +1,26 @@
 <template>
-  <div class="overflow-y-auto sm:mx-auto">
+  <div class="overflow-y-auto sm:mx-auto relative">
+    <div class="text-base font-bold p-2 text-left">
+      从来没有实习经历的大学生如何找实习？【转载】
+    </div>
+    <div class="flex mb-1 p-2 pt-0">
+      <img
+        v-if="post.creator.avatar"
+        class="mr-2 rounded-full w-8 h-8 border-primary"
+        :src="post.creator.avatar"
+        alt="avatar"
+      >
+      <span class="flex flex-col items-start">
+        <div class="text-sm font-bold text-gray-700">{{ post.creator.nickname }}</div>
+        <div class="text-xs text-gray-500">{{ post.createdAt }}</div>
+      </span>
+      <span class="flex-auto flex justify-end mr-3 mt-1">
+        <a-button
+          size="small"
+          class="bg-primary border-none text-white"
+        >关注+</a-button>
+      </span>
+    </div>
     <div class="text-left break-all whitespace-pre-wrap space-y-2 p-2">
       <p>
         作者：Layne.Lu
@@ -1103,19 +1124,17 @@
       </figure>
       <p />
     </div>
-    <div class="h-8 mt-2 hover:text-primary f-clickable">
-      <f-icon
-        name="back"
-        :width="14"
-        :height="14"
-        @click="routerBack('/forum')"
-      />
+    <div class="font-bold border-t-2 p-2">
+      全部评论 12
     </div>
-
-    <reply-card
+    <post-card
       v-for="reply in replies"
       :key="reply.id"
-      :reply="reply"
+      :post="reply"
+    />
+    <richtext-input
+      class="sticky bottom-0"
+      @send="sendMessage"
     />
   </div>
 </template>
@@ -1123,11 +1142,14 @@
 import { defineComponent } from 'vue';
 import { mockReplies } from '@/apis/mocks/replies';
 import { useRouterBack } from '@/composables/useRouterBack';
-import ReplyCard from './ReplyCard.vue';
+import dayjs from 'dayjs';
+import RichtextInput from '@/components/RichtextInput.vue';
+import PostCard from './PostCard.vue';
 
 export default defineComponent({
   components: {
-    ReplyCard,
+    PostCard, RichtextInput,
+
   },
   props: {
     postId: { type: String, default: '1' },
@@ -1135,11 +1157,22 @@ export default defineComponent({
   setup() {
     // TODO: api: 根据 postId 获取所有回复
     const replies = mockReplies.slice(1);
-    const post = mockReplies[0];
     // TODO: root post 显示不一样的样式
     return {
       replies,
-      post,
+      post: {
+        id: 1,
+        content: '讲的简单粗暴点：一份高质量的实习offer，对于你的成长速度，可能比你待在学校前几年成长速度的总和都要快的多！一份高质量的实习经历，对于一个普通的本科生来说，是你能够和同年龄985同学乃至硕士同台竞争的。\n\n但大多数同学对于实习的认知，就是学校给分配，然后自己作为一个学生去简单“历练”“历练”，体验下工作生活就完事了~\n\n通常会养成这个观点，是因为学校老师、前几届的学长学姐等等给（xian）予（zhi）了我们的认知~',
+        title: '从来没有实习经历的大学生如何找实习？【转载】',
+        replyCount: 12,
+        thumbUpCount: 51,
+        createdAt: dayjs('20210409132256').fromNow(),
+        creator: {
+          id: '1',
+          nickname: '钱果果',
+          avatar: 'https://picsum.photos/seed/qgg/40/40',
+        },
+      },
       routerBack: useRouterBack(),
     };
   },

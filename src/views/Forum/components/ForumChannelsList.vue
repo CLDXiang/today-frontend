@@ -1,5 +1,8 @@
 <template>
-  <div class="flex mb-4 f-clickable">
+  <div
+    class="flex mb-4 f-clickable"
+    @click="$router.push(`/forum/channel/0`);"
+  >
     <div class="pt-1">
       <f-icon
         name="chat-square-quote"
@@ -7,7 +10,7 @@
         class="mr-2"
       />
     </div>
-    <div>树洞</div>
+    <div>匿名树洞</div>
   </div>
   <div
     v-for="channelGroup in mockChannelGroups"
@@ -27,7 +30,7 @@
       v-for="channel in channelGroup.channels"
       :key="channel.id"
       class="flex h-8 pt-1 focus:bg-gray-400 f-clickable"
-      @click="$router.push({ path: `/forum/channel/${channel.id}`, params: { id: channel.id } });"
+      @click="$router.push(`/forum/channel/${channelGroup.id}-${channel.id}`);"
     >
       <div class="pt-1 mr-2">
         <f-icon
@@ -58,9 +61,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.f-clickable {
-  @apply hover:bg-gray-400;
-}
-</style>

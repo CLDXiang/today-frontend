@@ -1,6 +1,15 @@
 import { Post } from '@/views/Forum/types';
 import dayjs from 'dayjs';
 
+/** 树洞 */
+export const mockPostsSecret: Post[] = [];
+
+/** 闲聊 */
+export const mockPostsChat: Post[] = [];
+
+/** 求职攻略 */
+export const mockPostsWork: Post[] = [];
+
 const mockPosts: Post[] = [
   {
     id: 1,
@@ -429,5 +438,3 @@ const mockPosts3: Post[] = [
     },
   },
 ];
-
-export { mockPosts, mockPosts2, mockPosts3 };

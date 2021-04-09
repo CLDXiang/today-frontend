@@ -3,35 +3,36 @@ import { Channel, ChannelGroup } from '@/views/Forum/types';
 export const mockChannels1: Channel[] = [
   {
     id: 1,
-    name: '官方消息',
-    description: '学校官方发布的消息',
+    name: '校园快讯',
+    description: '',
   },
   {
     id: 2,
-    name: '闲聊灌水',
-    description: '随便聊聊',
+    name: '校友杂谈',
+    description: '尽情闲聊吧！',
   },
   {
     id: 3,
     name: '校园活动',
-    description: '最近有啥活动瞅瞅',
+    description: '',
   },
   {
     id: 4,
-    name: '约饭约自习',
-    description: '校园有约',
+    name: '约自习',
+    description: '',
   },
 ];
+
 export const mockChannels2: Channel[] = [
   {
     id: 1,
-    name: '运动打卡',
-    description: '天天运动',
+    name: '社团交流',
+    description: '',
   },
   {
     id: 2,
-    name: '书影音',
-    description: '一起阅读观影',
+    name: '寻找同好',
+    description: '',
   },
 ];
 
@@ -39,22 +40,22 @@ export const mockChannels3: Channel[] = [
   {
     id: 1,
     name: '选课交流',
-    description: '交流交流选课相关信息',
+    description: '',
   },
   {
     id: 2,
     name: '资料分享',
-    description: '学习有关的资料分享',
+    description: '',
   },
   {
     id: 3,
-    name: '升学备考经验',
-    description: '问问学长姐考试那些事',
+    name: '留学经验',
+    description: '',
   },
   {
     id: 4,
-    name: '实习求职经验',
-    description: '问问学长姐求职那些事',
+    name: '求职攻略',
+    description: '一切关于实习和工作的攻略，帮助你更清晰地规划自己的职业生涯',
   },
 ];
 
@@ -67,19 +68,6 @@ export const mockChannels4: Channel[] = [
   {
     id: 2,
     name: '用户反馈',
-    description: '关于平台想说的都可以',
-  },
-];
-
-export const mockChannels5: Channel[] = [
-  {
-    id: 1,
-    name: '尤克里里',
-    description: '',
-  },
-  {
-    id: 2,
-    name: '钢琴协会',
     description: '',
   },
 ];
@@ -87,27 +75,22 @@ export const mockChannels5: Channel[] = [
 export const mockChannelGroups: ChannelGroup[] = [
   {
     id: 1,
-    name: '校园生活',
+    name: '复旦生活',
     channels: mockChannels1,
   },
   {
     id: 2,
-    name: '兴趣广场',
+    name: '兴趣小组',
     channels: mockChannels2,
   },
   {
     id: 3,
-    name: '生存手册',
+    name: '攻略指南',
     channels: mockChannels3,
   },
   {
     id: 4,
-    name: '社区建设',
+    name: '社区事务',
     channels: mockChannels4,
-  },
-  {
-    id: 5,
-    name: '社团天地',
-    channels: mockChannels5,
   },
 ];

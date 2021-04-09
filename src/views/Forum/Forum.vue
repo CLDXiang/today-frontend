@@ -12,16 +12,16 @@
       :visible="isChannelsVisible"
       @close="isChannelsVisible = false"
     >
-      <forum-channels-list
-        class="bg-gray-200"
-      />
+      <forum-channels-list class="bg-gray-200" />
     </a-drawer>
     <router-view />
-  <!-- rich text editor -->
+    <!-- rich text editor -->
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { computed, defineComponent, ref } from 'vue';
+import { mockChannelGroups } from '@/apis/mocks/forum';
 import { ForumHeadBar, ForumChannelsList } from './components';
 
 export default defineComponent({
@@ -37,14 +37,28 @@ export default defineComponent({
     // TODO: api: 根据 channelId (props) 获取 posts
     // TODO: api: 根据 channelId (props) 获取 channel 信息
 
-    const channel = {
-      name: 'general',
-      description: 'this is a channel',
-    };
+    const route = useRoute();
+
+    const channel = computed(() => {
+      if (route.params.channelId === '0') {
+        return {
+          name: '匿名树洞',
+          description: '说点悄悄话',
+        };
+      }
+      const [channelGroupId, channelId] = (route.params.channelId as string).split('-');
+      const channelInfo = mockChannelGroups.find(
+        (cg) => cg.id === parseInt(channelGroupId, 10),
+      )?.channels.find((c) => c.id === parseInt(channelId, 10));
+      return {
+        name: channelInfo?.name || '',
+        description: channelInfo?.description || '',
+      };
+    });
 
     return {
       isChannelsVisible,
-      channel, // FIXME: 接入 api 后替换
+      channel,
     };
   },
 });

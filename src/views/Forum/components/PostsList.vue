@@ -1,29 +1,39 @@
 <template>
   <div class="overflow-y-auto sm:mx-auto">
     <post-card
-      v-for="post in posts[channelId - 1]"
+      v-for="post in posts"
       :key="post.id"
       :post="post"
     />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mockPosts, mockPosts2, mockPosts3 } from '@/apis/mocks/posts';
+import { computed, defineComponent } from 'vue';
+import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
 import { PostCard } from './index';
+import { Post } from '../types';
 
 export default defineComponent({
   components: {
     PostCard,
   },
   props: {
-    channelId: { type: String, default: '1' },
+    channelId: { type: String, default: '1-1' },
   },
-  setup() {
-    const posts = [];
-    posts.push(mockPosts);
-    posts.push(mockPosts2);
-    posts.push(mockPosts3);
+  setup(props) {
+    const posts = computed<Post[]>(() => {
+      switch (props.channelId) {
+        case '0':
+          return mockPostsSecret;
+        case '1-2':
+          return mockPostsChat;
+        case '3-4':
+          return mockPostsWork;
+        default:
+          return [];
+      }
+    });
+
     return {
       posts,
     };

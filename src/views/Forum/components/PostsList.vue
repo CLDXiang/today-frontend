@@ -30,7 +30,10 @@
       :key="post.id"
       :post="post"
     />
-    <richtext-input class="sticky bottom-0" />
+    <richtext-input
+      class="sticky bottom-0"
+      @send="sendMessage"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -127,9 +130,25 @@ export default defineComponent({
       },
     );
 
+    const sendMessage = (content: string) => {
+      posts.value = [...posts.value, {
+        id: 999,
+        content,
+        replyCount: 0,
+        createdAt: dayjs(),
+        creator: {
+          id: '233',
+          nickname: '测试用账户',
+          avatar: 'https://picsum.photos/seed/cs/40/40',
+        },
+      }];
+      scrollToBottom();
+    };
+
     return {
       posts,
       scrollBottom: scrollBottomRef,
+      sendMessage,
     };
   },
 });

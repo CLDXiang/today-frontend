@@ -2,7 +2,58 @@ import { Post } from '@/views/Forum/types';
 import dayjs from 'dayjs';
 
 /** 树洞 */
-export const mockPostsSecret: Post[] = [];
+export const mockPostsSecret: Post[] = [
+  {
+    id: 1,
+    content: '有同学认识数院的 wsx 同学吗？求联系方式',
+    replyCount: 2,
+    createdAt: dayjs('20210405231123'),
+    creator: {
+      id: '1',
+      nickname: '匿名同学',
+    },
+  },
+  {
+    id: 2,
+    content: '期中季压力真的好大，身边也没有可以随意倾诉的人，大家遇到压力大的时候都是怎么排解的呢？',
+    replyCount: 33,
+    createdAt: dayjs('20210406215021'),
+    creator: {
+      id: '2',
+      nickname: '匿名同学',
+    },
+  },
+  {
+    id: 3,
+    content: '为什么那么多年都没有出现能替代日月光华的复旦校内社区软件？',
+    replyCount: 14,
+    createdAt: dayjs('20210406225152'),
+    creator: {
+      id: '3',
+      nickname: '匿名同学',
+    },
+  },
+  {
+    id: 4,
+    content: '受不了了，提前一天占座是不是不太合适？甚至有人占座后又不来上课\n\n谁能管一管呀！！',
+    replyCount: 32,
+    createdAt: dayjs('20210406231223'),
+    creator: {
+      id: '4',
+      nickname: '匿名同学',
+    },
+  },
+  {
+    id: 5,
+    content: '最近和室友一起试了试在寝室自习，在商量好学习和休息时间的前提下其实还蛮舒服的\n\n我们寝室现在的时间表是：\n\n- 7:00am 起床洗漱\n\n 7:30am 一起去吃早饭\n\n',
+    replyCount: 28,
+    createdAt: dayjs('20210408201212'),
+    creator: {
+      id: '5',
+      nickname: '匿名同学',
+    },
+  },
+];
 
 /** 闲聊 */
 export const mockPostsChat: Post[] = [];

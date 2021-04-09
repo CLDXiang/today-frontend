@@ -5,6 +5,7 @@
   >
     <div class="flex mb-1">
       <img
+        v-if="post.creator.avatar"
         class="mr-2 rounded-full w-8 h-8 border-primary"
         :src="post.creator.avatar"
         alt="avatar"
@@ -14,7 +15,10 @@
         <div class="text-xs text-gray-500">{{ timeDiff }}</div>
       </span>
       <span class="flex-auto flex justify-end items-center text-gray-500 text-sm">
-        <span class="flex">
+        <span
+          v-if="post.thumbUpCount"
+          class="flex"
+        >
           <f-icon
             name="hand-thumbs-up"
             size="16"
@@ -38,7 +42,7 @@
     <div class="text-left">
       <div
         v-if="post.title"
-        class="font-bold text-base"
+        class="font-bold text-sm my-1"
       >
         {{ post.title }}
       </div>

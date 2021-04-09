@@ -1,5 +1,8 @@
 <template>
-  <div class="overflow-y-auto sm:mx-auto">
+  <div
+    v-if="['3-4', '0'].includes(channelId)"
+    class="overflow-y-auto sm:mx-auto"
+  >
     <post-card
       v-for="post in posts"
       :key="post.id"
@@ -16,6 +19,17 @@
         size="24"
       />
     </div>
+  </div>
+  <div
+    v-else
+    class="overflow-y-auto sm:mx-auto"
+  >
+    <post-card
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+    />
+    <!-- TODO: rich text input box -->
   </div>
 </template>
 <script lang="ts">

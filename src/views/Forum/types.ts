@@ -32,7 +32,7 @@ export interface Post {
   /** 回复数量 */
   replyCount?: number;
   /** 赞的数量 */
-  thumbUpCount: number;
+  thumbUpCount?: number;
   /** 创建时间 */
   createdAt: Dayjs;
   /** 发布者信息 */
@@ -42,6 +42,6 @@ export interface Post {
     /** 发布者昵称 */
     nickname: string;
     /** 发布者头像 */
-    avatar: string;
+    avatar?: string;
   };
 }

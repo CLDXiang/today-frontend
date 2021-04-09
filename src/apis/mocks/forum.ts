@@ -8,7 +8,7 @@ export const mockChannels1: Channel[] = [
   },
   {
     id: 2,
-    name: '校友杂谈',
+    name: '闲聊杂谈',
     description: '尽情闲聊吧！',
   },
   {

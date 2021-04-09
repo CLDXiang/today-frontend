@@ -90,7 +90,7 @@ export default defineComponent({
             creator: {
               id: '5',
               nickname: '许丽雅',
-              avatar: 'https://source.unsplash.com/random/40x40?q=xly',
+              avatar: 'https://picsum.photos/seed/xly/40/40',
             },
           }];
           scrollToBottom();
@@ -106,7 +106,7 @@ export default defineComponent({
             creator: {
               id: '6',
               nickname: '张华齐',
-              avatar: 'https://source.unsplash.com/random/40x40?q=zhq',
+              avatar: 'https://picsum.photos/seed/zhq/40/40',
             },
           }];
           scrollToBottom();

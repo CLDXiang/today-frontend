@@ -11,7 +11,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '张陆洋',
-      avatar: 'https://source.unsplash.com/random/40x40?q=zly',
+      avatar: 'https://picsum.photos/seed/zly/40/40',
     },
   },
   {
@@ -22,7 +22,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '吴蚝田',
-      avatar: 'https://source.unsplash.com/random/40x40?q=wht',
+      avatar: 'https://picsum.photos/seed/wht/40/40',
     },
   },
   {
@@ -33,7 +33,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '张银时',
-      avatar: 'https://source.unsplash.com/random/40x40?q=zys',
+      avatar: 'https://picsum.photos/seed/zys/40/40',
     },
   },
   {
@@ -44,7 +44,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
   {
@@ -55,7 +55,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
   {
@@ -66,7 +66,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
   {
@@ -77,7 +77,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
   {
@@ -88,7 +88,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
   {
@@ -99,7 +99,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
   {
@@ -110,7 +110,7 @@ export const mockReplies: Post[] = [
     creator: {
       id: '234',
       nickname: '刘乐',
-      avatar: 'https://source.unsplash.com/random/40x40?q=ll',
+      avatar: 'https://picsum.photos/seed/ll/40/40',
     },
   },
 ];

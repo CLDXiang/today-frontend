@@ -27,7 +27,7 @@ export default defineComponent({
     ReplyCard,
   },
   props: {
-    postId: { type: Number, default: 1 },
+    postId: { type: String, default: '1' },
   },
   setup() {
     // TODO: api: 根据 postId 获取所有回复

@@ -12,7 +12,7 @@
       :visible="isChannelsVisible"
       @close="isChannelsVisible = false"
     >
-      <forum-channels-list class="bg-gray-200" />
+      <forum-channels-list />
     </a-drawer>
     <router-view />
     <!-- rich text editor -->

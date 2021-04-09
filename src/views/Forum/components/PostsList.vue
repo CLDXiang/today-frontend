@@ -8,7 +8,9 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import {
+  defineComponent, watch, ref,
+} from 'vue';
 import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
 import { PostCard } from './index';
 import { Post } from '../types';
@@ -21,21 +23,34 @@ export default defineComponent({
     channelId: { type: String, default: '1-1' },
   },
   setup(props) {
-    const posts = computed<Post[]>(() => {
+    const posts = ref<Post[]>([]);
+
+    switch (props.channelId) {
+      case '0':
+        posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)); break;
+      case '1-2':
+        posts.value = mockPostsChat.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)); break;
+      case '3-4':
+        posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)); break;
+      default:
+        posts.value = [];
+    }
+
+    watch(() => props.channelId, () => {
       switch (props.channelId) {
         case '0':
-          return mockPostsSecret;
+          posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)); break;
         case '1-2':
-          return mockPostsChat;
+          posts.value = mockPostsChat.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)); break;
         case '3-4':
-          return mockPostsWork;
+          posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)); break;
         default:
-          return [];
+          posts.value = [];
       }
     });
 
     return {
-      posts: posts.value.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+      posts,
     };
   },
 });

@@ -65,7 +65,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '1',
       nickname: '胡而易',
-      avatar: 'https://source.unsplash.com/random?q=hey',
+      avatar: 'https://source.unsplash.com/random/40x40?q=hey',
     },
   },
   {
@@ -76,7 +76,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '2',
       nickname: '方库',
-      avatar: 'https://source.unsplash.com/random?q=fk',
+      avatar: 'https://source.unsplash.com/random/40x40?q=fk',
     },
   },
   {
@@ -87,7 +87,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '3',
       nickname: '秦清',
-      avatar: 'https://source.unsplash.com/random?q=qq',
+      avatar: 'https://source.unsplash.com/random/40x40?q=qq',
     },
   },
   {
@@ -98,7 +98,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '4',
       nickname: '陈真真',
-      avatar: 'https://source.unsplash.com/random?q=czz',
+      avatar: 'https://source.unsplash.com/random/40x40?q=czz',
     },
   },
   {
@@ -109,7 +109,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '4',
       nickname: '吴限达',
-      avatar: 'https://source.unsplash.com/random?q=wxd',
+      avatar: 'https://source.unsplash.com/random/40x40?q=wxd',
     },
   },
   {
@@ -120,7 +120,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '4',
       nickname: '周见齐',
-      avatar: 'https://source.unsplash.com/random?q=zjq',
+      avatar: 'https://source.unsplash.com/random/40x40?q=zjq',
     },
   },
   {
@@ -131,7 +131,7 @@ export const mockPostsChat: Post[] = [
     creator: {
       id: '4',
       nickname: '吴华群',
-      avatar: 'https://source.unsplash.com/random?q=whq',
+      avatar: 'https://source.unsplash.com/random/40x40?q=whq',
     },
   },
 ];
@@ -153,7 +153,7 @@ export const mockPostsWork: Post[] = [
     creator: {
       id: '1',
       nickname: '钱果果',
-      avatar: 'https://source.unsplash.com/random?q=qgg',
+      avatar: 'https://source.unsplash.com/random/40x40?q=qgg',
     },
   },
   {
@@ -166,7 +166,7 @@ export const mockPostsWork: Post[] = [
     creator: {
       id: '2',
       nickname: '张程亮',
-      avatar: 'https://source.unsplash.com/random?q=zcl',
+      avatar: 'https://source.unsplash.com/random/40x40?q=zcl',
     },
   },
   {
@@ -179,7 +179,7 @@ export const mockPostsWork: Post[] = [
     creator: {
       id: '3',
       nickname: '徐萌',
-      avatar: 'https://source.unsplash.com/random?q=xm',
+      avatar: 'https://source.unsplash.com/random/40x40?q=xm',
     },
   },
 ];

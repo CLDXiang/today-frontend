@@ -31,8 +31,9 @@
 
 <!-- 以下四项必须保留，将 - [] 改为 - [x] 即可标记为完成，也可以在提交后直接点击 checkbox 切换状态。可以按照 PR 需求新增其他检查事项。 -->
 
-- [ ] （如有必要）更新了更新日志文件 `public/changeLog.json`
-- [ ] 在看板中同步了该 PR 的状态
+- [ ] 更新了更新日志文件 `public/changeLog.json`（若有必要）
+- [ ] 链接了对应 Issues（若有）
+- [ ] 指定了对应 Projects（若有必要）
 - [ ] 分配了 assignees, labels 和 reviewers
 - [ ] 在 Slack 中通知了 reviewers
 

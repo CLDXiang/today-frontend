@@ -65,11 +65,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { FIcon } from '@/components/common';
 
 export default defineComponent({
-  components: {
-    FIcon,
-  },
 });
 </script>

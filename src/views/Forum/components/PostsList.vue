@@ -23,14 +23,14 @@
   <div
     v-else
     ref="scrollBottom"
-    class="overflow-y-auto"
+    class="overflow-y-auto relative"
   >
     <thread-card
       v-for="post in posts"
       :key="post.id"
       :post="post"
     />
-    <!-- TODO: rich text input box -->
+    <richtext-input class="sticky bottom-0" />
   </div>
 </template>
 <script lang="ts">
@@ -39,6 +39,7 @@ import {
 } from 'vue';
 import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
 import dayjs from 'dayjs';
+import RichtextInput from '@/components/RichtextInput.vue';
 import { PostCard, ThreadCard } from './index';
 import { Post } from '../types';
 
@@ -46,6 +47,7 @@ export default defineComponent({
   components: {
     PostCard,
     ThreadCard,
+    RichtextInput,
   },
   props: {
     channelId: { type: String, default: '1-1' },

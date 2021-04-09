@@ -40,7 +40,7 @@ export default defineComponent({
     const route = useRoute();
 
     const channel = computed(() => {
-      if (route.params.channelId === '0') {
+      if (route.params.channelId === '0' || !route.params.channelId) {
         return {
           name: '匿名树洞',
           description: '说点悄悄话',

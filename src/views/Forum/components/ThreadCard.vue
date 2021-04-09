@@ -1,7 +1,7 @@
 <template>
   <div
     class="p-2 border-b-2 border-gray-100 flex"
-    @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
+    @click="$router.push(`${$route.path}/reply/${post.id}`)"
   >
     <img
       v-if="post.creator.avatar"

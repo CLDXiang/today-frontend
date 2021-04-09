@@ -1,7 +1,7 @@
 <template>
   <div
     class="p-2 border-b-2 border-gray-100"
-    @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
+    @click="$router.push(`${$route.path}/reply/${post.id}`)"
   >
     <div class="flex mb-1">
       <img
@@ -54,13 +54,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { FIcon } from '@/components/common';
 import { Post } from '../types';
 
 export default defineComponent({
-  components: {
-    FIcon,
-  },
   props: {
     post: { type: Object as PropType<Post>, default: {} },
   },

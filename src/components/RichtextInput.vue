@@ -58,7 +58,7 @@
         name="paper-plane"
         class="mr-2 f-clickable"
         size="18"
-        @click="$emit('send', content)"
+        @click="send"
       />
     </div>
   </div>
@@ -69,11 +69,17 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   emits: ['send'],
-  setup() {
+  setup(_, ctx) {
     const content = ref('');
+
+    const send = () => {
+      ctx.emit('send', content.value);
+      content.value = '';
+    };
 
     return {
       content,
+      send,
     };
   },
 });

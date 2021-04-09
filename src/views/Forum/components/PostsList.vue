@@ -22,7 +22,8 @@
   </div>
   <div
     v-else
-    class="overflow-y-auto sm:mx-auto"
+    ref="scrollBottom"
+    class="overflow-y-auto"
   >
     <post-card
       v-for="post in posts"
@@ -33,7 +34,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, watch, ref } from 'vue';
+import {
+  defineComponent, watch, ref, onMounted,
+} from 'vue';
 import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
 import { PostCard } from './index';
 import { Post } from '../types';
@@ -47,20 +50,33 @@ export default defineComponent({
   },
   setup(props) {
     const posts = ref<Post[]>([]);
+    const scrollBottomRef = ref<HTMLDivElement | null>(null);
 
-    switch (props.channelId) {
-      case '0':
-        posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-        break;
-      case '1-2':
-        posts.value = mockPostsChat.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-        break;
-      case '3-4':
-        posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-        break;
-      default:
-        posts.value = [];
-    }
+    const scrollToBottom = () => {
+      setTimeout(() => {
+        if (!scrollBottomRef.value) {
+          return;
+        }
+        scrollBottomRef.value.scrollTop = scrollBottomRef.value.scrollHeight;
+      }, 0);
+    };
+
+    onMounted(() => {
+      switch (props.channelId) {
+        case '0':
+          posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+          break;
+        case '1-2':
+          posts.value = mockPostsChat.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
+          break;
+        case '3-4':
+          posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+          break;
+        default:
+          posts.value = [];
+      }
+      scrollToBottom();
+    });
 
     watch(
       () => props.channelId,
@@ -70,7 +86,7 @@ export default defineComponent({
             posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
             break;
           case '1-2':
-            posts.value = mockPostsChat.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+            posts.value = mockPostsChat.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
             break;
           case '3-4':
             posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -78,11 +94,13 @@ export default defineComponent({
           default:
             posts.value = [];
         }
+        scrollToBottom();
       },
     );
 
     return {
       posts,
+      scrollBottom: scrollBottomRef,
     };
   },
 });

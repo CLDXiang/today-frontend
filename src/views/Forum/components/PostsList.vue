@@ -35,7 +35,7 @@ export default defineComponent({
     });
 
     return {
-      posts,
+      posts: posts.value.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     };
   },
 });

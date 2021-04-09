@@ -38,6 +38,7 @@ import {
   defineComponent, watch, ref, onMounted,
 } from 'vue';
 import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
+import dayjs from 'dayjs';
 import { PostCard, ThreadCard } from './index';
 import { Post } from '../types';
 
@@ -77,6 +78,40 @@ export default defineComponent({
           posts.value = [];
       }
       scrollToBottom();
+
+      if (props.channelId === '1-2') {
+        // 模拟 5 秒后有其他人发了消息
+        setTimeout(() => {
+          posts.value = [...posts.value, {
+            id: 999,
+            content: '萌新报道！一条测试消息~',
+            replyCount: 0,
+            createdAt: dayjs(),
+            creator: {
+              id: '5',
+              nickname: '许丽雅',
+              avatar: 'https://source.unsplash.com/random/40x40?q=xly',
+            },
+          }];
+          scrollToBottom();
+        }, 5000);
+
+        // 模拟 12 秒后有其他人发了消息
+        setTimeout(() => {
+          posts.value = [...posts.value, {
+            id: 999,
+            content: '我也来凑个热闹 hhh',
+            replyCount: 0,
+            createdAt: dayjs(),
+            creator: {
+              id: '6',
+              nickname: '张华齐',
+              avatar: 'https://source.unsplash.com/random/40x40?q=zhq',
+            },
+          }];
+          scrollToBottom();
+        }, 12000);
+      }
     });
 
     watch(

@@ -58,6 +58,17 @@ export const mockPostsSecret: Post[] = [
 /** 闲聊 */
 export const mockPostsChat: Post[] = [
   {
+    id: 23,
+    content: '水水水水水水水水水水水水水水水水水水水水水',
+    replyCount: 3,
+    createdAt: dayjs('20210408123450'),
+    creator: {
+      id: '23',
+      nickname: '黄叶子',
+      avatar: 'https://source.unsplash.com/random/40x40?q=hyz',
+    },
+  },
+  {
     id: 1,
     content: '毕业论文问卷求填！！大概需要3分钟！！谢谢大家！！🥺🥺🥺\n\n链接放回复里',
     replyCount: 3,

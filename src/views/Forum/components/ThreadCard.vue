@@ -44,7 +44,7 @@ export default defineComponent({
   },
   computed: {
     timeDiff() {
-      const res: string = this.post.createdAt.fromNow();
+      const res: string = this.post.createdAt.format('MM/DD HH:mm');
       return res;
     },
   },

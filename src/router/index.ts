@@ -68,12 +68,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/forum',
     name: 'Forum',
-    redirect: '/forum/channel/1',
-  },
-  {
-    path: '/forum/channel/:channelid',
     component: Forum,
-    props: (route) => ({ channelId: route.params.channelid }),
+    redirect: '/forum/channel/1',
     children: [
       {
         path: '/forum/channel/:channelid/reply/:postid',
@@ -83,6 +79,14 @@ const routes: Array<RouteRecordRaw> = [
             '@/views/Forum/components/RepliesList.vue'
           ),
         props: (route) => ({ postId: route.params.postid }),
+      },
+      {
+        path: '/forum/channel/:channelid',
+        component: import(
+          /* webpackChunkName: "user-state" */
+          '@/views/Forum/components/PostsList.vue'
+        ),
+        props: (route) => ({ channelId: route.params.channelid }),
       },
     ],
   },

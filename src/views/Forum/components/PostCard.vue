@@ -29,12 +29,17 @@
     <div class="grid grid-cols-8">
       <div
         class="text-left col-span-7"
-        @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
       >
-        <div class="text-lg font-bold h-9">
+        <div
+          class="text-lg font-bold h-9 f-clickable"
+          @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
+        >
           {{ post.title }}
         </div>
-        <div class="mb-3 line-limit">
+        <div
+          class="mb-3 line-limit f-clickable"
+          @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
+        >
           {{ post.content }}
         </div>
         <div class="flex">

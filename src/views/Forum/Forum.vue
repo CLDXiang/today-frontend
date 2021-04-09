@@ -17,23 +17,17 @@
       />
     </a-drawer>
     <router-view />
-    <posts-list
-      v-if="$router.currentRoute._rawValue.matched.length === 1"
-      :posts="mockPosts"
-    />
   <!-- rich text editor -->
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { mockPosts } from '@/apis/mocks/posts';
-import { ForumHeadBar, ForumChannelsList, PostsList } from './components';
+import { ForumHeadBar, ForumChannelsList } from './components';
 
 export default defineComponent({
   components: {
     ForumHeadBar,
     ForumChannelsList,
-    PostsList,
   },
   props: {
     channelId: { type: Number, default: 1 },
@@ -50,7 +44,6 @@ export default defineComponent({
 
     return {
       isChannelsVisible,
-      mockPosts, // FIXME: 接入 api 后替换
       channel, // FIXME: 接入 api 后替换
     };
   },

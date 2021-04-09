@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-const Timetable = () => import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
+const Timetable = () =>
+  import(/* webpackChunkName: "timetable" */ '@/views/Timetable/Timetable.vue');
 const Rating = () => import(/* webpackChunkName: "rating" */ '@/views/Rating/Rating.vue');
-const Notification = () => import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
+const Notification = () =>
+  import(/* webpackChunkName: "notification" */ '@/views/Notification/Notification.vue');
 const About = () => import(/* webpackChunkName: "about" */ '@/views/About/About.vue');
 const User = () => import(/* webpackChunkName: "user" */ '@/views/User/User.vue');
+const Forum = () => import(/* webpackChunkName: "forum" */ '@/views/Forum/Forum.vue');
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/timetable' },
@@ -49,7 +52,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/forgot-password',
     name: 'ForgotPassword',
-    component: () => import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/ForgotPassword.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user-state" */ '@/views/UserStatus/ForgotPassword.vue'),
   },
   {
     path: '/register',
@@ -60,6 +64,32 @@ const routes: Array<RouteRecordRaw> = [
     path: '/about',
     name: 'About',
     component: About,
+  },
+  {
+    path: '/forum',
+    name: 'Forum',
+    component: Forum,
+    redirect: '/forum/channel/1',
+    children: [
+      {
+        path: '/forum/channel/:channelid/reply/:postid',
+        component: () =>
+          import(
+            /* webpackChunkName: "forum" */
+            '@/views/Forum/components/RepliesList.vue'
+          ),
+        props: (route) => ({ postId: route.params.postid }),
+      },
+      {
+        path: '/forum/channel/:channelid',
+        component: () =>
+          import(
+            /* webpackChunkName: "forum" */
+            '@/views/Forum/components/PostsList.vue'
+          ),
+        props: (route) => ({ channelId: route.params.channelid }),
+      },
+    ],
   },
   { path: '/*', component: Timetable },
 ];
@@ -75,6 +105,7 @@ export const HeapPagePathReges = [
   /\/forgot-password$/,
   /\/register$/,
   /\/about$/,
+  /\/forum.*$/,
 ];
 
 const router = createRouter({

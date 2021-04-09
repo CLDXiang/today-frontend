@@ -38,6 +38,9 @@ module.exports = {
       primary: '#60bdca',
     },
     extend: {
+      width: {
+        160: '40rem',
+      },
       maxWidth: {
         '14xl': '160rem',
       },
@@ -46,6 +49,9 @@ module.exports = {
       },
       fontSize: {
         xxs: ['0.625rem', '0.75rem'],
+      },
+      minHeight: {
+        28: '7rem',
       },
     },
   },

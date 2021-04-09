@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-nav flex-initial flex-shrink-0 text-gray-600">
+  <div class="flex-initial flex-shrink-0 text-gray-600 bottom-nav">
     <span
       :class="{ 'text-primary': activePage === 'timetable' }"
       @click="handleClick('timetable')"
@@ -23,6 +23,17 @@
     </span>
 
     <span
+      :class="{ 'text-primary': activePage === 'forum' }"
+      @click="handleClick('forum')"
+    >
+      <f-icon
+        name="forum"
+        size="20"
+      />
+      <span> 论坛 </span>
+    </span>
+
+    <span
       :class="{ 'text-primary': activePage === 'status' }"
       @click="handleClick('status')"
     >
@@ -40,7 +51,7 @@ import log from '@/utils/log';
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 
-type ActivePageType = 'timetable' | 'rating' | 'notification' | 'status';
+type ActivePageType = 'timetable' | 'rating' | 'notification' | 'status' | 'forum';
 
 export default defineComponent({
   computed: {
@@ -62,6 +73,9 @@ export default defineComponent({
       ) {
         return 'status';
       }
+      if (/\/forum\/?.*$/.test(path)) {
+        return 'forum';
+      }
       return 'timetable';
     },
   },
@@ -78,6 +92,10 @@ export default defineComponent({
         });
       } else if (v === 'notification') {
         this.$router.push({ name: 'Notification' }).catch((e) => {
+          log.error(e);
+        });
+      } else if (v === 'forum') {
+        this.$router.push({ name: 'Forum' }).catch((e) => {
           log.error(e);
         });
       } else if (v === 'status') {

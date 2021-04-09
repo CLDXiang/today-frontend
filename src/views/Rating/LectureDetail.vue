@@ -59,7 +59,7 @@
               type="primary"
               shape="round"
               size="small"
-              class="info-bar__watch-button text-gray-600"
+              class="text-gray-600 info-bar__watch-button"
               :class="{ 'info-bar__watch-button--watched': lectureInfo.watched }"
               @click="handleClickWatch"
             >

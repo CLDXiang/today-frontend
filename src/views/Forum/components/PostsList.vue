@@ -63,7 +63,7 @@ export default defineComponent({
       }, 0);
     };
 
-    onMounted(() => {
+    const init = () => {
       switch (props.channelId) {
         case '0':
           posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -112,25 +112,16 @@ export default defineComponent({
           scrollToBottom();
         }, 12000);
       }
+    };
+
+    onMounted(() => {
+      init();
     });
 
     watch(
       () => props.channelId,
       () => {
-        switch (props.channelId) {
-          case '0':
-            posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-            break;
-          case '1-2':
-            posts.value = mockPostsChat.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
-            break;
-          case '3-4':
-            posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-            break;
-          default:
-            posts.value = [];
-        }
-        scrollToBottom();
+        init();
       },
     );
 

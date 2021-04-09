@@ -82,10 +82,11 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/forum/channel/:channelid',
-        component: import(
-          /* webpackChunkName: "user-state" */
-          '@/views/Forum/components/PostsList.vue'
-        ),
+        component: () =>
+          import(
+            /* webpackChunkName: "user-state" */
+            '@/views/Forum/components/PostsList.vue'
+          ),
         props: (route) => ({ channelId: route.params.channelid }),
       },
     ],

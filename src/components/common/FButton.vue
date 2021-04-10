@@ -4,6 +4,7 @@
     :class="classNameArray"
     @mousedown="handleMousedown"
     @mouseup="handleMouseup"
+    @click="handleClick"
   >
     <svg
       v-if="loading"
@@ -66,8 +67,6 @@ export default defineComponent({
     ghost: { type: Boolean, default: false },
   },
   setup(props) {
-    // TODO: disabled 时阻止外部 click 事件
-
     /** 刚失去焦点 */
     const blurring = ref(false);
     /** 失焦计时器 */
@@ -203,6 +202,13 @@ export default defineComponent({
       }, 300);
     };
 
+    const handleClick = (e: MouseEvent) => {
+      if (props.disabled) {
+        // 若禁用，则阻止外部事件
+        e.stopImmediatePropagation();
+      }
+    };
+
     onBeforeUnmount(() => {
       // 销毁前清除计时器
       clearTimeout(blurringTimer.value);
@@ -212,6 +218,7 @@ export default defineComponent({
       classNameArray,
       handleMousedown,
       handleMouseup,
+      handleClick,
     };
   },
 });

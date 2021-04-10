@@ -16,7 +16,7 @@ module.exports = {
   rules: {
     'no-console': 1,
     'no-debugger': 1,
-    'max-len': 1,
+    'max-len': ['warn', { ignorePattern: '^\\s*(class|d)="[^"]+"', code: 100 }],
     'prefer-promise-reject-errors': 0,
     'implicit-arrow-linebreak': 0,
     'import/prefer-default-export': 0,

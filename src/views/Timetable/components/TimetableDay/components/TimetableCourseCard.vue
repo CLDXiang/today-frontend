@@ -1,10 +1,7 @@
 <template>
   <div
-    :class="[
-      ...classCourseCard,
-      'flex flex-col justify-start z-10 box-border absolute',
-      'rounded-md border-b-4 p-1 transition-colors cursor-pointer select-none f-clickable',
-    ]"
+    class="flex flex-col justify-start z-10 box-border absolute rounded-md border-b-4 p-1 transition-colors cursor-pointer select-none f-clickable"
+    :class="classCourseCard"
     :style="styleCourseCard"
     style="width: calc(100% - 0.125rem); left: 0.0625rem"
     @click="handleClickCourseCard"

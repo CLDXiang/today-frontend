@@ -1,7 +1,6 @@
 <template>
   <div
-    :class="['p-7 flex flex-col justify-start items-stretch',
-             'h-full w-full overflow-y-auto max-w-14xl']"
+    class="p-7 flex flex-col justify-start items-stretch h-full w-full overflow-y-auto max-w-14xl"
   >
     <div class="flex justify-center items-center h-6 mt-2 mb-4 mx-0">
       <span

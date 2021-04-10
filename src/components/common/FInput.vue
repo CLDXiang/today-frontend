@@ -1,9 +1,8 @@
 <template>
   <div class="f-input">
     <div
-      class="box-border cursor-text rounded text-gray-400 border-current"
+      class="box-border cursor-text rounded text-gray-400 border-current py-1 px-2 mb-1 text-base h-10 transition-colors"
       :class="{
-        'py-1 px-2 mb-1 text-base h-10 transition-colors': true,
         'border': !isFocused,
         'text-primary border-2': isFocused,
         'border-red-500': !obeyRules,
@@ -14,9 +13,8 @@
       <div class="h-full relative flex items-center cursor-text hover:text-gray-700">
         <span
           v-if="label !== undefined"
-          class="text-gray-400 transition-all absolute left-0 origin-top-left py-0 px-1 transform"
+          class="text-gray-400 transition-all absolute left-0 origin-top-left py-0 px-1 transform bg-white"
           :class="{
-            'bg-white': true,
             '-translate-y-4 scale-75': shouldLabelFloating,
             'text-primary': isFocused,
           }"

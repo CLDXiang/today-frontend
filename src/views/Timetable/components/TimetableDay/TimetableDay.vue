@@ -4,10 +4,7 @@
     class="h-full border-r last:border-0 border-gray-200 flex-auto flex-shrink-0 flex flex-col"
   >
     <div
-      :class="[
-        'flex-initial flex-shrink-0 h-8',
-        'flex justify-center items-center text-gray-500 font-semibold bg-transparent',
-      ]"
+      class="flex-initial flex-shrink-0 h-8 flex justify-center items-center text-gray-500 font-semibold bg-transparent"
     >
       {{ title }}
     </div>

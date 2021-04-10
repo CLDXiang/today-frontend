@@ -3,10 +3,7 @@
     <div
       v-for="(_, index) in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]"
       :key="'cell-' + index"
-      :class="[
-        'h-16 flex-auto flex-shrink-0 justify-center items-center',
-        'select-none even:bg-transparent odd:bg-gray-100',
-      ]"
+      class="h-16 flex-auto flex-shrink-0 justify-center items-center select-none even:bg-transparent odd:bg-gray-100"
     />
     <timetable-course-card
       v-for="(section, index) in sectionList"

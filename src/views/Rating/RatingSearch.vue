@@ -1,9 +1,6 @@
 <template>
   <div
-    :class="[
-      'w-full h-full overflow-y-auto max-w-14xl',
-      'flex flex-col items-center text-gray-600 text-sm mx-auto my-0',
-    ]"
+    class="w-full h-full overflow-y-auto max-w-14xl flex flex-col items-center text-gray-600 text-sm mx-auto my-0"
   >
     <rating-head-bar
       is-back-visible

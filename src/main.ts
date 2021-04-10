@@ -8,7 +8,7 @@ import {
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import {
-  FBadge, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton,
+  FBadge, FButton, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton,
 } from '@/components/common';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -52,6 +52,7 @@ declare module '@vue/runtime-core' {
 // 自定义全局组件
 app
   .component('FBadge', FBadge)
+  .component('FButton', FButton)
   .component('FPopover', FPopover)
   .component('FIcon', FIcon)
   .component('FInput', FInput)

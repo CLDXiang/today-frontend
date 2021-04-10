@@ -1,9 +1,6 @@
 <template>
   <div
-    :class="[
-      'w-full h-full overflow-hidden max-w-14xl text-warm-gray-700 text-sm mx-auto',
-      'flex flex-col',
-    ]"
+    class="w-full h-full overflow-hidden max-w-14xl text-warm-gray-700 text-sm mx-auto flex flex-col"
   >
     <rating-head-bar />
     <f-tabs v-model="activeTab">

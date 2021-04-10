@@ -1,10 +1,7 @@
 <template>
   <div class="bg-blue-50 h-full rounded-l-lg flex flex-col">
     <div
-      :class="[
-        'flex-shrink-0 h-14 bg-white flex justify-between items-center',
-        'p-3 font-bold text-lg text-gray-600',
-      ]"
+      class="flex-shrink-0 h-14 bg-white flex justify-between items-center p-3 font-bold text-lg text-gray-600"
     >
       <span class="flex items-center">
         <span>已选课程列表</span>

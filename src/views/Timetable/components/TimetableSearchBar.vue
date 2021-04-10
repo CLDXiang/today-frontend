@@ -46,10 +46,7 @@
       </a-button>
     </div>
     <span
-      :class="[
-        'mt-7 mx-0 mb-5 text-xl flex-initial flex-shrink-0',
-        'flex justify-center text-gray-800 md:hidden',
-      ]"
+      class="mt-7 mx-0 mb-5 text-xl flex-initial flex-shrink-0 flex justify-center text-gray-800 md:hidden"
     >
       搜索课程
     </span>

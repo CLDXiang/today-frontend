@@ -23,8 +23,7 @@
           </span>
         </div>
         <div
-          :class="['pt-2 overflow-hidden text-left break-all whitespace-pre-wrap',
-                   'max-h-20 overflow-ellipsis line-limit']"
+          class="pt-2 overflow-hidden text-left break-all whitespace-pre-wrap max-h-20 overflow-ellipsis line-limit"
         >
           {{ rating.form.content }}
         </div>

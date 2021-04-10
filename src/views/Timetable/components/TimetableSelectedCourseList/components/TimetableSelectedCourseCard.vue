@@ -1,9 +1,6 @@
 <template>
   <div
-    :class="[
-      'h-16 mt-2 rounded-lg bg-white',
-      'select-none hover:shadow-lg flex items-stretch transition-shadow',
-    ]"
+    class="h-16 mt-2 rounded-lg bg-white select-none hover:shadow-lg flex items-stretch transition-shadow"
   >
     <span
       class="flex-initial flex-shrink-0 w-4 rounded-l-lg"
@@ -14,10 +11,7 @@
       style="width: calc(100% - 1rem)"
     >
       <div
-        :class="[
-          'font-bold text-base text-gray-600',
-          'overflow-hidden overflow-ellipsis whitespace-nowrap',
-        ]"
+        class="font-bold text-base text-gray-600 overflow-hidden overflow-ellipsis whitespace-nowrap"
       >
         {{ course.name }}
       </div>

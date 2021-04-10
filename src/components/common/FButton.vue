@@ -1,11 +1,34 @@
 <template>
   <button
-    class="focus:outline-none text-sm transition-shadow duration-300"
+    class="focus:outline-none text-sm transition-shadow duration-300 relative flex justify-center items-center"
     :class="classNameArray"
     @mousedown="handleMousedown"
     @mouseup="handleMouseup"
   >
-    <slot />
+    <svg
+      v-if="loading"
+      class="animate-spin h-5 w-5 absolute"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      />
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+    <div :class="{ 'opacity-0': loading }">
+      <slot />
+    </div>
   </button>
 </template>
 
@@ -61,12 +84,16 @@ export default defineComponent({
       } else {
         switch (props.type) {
           case 'primary':
-            bg = 'bg-primary'; break;
+            bg = 'bg-primary';
+            break;
           case 'normal':
-            bg = 'bg-white'; break;
+            bg = 'bg-white';
+            break;
           case 'danger':
-            bg = 'bg-red-400'; break;
-          default: break;
+            bg = 'bg-red-400';
+            break;
+          default:
+            break;
         }
       }
 
@@ -75,17 +102,21 @@ export default defineComponent({
 
       switch (props.type) {
         case 'primary':
-          border = 'border border-primary ring-primary'; break;
+          border = 'border border-primary ring-primary';
+          break;
         case 'normal':
-          border = 'border border-gray-300 ring-gray-300'; break;
+          border = 'border border-gray-300 ring-gray-300';
+          break;
         case 'danger':
-          border = 'border border-red-400 ring-red-400'; break;
+          border = 'border border-red-400 ring-red-400';
+          break;
         case 'link':
-        default: break;
+        default:
+          break;
       }
 
       /** 外围 ring */
-      const ring = (blurring.value && props.type !== 'link') ? 'ring ring-opacity-50' : '';
+      const ring = blurring.value && props.type !== 'link' ? 'ring ring-opacity-50' : '';
 
       /** 文字颜色 */
       let textColor = '';
@@ -95,14 +126,19 @@ export default defineComponent({
       } else {
         switch (props.type) {
           case 'primary':
-            textColor = props.ghost ? 'text-primary' : 'text-white'; break;
+            textColor = props.ghost ? 'text-primary' : 'text-white';
+            break;
           case 'danger':
-            textColor = props.ghost ? 'text-red-400' : 'text-white'; break;
+            textColor = props.ghost ? 'text-red-400' : 'text-white';
+            break;
           case 'normal':
-            textColor = 'text-gray-800'; break;
+            textColor = 'text-gray-800';
+            break;
           case 'link':
-            textColor = 'text-primary'; break;
-          default: break;
+            textColor = 'text-primary';
+            break;
+          default:
+            break;
         }
       }
 
@@ -111,12 +147,16 @@ export default defineComponent({
 
       switch (props.shape) {
         case 'base':
-          rounded = 'rounded-sm'; break;
+          rounded = 'rounded-sm';
+          break;
         case 'round':
-          rounded = 'rounded-md'; break;
+          rounded = 'rounded-md';
+          break;
         case 'circle':
-          rounded = 'rounded-full'; break;
-        default: break;
+          rounded = 'rounded-full';
+          break;
+        default:
+          break;
       }
 
       /** 尺寸 */
@@ -124,12 +164,16 @@ export default defineComponent({
 
       switch (props.size) {
         case 'base':
-          size = 'h-8 px-2'; break;
+          size = 'h-8 px-2';
+          break;
         case 'small':
-          size = 'h-6 px-3'; break;
+          size = 'h-6 px-3';
+          break;
         case 'large':
-          size = 'h-10 px-4'; break;
-        default: break;
+          size = 'h-10 px-4';
+          break;
+        default:
+          break;
       }
 
       /** 指针样式 */

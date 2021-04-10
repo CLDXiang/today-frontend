@@ -43,14 +43,15 @@ export default defineComponent({
       /** 背景色 */
       let bg = '';
 
-      if (props.ghost) {
+      if (props.ghost || props.type === 'link') {
         bg = 'bg-transparent';
+      } else if (props.disabled) {
+        bg = 'bg-gray-100';
       } else {
         switch (props.type) {
           case 'primary':
             bg = 'bg-primary'; break;
           case 'normal':
-          case 'link':
             bg = 'bg-white'; break;
           case 'danger':
             bg = 'bg-red-400'; break;
@@ -75,15 +76,20 @@ export default defineComponent({
       /** 文字颜色 */
       let textColor = '';
 
-      switch (props.type) {
-        case 'primary':
-        case 'danger':
-          textColor = 'text-white'; break;
-        case 'normal':
-          textColor = 'text-gray-800'; break;
-        case 'link':
-          textColor = 'text-primary'; break;
-        default: break;
+      if (props.disabled) {
+        textColor = 'text-gray-400';
+      } else {
+        switch (props.type) {
+          case 'primary':
+            textColor = props.ghost ? 'text-primary' : 'text-white'; break;
+          case 'danger':
+            textColor = props.ghost ? 'text-red-400' : 'text-white'; break;
+          case 'normal':
+            textColor = 'text-gray-800'; break;
+          case 'link':
+            textColor = 'text-primary'; break;
+          default: break;
+        }
       }
 
       /** 圆角 */
@@ -112,7 +118,13 @@ export default defineComponent({
         default: break;
       }
 
-      return [bg, border, textColor, size, rounded];
+      /** 指针样式 */
+      const cursor = props.disabled ? 'cursor-not-allowed' : '';
+
+      /** 透明度 */
+      const opacity = props.disabled ? '' : 'focus:opacity-80 hover:opacity-80 transition-opacity duration-300';
+
+      return [bg, border, textColor, size, rounded, cursor, opacity];
     });
 
     return {

@@ -1,14 +1,18 @@
 <template>
   <button
-    class="focus:outline-none text-sm"
+    class="focus:outline-none text-sm transition-shadow duration-300"
     :class="classNameArray"
+    @mousedown="handleMousedown"
+    @mouseup="handleMouseup"
   >
     <slot />
   </button>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from 'vue';
+import {
+  defineComponent, PropType, computed, ref, onBeforeUnmount,
+} from 'vue';
 
 export default defineComponent({
   props: {
@@ -39,6 +43,13 @@ export default defineComponent({
     ghost: { type: Boolean, default: false },
   },
   setup(props) {
+    // TODO: disabled 时阻止外部 click 事件
+
+    /** 刚失去焦点 */
+    const blurring = ref(false);
+    /** 失焦计时器 */
+    const blurringTimer = ref<number>(-1);
+
     const classNameArray = computed<string[]>(() => {
       /** 背景色 */
       let bg = '';
@@ -64,14 +75,17 @@ export default defineComponent({
 
       switch (props.type) {
         case 'primary':
-          border = 'border border-primary'; break;
+          border = 'border border-primary ring-primary'; break;
         case 'normal':
-          border = 'border border-gray-300'; break;
+          border = 'border border-gray-300 ring-gray-300'; break;
         case 'danger':
-          border = 'border border-red-400'; break;
+          border = 'border border-red-400 ring-red-400'; break;
         case 'link':
         default: break;
       }
+
+      /** 外围 ring */
+      const ring = (blurring.value && props.type !== 'link') ? 'ring ring-opacity-50' : '';
 
       /** 文字颜色 */
       let textColor = '';
@@ -122,13 +136,38 @@ export default defineComponent({
       const cursor = props.disabled ? 'cursor-not-allowed' : '';
 
       /** 透明度 */
-      const opacity = props.disabled ? '' : 'focus:opacity-80 hover:opacity-80 transition-opacity duration-300';
+      const opacity = props.disabled ? '' : 'focus:opacity-80 hover:opacity-80 transition-opacity';
 
-      return [bg, border, textColor, size, rounded, cursor, opacity];
+      return [bg, border, textColor, size, rounded, cursor, opacity, ring];
+    });
+
+    const handleMousedown = () => {
+      if (props.disabled) {
+        return;
+      }
+      clearTimeout(blurringTimer.value);
+      blurring.value = false;
+    };
+
+    const handleMouseup = () => {
+      if (props.disabled) {
+        return;
+      }
+      blurring.value = true;
+      blurringTimer.value = setTimeout(() => {
+        blurring.value = false;
+      }, 300);
+    };
+
+    onBeforeUnmount(() => {
+      // 销毁前清除计时器
+      clearTimeout(blurringTimer.value);
     });
 
     return {
       classNameArray,
+      handleMousedown,
+      handleMouseup,
     };
   },
 });

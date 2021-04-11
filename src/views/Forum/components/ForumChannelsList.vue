@@ -1,5 +1,9 @@
 <template>
-  <div class="flex mb-4 f-clickable">
+  <div
+    class="flex mb-2 f-clickable py-1 px-2 rounded"
+    :class="{ 'bg-primary bg-opacity-30': selectedChannelId === '0' }"
+    @click="$router.push(`/forum/channel/0`)"
+  >
     <div class="pt-1">
       <f-icon
         name="chat-square-quote"
@@ -7,7 +11,7 @@
         class="mr-2"
       />
     </div>
-    <div>树洞</div>
+    <div>匿名树洞</div>
   </div>
   <div
     v-for="channelGroup in mockChannelGroups"
@@ -26,8 +30,11 @@
     <div
       v-for="channel in channelGroup.channels"
       :key="channel.id"
-      class="flex h-8 pt-1 focus:bg-gray-400 f-clickable"
-      @click="$router.push({ path: `/forum/channel/${channel.id}`, params: { id: channel.id } });"
+      class="flex f-clickable py-1 px-2 rounded"
+      :class="{
+        'bg-primary bg-opacity-30': selectedChannelId === `${channelGroup.id}-${channel.id}`,
+      }"
+      @click="$router.push(`/forum/channel/${channelGroup.id}-${channel.id}`)"
     >
       <div class="pt-1 mr-2">
         <f-icon
@@ -41,26 +48,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { FIcon } from '@/components/common';
+import { defineComponent, watch, ref } from 'vue';
 import { mockChannelGroups } from '@/apis/mocks/forum';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  components: {
-    FIcon,
-  },
-  props: {
-  },
   setup() {
+    const route = useRoute();
+
+    const selectedChannelId = ref(route.params.channelId);
+
+    watch(
+      () => route.params.channelId,
+      () => {
+        selectedChannelId.value = route.params.channelId;
+      },
+    );
+
     return {
       mockChannelGroups,
+      selectedChannelId,
     };
   },
 });
 </script>
-
-<style scoped>
-.f-clickable {
-  @apply hover:bg-gray-400;
-}
-</style>

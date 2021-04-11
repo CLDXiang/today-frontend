@@ -1,31 +1,154 @@
 <template>
-  <div class="overflow-y-auto sm:mx-auto">
+  <div
+    v-if="['3-4', '0'].includes(channelId)"
+    class="overflow-y-auto sm:mx-auto"
+  >
     <post-card
-      v-for="post in posts[channelId - 1]"
+      v-for="post in posts"
       :key="post.id"
       :post="post"
+    />
+    <div
+      :class="[
+        'fixed bottom-20 right-5 w-12 h-12 z-20',
+        'flex justify-center items-center bg-primary text-white rounded-full',
+      ]"
+    >
+      <f-icon
+        name="plus"
+        size="24"
+      />
+    </div>
+  </div>
+  <div
+    v-else
+    ref="scrollBottom"
+    class="overflow-y-auto relative"
+  >
+    <thread-card
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+    />
+    <richtext-input
+      class="sticky bottom-0"
+      @send="sendMessage"
     />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mockPosts, mockPosts2, mockPosts3 } from '@/apis/mocks/posts';
-import { PostCard } from './index';
+import {
+  defineComponent, watch, ref, onMounted,
+} from 'vue';
+import { mockPostsChat, mockPostsSecret, mockPostsWork } from '@/apis/mocks/posts';
+import dayjs from 'dayjs';
+import RichtextInput from '@/components/RichtextInput.vue';
+import { PostCard, ThreadCard } from './index';
+import { Post } from '../types';
 
 export default defineComponent({
   components: {
     PostCard,
+    ThreadCard,
+    RichtextInput,
   },
   props: {
-    channelId: { type: String, default: '1' },
+    channelId: { type: String, default: '1-1' },
   },
-  setup() {
-    const posts = [];
-    posts.push(mockPosts);
-    posts.push(mockPosts2);
-    posts.push(mockPosts3);
+  setup(props) {
+    const posts = ref<Post[]>([]);
+    const scrollBottomRef = ref<HTMLDivElement | null>(null);
+
+    const scrollToBottom = () => {
+      setTimeout(() => {
+        if (!scrollBottomRef.value) {
+          return;
+        }
+        scrollBottomRef.value.scrollTop = scrollBottomRef.value.scrollHeight;
+      }, 0);
+    };
+
+    const init = () => {
+      switch (props.channelId) {
+        case '0':
+          posts.value = mockPostsSecret.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+          break;
+        case '1-2':
+          posts.value = mockPostsChat.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
+          break;
+        case '3-4':
+          posts.value = mockPostsWork.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+          break;
+        default:
+          posts.value = [];
+      }
+      scrollToBottom();
+
+      if (props.channelId === '1-2') {
+        // 模拟 5 秒后有其他人发了消息
+        setTimeout(() => {
+          posts.value = [...posts.value, {
+            id: 999,
+            content: '萌新报道！一条测试消息~',
+            replyCount: 0,
+            createdAt: dayjs(),
+            creator: {
+              id: '5',
+              nickname: '许丽雅',
+              avatar: 'https://picsum.photos/seed/xly/40/40',
+            },
+          }];
+          scrollToBottom();
+        }, 5000);
+
+        // 模拟 12 秒后有其他人发了消息
+        setTimeout(() => {
+          posts.value = [...posts.value, {
+            id: 999,
+            content: '我也来凑个热闹 hhh',
+            replyCount: 0,
+            createdAt: dayjs(),
+            creator: {
+              id: '6',
+              nickname: '张华齐',
+              avatar: 'https://picsum.photos/seed/zhq/40/40',
+            },
+          }];
+          scrollToBottom();
+        }, 12000);
+      }
+    };
+
+    onMounted(() => {
+      init();
+    });
+
+    watch(
+      () => props.channelId,
+      () => {
+        init();
+      },
+    );
+
+    const sendMessage = (content: string) => {
+      posts.value = [...posts.value, {
+        id: 999,
+        content,
+        replyCount: 0,
+        createdAt: dayjs(),
+        creator: {
+          id: '233',
+          nickname: '测试用账户',
+          avatar: 'https://picsum.photos/seed/cs/40/40',
+        },
+      }];
+      scrollToBottom();
+    };
+
     return {
       posts,
+      scrollBottom: scrollBottomRef,
+      sendMessage,
     };
   },
 });

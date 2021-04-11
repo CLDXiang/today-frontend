@@ -1,85 +1,65 @@
 <template>
   <div
-    :class="['px-2 mb-2 border-b-2 border-gray-100 pb-4',
-             ' min-h-28 sm:w-160']"
+    class="p-2 border-b-2 border-gray-100"
+    @click="$router.push(`${$route.path}/reply/${post.id}`)"
   >
-    <div class="flex pt-3 mb-1">
+    <div class="flex mb-1">
       <img
-        class="mr-2 rounded-full w-7 h-7 border-primary"
+        v-if="post.creator.avatar"
+        class="mr-2 rounded-full w-8 h-8 border-primary"
         :src="post.creator.avatar"
         alt="avatar"
       >
-      <div class="pt-1 mr-2">
-        {{ post.creator.nickname }}
-      </div>
-      <div class="pt-1 mr-2">
-        &middot;
-      </div>
-      <div class="pt-1">
-        {{ timeDiff }}
-      </div>
-      <div class="flex justify-end flex-grow">
-        <f-icon
-          name="three-dots"
-          size="23"
-          class="pt-2 f-clickable"
-        />
-      </div>
-    </div>
-    <div class="grid grid-cols-8">
-      <div
-        class="text-left col-span-7"
-      >
-        <div
-          class="text-lg font-bold h-9 f-clickable"
-          @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
+      <span class="flex flex-col items-start">
+        <div class="text-sm font-bold text-gray-700">{{ post.creator.nickname }}</div>
+        <div class="text-xs text-gray-500">{{ timeDiff }}</div>
+      </span>
+      <span class="flex-auto flex justify-end items-center text-gray-500 text-sm">
+        <span
+          v-if="post.thumbUpCount !== undefined"
+          class="flex"
         >
-          {{ post.title }}
-        </div>
-        <div
-          class="mb-3 line-limit f-clickable"
-          @click="$router.push(`/forum/channel/${post.channelId}/reply/${post.id}`)"
-        >
-          {{ post.content }}
-        </div>
-        <div class="flex">
           <f-icon
             name="hand-thumbs-up"
             size="16"
             class="mr-1"
           />
           <div class="mr-3">
-            {{ post.thumbupCount }}
+            {{ post.thumbUpCount }}
+          </div></span>
+        <span
+          v-if="post.replyCount !== undefined"
+          class="flex"
+        >
+          <f-icon
+            name="chat"
+            size="16"
+            class="mr-1"
+          />
+          <div class="mr-3">
+            {{ post.replyCount }}
           </div>
-          <div
-            class="pt-0.5 mr-2 f-clickable"
-          >
-            <f-icon
-              name="share"
-              size="16"
-            />
-          </div>
-          Share
-        </div>
-      </div>
+        </span>
+      </span>
+    </div>
+    <div class="text-left">
       <div
-        class="pt-1 text-lg pl-14"
-        :class="getReplyCountColor(post.replyCount)"
+        v-if="post.title"
+        class="font-bold text-sm my-1"
       >
-        {{ post.replyCount }}
+        {{ post.title }}
+      </div>
+      <div class="line-limit overflow-hidden text-sm whitespace-pre-wrap">
+        {{ post.content }}
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { FIcon } from '@/components/common';
 import { Post } from '../types';
 
 export default defineComponent({
-  components: {
-    FIcon,
-  },
   props: {
     post: { type: Object as PropType<Post>, default: {} },
   },
@@ -103,7 +83,7 @@ export default defineComponent({
 <style scoped>
 .line-limit {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-line-clamp: 4; /* number of lines to show */
   -webkit-box-orient: vertical;
 }
 </style>

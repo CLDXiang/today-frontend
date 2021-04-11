@@ -69,25 +69,25 @@ const routes: Array<RouteRecordRaw> = [
     path: '/forum',
     name: 'Forum',
     component: Forum,
-    redirect: '/forum/channel/1',
+    redirect: '/forum/channel/0',
     children: [
       {
-        path: '/forum/channel/:channelid/reply/:postid',
+        path: '/forum/channel/:channelId/reply/:postId',
         component: () =>
           import(
             /* webpackChunkName: "forum" */
             '@/views/Forum/components/RepliesList.vue'
           ),
-        props: (route) => ({ postId: route.params.postid }),
+        props: (route) => ({ postId: route.params.postId }),
       },
       {
-        path: '/forum/channel/:channelid',
+        path: '/forum/channel/:channelId',
         component: () =>
           import(
             /* webpackChunkName: "forum" */
             '@/views/Forum/components/PostsList.vue'
           ),
-        props: (route) => ({ channelId: route.params.channelid }),
+        props: (route) => ({ channelId: route.params.channelId }),
       },
     ],
   },

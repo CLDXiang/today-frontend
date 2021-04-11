@@ -20,22 +20,22 @@
           course.teachers.join(',')
         }}</span>
         <span class="flex">
-          <a-button
+          <f-button
             class="ml-1 rounded-md py-0 px-1.5"
             type="primary"
             size="small"
             @click.stop="handleClickDetailButton"
           >
             <span>详情</span>
-          </a-button>
-          <a-button
+          </f-button>
+          <f-button
             class="ml-1 rounded-md py-0 px-1.5"
             type="danger"
             size="small"
             @click.stop="handleClickDeleteButton"
           >
             <span>删除</span>
-          </a-button>
+          </f-button>
         </span>
       </div>
     </span>
@@ -74,10 +74,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.ant-btn.ant-btn-two-chinese-chars > *:not(.anticon) {
-  margin-right: 0;
-  letter-spacing: normal;
-}
-</style>

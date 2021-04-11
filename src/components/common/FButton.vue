@@ -1,6 +1,6 @@
 <template>
   <button
-    class="focus:outline-none text-sm transition-shadow duration-300 relative flex justify-center items-center"
+    class="focus:outline-none outline-none text-sm transition-all duration-300 whitespace-nowrap flex justify-center items-center"
     :class="classNameArray"
     @mousedown="handleMousedown"
     @mouseup="handleMouseup"
@@ -103,23 +103,31 @@ export default defineComponent({
       /** 边框 */
       let border = '';
 
-      switch (props.type) {
-        case 'primary':
-          border = 'border border-primary ring-primary';
-          break;
-        case 'normal':
-          border = 'border border-gray-300 ring-gray-300';
-          break;
-        case 'danger':
-          border = 'border border-red-400 ring-red-400';
-          break;
-        case 'link':
-        default:
-          break;
+      if (props.disabled && props.type !== 'link') {
+        border = 'border border-gray-300';
+      } else {
+        switch (props.type) {
+          case 'primary':
+            border = 'border border-primary ring-primary';
+            break;
+          case 'normal':
+            border = 'border border-gray-300 ring-gray-300 '
+              + 'hover:border-primary focus:border-primary hover:ring-primary focus:ring-primary';
+            break;
+          case 'danger':
+            border = 'border border-red-400 ring-red-400';
+            break;
+          case 'link':
+          default:
+            break;
+        }
       }
 
       /** 外围 ring */
-      const ring = blurring.value && props.type !== 'link' ? 'ring ring-opacity-50' : '';
+      let ring = '';
+      if (!props.disabled && blurring.value && props.type !== 'link') {
+        ring = 'ring ring-opacity-50';
+      }
 
       /** 文字颜色 */
       let textColor = '';
@@ -129,13 +137,17 @@ export default defineComponent({
       } else {
         switch (props.type) {
           case 'primary':
-            textColor = props.ghost ? 'text-primary' : 'text-white';
+            textColor = props.ghost
+              ? 'text-primary'
+              : 'text-white';
             break;
           case 'danger':
-            textColor = props.ghost ? 'text-red-400' : 'text-white';
+            textColor = props.ghost
+              ? 'text-red-400'
+              : 'text-white';
             break;
           case 'normal':
-            textColor = 'text-gray-800';
+            textColor = 'text-gray-800 hover:text-primary focus:text-primary';
             break;
           case 'link':
             textColor = 'text-primary';
@@ -173,7 +185,7 @@ export default defineComponent({
           size = 'h-6 px-3';
           break;
         case 'large':
-          size = 'h-10 px-4';
+          size = 'h-10 px-4 text-base';
           break;
         default:
           break;
@@ -183,7 +195,7 @@ export default defineComponent({
       const cursor = props.disabled ? 'cursor-not-allowed' : '';
 
       /** 透明度 */
-      const opacity = props.disabled ? '' : 'focus:opacity-80 hover:opacity-80 transition-opacity';
+      const opacity = props.disabled ? '' : 'focus:opacity-80 hover:opacity-80';
 
       return [bg, border, textColor, size, rounded, cursor, opacity, ring];
     });

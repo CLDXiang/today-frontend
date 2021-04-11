@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col h-full w-full">
     <div class="justify-end items-center p-2 hidden md:flex space-x-2">
-      <a-button
+      <f-button
         v-show="searchResults.length !== 0"
-        block
+        class="w-full"
         :type="isSearchResultsVisible ? 'primary' : undefined"
-        shape="round"
+        shape="circle"
         size="large"
         @click="isSearchResultsVisible = !isSearchResultsVisible"
       >
@@ -15,12 +15,12 @@
           size="20"
         />
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
-      </a-button>
+      </f-button>
     </div>
     <div class="justify-end items-center p-2 hidden md:flex space-x-2">
-      <a-button
+      <f-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
-        shape="round"
+        shape="circle"
         size="large"
         @click="resetSearchQuery"
       >
@@ -29,12 +29,12 @@
           size="20"
         />
         重置
-      </a-button>
-      <a-button
+      </f-button>
+      <f-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         :loading="isLoadingSearchResults"
         type="primary"
-        shape="round"
+        shape="circle"
         size="large"
         @click="search"
       >
@@ -43,7 +43,7 @@
           size="20"
         />
         搜索课程
-      </a-button>
+      </f-button>
     </div>
     <span
       class="mt-7 mx-0 mb-5 text-xl flex-initial flex-shrink-0 flex justify-center text-gray-800 md:hidden"
@@ -201,11 +201,11 @@
       </div>
       <!-- </v-scroll-y-reverse-transition> -->
     </div>
-    <div class="justify-end items-center p-2 md:hidden space-x-2">
-      <a-button
+    <div class="justify-end items-center p-2 md:hidden space-x-2 flex">
+      <f-button
         v-show="searchResults.length !== 0"
         :type="isSearchResultsVisible ? 'primary' : undefined"
-        shape="round"
+        shape="circle"
         size="large"
         @click="isSearchResultsVisible = !isSearchResultsVisible"
       >
@@ -215,12 +215,12 @@
           size="20"
         />
         {{ isSearchResultsVisible ? '收起搜索结果' : '展开搜索结果' }}
-      </a-button>
+      </f-button>
     </div>
-    <div class="justify-end items-center p-2 md:hidden space-x-2">
-      <a-button
+    <div class="justify-end items-center p-2 md:hidden space-x-2 flex flex-wrap">
+      <f-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
-        shape="round"
+        shape="circle"
         size="large"
         @click="resetSearchQuery"
       >
@@ -229,10 +229,10 @@
           size="20"
         />
         重置
-      </a-button>
-      <a-button
+      </f-button>
+      <f-button
         :disabled="isLoadingSearchResults"
-        shape="round"
+        shape="circle"
         size="large"
         @click="$emit('hide-search-dialog')"
       >
@@ -241,12 +241,12 @@
           size="20"
         />
         关闭
-      </a-button>
-      <a-button
+      </f-button>
+      <f-button
         :disabled="isLoadingSearchResults || isSearchQueryEmpty"
         :loading="isLoadingSearchResults"
         type="primary"
-        shape="round"
+        shape="circle"
         size="large"
         @click="search"
       >
@@ -255,7 +255,7 @@
           size="20"
         />
         搜索课程
-      </a-button>
+      </f-button>
     </div>
   </div>
 </template>

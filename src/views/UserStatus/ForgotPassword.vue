@@ -22,7 +22,7 @@
           outlined
           required
         />
-        <a-button
+        <f-button
           type="primary"
           :disabled="cooldownCnt !== 0"
           :loading="state === 'requesting'"
@@ -35,7 +35,7 @@
                 ? `${cooldownCnt}s`
                 : '重新发送'
           }}
-        </a-button>
+        </f-button>
       </div>
       <f-input
         v-model="password"
@@ -57,23 +57,23 @@
       />
     </div>
     <div class="button-box">
-      <a-button
-        block
+      <f-button
+        class="w-full"
         type="primary"
         size="large"
-        shape="round"
+        shape="circle"
         @click="resetPassword"
       >
         重置密码
-      </a-button>
+      </f-button>
     </div>
-    <a-button
+    <f-button
       style="margin-top: 12px"
       type="link"
       @click="$router.push('/login')"
     >
       返回登录页
-    </a-button>
+    </f-button>
   </div>
 </template>
 
@@ -214,25 +214,12 @@ export default defineComponent({
         max-width: 226px;
         margin-right: 12px;
       }
-
-      > .ant-btn {
-        margin-top: 4px;
-        width: 92px;
-      }
     }
   }
 
   > .button-box {
     width: 80vw;
     max-width: 340px;
-
-    > .ant-btn {
-      margin-top: 16px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
   }
 }
 </style>

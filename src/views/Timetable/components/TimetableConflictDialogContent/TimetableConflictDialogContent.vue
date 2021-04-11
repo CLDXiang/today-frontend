@@ -13,12 +13,12 @@
         </div>
         <lesson-list :selected-courses="selectedCoursesOnlyInLocal" />
         <div class="self-center">
-          <a-button
-            shape="round"
+          <f-button
+            shape="circle"
             @click="() => handleChoosen('local')"
           >
             使用本地课表
-          </a-button>
+          </f-button>
         </div>
       </div>
       <div class="flex-grow flex flex-col my-0 mx-1">
@@ -27,24 +27,24 @@
         </div>
         <lesson-list :selected-courses="selectedCoursesOnlyInDataBase" />
         <div class="self-center">
-          <a-button
-            shape="round"
+          <f-button
+            shape="circle"
             depressed
             @click="() => handleChoosen('cloud')"
           >
             使用云端课表
-          </a-button>
+          </f-button>
         </div>
       </div>
     </div>
     <div class="flex-grow-0 flex-shrink-0 flex justify-end my-4 mx-5">
-      <a-button
-        shaple="round"
+      <f-button
+        shape="circle"
         type="primary"
         @click="() => handleChoosen('both')"
       >
         合并
-      </a-button>
+      </f-button>
     </div>
   </div>
 </template>

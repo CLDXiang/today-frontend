@@ -40,16 +40,6 @@ body {
   overflow-y: hidden;
 }
 
-.ant-btn {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-
-  > svg:first-child {
-    margin-right: 4px;
-  }
-}
-
 .ant-drawer-bottom > .ant-drawer-content-wrapper > .ant-drawer-content {
   border-radius: 16px 16px 0 0;
 
@@ -70,15 +60,6 @@ body {
 
 .ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none !important;
-}
-
-.ant-btn-round.ant-btn-lg {
-  padding: 0 16px;
-}
-
-.ant-btn-danger {
-  @apply bg-red-400;
-  @apply border-red-400;
 }
 
 :focus {

@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
 import {
   message,
-  Button,
   Modal,
   Drawer,
   Slider,
@@ -38,7 +37,6 @@ app.use(store).use(router);
 
 // AntD 组件
 app
-  .use(Button)
   .use(Modal)
   .use(Drawer)
   .use(Slider);

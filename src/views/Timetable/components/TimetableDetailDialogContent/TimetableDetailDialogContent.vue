@@ -78,31 +78,30 @@
     </div>
     <div class="mt-6 space-y-6">
       <div class="flex justify-between">
-        <a-button
-          shape="round"
+        <f-button
+          shape="circle"
           type="primary"
           disabled
         >
           查看课程评价
-        </a-button>
-        <a-button
-          shape="round"
+        </f-button>
+        <f-button
+          shape="circle"
           type="danger"
           @click="handleClickDeleteButton"
         >
           <f-icon name="delete" />
           删除课程
-        </a-button>
+        </f-button>
       </div>
       <div class="flex justify-end">
-        <a-button
-          shape="round"
+        <f-button
+          shape="circle"
           @click="handleClickCloseButton"
         >
           <f-icon name="shrink" />
-
           关闭
-        </a-button>
+        </f-button>
       </div>
     </div>
   </div>

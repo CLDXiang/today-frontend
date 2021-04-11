@@ -18,6 +18,7 @@ import { ContentWrapper } from './components';
 
 export default defineComponent({
   props: {
+    /** 是否可见（v-model） */
     visible: { type: Boolean, required: false },
     /** 触发方式 */
     trigger: { type: String as PropType<'hover' | 'click'>, default: 'hover' },

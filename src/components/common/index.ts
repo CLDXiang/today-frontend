@@ -7,3 +7,4 @@ export { default as FTabs } from './FTabs.vue';
 export { default as FTabPane } from './FTabPane.vue';
 export { default as FPopover } from './FPopover';
 export { default as FSkeleton } from './FSkeleton.vue';
+export { default as FModal } from './FModal';

@@ -66,9 +66,7 @@
             </span>
           </div>
           <span class="bio text-gray-500">
-            {{
-              userProfile.bio || ''
-            }}
+            {{ userProfile.bio || '' }}
           </span>
         </div>
       </div>
@@ -195,7 +193,8 @@ export default defineComponent({
     const router = useRouter();
     const currentUser = computed(() => store.state.user);
     const userLoggedIn = computed(() => store.getters.userLoggedIn);
-    const isCurrentUser = () => userLoggedIn.value && (props.userId === currentUser.value.id || props.userId === '');
+    const isCurrentUser = () =>
+      userLoggedIn.value && (props.userId === currentUser.value.id || props.userId === '');
     const setUserProfile = (profile: UserProfile) => store.commit('setUserProfile', profile);
 
     const logout = () => {
@@ -256,14 +255,13 @@ export default defineComponent({
     /** 最近一次看过的更新日志日期 */
     const lastSawChangeLogDate = computed(() => store.state.lastSawChangeLogDate);
 
-    axios.get<{ date: string }[]>('changeLog.json')
-      .then(({ data }) => {
-        /** 最新的更新日志日期 */
-        const latestDate = data.map((d) => d.date).sort((a, b) => (a < b ? 1 : -1))[0];
-        if (latestDate !== lastSawChangeLogDate.value) {
-          isAboutBadgeVisible.value = true;
-        }
-      });
+    axios.get<{ date: string }[]>('changeLog.json').then(({ data }) => {
+      /** 最新的更新日志日期 */
+      const latestDate = data.map((d) => d.date).sort((a, b) => (a < b ? 1 : -1))[0];
+      if (latestDate !== lastSawChangeLogDate.value) {
+        isAboutBadgeVisible.value = true;
+      }
+    });
 
     return {
       processAvatar,

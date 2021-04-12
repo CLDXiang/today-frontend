@@ -25,7 +25,9 @@ const getRatingListByUser = async (req: {
 }> => {
   log.info('rateClient.getRatingListByUser', req);
   try {
-    const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+    const {
+      data: { data },
+    } = await API.get<GetRatesRespDto>('rates', {
       params: {
         user_id: req.userId,
         last_id: req.lastId,
@@ -51,7 +53,9 @@ const getRatingListByLecture = async (req: {
 }> => {
   log.info('rateClient.getRatingListByLecture', req);
   try {
-    const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+    const {
+      data: { data },
+    } = await API.get<GetRatesRespDto>('rates', {
       params: {
         lecture_id: req.lectureId,
         last_id: req.lastId,
@@ -76,7 +80,9 @@ const getRatingByLectureId = async (req: {
   data: RateForm | RateDraftDtoPartial;
 }> => {
   log.info('rateClient.getRatingById', req);
-  const { data: { data } } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`, {
+  const {
+    data: { data },
+  } = await API.get<GetRatesLectureIdRespDto>(`rates/${req.lectureId}`, {
     params: {
       lecture_id: req.lectureId,
       last_id: req.lastId,
@@ -96,7 +102,9 @@ const getRatingList = async (req: {
   data: CardRatingItem[];
 }> => {
   log.info('rateClient.getRatingList');
-  const { data: { data } } = await API.get<GetRatesRespDto>('rates', {
+  const {
+    data: { data },
+  } = await API.get<GetRatesRespDto>('rates', {
     params: {
       last_id: req.lastId,
       limit: req.limit,
@@ -153,7 +161,9 @@ const deleteRating = async (req: {
   data: CardRatingItem[];
 }> => {
   log.info('rateClient.deleteRating', req);
-  const { data: { data } } = await API.delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`);
+  const {
+    data: { data },
+  } = await API.delete<DeleteRatesLectureIdRespDto>(`rates/${req.lectureId}`);
   return { data: data.map(transferRateItemToCardRatingItem) };
 };
 

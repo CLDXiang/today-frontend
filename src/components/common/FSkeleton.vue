@@ -14,7 +14,7 @@
         :key="i"
         class="h-4 mt-4 first:mt-0 bg-gray-200 rounded max-w-full"
         :style="{
-          width: widths[i - 1]
+          width: widths[i - 1],
         }"
       />
     </ul>
@@ -35,14 +35,20 @@ export default defineComponent({
     /** 每行宽度
      * 传入单个值为最后一行宽度，传入多个值则为从首行开始每行的宽度
      */
-    width: { type: [Number, String, Array] as PropType<number | string | Array<number | string>>, default: '100%' },
+    width: {
+      type: [Number, String, Array] as PropType<number | string | Array<number | string>>,
+      default: '100%',
+    },
   },
   setup(props) {
     const avatarSizeClass = computed(() => {
       switch (props.avatarSize) {
-        case 'base': return 'w-9 h-9';
-        case 'large': return 'w-20 h-20';
-        default: return '';
+        case 'base':
+          return 'w-9 h-9';
+        case 'large':
+          return 'w-20 h-20';
+        default:
+          return '';
       }
     });
     const widths = computed<string[]>(() => {

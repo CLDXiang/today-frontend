@@ -315,25 +315,31 @@ export default defineComponent({
     /** 对比字段，如果没有变化返回 undefined，否则返回新的值 */
     editedValue<K extends keyof RateForm>(fieldName: K): RateForm[K] | undefined {
       if (this.formData[fieldName] === this.savedRateDraft[fieldName]) return undefined;
-      if (fieldName === 'content' && this.formData.content?.trim() === this.savedRateDraft.content?.trim()) return undefined;
+      if (
+        fieldName === 'content'
+        && this.formData.content?.trim() === this.savedRateDraft.content?.trim()
+      ) { return undefined; }
       return this.formData[fieldName];
     },
     /** 点击保存按钮 */
     handleClickSaveDraft() {
       this.isLoading = true;
-      rateDraftClient.saveDraft({
-        lectureId: this.lectureId,
-        difficulty: this.editedValue('difficulty'),
-        nice: this.editedValue('nice'),
-        workload: this.editedValue('workload'),
-        recommended: this.editedValue('recommended'),
-        content: this.editedValue('content'),
-      }).then(() => {
-        this.$message.success('保存草稿成功！');
-        this.savedRateDraft = { ...this.formData };
-      }).finally(() => {
-        this.isLoading = false;
-      });
+      rateDraftClient
+        .saveDraft({
+          lectureId: this.lectureId,
+          difficulty: this.editedValue('difficulty'),
+          nice: this.editedValue('nice'),
+          workload: this.editedValue('workload'),
+          recommended: this.editedValue('recommended'),
+          content: this.editedValue('content'),
+        })
+        .then(() => {
+          this.$message.success('保存草稿成功！');
+          this.savedRateDraft = { ...this.formData };
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     /** 点击发布按钮 */
     handleClickSubmit() {

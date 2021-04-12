@@ -48,10 +48,16 @@ export default defineComponent({
   },
   setup(props) {
     const withdrawable = computed(() => {
-      if (props.lectureInfo.detailInfo.withdrawable === 'true' || props.lectureInfo.detailInfo.withdrawable === '是') {
+      if (
+        props.lectureInfo.detailInfo.withdrawable === 'true'
+        || props.lectureInfo.detailInfo.withdrawable === '是'
+      ) {
         return '是';
       }
-      if (props.lectureInfo.detailInfo.withdrawable === '否' || props.lectureInfo.detailInfo.withdrawable === '') {
+      if (
+        props.lectureInfo.detailInfo.withdrawable === '否'
+        || props.lectureInfo.detailInfo.withdrawable === ''
+      ) {
         return '否';
       }
       return '未知';

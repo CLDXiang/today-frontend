@@ -33,16 +33,16 @@
             )
         "
       >
-      <a-button
+      <f-button
         class="flex-1"
         type="primary"
-        shape="round"
+        shape="circle"
         :disabled="isAvatarUploading"
         :loading="isAvatarUploading"
         @click="handleClickModifyAvatar"
       >
         修改头像
-      </a-button>
+      </f-button>
     </div>
     <div class="w-full max-w-sm self-center mb-4">
       <div>
@@ -66,16 +66,16 @@
         />
       </div>
       <div>
-        <a-button
-          block
+        <f-button
+          class="w-full"
           type="primary"
-          shape="round"
+          shape="circle"
           :disabled="!isInfoModified || isInfoModifying"
           :loading="isInfoModifying"
           @click="handleClickModifyInfo"
         >
           保存修改
-        </a-button>
+        </f-button>
       </div>
     </div>
     <div class="w-full max-w-sm self-center mb-4">
@@ -96,24 +96,24 @@
           outlined
           disabled
         />
-        <a-button
+        <f-button
           class="mt-0.5 w-24 ml-3"
           type="primary"
-          shape="round"
+          shape="circle"
           disabled
         >
           发送验证码
-        </a-button>
+        </f-button>
       </div>
       <div>
-        <a-button
-          block
+        <f-button
+          class="w-full"
           type="primary"
-          shape="round"
+          shape="circle"
           disabled
         >
           更换邮箱（开发中）
-        </a-button>
+        </f-button>
       </div>
     </div>
     <div class="w-full max-w-sm self-center">
@@ -147,14 +147,14 @@
           outlined
         />
       </div>
-      <a-button
-        block
+      <f-button
+        class="w-full"
         type="primary"
-        shape="round"
+        shape="circle"
         @click="handleClickChangePassword"
       >
         修改密码
-      </a-button>
+      </f-button>
     </div>
   </div>
 </template>

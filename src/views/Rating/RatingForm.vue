@@ -61,45 +61,45 @@
     </div>
     <div class="action-box">
       <span class="action-box__left">
-        <a-button
+        <f-button
           class="button-gray text-gray-600"
-          shape="round"
+          shape="circle"
           size="large"
           @click="handleClickReset"
         >
-          清空
-        </a-button>
+          清 空
+        </f-button>
       </span>
       <span class>
-        <span class="action-box__right">
-          <a-button
-            shape="round"
+        <span class="action-box__right flex flex-wrap">
+          <f-button
+            shape="circle"
             size="large"
             :loading="isLoading"
             @click="handleClickGetDraft"
           >
             恢复草稿
-          </a-button>
-          <a-button
+          </f-button>
+          <f-button
             :class="{ 'button-gray text-gray-600': isRateDraftEdited }"
-            shape="round"
+            shape="circle"
             size="large"
             :disabled="!isRateDraftEdited"
             :loading="isLoading"
             @click="handleClickSaveDraft"
           >
-            保存
-          </a-button>
-          <a-button
-            shape="round"
+            保 存
+          </f-button>
+          <f-button
+            shape="circle"
             type="primary"
             size="large"
             :disabled="!isFormDataAvailable || !isRateEdited"
             :loading="isLoading"
             @click="handleClickSubmit"
           >
-            发布
-          </a-button>
+            发 布
+          </f-button>
         </span>
       </span>
     </div>

@@ -27,33 +27,33 @@
       />
     </div>
     <div class="button-box">
-      <a-button
-        block
+      <f-button
+        class="w-full"
         type="primary"
         size="large"
-        shape="round"
+        shape="circle"
         @click="login"
       >
-        登录
-      </a-button>
-      <a-button
-        block
+        登 录
+      </f-button>
+      <f-button
+        class="w-full mt-4"
         type="primary"
         size="large"
-        shape="round"
+        shape="circle"
         ghost
         @click="$router.push('/register')"
       >
-        注册
-      </a-button>
+        注 册
+      </f-button>
     </div>
-    <a-button
-      style="margin-top: 12px"
+    <f-button
+      class="mt-3"
       type="link"
       @click="$router.push('/forgot-password')"
     >
       忘记密码？
-    </a-button>
+    </f-button>
   </div>
 </template>
 
@@ -145,14 +145,6 @@ export default defineComponent({
   > .button-box {
     width: 80vw;
     max-width: 340px;
-
-    > .ant-btn {
-      margin-top: 16px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
   }
 }
 </style>

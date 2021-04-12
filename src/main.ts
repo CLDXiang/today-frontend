@@ -1,14 +1,13 @@
 import { createApp } from 'vue';
 import {
   message,
-  Button,
   Modal,
   Drawer,
   Slider,
 } from 'ant-design-vue';
 import { Message } from 'ant-design-vue/types/message.d';
 import {
-  FBadge, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton,
+  FBadge, FButton, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton,
 } from '@/components/common';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -38,7 +37,6 @@ app.use(store).use(router);
 
 // AntD 组件
 app
-  .use(Button)
   .use(Modal)
   .use(Drawer)
   .use(Slider);
@@ -52,6 +50,7 @@ declare module '@vue/runtime-core' {
 // 自定义全局组件
 app
   .component('FBadge', FBadge)
+  .component('FButton', FButton)
   .component('FPopover', FPopover)
   .component('FIcon', FIcon)
   .component('FInput', FInput)

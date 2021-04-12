@@ -110,7 +110,7 @@
         />
       </div>
 
-      <a-button
+      <f-button
         class="fixed bottom-20 right-5 w-12 h-12 z-20 flex justify-center items-center md:hidden"
         type="primary"
         size="small"
@@ -127,7 +127,7 @@
             size="24"
           />
         </f-badge>
-      </a-button>
+      </f-button>
     </div>
   </div>
 </template>

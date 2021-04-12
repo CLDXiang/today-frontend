@@ -23,7 +23,7 @@
           outlined
           required
         />
-        <a-button
+        <f-button
           type="primary"
           :disabled="cooldownCnt !== 0"
           :loading="state === 'requesting'"
@@ -31,7 +31,7 @@
         >
           {{ state === 'init' || state === 'requesting'? '发送验证码'
             : state === 'cooldown' ? `${cooldownCnt}s` : '重新发送' }}
-        </a-button>
+        </f-button>
       </div>
       <div>
         <f-input
@@ -71,23 +71,23 @@
       />
     </div>
     <div class="button-box">
-      <a-button
-        block
+      <f-button
+        class="w-full mt-4"
         type="primary"
         size="large"
-        shape="round"
+        shape="circle"
         @click="register"
       >
-        注册
-      </a-button>
+        注 册
+      </f-button>
     </div>
-    <a-button
-      style="margin-top: 12px"
+    <f-button
+      class="mt-3"
       type="link"
       @click="$router.push('/login')"
     >
       已有账号？前往登录
-    </a-button>
+    </f-button>
   </div>
 </template>
 
@@ -233,25 +233,12 @@ export default defineComponent({
         max-width: 226px;
         margin-right: 12px;
       }
-
-      > .ant-btn {
-        margin-top: 4px;
-        width: 92px;
-      }
     }
   }
 
   > .button-box {
     width: 80vw;
     max-width: 340px;
-
-    > .ant-btn {
-      margin-top: 16px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
   }
 }
 </style>

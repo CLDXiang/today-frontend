@@ -57,9 +57,9 @@
             v-if="false"
             class="info-bar__watch"
           >
-            <a-button
+            <f-button
               type="primary"
-              shape="round"
+              shape="circle"
               size="small"
               class="info-bar__watch-button text-gray-600"
               :class="{ 'info-bar__watch-button--watched': lectureInfo.watched }"
@@ -70,12 +70,13 @@
                 #icon
               >
                 <f-icon
+                  class="mr-1"
                   name="plus"
                   :size="10"
                 />
               </template>
               {{ lectureInfo.watched ? '已关注' : '关注' }}
-            </a-button>
+            </f-button>
           </div>
         </div>
       </div>
@@ -114,26 +115,21 @@
     <div class="rating-bar">
       <div class="rating-bar__header">
         <span>课程点评</span>
-        <a-button
+        <f-button
           type="primary"
           size="small"
-          :style="{
-            backgroundColor: '#6a99e3',
-            color: '#fff',
-            borderColor: '#6a99e3',
-            padding: '0 8px',
-            borderRadius: '6px',
-          }"
+          shape="round"
           @click="handleEditRating"
         >
           <template #icon>
             <f-icon
+              class="mr-1"
               name="edit"
               :size="14"
             />
           </template>
           {{ lectureInfo.rated ? '编辑点评' : '我要点评' }}
-        </a-button>
+        </f-button>
       </div>
       <div class="rating-bar__list">
         <div

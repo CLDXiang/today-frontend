@@ -79,7 +79,6 @@ export default defineComponent({
     const classNameArray = computed<string[]>(() => {
       /** 背景色 */
       let bg = '';
-
       if (props.ghost || props.type === 'link') {
         bg = 'bg-transparent';
       } else if (props.disabled) {
@@ -102,7 +101,6 @@ export default defineComponent({
 
       /** 边框 */
       let border = '';
-
       if (props.disabled && props.type !== 'link') {
         border = 'border border-gray-300';
       } else {
@@ -131,17 +129,18 @@ export default defineComponent({
 
       /** 文字颜色 */
       let textColor = '';
-
       if (props.disabled) {
         textColor = 'text-gray-400';
       } else {
         switch (props.type) {
           case 'primary':
+            // ghost 时，背景色不再是实底，故将文字换为主色
             textColor = props.ghost
               ? 'text-primary'
               : 'text-white';
             break;
           case 'danger':
+            // ghost 时，背景色不再是实底，故将文字换为危险色
             textColor = props.ghost
               ? 'text-red-400'
               : 'text-white';
@@ -159,7 +158,6 @@ export default defineComponent({
 
       /** 圆角 */
       let rounded = '';
-
       switch (props.shape) {
         case 'base':
           rounded = 'rounded-sm';
@@ -176,7 +174,6 @@ export default defineComponent({
 
       /** 尺寸 */
       let size = '';
-
       switch (props.size) {
         case 'base':
           size = 'h-8 px-2';

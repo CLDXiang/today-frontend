@@ -5,7 +5,13 @@ import { RateForm } from '@/components/listCard';
 
 /** 需要持久化保存的 state */
 const persistedState = {
-  localStorage: ['user', 'semester', 'selectedCoursesIds', 'selectedSectionsByDay', 'lastSawChangeLogDate'],
+  localStorage: [
+    'user',
+    'semester',
+    'selectedCoursesIds',
+    'selectedSectionsByDay',
+    'lastSawChangeLogDate',
+  ],
   sessionStorage: ['ratingForms'],
 };
 
@@ -137,7 +143,7 @@ const store = createStore({
       state.hasFetchedSelectedCourses = true;
     },
     /** 设置 ratingForms */
-    setRatingForm(state, payload: { lectureId: string, formData: RateForm }) {
+    setRatingForm(state, payload: { lectureId: string; formData: RateForm }) {
       const { lectureId, formData } = payload;
       state.ratingForms[lectureId] = formData;
     },

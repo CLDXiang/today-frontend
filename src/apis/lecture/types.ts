@@ -81,7 +81,10 @@ export interface LectureDetail extends LectureType {
 }
 
 /** API 原始 Lecture Detail */
-export type LectureDetailDto = Omit<LectureDetail, 'difficulty' | 'nice' | 'workload' | 'recommended'> & {
+export type LectureDetailDto = Omit<
+  LectureDetail,
+  'difficulty' | 'nice' | 'workload' | 'recommended'
+> & {
   /** 难易程度 */
   difficulty: number | null;
   /** 给分好坏 */
@@ -90,7 +93,7 @@ export type LectureDetailDto = Omit<LectureDetail, 'difficulty' | 'nice' | 'work
   workload: number | null;
   /** 推荐指数 */
   recommended: number | null;
-}
+};
 
 /** 列表页 Lecture 项 */
 export type LectureItem = LectureType;

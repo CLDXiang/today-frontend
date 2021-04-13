@@ -10,8 +10,12 @@ interface ModalConfirmProps {
   title?: string;
   /** 确认按钮文字 */
   okText?: string;
+  /** 确认按钮类型 */
+  okType?: 'primary' | 'normal' | 'danger' | 'link';
   /** 取消按钮文字 */
   cancelText?: string;
+  /** 取消按钮类型 */
+  cancelType?: 'primary' | 'normal' | 'danger' | 'link';
   /** 是否显示遮罩 */
   mask?: boolean;
   /** 点击遮罩是否允许关闭 */
@@ -35,15 +39,17 @@ const confirm = (props: ModalConfirmProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let confirmModalInstance: any = null;
 
+  const {
+    content,
+    onOk,
+    onCancel,
+    ...currentProps
+  } = props;
+
   /** 传入组件的 Props */
   const confirmModalProps = {
     visible: false,
-    closable: props.closable,
-    title: props.title,
-    okText: props.okText,
-    cancelText: props.cancelText,
-    mask: props.mask,
-    maskClosable: props.maskClosable,
+    ...currentProps,
   };
 
   /** 销毁组件实例 */
@@ -70,17 +76,17 @@ const confirm = (props: ModalConfirmProps) => {
           {
             ...this.confirmModalProps,
             onOk: () => {
-              props.onOk?.();
+              onOk?.();
               // 0.5 秒后自动销毁，给隐藏动画预留时间
               setTimeout(() => close(), 500);
             },
             onCancel: () => {
-              props.onCancel?.();
+              onCancel?.();
               // 0.5 秒后自动销毁,给隐藏动画预留时间
               setTimeout(() => close(), 500);
             },
           },
-          () => props.content,
+          () => content,
         )
         : null;
     },

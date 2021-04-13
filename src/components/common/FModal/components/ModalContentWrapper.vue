@@ -47,11 +47,14 @@
           <slot />
         </div>
         <div class="w-full px-4 py-2.5 flex justify-end space-x-2">
-          <f-button @click="handleCancel">
+          <f-button
+            :type="cancelType"
+            @click="handleCancel"
+          >
             {{ cancelText }}
           </f-button>
           <f-button
-            type="primary"
+            :type="okType"
             @click="handleOk"
           >
             {{ okText }}
@@ -63,30 +66,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import {
+  defineComponent, ref, watch,
+} from 'vue';
 import { FButton, FIcon } from '../..';
+import { ModalProps } from '../types';
 
 export default defineComponent({
   components: {
     FButton,
     FIcon,
   },
-  props: {
-    /** 是否可见（v-model） */
-    visible: { type: Boolean, required: false },
-    /** 是否显示右上关闭按钮 */
-    closable: { type: Boolean, default: true },
-    /** 标题 */
-    title: { type: String, default: '' },
-    /** 确认按钮文字 */
-    okText: { type: String, default: '确定' },
-    /** 取消按钮文字 */
-    cancelText: { type: String, default: '取消' },
-    /** 是否显示遮罩 */
-    mask: { type: Boolean, default: true },
-    /** 点击遮罩是否允许关闭 */
-    maskClosable: { type: Boolean, default: true },
-  },
+  props: ModalProps,
   emits: [
     /** v-model */
     'update:visible',
@@ -106,9 +97,12 @@ export default defineComponent({
       ctx.emit('update:visible', value);
     };
 
-    watch(() => props.visible, () => {
-      isVisible.value = props.visible;
-    });
+    watch(
+      () => props.visible,
+      () => {
+        isVisible.value = props.visible;
+      },
+    );
 
     /** “取消”按钮回调 */
     const handleCancel = () => {

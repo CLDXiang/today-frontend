@@ -16,27 +16,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { ModalContentWrapper } from './components';
+import { ModalProps } from './types';
 
 export default defineComponent({
   components: {
     ModalContentWrapper,
   },
-  props: {
-    /** 是否可见（v-model） */
-    visible: { type: Boolean, required: false },
-    /** 是否显示右上关闭按钮 */
-    closable: { type: Boolean, default: true },
-    /** 标题 */
-    title: { type: String, default: '标题' },
-    /** 确认按钮文字 */
-    okText: { type: String, default: '确定' },
-    /** 取消按钮文字 */
-    cancelText: { type: String, default: '取消' },
-    /** 是否显示遮罩 */
-    mask: { type: Boolean, default: true },
-    /** 点击遮罩是否允许关闭 */
-    maskClosable: { type: Boolean, default: true },
-  },
+  props: ModalProps,
   emits: [
     /** v-model */
     'update:visible',

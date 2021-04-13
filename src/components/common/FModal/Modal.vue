@@ -1,7 +1,8 @@
 <template>
   <teleport to="body">
     <div
-      class="w-0 h-0 fixed top-0 left-0 overflow-visible"
+      class="w-full h-0 fixed top-0 left-0 overflow-visible"
+      style="z-index: 990"
     >
       <modal-content-wrapper
         v-bind="$props"

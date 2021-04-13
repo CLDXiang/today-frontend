@@ -171,7 +171,6 @@
 </template>
 
 <script lang="ts">
-import { Modal } from 'ant-design-vue';
 import { useStore } from 'vuex';
 import { rateClient } from '@/apis';
 import { useRouterBack } from '@/composables';
@@ -179,6 +178,7 @@ import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
 import { CardReactiveRating } from '@/components/listCard';
+import { FModal } from '@/components/common';
 import { RatingHeadBar, LectureDetailInfo } from './components';
 import { useLectureInfo, useLectureRatings } from './composables';
 
@@ -243,7 +243,7 @@ export default defineComponent({
       this.$router.push(`/rating/lecture/${this.lectureId}/edit-rating`);
     },
     deleteShow() {
-      Modal.confirm({
+      FModal.confirm({
         title: '确认删除',
         okType: 'danger',
         okText: '确认',

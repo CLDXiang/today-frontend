@@ -7,7 +7,8 @@
   >
     <div
       v-show="mask && isVisible"
-      class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 z-40 flex justify-center items-start"
+      class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-start"
+      style="z-index: 1000"
       @click="handleClickMask"
     />
   </transition>
@@ -21,7 +22,8 @@
   >
     <div
       v-show="isVisible"
-      class="fixed top-0 left-1/2 w-0 h-0 z-50 flex justify-center items-start"
+      class="fixed top-0 left-0 w-full h-0 flex justify-center items-start"
+      style="z-index: 1010"
     >
       <div
         class="relative top-24 mx-4 bg-white rounded shadow-xl"

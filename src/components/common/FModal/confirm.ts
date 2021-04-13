@@ -32,7 +32,8 @@ interface ModalConfirmProps {
 
 const confirm = (props: ModalConfirmProps) => {
   const div = document.createElement('div');
-  div.className = 'w-0 h-0 fixed top-0 left-0 overflow-visible';
+  div.className = 'w-full h-0 fixed top-0 left-0 overflow-visible';
+  div.style.zIndex = '990';
   document.body.appendChild(div);
 
   /** 组件实例，不知道为什么无论如何无法和 createApp 的返回类型对上，就用了 any */

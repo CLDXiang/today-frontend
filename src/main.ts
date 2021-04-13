@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
 import {
   message,
-  Modal,
   Drawer,
   Slider,
 } from 'ant-design-vue';
@@ -37,7 +36,6 @@ app.use(store).use(router);
 
 // AntD 组件
 app
-  .use(Modal)
   .use(Drawer)
   .use(Slider);
 app.config.globalProperties.$message = message;

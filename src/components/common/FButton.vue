@@ -176,10 +176,10 @@ export default defineComponent({
       let size = '';
       switch (props.size) {
         case 'base':
-          size = 'h-8 px-2';
+          size = 'h-8 px-3';
           break;
         case 'small':
-          size = 'h-6 px-3';
+          size = 'h-6 px-2';
           break;
         case 'large':
           size = 'h-10 px-4 text-base';

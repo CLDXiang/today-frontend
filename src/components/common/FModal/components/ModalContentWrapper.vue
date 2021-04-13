@@ -27,7 +27,10 @@
         class="relative top-24 mx-4 bg-white rounded shadow-xl"
         style="min-width: 240px; max-width: 520px"
       >
-        <div class="w-full flex justify-between text-base font-medium">
+        <div
+          v-if="title || closable"
+          class="w-full flex justify-between text-base font-medium"
+        >
           <span class="flex-auto px-6 py-4 text-gray-800">{{ title }}</span>
           <span
             v-if="closable"
@@ -74,7 +77,7 @@ export default defineComponent({
     /** 是否显示右上关闭按钮 */
     closable: { type: Boolean, default: true },
     /** 标题 */
-    title: { type: String, default: '标题' },
+    title: { type: String, default: '' },
     /** 确认按钮文字 */
     okText: { type: String, default: '确定' },
     /** 取消按钮文字 */

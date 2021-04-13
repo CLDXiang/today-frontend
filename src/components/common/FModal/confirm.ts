@@ -78,13 +78,13 @@ const confirm = (props: ModalConfirmProps) => {
             ...this.confirmModalProps,
             onOk: () => {
               onOk?.();
-              // 0.5 秒后自动销毁，给隐藏动画预留时间
-              setTimeout(() => close(), 500);
+              // 60 秒后自动销毁，给隐藏动画和异步回调预留时间
+              setTimeout(() => close(), 60000);
             },
             onCancel: () => {
               onCancel?.();
-              // 0.5 秒后自动销毁,给隐藏动画预留时间
-              setTimeout(() => close(), 500);
+              // 60 秒后自动销毁，给隐藏动画和异步回调预留时间
+              setTimeout(() => close(), 60000);
             },
           },
           () => content,

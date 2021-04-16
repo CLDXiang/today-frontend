@@ -72,7 +72,7 @@ import {
   defineComponent, ref, watch,
 } from 'vue';
 import { FButton, FIcon } from '../..';
-import { ModalProps } from '../types';
+import { ModalProps } from '../props';
 
 export default defineComponent({
   components: {

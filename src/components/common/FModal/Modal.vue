@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { ModalContentWrapper } from './components';
-import { ModalProps } from './types';
+import { ModalProps } from './props';
 
 export default defineComponent({
   components: {

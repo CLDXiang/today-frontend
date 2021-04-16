@@ -66,6 +66,7 @@ const confirm = (props: ModalConfirmProps) => {
     data() {
       return {
         confirmModalProps,
+        /** 是否显示组件，可理解为 v-if */
         vIf: true,
       };
     },

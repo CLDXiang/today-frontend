@@ -12,7 +12,7 @@
 
 按照字典序：
 
-[ahacad](https://github.com/ahacad)、[Chameee](https://github.com/Chameee)、[CLDXiang](https://github.com/CLDXiang)、[Currycurrycurry](https://github.com/Currycurrycurry)、[Depetrol](https://github.com/Depetrol)、[gkzhb](https://github.com/gkzhb)、[Gootter12](https://github.com/Gootter12)、[hakula139](https://github.com/hakula139)、[Hongqin-Li](https://github.com/Hongqin-Li)、[ichn-hu](https://github.com/ichn-hu)、[jasha64](https://github.com/jasha64)、[Josep-h](https://github.com/Josep-h)、[rebelice](https://github.com/rebelice)、[SunflowerAries](https://github.com/SunflowerAries)、[Vectorchip](https://github.com/Vectorchip)、Xiaoshan He、Xingtong Wang、Yu Hang、Yunhui Li
+[ahacad](https://github.com/ahacad)、[Chameee](https://github.com/Chameee)、[CLDXiang](https://github.com/CLDXiang)、[Currycurrycurry](https://github.com/Currycurrycurry)、[Depetrol](https://github.com/Depetrol)、[gkzhb](https://github.com/gkzhb)、[Gootter12](https://github.com/Gootter12)、[hakula139](https://github.com/hakula139)、[Hongqin-Li](https://github.com/Hongqin-Li)、[ichn-hu](https://github.com/ichn-hu)、[jasha64](https://github.com/jasha64)、[Josep-h](https://github.com/Josep-h)、[rebelice](https://github.com/rebelice)、[SunflowerAries](https://github.com/SunflowerAries)、[Vectorchip](https://github.com/Vectorchip)、[Xiaoshan He](http://www.xiaoshanhe.com/)、Xingtong Wang、Yu Hang、Yunhui Li
 
 ## 原文档
 

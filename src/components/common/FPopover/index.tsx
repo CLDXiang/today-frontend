@@ -18,6 +18,7 @@ import { ContentWrapper } from './components';
 
 export default defineComponent({
   props: {
+    /** 是否可见（v-model） */
     visible: { type: Boolean, required: false },
     /** 触发方式 */
     trigger: { type: String as PropType<'hover' | 'click'>, default: 'hover' },
@@ -44,7 +45,6 @@ export default defineComponent({
       if (value === isVisible.value || props.disabled) {
         return;
       }
-      // 如果禁用，则总是返回 false
       isVisible.value = value;
       emit('update:visible', value);
       emit('visibleChange', value);

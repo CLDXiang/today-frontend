@@ -124,8 +124,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import FiveStars from '@/components/FiveStars.vue';
 import { mapState } from 'vuex';
+import FiveStars from '@/components/FiveStars.vue';
 import { useProcessAvatar } from '@/composables';
 import { mapScoreToText } from '@/utils/rating';
 import { Reaction, EmojiTable } from '@/components/reaction';
@@ -140,7 +140,7 @@ export default defineComponent({
   },
   props: {
     /** 点评数据项 */
-    rating: { type: Object as PropType<CardRatingItem>, default: true },
+    rating: { type: Object as PropType<CardRatingItem>, required: true },
     showChat: { type: Boolean, default: false },
     showLike: { type: Boolean, default: false },
     showEdit: { type: Boolean, default: false },

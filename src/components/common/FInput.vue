@@ -88,7 +88,7 @@ export default defineComponent({
     rules: { type: Array as PropType<((value: string) => boolean | string)[]>, default: undefined },
     /** 占位文本 */
     placeholder: { type: String, default: undefined },
-    modelValue: { type: String, default: undefined },
+    modelValue: { type: String, default: '' },
   },
   emits: ['update:modelValue'],
   data() {

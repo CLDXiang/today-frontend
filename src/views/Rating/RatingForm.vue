@@ -108,10 +108,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapMutations, mapState } from 'vuex';
 import { useRouterBack } from '@/composables';
 import FiveStars from '@/components/FiveStars.vue';
 import { rateClient, lectureClient, rateDraftClient } from '@/apis';
-import { mapMutations, mapState } from 'vuex';
 import { scoreTextTable } from '@/utils/rating';
 import { RateForm } from './types';
 import { RatingHeadBar } from './components';

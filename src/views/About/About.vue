@@ -38,8 +38,8 @@
 import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import { useRouterBack } from '@/composables';
 import { useStore } from 'vuex';
+import { useRouterBack } from '@/composables';
 import { AboutSection, ChangeLog } from './components';
 import { ChangeLogType } from './type';
 

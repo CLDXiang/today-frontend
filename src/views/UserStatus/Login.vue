@@ -59,9 +59,9 @@
 
 <script lang="ts">
 import { mapGetters, mapMutations } from 'vuex';
+import { defineComponent } from 'vue';
 import { authClient, userClient } from '@/apis';
 import log from '@/utils/log';
-import { defineComponent } from 'vue';
 
 export default defineComponent({
   data: () => ({

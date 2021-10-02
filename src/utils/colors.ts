@@ -9,7 +9,7 @@ const colorClassNames = [
   'bg-emerald-300 border-emerald-500 text-emerald-600',
   'bg-teal-300 border-teal-500 text-teal-600',
   'bg-cyan-300 border-cyan-500 text-cyan-600',
-  'bg-light-blue-300 border-light-blue-500 text-light-blue-600',
+  'bg-sky-300 border-sky-500 text-sky-600',
   'bg-blue-300 border-blue-500 text-blue-600',
   'bg-indigo-300 border-indigo-500 text-indigo-600',
   'bg-violet-300 border-violet-500 text-violet-600',

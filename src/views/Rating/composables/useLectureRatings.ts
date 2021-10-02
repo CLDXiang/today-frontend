@@ -1,8 +1,8 @@
-import { rateClient } from '@/apis';
-import { CardRatingItem } from '@/components/listCard';
 import {
   ref, Ref, watch,
 } from 'vue';
+import { rateClient } from '@/apis';
+import { CardRatingItem } from '@/components/listCard';
 
 /**
  * 拉取课程点评列表

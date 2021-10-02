@@ -1,5 +1,5 @@
-import { CardCommentItem } from '@/components/listCard';
 import dayjs from 'dayjs';
+import { CardCommentItem } from '@/components/listCard';
 import { CommentItem } from './types';
 
 /** 将 CommentItem 转为 CardCommentItem */

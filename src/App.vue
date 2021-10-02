@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import BottomNav from '@/components/BottomNav.vue';
 import { defineComponent } from 'vue';
+import BottomNav from '@/components/BottomNav.vue';
 import { HeapPagePathReges } from '@/router';
 
 export default defineComponent({

@@ -4,15 +4,15 @@ import {
   Drawer,
   Slider,
 } from 'ant-design-vue';
-import { Message } from 'ant-design-vue/types/message.d';
-import {
-  FBadge, FButton, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton, FModal,
-} from '@/components/common';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import 'dayjs/locale/zh-cn';
 import dayjs from 'dayjs';
+
+import {
+  FBadge, FButton, FIcon, FInput, FSelect, FTabs, FTabPane, FPopover, FSkeleton, FModal,
+} from '@/components/common';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -41,7 +41,7 @@ app
 app.config.globalProperties.$message = message;
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $message: Message;
+    $message: typeof message;
   }
 }
 

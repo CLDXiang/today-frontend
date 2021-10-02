@@ -1,5 +1,5 @@
-import log from '@/utils/log';
 import dayjs from 'dayjs';
+import log from '@/utils/log';
 import { ReactionType } from './types';
 import { mockReaction } from '../mocks/reaction';
 

@@ -36,9 +36,9 @@
 </template>
 
 <script lang="ts">
-import log from '@/utils/log';
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
+import log from '@/utils/log';
 
 type ActivePageType = 'timetable' | 'rating' | 'notification' | 'status';
 

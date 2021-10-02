@@ -172,9 +172,9 @@
 
 <script lang="ts">
 import { useStore } from 'vuex';
+import { defineComponent, toRefs } from 'vue';
 import { rateClient } from '@/apis';
 import { useRouterBack } from '@/composables';
-import { defineComponent, toRefs } from 'vue';
 import FiveStars from '@/components/FiveStars.vue';
 import { mapScoreToText } from '@/utils/rating';
 import { CardReactiveRating } from '@/components/listCard';

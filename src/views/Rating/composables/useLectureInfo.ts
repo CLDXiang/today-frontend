@@ -1,6 +1,6 @@
+import { ref, Ref, watch } from 'vue';
 import { lectureClient } from '@/apis';
 import { LectureDetail } from '@/apis/lecture/types';
-import { ref, Ref, watch } from 'vue';
 
 /**
  * 拉取课程详情信息

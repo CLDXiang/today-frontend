@@ -1,5 +1,5 @@
-import { CardCommonItem } from '@/components/listCard';
 import dayjs from 'dayjs';
+import { CardCommonItem } from '@/components/listCard';
 
 export const mockStars: CardCommonItem[] = [
   {

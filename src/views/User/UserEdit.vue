@@ -161,9 +161,9 @@
 
 <script lang="ts">
 import { mapMutations, mapState } from 'vuex';
+import { defineComponent } from 'vue';
 import { authClient, userClient } from '@/apis';
 import log from '@/utils/log';
-import { defineComponent } from 'vue';
 import { useProcessAvatar } from '@/composables';
 
 export default defineComponent({

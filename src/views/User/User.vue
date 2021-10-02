@@ -154,10 +154,10 @@ import {
   computed, defineComponent, provide, ref,
 } from 'vue';
 import { useStore } from 'vuex';
-import { userClient } from '@/apis';
-import { useProcessAvatar } from '@/composables';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { userClient } from '@/apis';
+import { useProcessAvatar } from '@/composables';
 import {
   RatingList, CommentList, LessonList, CommonList,
 } from './components';

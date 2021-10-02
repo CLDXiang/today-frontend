@@ -49,7 +49,7 @@ export default defineComponent({
   },
   props: {
     /** reaction 对象 */
-    value: { type: Object as PropType<EmojiTable>, default: {} },
+    value: { type: Object as PropType<EmojiTable>, default: () => ({}) },
     /** 是否只读（不可交互） */
     readonly: { type: Boolean, default: true },
     /** 排序 */
@@ -57,11 +57,11 @@ export default defineComponent({
     /** 只显示前 N 个（为 0 时不筛选） */
     topN: { type: Number, default: 0 },
     /** button 样式 */
-    buttonStyle: { type: Object as PropType<CSSProperties>, default: {} },
+    buttonStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
     /** emoji 样式 */
-    emojiStyle: { type: Object as PropType<CSSProperties>, default: {} },
+    emojiStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
     /** 数目样式 */
-    countStyle: { type: Object as PropType<CSSProperties>, default: {} },
+    countStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
   },
   emits: ['add', 'delete'],
   data() {

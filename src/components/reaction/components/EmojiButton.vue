@@ -24,9 +24,9 @@ export default defineComponent({
     /** 激活态 */
     active: { type: Boolean, default: false },
     /** emoji 样式 */
-    emojiStyle: { type: Object as PropType<CSSProperties>, default: {} },
+    emojiStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
     /** 数目样式 */
-    countStyle: { type: Object as PropType<CSSProperties>, default: {} },
+    countStyle: { type: Object as PropType<CSSProperties>, default: () => ({}) },
   },
 });
 </script>

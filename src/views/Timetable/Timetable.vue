@@ -137,10 +137,10 @@ import axios from 'axios';
 import {
   defineComponent, onMounted, ref,
 } from 'vue';
+import { message } from 'ant-design-vue';
 import { userClient } from '@/apis';
 import log from '@/utils/log';
 import { semesterArray } from '@/utils/config';
-import { message } from 'ant-design-vue';
 
 import {
   TimetableDay,

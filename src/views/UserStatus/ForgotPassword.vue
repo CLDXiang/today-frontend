@@ -78,9 +78,9 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 import { authClient } from '@/apis';
 import log from '@/utils/log';
-import { defineComponent } from 'vue';
 
 export default defineComponent({
   data: () => ({

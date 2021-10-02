@@ -7,11 +7,9 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     '@vue/airbnb',
     '@vue/typescript/recommended',
-    '@vue/typescript',
   ],
   parserOptions: {
     ecmaVersion: 2020,
-    parser: '@typescript-eslint/parser',
   },
   rules: {
     'no-console': 1,
